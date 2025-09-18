@@ -1,0 +1,81 @@
+/* Dropdown styles */
+.change-section-dropdown {
+
+        position: absolute;
+        background-color: white;
+        box-shadow: 0 4px 12px 0 rgba(30, 37, 48, .12), 0 2px 4px rgba(30, 37, 48, .08);
+        border-radius: 4px;
+        z-index: 500;
+        width: 182px;
+        right: 0;
+        top: 105%;
+    
+}
+
+.dropdown-heading {
+padding: 10px 10px 0px 10px;
+    margin: 0;
+    font-size: 14px;
+  
+   
+}
+.dropdown-footer {
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 14px;
+
+    border-top: 1px solid #eee;
+    cursor: pointer;
+  
+}
+.dropdown-footer:hover{
+        background-color: var(--hover-bg);
+}
+.dropdown-options-list {
+    list-style: none;
+    padding: 0;
+    margin: 5px 5px ;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-option {
+    padding: 6px 12px 6px 30px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 8px;
+    display: flex;
+   
+    align-items: center;
+}
+
+.dropdown-option:hover {
+        background-color: var(--hover-bg);
+}
+
+.section-check {
+    color: transparent;
+}
+
+.dropdown-option:hover .section-check {
+    color: #555;
+}
+
+.dropdown-option.active .section-check {
+    color: var(--primary-color);
+}
+.color-dot {
+
+        display: inline-block;
+        width: var(--tag-dot-size);
+        height: var(--tag-dot-size);
+        border-radius: 50%;
+        margin-right: 10px;
+    
+}
+
+
+
+.set-marks-tube-icon{
+    font-weight: 600;
+}
