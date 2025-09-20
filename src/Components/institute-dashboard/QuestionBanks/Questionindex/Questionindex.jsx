@@ -138,7 +138,7 @@ const Questionindex = () => {
   const handleActionClick = (action, row) => {
     // Close dropdown first
     setOpenDropdownId(null)
-
+          console.log(action)
     // Then execute the action
     switch (action) {
       case "pdf":

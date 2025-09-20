@@ -229,7 +229,7 @@ const Dispatched = () => {
             <span className="row-link">{row.test}</span>
           </Link>
           <div className="question-tags">
-            {tags.filter(tag => tag.questions.includes(row.id))
+            {tags.filter(tag => tag.questions?.includes(row.id))
               .map(tag => (
                 <div key={tag.id} className="question-tag-container">
                   <div className="question-tag">

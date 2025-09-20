@@ -98,8 +98,6 @@ font-size: var(--font-size-regular) !important;
   font-weight: var(--font-weight-active) !important;
 }
 .sidebar-contents {
-
-
   padding: var(--sidebar-content-padding);
   cursor: pointer;
   border-radius: 8px;
@@ -112,6 +110,7 @@ font-size: var(--font-size-regular) !important;
   font-weight: var(--font-weight-sidebar);
   margin-bottom: 4px;
   position: relative;
+  margin-top: -4px;
 }
 
 /* .sidebar-letters{

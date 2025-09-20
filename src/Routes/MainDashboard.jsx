@@ -18,6 +18,7 @@ const MainDashboard = () => {
             <Route path="*" element={<DashboardLayout />}> 
 
                 <Route index element={<DashboardIndex />} />
+
                 <Route path="general" element={<General />} />
                 <Route path="scheduled" element={<Scheduled />} />
                 <Route path="unscheduled" element={<Unscheduled />} />

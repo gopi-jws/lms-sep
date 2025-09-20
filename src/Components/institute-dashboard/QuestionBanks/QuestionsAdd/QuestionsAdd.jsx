@@ -14,6 +14,9 @@ import { Helmet } from "react-helmet"
 import QuestionAddDropdown from "../../../ReusableComponents/QuestionAddDropdown/QuestionAddDropdown"
 
 const QuestionsAdd = () => {
+
+  const q1 = `<p>1. Solve the quadratic equation:</p><math math ><mrow><mi>x</mi><mo>^</mo><mn>2</mn><mo>+</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>6</mn><mo>=</mo><mn>0</mn></mrow></math><p>2. Write a Python function to add two numbers:</p><pre><code class="language-python">def add(a, b):
+  return a + b</code></pre>`
   const data = [
     {
       id: 1,
@@ -34,7 +37,8 @@ const QuestionsAdd = () => {
       ],
       correctAnswer: 0,
       isLaTeXEnabled: true,
-      hasImages: true
+      hasImages: true,
+      mode:"both"
     },
     {
       id: 2,
@@ -57,6 +61,7 @@ const QuestionsAdd = () => {
       ],
       correctAnswer: 3,
       isLaTeXEnabled: true,
+      mode: "both"
     },
     {
       id: 4,
@@ -97,6 +102,7 @@ const QuestionsAdd = () => {
       tolerance: "±5%",
       isLaTeXEnabled: true,
       units: "m/s",
+      mode: "both"
     },
     {
       id: 6,
@@ -109,6 +115,7 @@ const QuestionsAdd = () => {
       created: "16/03/2025",
       modified: "1 week ago",
       correctAnswer: true,
+      mode: "both"
     },
     {
       id: 7,
@@ -130,6 +137,7 @@ const QuestionsAdd = () => {
       ],
       correctAnswer: 2,
       isLaTeXEnabled: true,
+      mode: "both"
     },
     {
       id: 8,
@@ -144,16 +152,20 @@ const QuestionsAdd = () => {
       options: ["రబి, ఖరీఫ్, బోనాల", "శీతకాల, వేసవికాల, ఆదివార", "పంటల్ని వేరే విభజించలేదు", "ఉష్ణకటిన, ట్రోపికల్, మాన్సూన్"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
+      mode: "both"
     },
     {
       id: 9,
-      question: `In Python, what will be the output of the following code?`,
+      question: `In Python, what will be the output of the following code? def factorial(n):
+        <pre><code class="language-python">def add(a, b):
+  return a + b</code></pre>`,
       answer: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
-      hasCode: true,
+      hasCode: true,                 
+      mode: "both",
       code: `def factorial(n):
             if n == 0:
             return 1
@@ -165,7 +177,7 @@ const QuestionsAdd = () => {
     },
     {
       id: 10,
-      question: `Which of the following are prime numbers? (Select all that apply)`,
+      question: q1,
       answer: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
       marks: 3,
@@ -173,16 +185,9 @@ const QuestionsAdd = () => {
       section: "Mathematics",
       created: "18/03/2025",
       modified: "1 day ago",
-      options: [
-        "2",
-        "4",
-        "7",
-        "9",
-        "13",
-        "15"
-      ],
       correctAnswers: [0, 2, 4], // Indices of correct options
-      isLaTeXEnabled: false
+      isLaTeXEnabled: false,
+      mode: "both"
     }
   ];
 
@@ -201,7 +206,7 @@ const QuestionsAdd = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState(null)
   const [modalIsOpen, setModalIsOpen] = useState(false)
-
+ 
 
   // Check if screen is mobile size
   useEffect(() => {
