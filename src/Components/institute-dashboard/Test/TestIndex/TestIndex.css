@@ -275,9 +275,9 @@
 }
 
 /* Selected Color Box */
-.color-box.selected {
-  /* border: 1px solid #000; */
-}
+/* .color-box.selected {
+  border: 1px solid #000;
+} */
 
 /* Checkmark */
 .checkmark {
@@ -447,9 +447,16 @@
 }
 
 /* Color-specific styles for mobile actions */
-.mobile-action-item.dispatch:hover {
-  background-color: #eff6ff;
-  color: #2563eb;
+.mobile-action-item .dispatch:hover{
+  background-color: rgb(41, 179, 224);
+}
+
+.dispatch:hover {
+  background-color: lightblue;
+}
+
+.edit:hover{
+  background-color: lightblue;
 }
 
 .mobile-action-item.copy:hover {
@@ -457,9 +464,21 @@
   color: #16a34a;
 }
 
+.copy:hover {
+ background-color: lightblue;
+}
+
+.rename:hover{
+  background-color: lightblue;
+}
+
 .mobile-action-item.pdf:hover {
   background-color: #fef2f2;
   color: #dc2626;
+}
+
+.pdf:hover {
+  background-color: lightblue;
 }
 
 .mobile-action-item.share:hover {
@@ -467,14 +486,30 @@
   color: #0284c7;
 }
 
+.share:hover {
+  background-color: lightblue;
+}
+
 .mobile-action-item.archive:hover {
   background-color: #fffbeb;
   color: #d97706;
 }
 
+.archive:hover {
+  background-color: lightblue;
+}
+
 .mobile-action-item.delete:hover {
   background-color: #fef2f2;
   color: #dc2626;
+}
+
+.delete:hover {
+  background-color: lightblue;
+}
+
+.settings:hover {
+  background-color: lightblue;
 }
 
 /* Mobile Action Item Icon */

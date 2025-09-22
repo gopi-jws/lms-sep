@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "./DescriptiveModal.css";
 import 'katex/dist/katex.min.css';
+import { FaCloudUploadAlt } from "react-icons/fa";
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
 
@@ -145,41 +146,110 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                 </div>
                             </div>
 
-                            <div className="descriptive-form-group row">
-                                {/* Question Input */}
-                                <div className="col-8">
-                                    <label className="pt-3">Question :</label>
+                            <div className="descriptive-form-group descriptive-qns-box">
+                                {/* {isLaTeXEnabled ? (
+                                    <textarea
+                                        className="descriptive-form-control latex-input"
+                                        rows="6"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                        disabled={isSubmitting}
+                                    />
+                                ) : (
+                                    <textarea
+                                        className="descriptive-form-control"
+                                        rows="6"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(e.target.value)}
+                                        placeholder="Enter question text"
+                                        disabled={isSubmitting}
+                                    />
+                                )} */}
+                                <div className="div">
+                                    <label className="pt-3">Question : </label>
                                     {isLaTeXEnabled ? (
-                                        <textarea
-                                            className="descriptive-form-control latex-input"
-                                            rows="6"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                            disabled={isSubmitting}
-                                        />
-                                    ) : (
-                                        <textarea
-                                            className="descriptive-form-control normal-question-input"
-                                            rows="6"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter question text"
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
+                                    <textarea
+                                            className="descriptive-form-control descriptive-latex-input"
+                                        rows="6"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                        disabled={isSubmitting}
+                                    />
+                                ) : (
+                                    <input
+                                        type="text"
+                                                className="descriptive-form-control descriptive-text-input"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(e.target.value)}
+                                        placeholder="Enter question text"
+                                        disabled={isSubmitting}
+                                    />
+                                )}
                                 </div>
+                                
+                                {/* <div className="image-upload-container">
+                                    <label className="image-upload-label">
+                                        {questionImage ? "Change Question Image" : "Add Question Image"}
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="question-image-upload"
+                                        className="descriptive-form-control"
+                                        onChange={handleQuestionImageUpload}
+                                        accept="image/*"
+                                        disabled={isSubmitting}
+                                    />
+                                    {questionImage && (
+                                        <div className="image-preview-container">
+                                            <div className="image-wrapper">
+                                                <img
+                                                    src={questionImage}
+                                                    alt="Question preview"
+                                                    className="img-preview-small"
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextElementSibling.style.display = 'block';
+                                                    }}
+                                                />
+                                            </div>
+                                            <button
+                                                className="btn-remove-image"
+                                                onClick={handleRemoveQuestionImage}
+                                                disabled={isSubmitting}
+                                                aria-label="Remove question image"
+                                                title="Remove image"
+                                            >
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div> */}
 
-                                {/* Image Upload */}
-                                <div className="col-4">
-                                    <label htmlFor="" className="pt-3">Question Image</label>
+                                <div className="image-upload-container descriptive-image-box">
+                                    <label className="image-upload-label">
+                                        Image
+                                    </label>
+
                                     <div
                                         className="upload-box"
-                                        onClick={() => document.getElementById("descriptive-image-upload").click()}
+                                        onClick={() => document.getElementById("question-image-upload").click()}
                                     >
+                                        <input
+                                            type="file"
+                                            id="question-image-upload"
+                                            className="descriptive-form-control"
+                                            style={{ display: "none" }}
+                                            onChange={handleQuestionImageUpload}
+                                            accept="image/*"
+                                            disabled={isSubmitting}
+                                        />
                                         {!questionImage ? (
                                             <div className="upload-placeholder">
-                                                <span className="plus-icon">+</span>
+                                                <FaCloudUploadAlt className="upload-icon" />
                                             </div>
                                         ) : (
                                             <div className="image-preview-container">
@@ -187,34 +257,23 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                                     src={questionImage}
                                                     alt="Question preview"
                                                     className="img-preview"
-                                                    onError={(e) => {
-                                                        e.target.style.display = "none";
-                                                        e.target.nextElementSibling.style.display = "block";
-                                                    }}
                                                 />
+
                                                 <button
                                                     className="btn-remove-image"
                                                     onClick={handleRemoveQuestionImage}
                                                     disabled={isSubmitting}
                                                     aria-label="Remove question image"
-                                                    title="Remove image"
                                                 >
                                                     ×
                                                 </button>
                                             </div>
                                         )}
-                                        <input
-                                            type="file"
-                                            id="descriptive-image-upload"
-                                            style={{ display: "none" }}
-                                            onChange={handleQuestionImageUpload}
-                                            accept="image/*"
-                                            disabled={isSubmitting}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
 
+                                    </div> 
+                                </div>
+                                                                   
+                            </div>
                         </div>
 
                         <div className="secound-column">

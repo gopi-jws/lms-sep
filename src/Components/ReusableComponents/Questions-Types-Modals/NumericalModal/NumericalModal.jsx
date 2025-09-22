@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "./NumericalModal.css";
 import { FaPlus } from "react-icons/fa";
+import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
@@ -181,65 +182,41 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                 </div>
                             </div>
 
-                            <div className="numerical-form-group row">
-                                {/* Question Input */}
-                                <div className="col-8">
-                                    <label className="pt-3">Question :</label>
-                                    {isLaTeXEnabled ? (
-                                        <textarea
-                                            className="numerical-form-control latex-input"
-                                            rows="4"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                            disabled={isSubmitting}
-                                        />
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            className="numerical-form-control normal-question-input"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter question text"
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
+                            <div className="numerical-form-group numerical-qns-box">
+                                {/* Question textarea */}
+                                <div className="col-7">
+                                      <label className="pt-3">Question : </label>
+                                {isLaTeXEnabled ? (
+                                    <textarea
+                                        className="numerical-form-control numerical-latex-input"
+                                        rows="4"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                        disabled={isSubmitting}
+                                    />
+                                ) : (
+                                    <input
+                                        type="text"
+                                        className="numerical-form-control numerical-text-input"
+                                        value={questionTitle}
+                                        onChange={(e) => setQuestionTitle(e.target.value)}
+                                        placeholder="Enter question text"
+                                        disabled={isSubmitting}
+                                    />
+                                )}
                                 </div>
+                                
+                                {/* Image Upload */}
+                                <div className="image-upload-container numerical-image-box">
+                                    <label className="image-upload-label">
+                                        Image
+                                    </label>
 
-                                {/* Question Image */}
-                                <div className="col-4">
-                                    <label htmlFor="" className="pt-3">Question Image</label>
-                                    <div
+                                    <div 
                                         className="upload-box"
                                         onClick={() => document.getElementById("question-image-upload").click()}
                                     >
-                                        {!questionImage ? (
-                                            <div className="upload-placeholder">
-                                                <span className="plus-icon">+</span>
-                                        
-                                            </div>
-                                        ) : (
-                                            <div className="image-preview-container">
-                                                <img
-                                                    src={questionImage}
-                                                    alt="Question preview"
-                                                    className="img-preview"
-                                                    onError={(e) => {
-                                                        e.target.style.display = "none";
-                                                        e.target.nextElementSibling.style.display = "block";
-                                                    }}
-                                                />
-                                                <button
-                                                    className="btn-remove-image"
-                                                    onClick={handleRemoveQuestionImage}
-                                                    disabled={isSubmitting}
-                                                    aria-label="Remove question image"
-                                                    title="Remove image"
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        )}
                                         <input
                                             type="file"
                                             id="question-image-upload"
@@ -248,7 +225,31 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                             accept="image/*"
                                             disabled={isSubmitting}
                                         />
+                                        {!questionImage ? (
+                                            <div className="upload-placeholder">
+                                                <FaCloudUploadAlt className="upload-icon" />
+                                            </div>
+                                        ) : (
+                                            <div className="image-preview-container">
+                                                <img
+                                                    src={questionImage}
+                                                    alt="Question preview"
+                                                    className="img-preview"
+                                                />
+
+                                                <button
+                                                    className="btn-remove-image"
+                                                    onClick={handleRemoveQuestionImage}
+                                                    disabled={isSubmitting}
+                                                    aria-label="Remove question image"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        )}
+
                                     </div>
+                                    
                                 </div>
                             </div>
 

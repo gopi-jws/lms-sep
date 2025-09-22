@@ -22,9 +22,9 @@
     background-color: var(--modal-content-bg);
         border-radius: var(--modal-content-border-radius);
         width: var(--modal-content-width);
-        max-width: var(--modal-content-width);
+        max-width: var(--modal-content-max-width);
         max-height: var(--modal-content-max-height);
-        overflow-y: var(--modal-content-overflow-y);
+        /* overflow-y: var(--modal-content-overflow-y); */
         box-shadow: var(--modal-content-box-shadow);
         display: var(--modal-content-display);
         flex-direction: var(--modal-content-flex-direction);
@@ -290,4 +290,19 @@ input[type="file"]::file-selector-button {
     .true-false-preview-section {
         margin-top: 20px;
     }
+}
+
+.tf-latex-input {
+    width: 330px;
+    min-height: 100px;
+}
+
+.tf-text-input{
+    width: 330px;
+}
+
+.tf-image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

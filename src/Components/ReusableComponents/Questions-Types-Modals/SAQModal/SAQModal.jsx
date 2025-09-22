@@ -1,14 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Select from 'react-select';
-import "./MCQModal.css";
+import "../MCQModal/MCQModal";
 import { FaPlus } from "react-icons/fa";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
+import CKEditorRenderer from "../../CKEditorRenderer/CKEditorRenderer";
 
-const MCQModal = ({ open, onClose, initialData, }) => {
+const SAQModal = ({ open, onClose, initialData, }) => {
     const { modalRef, isBouncing } = useBounceModal(open);
     const [questionTitle, setQuestionTitle] = useState(initialData?.questionTitle || "");
     const [codeAnswers, setCodeAnswers] = useState(initialData?.codeAnswers || [{ text: "", image: null }]);
@@ -87,26 +88,68 @@ const MCQModal = ({ open, onClose, initialData, }) => {
         if (fileInput) fileInput.value = '';
     };
 
+    const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
+
     const handleCodeToggle = () => {
-        const newCodeState = !isCodeEnabled;
-        setIsCodeEnabled(newCodeState);
-        setIsLaTeXEnabled(!newCodeState);
-        setIsCodeandLaTexEnabled(false);
+        if (mode === "code") {
+            setMode("latex"); // toggle to latex if already code
+            setIsCodeEnabled(false)
+            setIsLaTeXEnabled(true)
+            setIsCodeandLaTexEnabled(false)
+        } else {
+            setMode("code"); // otherwise force code
+            setIsCodeEnabled(true);
+            setIsLaTeXEnabled(false);
+            setIsCodeandLaTexEnabled(false)
+        }
     };
 
     const handleLaTeXToggle = () => {
-        const newLaTeXState = !isLaTeXEnabled;
-        setIsLaTeXEnabled(newLaTeXState);
-        setIsCodeEnabled(!newLaTeXState);
-        setIsCodeandLaTexEnabled(false);
+        if (mode === "latex") {
+            setMode("code"); // toggle back to code if already latex
+            setIsLaTeXEnabled(false)
+            setIsCodeEnabled(true)
+        } else {
+            setMode("latex"); // otherwise force latex
+            setIsLaTeXEnabled(true)
+            setIsCodeandLaTexEnabled(false)
+            setIsCodeEnabled(false)
+        }
     };
 
     const handleCodeandLaTeXToggle = () => {
-        const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
-        setIsCodeandLaTexEnabled(newCodeandLaTeXState);
-        setIsCodeEnabled(!newCodeandLaTeXState);
-        setIsLaTeXEnabled(false);
+        if (mode === "both") {
+            setMode("code"); // toggle back to code if already both
+            setIsCodeandLaTexEnabled(false)
+            setIsCodeEnabled(true) 
+        } else {
+            setMode("both"); // otherwise force both
+            setIsCodeandLaTexEnabled(true)
+            setIsLaTeXEnabled(false)
+            setIsCodeEnabled(false)
+        }
     };
+
+
+
+    // const handleCodeToggle = () => {
+    //     setIsCodeEnabled(true);
+    //     setIsLaTeXEnabled(false);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleLaTeXToggle = () => {
+    //     setIsCodeEnabled(false);
+    //     setIsLaTeXEnabled(true);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleCodeandLaTeXToggle = () => {
+    //     setIsCodeEnabled(false);
+    //     setIsLaTeXEnabled(false);
+    //     setIsCodeandLaTexEnabled(true);
+    // };
+
 
     const addAnswerField = () => {
         if (currentAnswers.length < 10) {
@@ -254,11 +297,9 @@ const MCQModal = ({ open, onClose, initialData, }) => {
         <div className="mcq-modal-overlay">
             <div ref={modalRef} className={`mcq-modal-content ${isBouncing ? "bounce" : ""}`}>
                 <div className="mcq-modal-header">
-                
-                         <h5>{initialData ? "Edit MAQ Question" : "Add MAQ Question"}</h5>
-                    
-                    
-                    <button className="close-btn" onClick={onClose}>&times;</button>
+                    <h5>{initialData ? "Edit SAQ Question" : "Add SAQ Question"}</h5>
+
+                    <button className="close-btn" onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code')}}>&times;</button>
                 </div>
 
                 <div className="mcq-modal-body">
@@ -270,7 +311,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isCodeEnabled}
+                                            checked={mode == "code"}
                                             onChange={handleCodeToggle}
                                             disabled={isSubmitting}
                                         />
@@ -283,7 +324,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isLaTeXEnabled}
+                                            checked={mode == "latex"}
                                             onChange={handleLaTeXToggle}
                                             disabled={isSubmitting}
                                         />
@@ -296,7 +337,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isCodeandLaTeXEnabled}
+                                            checked={mode == "both"}
                                             onChange={handleCodeandLaTeXToggle}
                                             disabled={isSubmitting}
                                         />
@@ -358,7 +399,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                                     alt="Question preview"
                                                     className="img-preview"
                                                 />
-                    
+
                                                 <button
                                                     className="btn-remove-image"
                                                     onClick={handleRemoveQuestionImage}
@@ -427,7 +468,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
 
                                     </div>
 
-                                
+
                                     <div className="col-2 option-box">
                                         <label>
                                             {/* {answer.image ? "Change Image" : "Add Image"} */}
@@ -606,14 +647,40 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                     <div className="preview-question">
                                         <div className="preview-label">Question:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer
-                                                    content={questionTitle}
-                                                    isInline={false}
-                                                />
+                                            {/* {isLaTeXEnabled ? (
+                                                // <LatexRenderer
+                                                //     content={questionTitle}
+                                                //     isInline={false}
+                                                // />
+                                                <CKEditorRenderer content={questionTitle} mode="latex"/>
                                             ) : (
                                                 questionTitle || <span className="placeholder-text">No question added yet</span>
-                                            )}
+                                            )} */}
+
+                                            {
+                                                isCodeEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={questionTitle} mode="code" />
+                                                    )
+                                                ) : isLaTeXEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={questionTitle} mode="latex" />
+                                                    )
+                                                ) : (
+                                                    questionTitle.title === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+
+                                                    ) : (
+                                                        <CKEditorRenderer content={questionTitle} mode="both" />
+
+                                                    )
+                                                )
+                                            }
+
                                             {questionImage && (
                                                 <div className="question-image-container">
                                                     <img
@@ -731,4 +798,4 @@ const MCQModal = ({ open, onClose, initialData, }) => {
     );
 };
 
-export default MCQModal;
+export default SAQModal;
