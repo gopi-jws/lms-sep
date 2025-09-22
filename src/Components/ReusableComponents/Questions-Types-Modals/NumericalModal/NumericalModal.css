@@ -22,9 +22,9 @@
     background-color: var(--modal-content-bg);
     border-radius: var(--modal-content-border-radius);
     width: var(--modal-content-width);
-    max-width: var(--modal-content-width);
+    max-width: var(--modal-content-max-width);
     max-height: var(--modal-content-max-height);
-    overflow-y: var(--modal-content-overflow-y);
+    /* overflow-y: var(--modal-content-overflow-y); */
     box-shadow: var(--modal-content-box-shadow);
     display: var(--modal-content-display);
     flex-direction: var(--modal-content-flex-direction);
@@ -128,6 +128,10 @@
     border-radius: var(--form-control-border-radius);
     font-size: var(--form-control-font-size);
     transition: var(--form-control-transition);
+}
+
+.numerical-text-input{
+    width: 335px;
 }
 
 /* Input Focus */
@@ -288,4 +292,20 @@ input[type="file"]::file-selector-button {
     .numerical-preview-section {
         margin-top: 20px;
     }
+}
+
+.numerical-qns-box{
+    display: flex;
+}
+
+.numerical-latex-input{
+    width: 330px;
+    min-height: 100px;
+}
+
+.numerical-image-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 115px;
 }

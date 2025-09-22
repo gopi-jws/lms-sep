@@ -1,11 +1,13 @@
     import React from "react"
     import "katex/dist/katex.min.css"
     import { BlockMath, InlineMath } from "react-katex"
+    import Prism from "prismjs";
+    import "prismjs/themes/prism.css";
     import DOMPurify from "dompurify"
 
     const LatexRenderer = ({ content, isInline = false }) => {
         if (!content) return <div className="latex-placeholder">Content will appear here</div>
-
+        console.log("Prism:", Prism);
         const renderMixedContent = () => {
             try {
                 const normalizeContent = (text) => {

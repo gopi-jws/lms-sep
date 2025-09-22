@@ -18,7 +18,6 @@ import AddTagModal from "../../../ReusableComponents/AddTagModal/AddTagModal"
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal"
 import { getTimeAgo } from "../../../../utils/time-utils"
 import { getNextId } from "../../../../utils/idGenerator"
-import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
 
 const initialData = [
   { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -68,8 +67,11 @@ const TestIndex = () => {
   const [isMobile, setIsMobile] = useState(false)
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
   const [editingTest, setEditingTest] = useState(null)
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
+  const [ismode, setIsmode] = useState("create");
   const getSortedTests = () => {
     const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
@@ -320,6 +322,22 @@ const TestIndex = () => {
     );
   };
 
+  const handleRenameTest = (testId, updatedFields) => {
+    setData(prevData =>
+      prevData.map(test =>
+        test.id === testId
+          ? {
+            ...test,
+            test: updatedFields.name || test.test,
+            lastModified: new Date().toISOString()
+          }
+          : test
+      )
+    );
+  };
+
+  
+
   const handleCopyTest = (testId) => {
     let testToCopy = data.find(test => test.id === testId);
     if (testToCopy) {
@@ -377,10 +395,6 @@ const TestIndex = () => {
     setFilteredData(result)
   }, [activeTag, tags, data])
 
-  const handleTagAction = (row) => {
-    setSelectedQuestions([row.id])
-    setIsTagQuestionsModalOpen(true)
-  }
 
   const handleBulkTagAction = (selectedRowIds) => {
     setSelectedQuestions(selectedRowIds)
@@ -416,13 +430,9 @@ const TestIndex = () => {
 
 
   const handleDeleteTest = (testId) => {
-    setData(prevData =>
-      prevData.map(test =>
-        test.id === testId
-          ? { ...test, trashed: true, lastModified: new Date().toISOString() }
-          : test
-      )
-    );
+    setData(prevData => prevData.filter(test => test.id !== testId));
+    console.log("deletd");
+    
     // Store deleted test in localStorage 'trashedTags' array only if not already present
     const trashedTest = data.find(test => test.id === testId);
     if (trashedTest) {
@@ -455,7 +465,6 @@ const TestIndex = () => {
         openModal(row.test);
         break;
       case "edit":
-      case "rename":
         setEditingTest({
           id: row.id,
           name: row.test,
@@ -465,6 +474,13 @@ const TestIndex = () => {
         });
         setIsEditModalOpen(true);
         break;
+      case "rename":
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsRenameModalOpen(true);
+       break;
       case "pdf":
         handleDownloadPdf(row);
         break;
@@ -481,7 +497,11 @@ const TestIndex = () => {
         handleArchiveTest(row.id);
         break;
       case "delete":
-        handleDeleteTest(row.id);
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsDeleteModalOpen(true);
         break;
       case "restore":
         handleRestoreTest(row.id);
@@ -494,6 +514,7 @@ const TestIndex = () => {
     }
   };
 
+  
 
   const columns = [
     {
@@ -590,10 +611,6 @@ const TestIndex = () => {
                     <BiSolidRename />
                     <span>Rename</span>
                   </button>
-                  <button className="test-action-button" aria-label="Tag" >
-                    <FaTag />
-                    <span className="">Tag</span>
-                  </button>
                   <button className="mobile-action-item share" onClick={() => handleActionClick("share", row)}>
                     <FaShare />
                     <span>Share</span>
@@ -650,10 +667,6 @@ const TestIndex = () => {
                 <BiSolidRename />
                 <span className="tooltip-text">Rename</span>
               </button>
-              <button className="test-action-button" aria-label="Tag" onClick={() => handleTagAction(row)}>
-                <FaTag />
-                <span className="tooltip-text">Tag</span>
-              </button>
               <button className="test-action-button share" aria-label="Share" onClick={() => openShareModal(row.test)}>
                 <FaShare />
                 <span className="tooltip-text">Share</span>
@@ -702,11 +715,6 @@ const TestIndex = () => {
           trashedCount={data.filter(test => test.trashed).length}
         />
 
-        <NotificationShared
-          sender="Akash"
-          projectName="Numerical Analysis Assignment-I"
-        />
-
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Tests</h1>
@@ -719,7 +727,6 @@ const TestIndex = () => {
               </div>
             )}
           </div>
-
 
           <div className="my-data-table">
             <DataTable
@@ -784,6 +791,22 @@ const TestIndex = () => {
             mode="edit"
           />
         )}
+
+        {isRenameModalOpen && (
+          <NewTestModal
+            isOpen={isRenameModalOpen}
+            onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
+            initialName={editingTest?.name || ""}
+            mode="rename"
+            onSubmit={(updatedFields) => {
+              // updatedFields will be { name: 'new name' }
+              handleRenameTest(editingTest.id, updatedFields);
+              setIsRenameModalOpen(false);
+              setEditingTest(null);
+            }}
+          />
+        )}
+
         {isNewTestModalOpen && (
           <NewTestModal
             isOpen={isNewTestModalOpen}
@@ -792,6 +815,22 @@ const TestIndex = () => {
             mode="create"
           />
         )}
+
+        {isDeleteModalOpen && (
+          <NewTestModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => {setIsDeleteModalOpen(false); setEditingTest(null);}}
+            initialName={editingTest?.name || ""}
+            onSubmit={(updatedFields)=> {
+              handleDeleteTest(editingTest.id, updatedFields)
+              setIsDeleteModalOpen(false)
+            }}
+            mode="delete"
+          />
+        )
+
+        }
+        
       </div>
 
       {showPaginationButtons && (

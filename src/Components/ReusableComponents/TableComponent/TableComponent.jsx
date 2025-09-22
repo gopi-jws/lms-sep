@@ -6,6 +6,7 @@ import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
 import StudentBulkActions from "../StudentBulkActions/StudentBulkActions"
 import LatexRenderer from "../LatexRenderer/LatexRenderer"
+import CKEditorRenderer from '../CKEditorRenderer/CKEditorRenderer'
 import NewTestModal from "../NewTestModal/NewTestModal"
 import QuestionsBulkActions from "../QuestionsBulkActions/QuestionsBulkActions"
 
@@ -342,7 +343,9 @@ const DataTable = ({
                                                     expandedQuestions.includes(row.id) ? (
                                                         <>
                                                             {/* Full question */}
-                                                            <LatexRenderer content={row.question} />
+                                                             {/* the question convent to latex and code */}
+                                                            {/* <LatexRenderer content={row.question} /> */}
+                                                            <CKEditorRenderer content={row.question} mode={row.mode} />
 
                                                             {/* View Solution button */}
                                                             {row.answer && (

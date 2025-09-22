@@ -275,7 +275,7 @@ const Archived = () => {
           </Link>
           <div className="question-tags">
             {tags
-              .filter(tag => tag.questions.includes(row.id))
+              .filter(tag => tag.questions?.includes(row.id))
               .map(tag => (
                 <div key={tag.id} className="question-tag-container">
                   <div className="question-tag">
@@ -285,7 +285,7 @@ const Archived = () => {
                     ></span>
                     <span className="index-tag-name">{tag.name}</span>
                   </div>
-                  {/* <span
+                  { <span
                     className="tag-remove"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -293,7 +293,7 @@ const Archived = () => {
                     }}
                   >
                     &times;
-                  </span> */}
+                  </span> }
                 </div>
               ))}
           </div>

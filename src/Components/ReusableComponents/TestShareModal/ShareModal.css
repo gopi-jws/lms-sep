@@ -632,7 +632,7 @@
 }
 /* Container for the invite section */
 .invite-section {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 /* Container for email tags and input */
@@ -932,6 +932,28 @@ input[type="file"]::file-selector-button {
     }
 }
 
+
+/* remove pop*/
+
+.remove-pop{
+    position: absolute;
+    z-index: 9999;
+    background-color: white;
+    box-shadow: 0px 0px 5px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 10px;
+    border-radius: 5px;
+    top: 20px;
+}
+
+.remove-btn{
+   display: flex;
+   gap: 20px;
+   justify-content: center;
+}
 
 
 
