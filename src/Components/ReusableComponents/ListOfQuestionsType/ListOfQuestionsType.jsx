@@ -9,14 +9,12 @@ import {
     AlignLeft,
 } from "lucide-react";
 
-import SAQModal from "../Questions-Types-Modals/SAQModal/SAQModal";
 import MCQModal from "../../ReusableComponents/Questions-Types-Modals/MCQModal/MCQModal";
 import NumericalModal from "../../ReusableComponents/Questions-Types-Modals/NumericalModal/NumericalModal";
 import TrueFalseModal from "../../ReusableComponents/Questions-Types-Modals/TrueFalseModal/TrueFalseModal";
 import DescriptiveModal from "../../ReusableComponents/Questions-Types-Modals/DescriptiveModal/DescriptiveModal";
 
 const ListOfQuestionsType = ({ onClose }) => {
-    const [isSQAModalOpen, setIsSQAModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNumericalModalOpen, setIsNumericalModalOpen] = useState(false);
     const [isTrueFalseModalOpen, setIsTrueFalseModalOpen] = useState(false);
@@ -31,11 +29,11 @@ const ListOfQuestionsType = ({ onClose }) => {
                         className="questiontypes-dropdown-item"
                         onClick={(e) => {
                             e.preventDefault();
-                            setIsSQAModalOpen(true);
+                            setIsModalOpen(true);
                         }}
                     >
                         <ListOrdered className="icon" />
-                        <span className="ps-2">SAQ</span>
+                        <span className="ps-2">SAQ-1</span>
                     </Link>
                 </li>
                 <li>
@@ -48,7 +46,7 @@ const ListOfQuestionsType = ({ onClose }) => {
                         }}
                     >
                         <ListOrdered className="icon" />
-                        <span className="ps-2">MAQ</span>
+                        <span className="ps-2">MAQ-2</span>
                     </Link>
                 </li>
                 <li>
@@ -91,8 +89,7 @@ const ListOfQuestionsType = ({ onClose }) => {
                     </Link>
                 </li>
             </ul>
-            
-            <SAQModal open={isSQAModalOpen} onClose={() => setIsSQAModalOpen(false)} />
+
             <MCQModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <NumericalModal
                 open={isNumericalModalOpen}

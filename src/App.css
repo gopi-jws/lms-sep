@@ -316,7 +316,6 @@ a{
     position: relative;
     border-radius: 50px;
     padding: 6px 22px;
-    margin-left: 10px;
 }
 
 
@@ -1365,9 +1364,6 @@ background-color: #e0e0e0 !important;
             
                     /* Horizontal Rule */
                     --hr-tag-margin: 0;
-
-
-                    /* Action icon */
                 
 }
 

@@ -41,7 +41,6 @@ const AddQuestionSidebar = () => {
     return storedFolders ? JSON.parse(storedFolders) : []
   })
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
-  const [isShortAnswerModalOpen, setIsShortAnswerModalOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNumericalModalOpen, setIsNumericalModalOpen] = useState(false)
   const [isTrueFalseModalOpen, setIsTrueFalseModalOpen] = useState(false)
@@ -186,7 +185,7 @@ const AddQuestionSidebar = () => {
 
               {isDropdownOpen && (
                 <div>
-                  <ListOfQuestionsType onClose={() => setIsDropdownOpen(false)} setIsShortAnswerModalOpen={setIsShortAnswerModalOpen}/>
+                  <ListOfQuestionsType onClose={() => setIsDropdownOpen(false)} />
                 </div>
               )}
             </div>
@@ -220,7 +219,7 @@ const AddQuestionSidebar = () => {
                   className={`sidebar-contents ${isActive("") ? "active" : ""}`}
                 >
                   <ListChecks className="icon" size={20} />
-                  <span className="sidebar-letters">SAQ (10)</span>
+                  <span className="sidebar-letters">SAQ-1 (10)</span>
                 </Link>
               </li>
 
@@ -230,7 +229,7 @@ const AddQuestionSidebar = () => {
                   className={`sidebar-contents ${isActive("") ? "active" : ""}`}
                 >
                   <ListChecks className="icon" size={20} />
-                  <span className="sidebar-letters">MAQ (10)</span>
+                  <span className="sidebar-letters">MAQ-2 (10)</span>
                 </Link>
               </li>
 
@@ -342,7 +341,7 @@ const AddQuestionSidebar = () => {
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
-      <MCQModal open={isModalOpen} onClose={() => setIsModalOpen(false)} ShortAnswerModalOpen={isShortAnswerModalOpen}/>
+      <MCQModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <NumericalModal open={isNumericalModalOpen} onClose={() => setIsNumericalModalOpen(false)} />
       <TrueFalseModal open={isTrueFalseModalOpen} onClose={() => setIsTrueFalseModalOpen(false)} />
       <DescriptiveModal

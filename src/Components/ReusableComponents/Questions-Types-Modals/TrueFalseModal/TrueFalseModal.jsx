@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import "./TrueFalseModal.css";
 import 'katex/dist/katex.min.css';
-import { FaCloudUploadAlt } from "react-icons/fa";
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
 
@@ -157,8 +156,8 @@ const TrueFalseModal = ({ open, onClose, initialData }) => {
                                 </div>
                             </div>
 
-                            <div className="true-false-form-group numerical-qns-box">
-                                {/* <label className="pt-3">Question : </label>
+                            <div className="true-false-form-group">
+                                <label className="pt-3">Question : </label>
                                 {isLaTeXEnabled ? (
                                     <textarea
                                         className="true-false-form-control latex-input"
@@ -216,73 +215,7 @@ const TrueFalseModal = ({ open, onClose, initialData }) => {
                                             </button>
                                         </div>
                                     )}
-                                </div> */}
-                                <div className="col-7">
-                                    <label className="pt-3">Question : </label>
-                                    {isLaTeXEnabled ? (
-                                        <textarea
-                                            className="true-false-form-control tf-latex-input"
-                                            rows="4"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                            disabled={isSubmitting}
-                                        />
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            className="true-false-form-control tf-text-input"
-                                            value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter question text"
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
-                                </div> 
-
-                                <div className="image-upload-container numerical-image-box">
-                                    <label className="image-upload-label">
-                                        Image
-                                    </label>
-
-                                    <div 
-                                        className="upload-box"
-                                        onClick={() => document.getElementById("true-false-form-control").click()}
-                                    >
-                                        <input
-                                            type="file"
-                                            id="true-false-form-control"
-                                            style={{ display: "none" }}
-                                            onChange={handleQuestionImageUpload}
-                                            accept="image/*"
-                                            disabled={isSubmitting}
-                                        />
-                                        {!questionImage ? (
-                                            <div className="upload-placeholder">
-                                                <FaCloudUploadAlt className="upload-icon" />
-                                            </div>
-                                        ) : (
-                                            <div className="image-preview-container">
-                                                <img
-                                                    src={questionImage}
-                                                    alt="Question preview"
-                                                    className="img-preview"
-                                                />
-
-                                                <button
-                                                    className="btn-remove-image"
-                                                    onClick={handleRemoveQuestionImage}
-                                                    disabled={isSubmitting}
-                                                    aria-label="Remove question image"
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        )}
-
-                                    </div>
-                                    
-                                </div>                          
+                                </div>
                             </div>
 
                             <div className="true-false-form-group">

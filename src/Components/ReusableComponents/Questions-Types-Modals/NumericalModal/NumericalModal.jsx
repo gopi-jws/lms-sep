@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import "./NumericalModal.css";
 import { FaPlus } from "react-icons/fa";
-import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
@@ -182,13 +181,11 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                 </div>
                             </div>
 
-                            <div className="numerical-form-group numerical-qns-box">
-                                {/* Question textarea */}
-                                <div className="col-7">
-                                      <label className="pt-3">Question : </label>
+                            <div className="numerical-form-group">
+                                <label className="pt-3">Question : </label>
                                 {isLaTeXEnabled ? (
                                     <textarea
-                                        className="numerical-form-control numerical-latex-input"
+                                        className="numerical-form-control latex-input"
                                         rows="4"
                                         value={questionTitle}
                                         onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
@@ -198,58 +195,51 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                 ) : (
                                     <input
                                         type="text"
-                                        className="numerical-form-control numerical-text-input"
+                                        className="numerical-form-control"
                                         value={questionTitle}
                                         onChange={(e) => setQuestionTitle(e.target.value)}
                                         placeholder="Enter question text"
                                         disabled={isSubmitting}
                                     />
                                 )}
-                                </div>
-                                
-                                {/* Image Upload */}
-                                <div className="image-upload-container numerical-image-box">
+                                <div className="image-upload-container">
                                     <label className="image-upload-label">
-                                        Image
+                                        {questionImage ? "Change Question Image" : "Add Question Image"}
                                     </label>
-
-                                    <div 
-                                        className="upload-box"
-                                        onClick={() => document.getElementById("question-image-upload").click()}
-                                    >
-                                        <input
-                                            type="file"
-                                            id="question-image-upload"
-                                            style={{ display: "none" }}
-                                            onChange={handleQuestionImageUpload}
-                                            accept="image/*"
-                                            disabled={isSubmitting}
-                                        />
-                                        {!questionImage ? (
-                                            <div className="upload-placeholder">
-                                                <FaCloudUploadAlt className="upload-icon" />
-                                            </div>
-                                        ) : (
-                                            <div className="image-preview-container">
+                                    <input
+                                        type="file"
+                                        id="question-image-upload"
+                                        className="numerical-form-control"
+                                        onChange={handleQuestionImageUpload}
+                                        accept="image/*"
+                                        disabled={isSubmitting}
+                                    />
+                                    {questionImage && (
+                                        <div className="image-preview-container">
+                                            <div className="image-wrapper">
                                                 <img
                                                     src={questionImage}
                                                     alt="Question preview"
-                                                    className="img-preview"
+                                                    className="img-preview-small"
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextElementSibling.style.display = 'block';
+                                                    }}
                                                 />
-
-                                                <button
-                                                    className="btn-remove-image"
-                                                    onClick={handleRemoveQuestionImage}
-                                                    disabled={isSubmitting}
-                                                    aria-label="Remove question image"
-                                                >
-                                                    ×
-                                                </button>
                                             </div>
-                                        )}
-
-                                    </div>
-                                    
+                                            <button
+                                                className="btn-remove-image"
+                                                onClick={handleRemoveQuestionImage}
+                                                disabled={isSubmitting}
+                                                aria-label="Remove question image"
+                                                title="Remove image"
+                                            >
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

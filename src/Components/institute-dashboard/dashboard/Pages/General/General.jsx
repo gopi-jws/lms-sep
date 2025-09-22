@@ -14,6 +14,11 @@ const General = () => {
     <div>
       <DashBoard />
       <TestStatusBar />
+     
+
+
+
+
     </div>
     </>
   )

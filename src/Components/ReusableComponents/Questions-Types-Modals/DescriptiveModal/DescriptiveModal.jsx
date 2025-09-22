@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import "./DescriptiveModal.css";
 import 'katex/dist/katex.min.css';
-import { FaCloudUploadAlt } from "react-icons/fa";
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
 
@@ -146,8 +145,9 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                 </div>
                             </div>
 
-                            <div className="descriptive-form-group descriptive-qns-box">
-                                {/* {isLaTeXEnabled ? (
+                            <div className="descriptive-form-group">
+                                <label className="pt-3">Question : </label>
+                                {isLaTeXEnabled ? (
                                     <textarea
                                         className="descriptive-form-control latex-input"
                                         rows="6"
@@ -165,31 +165,8 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                         placeholder="Enter question text"
                                         disabled={isSubmitting}
                                     />
-                                )} */}
-                                <div className="div">
-                                    <label className="pt-3">Question : </label>
-                                    {isLaTeXEnabled ? (
-                                    <textarea
-                                            className="descriptive-form-control descriptive-latex-input"
-                                        rows="6"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                        disabled={isSubmitting}
-                                    />
-                                ) : (
-                                    <input
-                                        type="text"
-                                                className="descriptive-form-control descriptive-text-input"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(e.target.value)}
-                                        placeholder="Enter question text"
-                                        disabled={isSubmitting}
-                                    />
                                 )}
-                                </div>
-                                
-                                {/* <div className="image-upload-container">
+                                <div className="image-upload-container">
                                     <label className="image-upload-label">
                                         {questionImage ? "Change Question Image" : "Add Question Image"}
                                     </label>
@@ -227,52 +204,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                             </button>
                                         </div>
                                     )}
-                                </div> */}
-
-                                <div className="image-upload-container descriptive-image-box">
-                                    <label className="image-upload-label">
-                                        Image
-                                    </label>
-
-                                    <div
-                                        className="upload-box"
-                                        onClick={() => document.getElementById("question-image-upload").click()}
-                                    >
-                                        <input
-                                            type="file"
-                                            id="question-image-upload"
-                                            className="descriptive-form-control"
-                                            style={{ display: "none" }}
-                                            onChange={handleQuestionImageUpload}
-                                            accept="image/*"
-                                            disabled={isSubmitting}
-                                        />
-                                        {!questionImage ? (
-                                            <div className="upload-placeholder">
-                                                <FaCloudUploadAlt className="upload-icon" />
-                                            </div>
-                                        ) : (
-                                            <div className="image-preview-container">
-                                                <img
-                                                    src={questionImage}
-                                                    alt="Question preview"
-                                                    className="img-preview"
-                                                />
-
-                                                <button
-                                                    className="btn-remove-image"
-                                                    onClick={handleRemoveQuestionImage}
-                                                    disabled={isSubmitting}
-                                                    aria-label="Remove question image"
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        )}
-
-                                    </div> 
                                 </div>
-                                                                   
                             </div>
                         </div>
 
