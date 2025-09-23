@@ -547,7 +547,9 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                     noOptionsMessage={() => "No options available"}
                                 />
                             </div>
+                            
 
+                             {/* Solution  */}
                             <div className="mcq-form-group option">
                                 <div className="answer-header">
                                     <label>Solution :</label>
@@ -708,11 +710,37 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                                         )}
                                                     </div>
                                                     <div className="answer-content">
-                                                        {isLaTeXEnabled ? (
-                                                            <LatexRenderer content={answer.text?.trim()} />
+                                                        {/* {isLaTeXEnabled ? (
+                                                            // <LatexRenderer content={answer.text?.trim()} />
+                                                            <CKEditorRenderer content={answer.text?.trim()} />
                                                         ) : (
                                                             answer.text?.trim() || <span className="placeholder-text">Empty answer</span>
-                                                        )}
+                                                        )} */}
+
+                                                        {
+                                                            isCodeEnabled ? (
+                                                                questionTitle.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                        <CKEditorRenderer content={answer.text?.trim()} mode="code" />
+                                                                )
+                                                            ) : isLaTeXEnabled ? (
+                                                                questionTitle.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="latex" />
+                                                                )
+                                                            ) : (
+                                                                questionTitle.title === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="both" />
+
+                                                                )
+                                                            )
+                                                        }
+
                                                         {answer.image && (
                                                             <div className="answer-image-container">
                                                                 <img
@@ -752,14 +780,38 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                     <div className="preview-solution">
                                         <div className="preview-label">Solution:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
+                                            {/* {isLaTeXEnabled ? (
                                                 <LatexRenderer
                                                     content={solutionText}
                                                     isInline={false}
                                                 />
                                             ) : (
                                                 solutionText || <span className="placeholder-text">No solution added yet</span>
-                                            )}
+                                            )} */}
+
+                                            {
+                                                isCodeEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="code" />
+                                                    )
+                                                ) : isLaTeXEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="latex" />
+                                                    )
+                                                ) : (
+                                                    questionTitle.title === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="both" />
+
+                                                    )
+                                                )
+                                            }
                                             {solutionImage && (
                                                 <div className="solution-image-container">
                                                     <img

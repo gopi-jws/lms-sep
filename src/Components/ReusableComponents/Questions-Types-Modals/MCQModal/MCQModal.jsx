@@ -7,6 +7,8 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
+import CKEditorRenderer from "../../CKEditorRenderer/CKEditorRenderer";
+
 
 const MCQModal = ({ open, onClose, initialData, }) => {
     const { modalRef, isBouncing } = useBounceModal(open);
@@ -87,26 +89,69 @@ const MCQModal = ({ open, onClose, initialData, }) => {
         if (fileInput) fileInput.value = '';
     };
 
-    const handleCodeToggle = () => {
-        const newCodeState = !isCodeEnabled;
-        setIsCodeEnabled(newCodeState);
-        setIsLaTeXEnabled(!newCodeState);
-        setIsCodeandLaTexEnabled(false);
-    };
 
-    const handleLaTeXToggle = () => {
-        const newLaTeXState = !isLaTeXEnabled;
-        setIsLaTeXEnabled(newLaTeXState);
-        setIsCodeEnabled(!newLaTeXState);
-        setIsCodeandLaTexEnabled(false);
-    };
+    const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
+    
+        const handleCodeToggle = () => {
+            if (mode === "code") {
+                setMode("latex"); // toggle to latex if already code
+                setIsCodeEnabled(false)
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+            } else {
+                setMode("code"); // otherwise force code
+                setIsCodeEnabled(true);
+                setIsLaTeXEnabled(false);
+                setIsCodeandLaTexEnabled(false)
+            }
+        };
+    
+        const handleLaTeXToggle = () => {
+            if (mode === "latex") {
+                setMode("code"); // toggle back to code if already latex
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(true)
+            } else {
+                setMode("latex"); // otherwise force latex
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
+    
+        const handleCodeandLaTeXToggle = () => {
+            if (mode === "both") {
+                setMode("code"); // toggle back to code if already both
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(true) 
+            } else {
+                setMode("both"); // otherwise force both
+                setIsCodeandLaTexEnabled(true)
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
 
-    const handleCodeandLaTeXToggle = () => {
-        const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
-        setIsCodeandLaTexEnabled(newCodeandLaTeXState);
-        setIsCodeEnabled(!newCodeandLaTeXState);
-        setIsLaTeXEnabled(false);
-    };
+    // const handleCodeToggle = () => {
+    //     const newCodeState = !isCodeEnabled;
+    //     setIsCodeEnabled(newCodeState);
+    //     setIsLaTeXEnabled(!newCodeState);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleLaTeXToggle = () => {
+    //     const newLaTeXState = !isLaTeXEnabled;
+    //     setIsLaTeXEnabled(newLaTeXState);
+    //     setIsCodeEnabled(!newLaTeXState);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleCodeandLaTeXToggle = () => {
+    //     const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
+    //     setIsCodeandLaTexEnabled(newCodeandLaTeXState);
+    //     setIsCodeEnabled(!newCodeandLaTeXState);
+    //     setIsLaTeXEnabled(false);
+    // };
 
     const addAnswerField = () => {
         if (currentAnswers.length < 10) {
