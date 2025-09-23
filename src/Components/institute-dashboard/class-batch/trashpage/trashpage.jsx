@@ -248,7 +248,7 @@ const TrashPage = ({ trashedClasses, handleRestore, handleTrashDelete }) => {
               <DataTable
                 columns={columns}
                 data={getCurrentPageData()}
-                availableActions={["delete", "archive", "download", "tag", "more"]}
+                availableActions={["delete", "archive", "download", "restore"]}
                 enableToggle={false}
                 searchoption={true}
                 searchQuery={searchQuery}

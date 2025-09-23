@@ -425,7 +425,7 @@ const Trashed = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag"]}
+              availableActions={["delete", "download", "tag","restore"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}

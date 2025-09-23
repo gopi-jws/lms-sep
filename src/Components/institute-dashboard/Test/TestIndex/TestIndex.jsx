@@ -73,19 +73,19 @@ const TestIndex = () => {
   const [editingTest, setEditingTest] = useState(null)
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
   const [ismode, setIsmode] = useState("create");
-  const getSortedTests = () => {
-    const tests = JSON.parse(localStorage.getItem("tests")) || [];
+  // const getSortedTests = () => {
+  //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
-    return tests.sort((a, b) => {
+  //   return tests.sort((a, b) => {
 
-      if (a.status === "Published" && b.status !== "Published") return -1;
-      if (a.status !== "Published" && b.status === "Published") return 1;
-      if (a.status === "Published" && b.status === "Published") {
-        return new Date(b.lastModified) - new Date(a.lastModified);
-      }
-      return new Date(b.lastModified) - new Date(a.lastModified);
-    });
-  };
+  //     if (a.status === "Published" && b.status !== "Published") return -1;
+  //     if (a.status !== "Published" && b.status === "Published") return 1;
+  //     if (a.status === "Published" && b.status === "Published") {
+  //       return new Date(b.lastModified) - new Date(a.lastModified);
+  //     }
+  //     return new Date(b.lastModified) - new Date(a.lastModified);
+  //   });
+  // };
   const [data, setData] = useState(() => {
     const tests = JSON.parse(localStorage.getItem("tests"));
     const savedTests = tests
