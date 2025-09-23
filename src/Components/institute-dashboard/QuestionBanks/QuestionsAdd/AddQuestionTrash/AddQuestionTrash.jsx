@@ -218,10 +218,10 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
           <div className="test-index-header">
             <h1 className="breadcrumb">QB 1 Questions</h1>
             <div className="columnvisibility-wrapper">
-              <ColumnVisibilityDropdown
+              {/* <ColumnVisibilityDropdown
                 columns={columns}
                 onToggleColumn={toggleColumnVisibility}
-              />
+              /> */}
             </div>
           </div>
 
@@ -229,7 +229,7 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
             <DataTable
               columns={visibleColumns}
               data={getCurrentPageData()}
-              availableActions={["delete"]}
+              availableActions={["delete" , "restore"]}
               enableToggle={true}
               searchoption={true}
               searchQuery={searchQuery}

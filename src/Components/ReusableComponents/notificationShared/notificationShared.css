@@ -27,14 +27,17 @@
 }
 
 .btn-join {
-    background-color: var(--button-bg-color);
-    color: #fff;
+    background-color: #fff;
     border: none;
     padding: 8px 30px;
     border-radius: 30px;
     cursor: pointer;
     font-size: 16px;
+    border: 1px solid #666;
+    font-weight: 700;
+    color: #34495E;
 }
+
 
 .btn-close {
   background: none;

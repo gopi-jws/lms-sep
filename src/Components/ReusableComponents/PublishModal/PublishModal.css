@@ -253,7 +253,7 @@
     width: 95%;
     max-height: 200px;
     overflow-y: auto;
-    margin-top: 8px;
+    margin-top: 0;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -680,7 +680,7 @@ input {
 }
 
 .advanced-options.open {
-    max-height: 500px;
+    max-height: 100% !important;
     /* Adjust this height if needed */
     opacity: 1;
     transform: translateY(0);
@@ -1076,7 +1076,7 @@ input {
 /* Input Fields */
 .publish-form-control {
     width: var(--form-control-width);
-    /* padding: var(--form-control-padding); */
+    padding: var(--form-control-padding);
     border: var(--form-control-border);
     border-radius: var(--form-control-border-radius);
     font-size: var(--form-control-font-size);

@@ -1,17 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes, FaInfoCircle } from "react-icons/fa";
-import { toast } from "react-toastify";  // ⬅ only toast here
+import { toast } from "react-toastify";
 import "./NotificationShared.css";
+import { useNavigate } from "react-router-dom";
 
-const NotificationShared = ({ sender, projectName }) => {
-  const [visible, setVisible] = useState(true);
+const NotificationShared = ({ sender, projectName, testId }) => {
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    // Check if notification has already been shown in this tab session
+    const alreadyShown = sessionStorage.getItem("notificationShown");
+
+    if (!alreadyShown) {
+      setVisible(true);
+      sessionStorage.setItem("notificationShown", "true");
+    }
+  }, []);
 
   const handleJoin = () => {
-    toast.success(`You successfully joined the project: ${projectName}`, {
+    navigate(`/test/${testId}/movetest`, { state: { testId } });
+
+    toast.success(`You successfully joined the test: ${projectName}`, {
       position: "top-right",
       autoClose: 3000,
     });
-    setVisible(false); // hide notification
+
+    setVisible(false);
   };
 
   const handleClose = () => {
@@ -34,7 +49,7 @@ const NotificationShared = ({ sender, projectName }) => {
 
       <div className="notification-actions">
         <button className="btn-join" onClick={handleJoin}>
-          Join
+          Join Test
         </button>
         <button
           className="btn-close"

@@ -200,7 +200,7 @@ label {
   font-weight: bold;
 }
 
-.dropdown {
+/* .dropdown {
   position: absolute;
   background: white;
   border: 1px solid #ccc;
@@ -211,6 +211,7 @@ label {
   padding: 0;
   z-index: 300;
 }
+
 .dropdown:focus{
   box-shadow: 0 0 0px 3px rgba(3, 125, 226, 0.4);
     border: 1px solid #007bff;
@@ -222,7 +223,7 @@ label {
 
 .dropdown li:hover {
   background: #f0f0f0;
-}
+} */
 
 .form-group {
   display: flex;

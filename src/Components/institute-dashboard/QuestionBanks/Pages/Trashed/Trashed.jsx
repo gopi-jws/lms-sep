@@ -240,7 +240,7 @@ const Trashed = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-              availableActions={["delete"]}
+              availableActions={["delete","restore"]}
               enableToggle={false}
               searchoption={true}
               searchQuery={searchQuery}

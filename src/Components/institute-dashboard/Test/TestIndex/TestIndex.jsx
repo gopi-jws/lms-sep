@@ -18,6 +18,7 @@ import AddTagModal from "../../../ReusableComponents/AddTagModal/AddTagModal"
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal"
 import { getTimeAgo } from "../../../../utils/time-utils"
 import { getNextId } from "../../../../utils/idGenerator"
+import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
 
 const initialData = [
   { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -72,16 +73,16 @@ const TestIndex = () => {
   const getSortedTests = () => {
     const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
-    return tests.sort((a, b) => {
+  //   return tests.sort((a, b) => {
 
-      if (a.status === "Published" && b.status !== "Published") return -1;
-      if (a.status !== "Published" && b.status === "Published") return 1;
-      if (a.status === "Published" && b.status === "Published") {
-        return new Date(b.lastModified) - new Date(a.lastModified);
-      }
-      return new Date(b.lastModified) - new Date(a.lastModified);
-    });
-  };
+  //     if (a.status === "Published" && b.status !== "Published") return -1;
+  //     if (a.status !== "Published" && b.status === "Published") return 1;
+  //     if (a.status === "Published" && b.status === "Published") {
+  //       return new Date(b.lastModified) - new Date(a.lastModified);
+  //     }
+  //     return new Date(b.lastModified) - new Date(a.lastModified);
+  //   });
+  // };
   const [data, setData] = useState(() => {
     const tests = JSON.parse(localStorage.getItem("tests"));
     const savedTests = tests
@@ -700,6 +701,12 @@ const TestIndex = () => {
           onCreateTest={handleCreateTest}
           archivedCount={data.filter(test => test.archived).length}
           trashedCount={data.filter(test => test.trashed).length}
+        />
+
+        <NotificationShared
+          sender="Akash"
+          projectName="Numerical Analysis Assignment-I"
+          testId={1}
         />
 
         <div className="test-index-container">

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Trash2, Archive, Download, Check } from "lucide-react";
+import { Trash2, Archive, Download, Check ,RotateCcw } from "lucide-react";
 import { BiSolidTag } from "react-icons/bi";
 import "./BulkAction.css";
 import AddTagModal from "../../ReusableComponents/AddTagModal/AddTagModal";
@@ -201,6 +201,7 @@ const BulkActions = ({
       }
     };
 
+
     switch (action) {
       case "delete":
         return (
@@ -232,6 +233,16 @@ const BulkActions = ({
             <Download size={18} />
           </button>
         );
+      case "restore":
+        return (
+          <button
+            className={baseClass} 
+            // data-tooltip="Restore"
+            onClick={handleActionClick}
+          >
+            Restore
+          </button>
+        )
       case "tag":
         return (
           <button
@@ -280,7 +291,9 @@ const BulkActions = ({
         {availableActions
           .filter(action => ["delete", "archive", "download"].includes(action))
           .map((action, index, filteredActions) => {
+            
             const isLastVisible = action === lastVisibleAction;
+
             const isLastItem = index === filteredActions.length - 1;
 
             return (
@@ -295,7 +308,6 @@ const BulkActions = ({
       </div>
 
       {/* Tag in its own container */}
-      {/* Tag in its own container */}
       {availableActions.includes("tag") && (
         <div className="tube-bulk-actions tag-actions">
           {renderActionButton("tag", 0, false)}
@@ -308,6 +320,14 @@ const BulkActions = ({
           {renderActionButton("more", 0, false)}
         </div>
       )}
+
+      {/* Restore in its own container */}
+      {availableActions.includes("restore") && (
+        <div className="tube-bulk-actions restore-actions">
+          {renderActionButton("restore", 0, false)}
+        </div>
+      )}
+
       {/* Tag Dropdown */}
       {activeDropdown === "tag" && (
 
@@ -342,8 +362,6 @@ const BulkActions = ({
                 }
               })
               console.log('willAddNewQuestions', willAddNewQuestions);
-
-
 
               return (
                 <li
