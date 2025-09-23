@@ -70,8 +70,8 @@ const TestIndex = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
-  const getSortedTests = () => {
-    const tests = JSON.parse(localStorage.getItem("tests")) || [];
+  // const getSortedTests = () => {
+  //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
   //   return tests.sort((a, b) => {
 
