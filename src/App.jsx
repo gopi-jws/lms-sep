@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 
-
 // import General from './Components/institute-dashboard/General/General';
 import MainDashboard from './Routes/MainDashboard.jsx';
 import TeachersRoutes from "./Routes/teachersRoutes.jsx";

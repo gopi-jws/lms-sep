@@ -266,6 +266,7 @@ const SharedWithMe = () => {
                     <FaCopy />
                     <span>Copy</span>
                   </button>
+
                   <button
                     className="mobile-action-item pdf"
                     onClick={() => handleActionClick('pdf', row)}
@@ -282,31 +283,46 @@ const SharedWithMe = () => {
                     <span>Archive</span>
                   </button>
 
+                  <button
+                    className="mobile-action-item delete"
+                    onClick={() => handleActionClick('delete', row)}
+                  >
+                    <FaTrash />
+                    <span>Delete</span>
+                  </button>
+
                 </div>
               )}
             </div>
           ) : (
             <div className="flex gap-2">
 
-              <button className="test-action-button copy" aria-label="Copy">
+              <button className="test-action-button copy" aria-label="Copy" onClick={() => handleActionClick('copy', row)}>
                 <FaCopy />
                 <span className="tooltip-text">Copy</span>
               </button>
-              <button className="test-action-button pdf" aria-label="Download PDF">
+
+              <button className="test-action-button pdf" aria-label="Download PDF" onClick={() => handleActionClick('pdf', row)}>
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>
 
-              <button className="test-action-button archive" aria-label="Archive">
+              <button className="test-action-button archive" aria-label="Archive" onClick={() => handleActionClick('archive', row)}>
                 <FaArchive />
                 <span className="tooltip-text">Archive</span>
+              </button>
+
+              <button className="test-action-button delete" aria-label="Delete" onClick={() => handleActionClick('delete', row)}>
+                <FaTrash />
+                <span className="tooltip-text">Delete</span>
               </button>
 
             </div>
           )}
         </div>
       ),
-    },
+    }
+
   ];
 
   return (
@@ -322,7 +338,7 @@ const SharedWithMe = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag"]}
+              availableActions={["delete", "download", "tag",]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}

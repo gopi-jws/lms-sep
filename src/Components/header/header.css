@@ -7,7 +7,7 @@
   z-index: 600;
   background-color: #fff;
   transition: all 0.3s ease;
-  padding-left: 12px;
+  /* padding-left: 12px; */
 }
 
 /* Alternative approach using pseudo-elements for more control */
@@ -50,7 +50,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 55px;
+  height: 70px;
   max-width: 100%;
   margin: 0 auto;
 }
