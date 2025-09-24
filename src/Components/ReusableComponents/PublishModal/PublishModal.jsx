@@ -508,6 +508,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                         onDateChange={handleDateTimeChange}
                                         className=""
                                     />
+                                    
                                 </div>
 
 
@@ -583,7 +584,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
 
                                     {emailThroughEmail && (
                                         <div className="publish-form-group">
-                                            <label>Maximum Allowed Enrollments</label>
+                                            <label>Enter maximum allowed Enrollments</label>
                                             <input
                                                 type="number"
                                                 value={attemptLimit}
@@ -593,38 +594,30 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                                         setAttemptLimit(value);
                                                     }
                                                 }}
-                                                placeholder="Enter maximum allowed attempts"
+                                                placeholder="Enter maximum allowed enrollments"
                                                 className="mcq-form-control"
                                             />
                                         </div>
                                     )}
-                                    <div className="publish-form-group">
-                                        <label >Enrollment Deadline</label>
-                                        <div className="date-picker-wrapper">
-                                            <DatePicker
-                                                showTime={{
-                                                    format: 'HH:mm',
-                                                    minuteStep: 15,
-                                                    suffixIcon: <FaClock className="time-icon" />,
-                                                }}
-                                                format="DD-MM-YYYY HH:mm"
-                                                value={enrollmentDeadline}
-                                                onChange={(date) => setEnrollmentDeadline(date)}
-                                                className={`date-range-picker ${errors.enrollmentDeadline ? "error" : ""}`}
-                                                disabledDate={(current) => current && current < dayjs().startOf('day')}
-                                                suffixIcon={<FaCalendarAlt className="calendar-icon" />}
+                                    <div className="publish-form-group"
+>
+                                        <label>Enrollment Deadline</label>
+                                        <div className="">
+                                            <CustomDateTimePicker
+                                                selectedDate={enrollmentDeadline}
+                                                onDateChange={setEnrollmentDeadline}
+                                                className={`${errors.enrollmentDeadline ? "error" : ""}`}
                                                 placeholder="Select date and time"
                                             />
+
                                             {errors.enrollmentDeadline && (
                                                 <div className="error-message">{errors.enrollmentDeadline}</div>
                                             )}
                                         </div>
                                     </div>
 
-
                                 </div>
                             )}
-
 
                         </div>
 

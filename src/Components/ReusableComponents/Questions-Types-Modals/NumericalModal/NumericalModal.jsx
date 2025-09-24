@@ -79,19 +79,62 @@ const NumericalModal = ({ open, onClose, initialData }) => {
         if (fileInput) fileInput.value = '';
     };
 
-    const handleCodeToggle = () => {
-        const newCodeState = !isCodeEnabled;
-        setIsCodeEnabled(newCodeState);
-        if (!newCodeState) setIsLaTeXEnabled(true);
-        else setIsLaTeXEnabled(false);
-    };
+    const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
+    
+        const handleCodeToggle = () => {
+            if (mode === "code") {
+                setMode("latex"); // toggle to latex if already code
+                setIsCodeEnabled(false)
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+            } else {
+                setMode("code"); // otherwise force code
+                setIsCodeEnabled(true);
+                setIsLaTeXEnabled(false);
+                setIsCodeandLaTexEnabled(false)
+            }
+        };
+    
+        const handleLaTeXToggle = () => {
+            if (mode === "latex") {
+                setMode("code"); // toggle back to code if already latex
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(true)
+            } else {
+                setMode("latex"); // otherwise force latex
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
+    
+        const handleCodeandLaTeXToggle = () => {
+            if (mode === "both") {
+                setMode("code"); // toggle back to code if already both
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(true) 
+            } else {
+                setMode("both"); // otherwise force both
+                setIsCodeandLaTexEnabled(true)
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
+    
 
-    const handleLaTeXToggle = () => {
-        const newLaTeXState = !isLaTeXEnabled;
-        setIsLaTeXEnabled(newLaTeXState);
-        if (!newLaTeXState) setIsCodeEnabled(true);
-        else setIsCodeEnabled(false);
-    };
+    // const handleCodeToggle = () => {
+    //     const newCodeState = !isCodeEnabled;
+    //     setIsCodeEnabled(newCodeState);
+    //     if (!newCodeState) setIsLaTeXEnabled(true);
+    //     else setIsLaTeXEnabled(false);
+    // };
+
+    // const handleLaTeXToggle = () => {
+    //     const newLaTeXState = !isLaTeXEnabled;
+    //     setIsLaTeXEnabled(newLaTeXState);
+    //     if (!newLaTeXState) setIsCodeEnabled(true);
+    //     else setIsCodeEnabled(false);
+    // };
 
     const cleanLatexInput = (text) => {
         if (!text) return '';
@@ -160,7 +203,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isCodeEnabled}
+                                            checked={mode == "code"}
                                             onChange={handleCodeToggle}
                                             disabled={isSubmitting}
                                         />
@@ -173,13 +216,26 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isLaTeXEnabled}
+                                            checked={mode === "latex"}
                                             onChange={handleLaTeXToggle}
                                             disabled={isSubmitting}
                                         />
                                         <span className="slider round"></span>
                                     </div>
                                 </div>
+
+                                {/* <div className="switch-wrapper">
+                                    <label>Enable Code&LateX</label>
+                                    <div className="switch" onClick={(e) => e.stopPropagation()}>
+                                        <input
+                                            type="checkbox"
+                                            checked={mode == "both"}
+                                            onChange={handleCodeandLaTeXToggle}
+                                            disabled={isSubmitting}
+                                        />
+                                        <span className="slider round"></span>
+                                    </div>
+                                </div> */}
                             </div>
 
                             <div className="numerical-form-group numerical-qns-box">

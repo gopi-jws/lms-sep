@@ -40,6 +40,7 @@ const TestSidebar = ({
   const [activeSection, setActiveSection] = useState("Alltest");
   const [modalHeading, setModalHeading] = useState("");
   const [editingTag, setEditingTag] = useState(null);
+  const [mode, setMode] = useState("")
   // const [tags, setTags] = useState(() => {
   //   const storedTags = localStorage.getItem("tags");
   //   return storedTags ? JSON.parse(storedTags) : [];

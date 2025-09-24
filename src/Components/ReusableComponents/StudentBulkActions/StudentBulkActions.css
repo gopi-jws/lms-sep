@@ -10,7 +10,6 @@
   align-items: center;
   border: 1px solid;
   border-radius: 30px;
-  overflow: hidden; /* optional: keeps hover bg inside rounded corners */
 }
 
 /* Each button wrapper */
@@ -48,12 +47,15 @@
 /* Hover state for all buttons */
 .tube-action-button:hover {
     background-color: #e2e8f0;
+
 }
 
 .tube-action-button:hover {
     background-color: #e2e8f0;
     width: 100%;
 }
+
+
 
 /* Tooltip */
 .tube-action-button[data-tooltip]:hover::after {

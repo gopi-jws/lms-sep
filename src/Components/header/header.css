@@ -102,6 +102,7 @@
 .nav-item.active {
   background-color: #f0f7ff;
   color: #037de2;
+  font-weight: 500;
 }
 
 .nav-icon {

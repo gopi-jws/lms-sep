@@ -21,9 +21,8 @@ import TeachersModuleRoutes from './Routes/TeachersModuleRoutes.jsx';
 
 function App() {
   return (
-    <Router basename="/lmsjuly12">
+    <Router basename="/lms-sep/">
       <Routes>
-
 
         {/* Define routes for institute Dashboard components */}s
         <Route path="/" element={<MainDashboard />} />
@@ -34,7 +33,6 @@ function App() {
         <Route path="/Test/*" element={<TestRoutes />} />
         <Route path="/teachers/*" element={<TeachersModuleRoutes />} />
         <Route path="/subscription/*" element={<SubscriptionRoutes />} />
-
 
         {/* Teachers Dashboard Routes */}
         <Route path="/teachers-dashboard/*" element={<TeachersRoutes />} />

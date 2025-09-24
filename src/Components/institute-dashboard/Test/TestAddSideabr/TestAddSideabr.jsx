@@ -34,7 +34,7 @@ const TestAddSidebar = () => {
   const handleNewQuestionClick = () => {
     const id = "1";
     sessionStorage.setItem("testQuestionData", JSON.stringify({ id }));
-    window.open(`/lmsjuly12/test/${id}/movetest/testquestionadd`, "_blank");
+    window.open(`/lms-sep/test/${id}/movetest/testquestionadd`, "_blank");
   };
 
   const handleAddFolder = ({ name, color }) => {

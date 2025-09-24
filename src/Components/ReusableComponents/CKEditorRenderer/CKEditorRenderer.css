@@ -3,7 +3,7 @@
 /* ========================= */
 pre[class*="language-"] {
     /* Dark background for code blocks */
-    color: var(--bs-body-color);
+    color: var(--bs-body-color) !important;
     /* Default text color */
     text-align: start;
     margin: 1em 0;

@@ -18,6 +18,7 @@ import AddTagModal from "../../../ReusableComponents/AddTagModal/AddTagModal"
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal"
 import { getTimeAgo } from "../../../../utils/time-utils"
 import { getNextId } from "../../../../utils/idGenerator"
+import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
 
 const initialData = [
   { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -69,22 +70,24 @@ const TestIndex = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
+  const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false)
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
-  const [ismode, setIsmode] = useState("create");
-  const getSortedTests = () => {
-    const tests = JSON.parse(localStorage.getItem("tests")) || [];
+  const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
+  // const getSortedTests = () => {
+  //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
-    return tests.sort((a, b) => {
+  //   return tests.sort((a, b) => {
 
-      if (a.status === "Published" && b.status !== "Published") return -1;
-      if (a.status !== "Published" && b.status === "Published") return 1;
-      if (a.status === "Published" && b.status === "Published") {
-        return new Date(b.lastModified) - new Date(a.lastModified);
-      }
-      return new Date(b.lastModified) - new Date(a.lastModified);
-    });
-  };
+  //     if (a.status === "Published" && b.status !== "Published") return -1;
+  //     if (a.status !== "Published" && b.status === "Published") return 1;
+  //     if (a.status === "Published" && b.status === "Published") {
+  //       return new Date(b.lastModified) - new Date(a.lastModified);
+  //     }
+  //     return new Date(b.lastModified) - new Date(a.lastModified);
+  //   });
+  // };
   const [data, setData] = useState(() => {
     const tests = JSON.parse(localStorage.getItem("tests"));
     const savedTests = tests
@@ -338,24 +341,41 @@ const TestIndex = () => {
 
   
 
-  const handleCopyTest = (testId) => {
+  const handleCopyTest = (testId, newName, selectedTags = []) => {
     let testToCopy = data.find(test => test.id === testId);
+         console.log(testToCopy.test);
+         
     if (testToCopy) {
+      const newTestId = Date.now();
       const newTest = {
         ...testToCopy,
-        id: Date.now(),
-        test: `${testToCopy.test} (copy)`,
+        id: newTestId,
+        test: newName || `${testToCopy.test}`,
         lastModified: new Date().toISOString(),
-        status: 'Not Published'
+        status: "Not Published"
       };
+      
+
       const originalIndex = data.findIndex(test => test.id === testId);
+
+      // 1️⃣ Update main data with the new test
       setData(prevData => [
         ...prevData.slice(0, originalIndex + 1),
         newTest,
         ...prevData.slice(originalIndex + 1)
       ]);
+
+      // 2️⃣ Update tags so selected ones include the new testId
+      setTags(prevTags =>
+        prevTags.map(tag =>
+          selectedTags.includes(tag.id)
+            ? { ...tag, questions: [...tag.questions, newTestId] }
+            : tag
+        )
+      );
     }
   };
+
 
   const handleCreateTest = (testData) => {
     const newTest = {
@@ -488,13 +508,22 @@ const TestIndex = () => {
         handleDownloadZip(row);
         break;
       case "copy":
-        handleCopyTest(row.id);
+        // handleCopyTest(row.id);
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsCopyModalOpen(true);
         break;
       case "share":
         openShareModal(row.test);
         break;
       case "archive":
-        handleArchiveTest(row.id);
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsArchivedModalOpen(true)
         break;
       case "delete":
         setEditingTest({
@@ -715,6 +744,12 @@ const TestIndex = () => {
           trashedCount={data.filter(test => test.trashed).length}
         />
 
+        <NotificationShared
+          sender="Akash"
+          projectName="Numerical Analysis Assignment-I"
+          testId={1}
+        />
+
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Tests</h1>
@@ -830,8 +865,35 @@ const TestIndex = () => {
         )
 
         }
+
+        {isCopyModalOpen && (
+          <NewTestModal
+            isOpen={isCopyModalOpen}
+            onClose={() => setIsCopyModalOpen(false)}
+            initialName={editingTest?.name || ""}
+            initialId={editingTest?.id || ""}
+            mode="copy"
+            onSubmit={(data) => handleCopyTest(editingTest.id, data.name, data.tags)}
+          />
+        )}
+
+        {isArchivedModalOpen && (
+          <NewTestModal
+            isOpen={isArchivedModalOpen}
+            onClose={() => { setIsArchivedModalOpen(false); setEditingTest(null); }}
+            initialName={editingTest?.name || ""}
+            onSubmit={() => {
+              handleArchiveTest(editingTest.id);
+              setIsArchivedModalOpen(false)
+            }}
+            mode="archive"
+          />
+        )}
+
         
       </div>
+
+     
 
       {showPaginationButtons && (
         <PaginationButtons

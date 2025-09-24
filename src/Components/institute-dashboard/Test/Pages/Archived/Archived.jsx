@@ -219,7 +219,7 @@ const Archived = () => {
   };
   const handleActionClick = (action, row) => {
     // Close dropdown first
-    setOpenDropdownId(null);
+    // setOpenDropdownId(null);
 
     // Then execute the action
     switch (action) {
