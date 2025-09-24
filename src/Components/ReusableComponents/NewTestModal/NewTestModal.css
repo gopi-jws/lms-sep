@@ -252,9 +252,24 @@ input[type="file"]::file-selector-button {
 }
 
 .delete{
-    margin: 20px 0px 20px 20px;
+    margin: 20px 0px 20px 40px;
+    list-style: disc;
+    font-weight: bolder;
 }
 
+.copytestTag{
+    margin-top: 16px;
+    display: flex;
+}
+
+.copytest-qus-tag{
+    margin-left: 10px;
+    padding-bottom: 5px;
+}
+
+.pop-titale{
+    margin-left: 10px;
+}
 
 
 /* Responsive Styles */
@@ -266,5 +281,4 @@ input[type="file"]::file-selector-button {
         max-height: 95vh;
     }
 
-  
 }

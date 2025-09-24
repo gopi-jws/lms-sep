@@ -7,6 +7,8 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
+import CKEditorRenderer from "../../CKEditorRenderer/CKEditorRenderer";
+
 
 const MCQModal = ({ open, onClose, initialData, }) => {
     const { modalRef, isBouncing } = useBounceModal(open);
@@ -87,26 +89,69 @@ const MCQModal = ({ open, onClose, initialData, }) => {
         if (fileInput) fileInput.value = '';
     };
 
-    const handleCodeToggle = () => {
-        const newCodeState = !isCodeEnabled;
-        setIsCodeEnabled(newCodeState);
-        setIsLaTeXEnabled(!newCodeState);
-        setIsCodeandLaTexEnabled(false);
-    };
 
-    const handleLaTeXToggle = () => {
-        const newLaTeXState = !isLaTeXEnabled;
-        setIsLaTeXEnabled(newLaTeXState);
-        setIsCodeEnabled(!newLaTeXState);
-        setIsCodeandLaTexEnabled(false);
-    };
+    const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
+    
+        const handleCodeToggle = () => {
+            if (mode === "code") {
+                setMode("latex"); // toggle to latex if already code
+                setIsCodeEnabled(false)
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+            } else {
+                setMode("code"); // otherwise force code
+                setIsCodeEnabled(true);
+                setIsLaTeXEnabled(false);
+                setIsCodeandLaTexEnabled(false)
+            }
+        };
+    
+        const handleLaTeXToggle = () => {
+            if (mode === "latex") {
+                setMode("code"); // toggle back to code if already latex
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(true)
+            } else {
+                setMode("latex"); // otherwise force latex
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
+    
+        const handleCodeandLaTeXToggle = () => {
+            if (mode === "both") {
+                setMode("code"); // toggle back to code if already both
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(true) 
+            } else {
+                setMode("both"); // otherwise force both
+                setIsCodeandLaTexEnabled(true)
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(false)
+            }
+        };
 
-    const handleCodeandLaTeXToggle = () => {
-        const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
-        setIsCodeandLaTexEnabled(newCodeandLaTeXState);
-        setIsCodeEnabled(!newCodeandLaTeXState);
-        setIsLaTeXEnabled(false);
-    };
+    // const handleCodeToggle = () => {
+    //     const newCodeState = !isCodeEnabled;
+    //     setIsCodeEnabled(newCodeState);
+    //     setIsLaTeXEnabled(!newCodeState);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleLaTeXToggle = () => {
+    //     const newLaTeXState = !isLaTeXEnabled;
+    //     setIsLaTeXEnabled(newLaTeXState);
+    //     setIsCodeEnabled(!newLaTeXState);
+    //     setIsCodeandLaTexEnabled(false);
+    // };
+
+    // const handleCodeandLaTeXToggle = () => {
+    //     const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
+    //     setIsCodeandLaTexEnabled(newCodeandLaTeXState);
+    //     setIsCodeEnabled(!newCodeandLaTeXState);
+    //     setIsLaTeXEnabled(false);
+    // };
 
     const addAnswerField = () => {
         if (currentAnswers.length < 10) {
@@ -314,7 +359,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             className="mcq-form-control latex-input"
                                             rows="6"
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                            onChange={(e) => setQuestionTitle(e.target.value)}
                                             placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
                                             disabled={isSubmitting}
                                         />
@@ -333,7 +378,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             className="mcq-form-control latex-input"
                                             rows="6"
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                            onChange={(e) => setQuestionTitle(e.target.value)}
                                             placeholder="Enter both Text and Latex "
                                             disabled={isSubmitting}
                                         />
@@ -401,7 +446,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             <textarea
                                                 className="mcq-form-control option-latext-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", cleanLatexInput(e.target.value))}
+                                                onChange={(e) => handleAnswerChange(index, "text",e.target.value)}
                                                 placeholder="Enter LaTeX equation"
                                                 disabled={isSubmitting}
                                             />
@@ -410,7 +455,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                                 type="text"
                                                 className="mcq-form-control option-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", e.target.value)}
+                                                onChange={(e) => handleAnswerChange(index, "text",e.target.value)}
                                                 placeholder="Enter answer text"
                                                 disabled={isSubmitting}
                                             />
@@ -418,7 +463,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             <textarea
                                                 className="mcq-form-control option-latext-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", cleanLatexInput(e.target.value))}
+                                                onChange={(e) => handleAnswerChange(index, "text", e.target.value)}
                                                 placeholder="Enter both Text and LaTeX equation"
                                                 disabled={isSubmitting}
                                             />
@@ -517,7 +562,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             rows="4"
                                             value={solutionText}
                                             onChange={(e) =>
-                                                setSolutionText(cleanLatexInput(e.target.value))
+                                                setSolutionText(e.target.value)
                                             }
                                             placeholder="Enter solution (supports LaTeX)"
                                             disabled={isSubmitting}
@@ -538,7 +583,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             rows="3"
                                             value={solutionText}
                                             onChange={(e) =>
-                                                setSolutionText(cleanLatexInput(e.target.value))
+                                                setSolutionText(e.target.value)
                                             }
                                             placeholder="Enter solution (text + LaTeX)"
                                             disabled={isSubmitting}
@@ -606,14 +651,31 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                     <div className="preview-question">
                                         <div className="preview-label">Question:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer
-                                                    content={questionTitle}
-                                                    isInline={false}
-                                                />
-                                            ) : (
-                                                questionTitle || <span className="placeholder-text">No question added yet</span>
-                                            )}
+
+                                            {
+                                                isCodeEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+                                                    ) : (
+                                                            <CKEditorRenderer content={`<pre><code class="language-">${questionTitle}</code><pre>`} mode="code" />
+                                                    )
+                                                ) : isLaTeXEnabled ? (
+                                                    questionTitle.length === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={questionTitle} mode="latex" />
+                                                    )
+                                                ) : (
+                                                    questionTitle.title === 0 ? (
+                                                        <span className="placeholder-text">No question added yet</span>
+
+                                                    ) : (
+                                                        <CKEditorRenderer content={questionTitle} mode="both" />
+
+                                                    )
+                                                )
+                                            }
+
                                             {questionImage && (
                                                 <div className="question-image-container">
                                                     <img
@@ -630,7 +692,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                         <div className="preview-label">Options:</div>
                                         <div className="answers-list">
                                             {currentAnswers.map((answer, index) => (
-                                                <div
+<div
                                                     className={`answer-item ${correctAnswers.includes(`answer${index + 1}`) ? 'correct-answer' : ''}`}
                                                     key={index}
                                                 >
@@ -641,11 +703,37 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                                         )}
                                                     </div>
                                                     <div className="answer-content">
-                                                        {isLaTeXEnabled ? (
-                                                            <LatexRenderer content={answer.text?.trim()} />
+                                                        {/* {isLaTeXEnabled ? (
+                                                            // <LatexRenderer content={answer.text?.trim()} />
+                                                            <CKEditorRenderer content={answer.text?.trim()} />
                                                         ) : (
                                                             answer.text?.trim() || <span className="placeholder-text">Empty answer</span>
-                                                        )}
+                                                        )} */}
+
+                                                        {
+                                                            isCodeEnabled ? (
+                                                                currentAnswers.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                    <CKEditorRenderer content={`<pre><code class="language-">${answer.text?.trim() }</code><pre>`} mode="code" />
+                                                                )
+                                                            ) : isLaTeXEnabled ? (
+                                                                currentAnswers.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="latex" />
+                                                                )
+                                                            ) : (
+                                                                currentAnswers.title === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="both" />
+
+                                                                )
+                                                            )
+                                                        }
+
                                                         {answer.image && (
                                                             <div className="answer-image-container">
                                                                 <img
@@ -656,7 +744,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                </div>
+                                                </div>                                               
                                             ))}
                                         </div>
                                     </div>
@@ -684,15 +772,29 @@ const MCQModal = ({ open, onClose, initialData, }) => {
 
                                     <div className="preview-solution">
                                         <div className="preview-label">Solution:</div>
-                                        <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer
-                                                    content={solutionText}
-                                                    isInline={false}
-                                                />
-                                            ) : (
-                                                solutionText || <span className="placeholder-text">No solution added yet</span>
-                                            )}
+                                            <div className="modal-preview-content">
+                                            {
+                                                isCodeEnabled ? (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={`<pre><code class="language-">${solutionText}</code><pre>`} mode="code" />
+                                                    )
+                                                ) : isLaTeXEnabled ? (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="latex" />
+                                                    )
+                                                ) : (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="both" />
+                                                    )
+                                                )
+                                            }
+
                                             {solutionImage && (
                                                 <div className="solution-image-container">
                                                     <img

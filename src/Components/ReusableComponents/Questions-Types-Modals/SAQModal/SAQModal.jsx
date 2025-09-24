@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import Select from 'react-select';
 import "../MCQModal/MCQModal";
 import { FaPlus } from "react-icons/fa";
@@ -14,6 +14,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
     const [questionTitle, setQuestionTitle] = useState(initialData?.questionTitle || "");
     const [codeAnswers, setCodeAnswers] = useState(initialData?.codeAnswers || [{ text: "", image: null }]);
     const [latexAnswers, setLatexAnswers] = useState(initialData?.latexAnswers || [{ text: "", image: null }]);
+    const [bothAnswers, setBothAnswers] = useState(initialData?.bothAnswers || [{ text: "", image: null }]);
     const [correctAnswers, setCorrectAnswers] = useState(initialData?.correctAnswers || []);
     const [isCodeEnabled, setIsCodeEnabled] = useState(true);
     const [isLaTeXEnabled, setIsLaTeXEnabled] = useState(false);
@@ -23,9 +24,22 @@ const SAQModal = ({ open, onClose, initialData, }) => {
     const [solutionText, setSolutionText] = useState(initialData?.solutionText || "");
     const [solutionImage, setSolutionImage] = useState(initialData?.solutionImage || null);
 
-    // Get current answers based on mode
-    const currentAnswers = isLaTeXEnabled ? latexAnswers : codeAnswers;
-    const setCurrentAnswers = isLaTeXEnabled ? setLatexAnswers : setCodeAnswers;
+   // Get current answers based on mode
+    let currentAnswers;
+    let setCurrentAnswers;
+
+    if (isCodeandLaTeXEnabled) {
+        currentAnswers = bothAnswers;
+        setCurrentAnswers = setBothAnswers;
+    } else if (isLaTeXEnabled) {
+        currentAnswers = latexAnswers;
+        setCurrentAnswers = setLatexAnswers;
+    } else {
+        currentAnswers = codeAnswers;
+        setCurrentAnswers = setCodeAnswers;
+    }
+    // const currentAnswers = isLaTeXEnabled ? latexAnswers : codeAnswers;
+    // const setCurrentAnswers = isLaTeXEnabled ? setLatexAnswers : setCodeAnswers;
 
     // Prepare options for react-select
     const answerOptions = currentAnswers.map((answer, index) => ({
@@ -58,6 +72,8 @@ const SAQModal = ({ open, onClose, initialData, }) => {
             setSolutionImage(null);
         }
     }, [open, initialData]);
+
+   
 
     const handleCorrectAnswersChange = (selectedOptions) => {
         setCorrectAnswers(selectedOptions ? selectedOptions.map(option => option.value) : []);
@@ -96,11 +112,13 @@ const SAQModal = ({ open, onClose, initialData, }) => {
             setIsCodeEnabled(false)
             setIsLaTeXEnabled(true)
             setIsCodeandLaTexEnabled(false)
+            setQuestionTitle('')
         } else {
             setMode("code"); // otherwise force code
             setIsCodeEnabled(true);
             setIsLaTeXEnabled(false);
             setIsCodeandLaTexEnabled(false)
+            setQuestionTitle('')
         }
     };
 
@@ -109,11 +127,13 @@ const SAQModal = ({ open, onClose, initialData, }) => {
             setMode("code"); // toggle back to code if already latex
             setIsLaTeXEnabled(false)
             setIsCodeEnabled(true)
+            setQuestionTitle('')
         } else {
             setMode("latex"); // otherwise force latex
             setIsLaTeXEnabled(true)
             setIsCodeandLaTexEnabled(false)
             setIsCodeEnabled(false)
+            setQuestionTitle('')
         }
     };
 
@@ -122,14 +142,15 @@ const SAQModal = ({ open, onClose, initialData, }) => {
             setMode("code"); // toggle back to code if already both
             setIsCodeandLaTexEnabled(false)
             setIsCodeEnabled(true) 
+            setQuestionTitle('')
         } else {
             setMode("both"); // otherwise force both
             setIsCodeandLaTexEnabled(true)
             setIsLaTeXEnabled(false)
             setIsCodeEnabled(false)
+            setQuestionTitle('')
         }
     };
-
 
 
     // const handleCodeToggle = () => {
@@ -173,6 +194,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
         const updatedAnswers = [...currentAnswers];
         updatedAnswers[index][field] = isLaTeXEnabled ? cleanLatexInput(value) : value;
         setCurrentAnswers(updatedAnswers);
+        console.log(currentAnswers);       
     };
 
     const handleImageUpload = (e, index) => {
@@ -280,16 +302,16 @@ const SAQModal = ({ open, onClose, initialData, }) => {
         }
     };
 
-    useEffect(() => {
-        if (!isLaTeXEnabled) {
-            setQuestionTitle(prev => cleanLatex(prev));
-            setCodeAnswers(prev => prev.map(answer => ({
-                ...answer,
-                text: cleanLatex(answer.text)
-            })));
-            setSolutionText(prev => cleanLatex(prev));
-        }
-    }, [isLaTeXEnabled]);
+    // useEffect(() => {
+    //     if (!isLaTeXEnabled) {
+    //         setQuestionTitle(prev => cleanLatex(prev));
+    //         setCodeAnswers(prev => prev.map(answer => ({
+    //             ...answer,
+    //             text: cleanLatex(answer.text)
+    //         })));
+    //         setSolutionText(prev => cleanLatex(prev));
+    //     }
+    // }, [isLaTeXEnabled]);
 
     if (!open) return null;
 
@@ -324,7 +346,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={mode == "latex"}
+                                            checked={mode === "latex"}
                                             onChange={handleLaTeXToggle}
                                             disabled={isSubmitting}
                                         />
@@ -355,7 +377,9 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             className="mcq-form-control latex-input"
                                             rows="6"
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
+                                            // onChange={(e) => setQuestionTitle(e.target.value)}
+                                            // onChange={handleChange}
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
                                             placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
                                             disabled={isSubmitting}
                                         />
@@ -365,7 +389,9 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             className="mcq-form-control"
                                             style={{ width: "145%", padding: "10px", minHeight: "100px" }}
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(e.target.value)}
+                                           // onChange={(e) => setQuestionTitle(e.target.value)}
+                                                // onChange={handleChange}
+                                                onChange={({ target: { value } }) => setQuestionTitle(value)}
                                             placeholder="Enter question text"
                                             disabled={isSubmitting}
                                         />
@@ -374,8 +400,10 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             className="mcq-form-control latex-input"
                                             rows="6"
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                            placeholder="Enter both Text and Latex "
+                                          //  onChange={(e) => setQuestionTitle(e.target.value)}
+                                                    // onChange={handleChange} 
+                                                    onChange={({ target: { value } }) => setQuestionTitle(value)} 
+                                          placeholder="Enter both Text and Latex "
                                             disabled={isSubmitting}
                                         />
                                     )}
@@ -442,7 +470,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             <textarea
                                                 className="mcq-form-control option-latext-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", cleanLatexInput(e.target.value))}
+                                                onChange={(e) => { handleAnswerChange(index, "text", cleanLatexInput(e.target.value));}}
                                                 placeholder="Enter LaTeX equation"
                                                 disabled={isSubmitting}
                                             />
@@ -451,7 +479,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                                 type="text"
                                                 className="mcq-form-control option-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", e.target.value)}
+                                                    onChange={(e) => { handleAnswerChange(index, "text", cleanLatexInput(e.target.value)); }}
                                                 placeholder="Enter answer text"
                                                 disabled={isSubmitting}
                                             />
@@ -459,7 +487,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             <textarea
                                                 className="mcq-form-control option-latext-input"
                                                 value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", cleanLatexInput(e.target.value))}
+                                                onChange={(e) => {handleAnswerChange(index, "text", cleanLatexInput(e.target.value));console.log(answer.text)}}
                                                 placeholder="Enter both Text and LaTeX equation"
                                                 disabled={isSubmitting}
                                             />
@@ -547,7 +575,9 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                     noOptionsMessage={() => "No options available"}
                                 />
                             </div>
+                            
 
+                             {/* Solution  */}
                             <div className="mcq-form-group option">
                                 <div className="answer-header">
                                     <label>Solution :</label>
@@ -558,7 +588,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             rows="4"
                                             value={solutionText}
                                             onChange={(e) =>
-                                                setSolutionText(cleanLatexInput(e.target.value))
+                                                setSolutionText(e.target.value)
                                             }
                                             placeholder="Enter solution (supports LaTeX)"
                                             disabled={isSubmitting}
@@ -579,7 +609,7 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                             rows="3"
                                             value={solutionText}
                                             onChange={(e) =>
-                                                setSolutionText(cleanLatexInput(e.target.value))
+                                                setSolutionText(e.target.value)
                                             }
                                             placeholder="Enter solution (text + LaTeX)"
                                             disabled={isSubmitting}
@@ -659,25 +689,11 @@ const SAQModal = ({ open, onClose, initialData, }) => {
 
                                             {
                                                 isCodeEnabled ? (
-                                                    questionTitle.length === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={questionTitle} mode="code" />
-                                                    )
+                                                    <CKEditorRenderer content={`<pre><code class="language-">${questionTitle}</pre></code>`} mode="code" />
                                                 ) : isLaTeXEnabled ? (
-                                                    questionTitle.length === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={questionTitle} mode="latex" />
-                                                    )
+                                                    <CKEditorRenderer content={questionTitle} mode="latex" />
                                                 ) : (
-                                                    questionTitle.title === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-
-                                                    ) : (
-                                                        <CKEditorRenderer content={questionTitle} mode="both" />
-
-                                                    )
+                                                    <CKEditorRenderer content={questionTitle} mode="both" />
                                                 )
                                             }
 
@@ -708,11 +724,37 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                                         )}
                                                     </div>
                                                     <div className="answer-content">
-                                                        {isLaTeXEnabled ? (
-                                                            <LatexRenderer content={answer.text?.trim()} />
+                                                        {/* {isLaTeXEnabled ? (
+                                                            // <LatexRenderer content={answer.text?.trim()} />
+                                                            <CKEditorRenderer content={answer.text?.trim()} />
                                                         ) : (
                                                             answer.text?.trim() || <span className="placeholder-text">Empty answer</span>
-                                                        )}
+                                                        )} */}
+
+                                                        {
+                                                            isCodeEnabled ? (
+                                                                currentAnswers.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                        <CKEditorRenderer content={`<pre><code class="language-">${answer.text?.trim()}</code><pre>`} mode="code" />
+                                                                )
+                                                            ) : isLaTeXEnabled ? (
+                                                                currentAnswers.length === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="latex" />
+                                                                )
+                                                            ) : (
+                                                                    currentAnswers.title === 0 ? (
+                                                                    <span className="placeholder-text">Empty answer</span>
+
+                                                                ) : (
+                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="both" />
+
+                                                                )
+                                                            )
+                                                        }
+
                                                         {answer.image && (
                                                             <div className="answer-image-container">
                                                                 <img
@@ -752,14 +794,38 @@ const SAQModal = ({ open, onClose, initialData, }) => {
                                     <div className="preview-solution">
                                         <div className="preview-label">Solution:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
+                                            {/* {isLaTeXEnabled ? (
                                                 <LatexRenderer
                                                     content={solutionText}
                                                     isInline={false}
                                                 />
                                             ) : (
                                                 solutionText || <span className="placeholder-text">No solution added yet</span>
-                                            )}
+                                            )} */}
+
+                                            {
+                                                isCodeEnabled ? (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                            <CKEditorRenderer content={`<pre><code class="language-">${solutionText}</code><pre>`} mode="code" />
+                                                    )
+                                                ) : isLaTeXEnabled ? (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="latex" />
+                                                    )
+                                                ) : (
+                                                    solutionText.length === 0 ? (
+                                                        <span className="placeholder-text">Empty answer</span>
+                                                    ) : (
+                                                        <CKEditorRenderer content={solutionText} mode="both" />
+                                                    )
+                                                )
+                                            }
+
+
                                             {solutionImage && (
                                                 <div className="solution-image-container">
                                                     <img

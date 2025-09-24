@@ -69,11 +69,13 @@ const TestIndex = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
+  const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false)
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
   const [modalHeading, setModalHeading] = useState("");
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
-  const [ismode, setIsmode] = useState("create");
+  const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
   // const getSortedTests = () => {
   //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
@@ -340,24 +342,41 @@ const TestIndex = () => {
 
 
 
-  const handleCopyTest = (testId) => {
+  const handleCopyTest = (testId, newName, selectedTags = []) => {
     let testToCopy = data.find(test => test.id === testId);
+         console.log(testToCopy.test);
+         
     if (testToCopy) {
+      const newTestId = Date.now();
       const newTest = {
         ...testToCopy,
-        id: Date.now(),
-        test: `${testToCopy.test} (copy)`,
-        // lastModified: new Date().toISOString(),
-        status: 'Not Published'
+        id: newTestId,
+        test: newName || `${testToCopy.test}`,
+        lastModified: new Date().toISOString(),
+        status: "Not Published"
       };
+      
+
       const originalIndex = data.findIndex(test => test.id === testId);
+
+      // 1️⃣ Update main data with the new test
       setData(prevData => [
         ...prevData.slice(0, originalIndex + 1),
         newTest,
         ...prevData.slice(originalIndex + 1)
       ]);
+
+      // 2️⃣ Update tags so selected ones include the new testId
+      setTags(prevTags =>
+        prevTags.map(tag =>
+          selectedTags.includes(tag.id)
+            ? { ...tag, questions: [...tag.questions, newTestId] }
+            : tag
+        )
+      );
     }
   };
+
 
   const handleCreateTest = (testData) => {
     const newTest = {
@@ -490,13 +509,22 @@ const TestIndex = () => {
         handleDownloadZip(row);
         break;
       case "copy":
-        handleCopyTest(row.id);
+        // handleCopyTest(row.id);
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsCopyModalOpen(true);
         break;
       case "share":
         openShareModal(row.test);
         break;
       case "archive":
-        handleArchiveTest(row.id);
+        setEditingTest({
+          id: row.id,
+          name: row.test,
+        });
+        setIsArchivedModalOpen(true)
         break;
       case "delete":
         setEditingTest({
@@ -841,7 +869,34 @@ const TestIndex = () => {
 
         }
 
+        {isCopyModalOpen && (
+          <NewTestModal
+            isOpen={isCopyModalOpen}
+            onClose={() => setIsCopyModalOpen(false)}
+            initialName={editingTest?.name || ""}
+            initialId={editingTest?.id || ""}
+            mode="copy"
+            onSubmit={(data) => handleCopyTest(editingTest.id, data.name, data.tags)}
+          />
+        )}
+
+        {isArchivedModalOpen && (
+          <NewTestModal
+            isOpen={isArchivedModalOpen}
+            onClose={() => { setIsArchivedModalOpen(false); setEditingTest(null); }}
+            initialName={editingTest?.name || ""}
+            onSubmit={() => {
+              handleArchiveTest(editingTest.id);
+              setIsArchivedModalOpen(false)
+            }}
+            mode="archive"
+          />
+        )}
+
+        
       </div>
+
+     
 
       {showPaginationButtons && (
         <PaginationButtons

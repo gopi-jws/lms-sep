@@ -422,6 +422,9 @@ const BulkActions = ({
                       setEditingTest({
                         id: test.id,
                         name: test.test,
+                        // duration: test.duration,
+                        // description: test.description,
+                        // instructions: test.instructions
                       });
                       setIsRenameModalOpen(true);
                     } else {
@@ -499,7 +502,7 @@ const BulkActions = ({
             onClose={() => setIsRenameModalOpen(false)}
             mode="rename"
             initialName={previousName}
-            onSubmit={(updatedFields) => {
+            onSubmit={(updatedFields) => {    
               try {
                 const questionId = selectedRows[0];
                 onUpdateTest(questionId, updatedFields);
@@ -509,6 +512,7 @@ const BulkActions = ({
               }
               setIsRenameModalOpen(false);
             }}
+          
           />
         )
       }

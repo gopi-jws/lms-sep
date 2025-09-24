@@ -4,8 +4,10 @@ import DOMPurify from "dompurify"
 import Prism from "prismjs"
 
 const CKEditorRenderer = ({ content, mode}) => {
+
     if (!content) return <div className="placeholder-text">Content will appear here</div>
     console.log(mode);
+    console.log(content);
     
 
     useEffect(() => {
