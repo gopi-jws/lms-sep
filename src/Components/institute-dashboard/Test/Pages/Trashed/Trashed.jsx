@@ -18,7 +18,7 @@ import {
   FaTimes,
   FaRegWindowRestore,
   FaEdit,
-
+  FaSignOutAlt ,
   FaArrowUp,
   FaArrowDown
 } from "react-icons/fa";
@@ -272,23 +272,6 @@ const Trashed = () => {
     }
   };
   const columns = [
-    // {
-    //   name: (
-    //     <div>
-    //       Test Names
-    //     </div>
-    //   ),
-    //   selector: "test",
-    //   sortable: true,
-    //   width: "250px",
-    //   cell: (row) => (
-    //     <div style={{ display: "flex", alignItems: "center" }}>
-    //       <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
-    //         <span className="row-link">{row.test}</span>
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
     {
       name: "Test Names",
       selector: "test",
@@ -375,15 +358,27 @@ const Trashed = () => {
                     onClick={() => handleRestore(row)}
                   >
                     <FaRegWindowRestore />
-                    <span> ReStore</span>
+                    <span>Restore</span>
                   </button>
+
                   <button
                     className="mobile-action-item delete"
-                    onClick={() => handleActionClick('delete', row)}
+                    onClick={() => handleActionClick("delete", row)}
                   >
                     <FaTrashAlt />
                     <span>Delete</span>
                   </button>
+
+                  {/* ✅ Show Leave only if condition is met */}
+                  {row.canLeave && (
+                    <button
+                      className="mobile-action-item leave"
+                      onClick={() => handleActionClick("leave", row)}
+                    >
+                      <FaSignOutAlt />
+                      <span>Leave</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -391,25 +386,39 @@ const Trashed = () => {
             <div className="flex gap-2">
               <button
                 className="test-action-button dispatch"
-                aria-label="Archive"
+                aria-label="Restore"
                 onClick={() => handleRestoreTag(row)}
               >
                 <FaRegWindowRestore />
-                <span className="tooltip-text"> ReStore</span>
+                <span className="tooltip-text">Restore</span>
               </button>
+
               <button
                 className="test-action-button dispatch"
-                aria-label="Dispatch"
-                onClick={() => handleActionClick('delete', row)}
+                aria-label="Delete"
+                onClick={() => handleActionClick("delete", row)}
               >
                 <FaTrashAlt />
                 <span className="tooltip-text">Delete</span>
               </button>
+
+              {/* ✅ Show Leave only if condition is met */}
+              {row.canLeave && (
+                <button
+                  className="test-action-button leave"
+                  aria-label="Leave"
+                  onClick={() => handleActionClick("leave", row)}
+                >
+                  <FaSignOutAlt />
+                  <span className="tooltip-text">Leave</span>
+                </button>
+              )}
             </div>
           )}
         </div>
       ),
-    },
+    }
+
   ];
 
 
@@ -424,14 +433,25 @@ const Trashed = () => {
           <div className="my-data-table">
             <DataTable
               columns={columns}
-              data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag","restore"]}
+              data={[
+                ...getCurrentPageData(),   // existing rows
+                {
+                  id: 999,
+                  test: "Test14",
+                  owner: "John Doe",
+                  status: "Not Published",
+                  lastModified: "2 days ago by you",  // current date/time
+                  canLeave: true,            // ✅ Leave button will show
+                }
+              ]}
+              availableActions={["delete", "download", "tag", "restore"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
               filterType={filterStatus}
               onFilterTypeChange={handleFilterStatusChange}
             />
+
           </div>
 
           <ShareModal

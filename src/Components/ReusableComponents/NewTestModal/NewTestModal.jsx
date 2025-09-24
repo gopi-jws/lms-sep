@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import './NewTestModal.css';
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal";
+import { Heading } from "lucide-react";
 
 const NewTestModal = ({
     isOpen,
     onClose,
     onSubmit,
+    heading,
     initialName = "",
     initialId = "",
     initialDuration = "",

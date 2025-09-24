@@ -575,7 +575,10 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                                 type="checkbox"
                                                 checked={emailThroughEmail}
                                                 onChange={() => setEmailThroughEmail(!emailThroughEmail)}
-                                                style={{ marginRight: "8px" }}
+                                                style={{
+                                                    marginRight: "8px",   // ✅ camelCase + comma
+                                                    padding: "0"           // ✅ camelCase + comma
+                                                }}
                                                 className="publish-form-control"
                                             />
                                             Generate a Link for others to enroll for the test

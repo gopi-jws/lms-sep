@@ -346,9 +346,9 @@
   align-items: center;
 }
 
-.sidebar-contents :hover {
+/* .sidebar-contents :hover {
   background-color: #f2f9ff;
-}
+} */
 
 .sidebar-contents:hover a {
   color: #037de2;

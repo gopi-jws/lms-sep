@@ -38,6 +38,10 @@ const TestSidebar = ({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("Alltest");
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [selectedTagName, setSelectedTagName] = useState("");
+  const [selectedTagId, setSelectedTagId] = useState(null);
+  const [tagsList, setTagsList] = useState([]);
   const [modalHeading, setModalHeading] = useState("");
   const [editingTag, setEditingTag] = useState(null);
   const [mode, setMode] = useState("")
@@ -90,19 +94,25 @@ const TestSidebar = ({
     setIsNewTagModalOpen(false);
   };
 
+ 
+  // Remove tag function (updates state + localStorage)
+  const removeTag = (id) => {
+    setTags(prev => prev.filter(tag => tag.id !== id)); // ✅ updates parent state
+  };
+
   const handleEditTag = (tag) => {
     setEditingTag(tag);
     setModalHeading("Edit Tag");
     setIsNewTagModalOpen(true);
   };
 
-  const handleRemoveTag = (tagId) => {
-    setTags(tags.filter(tag => tag.id !== tagId));
-    setShowMoreOptions(null);
-    if (activeTag === tags.find(t => t.id === tagId)?.name) {
-      onTagClick(null);
-    }
+  const handleRemoveTag = (tag) => {
+    setSelectedTagName(tag.name);
+    setSelectedTagId(tag.id);
+    setModalHeading("Delete Tag");
+    setIsRemoveModalOpen(true);
   };
+
 
   return (
     <div className="sidebar-wrapper">
@@ -233,12 +243,13 @@ const TestSidebar = ({
                       <TagActionsDropdown
                         isOpen={showMoreOptions === index}
                         onEdit={() => handleEditTag(tag)}
-                        onRemove={() => handleRemoveTag(tag.id)}
+                        onRemove={() => handleRemoveTag(tag)}
                         onClose={() => setShowMoreOptions(null)}
                         tagId={tag.id}
                         tagName={tag.name}
                         tagColor={tag.color}
                       />
+
                     </div>
                   </Link>
                 </li>
@@ -281,6 +292,26 @@ const TestSidebar = ({
         }}
         mode="create"
       />
+      
+      <NewTestModal
+        isOpen={isRemoveModalOpen}
+        onClose={() => {
+          setIsRemoveModalOpen(false);
+          setSelectedTagName("");
+          setSelectedTagId(null);
+        }}
+        mode="delete"
+        initialName={selectedTagName}
+        heading={modalHeading}
+        onSubmit={() => {
+          removeTag(selectedTagId); // ✅ must use selectedTagId
+          setIsRemoveModalOpen(false);
+          setSelectedTagName("");
+          setSelectedTagId(null);
+        }}
+      />
+
+
     </div>
   );
 };
