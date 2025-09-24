@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import './NewTestModal.css';
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal";
+import { Heading } from "lucide-react";
 
 const NewTestModal = ({
     isOpen,
     onClose,
     onSubmit,
+    heading,
     initialName = "",
     initialDuration = "",
     initialDescription = "",
@@ -282,7 +284,7 @@ const NewTestModal = ({
                 ) : (
                             <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                 <div className="newtest-modal-header">
-                                    <h5>Delete</h5>
+                                    <h5>{heading}</h5>
                                     <button className="close-btn" onClick={onClose}>
                                         &times;
                                     </button>

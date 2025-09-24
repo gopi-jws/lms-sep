@@ -422,9 +422,6 @@ const BulkActions = ({
                       setEditingTest({
                         id: test.id,
                         name: test.test,
-                        duration: test.duration,
-                        description: test.description,
-                        instructions: test.instructions
                       });
                       setIsRenameModalOpen(true);
                     } else {
@@ -462,7 +459,7 @@ const BulkActions = ({
 
 
       {/* Modals */}
-      {/* <>
+      <>
         <AddTagModal
           isOpen={isNewTagModalOpen}
           onClose={() => setIsNewTagModalOpen(false)}
@@ -470,7 +467,7 @@ const BulkActions = ({
           heading="Create New Tag"
         />
 
-      </> */}
+      </>
       {/* Modal */}
       {
         isModalOpen && modelType === "test" && (
@@ -500,6 +497,7 @@ const BulkActions = ({
           <NewTestModal
             isOpen={isRenameModalOpen}
             onClose={() => setIsRenameModalOpen(false)}
+            mode="rename"
             initialName={previousName}
             onSubmit={(updatedFields) => {
               try {

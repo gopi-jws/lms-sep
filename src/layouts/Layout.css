@@ -38,14 +38,16 @@
 
 /* Main content area */
 .layout-content {
-  flex: 1 1;
-  padding: 24px;
-  margin-left: 240px;
-  background-color: #f4f5f6;
-  min-height: calc(100vh - 60px);
-  overflow-y: auto;
-  border-top-left-radius: 16px;
+    flex: 1 1 auto;
+    padding: 24px;
+    margin-left: 240px;
+    background-color: #f4f5f6;
+    height: calc(100vh - 60px); /* Full viewport height minus header */
+    overflow-y: auto; /* Enable vertical scroll */
+    overflow-x: hidden;
+    border-top-left-radius: 16px;
 }
+
 
 /* Media Query for smaller screens */
 @media (max-width: 768px) {

@@ -14,6 +14,7 @@ const TagActionsDropdown = ({
 }) => {
     const dropdownRef = useRef(null);
 
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -39,10 +40,10 @@ const TagActionsDropdown = ({
     const handleRemoveClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (window.confirm(`Are you sure you want to remove the tag "${tagName}"?`)) {
-            onRemove(tagId);
-        }
+        onRemove({ name: tagName, color: tagColor, id: tagId });
+        onClose(); // optional, if you also want to close dropdown
     };
+
 
     if (!isOpen) return null;
 
@@ -62,6 +63,7 @@ const TagActionsDropdown = ({
                     Remove
                 </li>
             </ul>
+
         </div>
     );
 };

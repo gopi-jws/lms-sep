@@ -21,19 +21,20 @@ import { getNextId } from "../../../../utils/idGenerator"
 import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
 
 const initialData = [
-  { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
-  { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: new Date().toISOString(), duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
-  { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
-  { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
-  { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
-  { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: new Date().toISOString(), duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
-]
+  { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
+  { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
+  { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: "5 days ago by You", duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
+  { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: "8 hours ago by You", duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
+  { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: "3 days ago by You", duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
+  { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: "12 hours ago by You", duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: "1 day ago by You", duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: "6 hours ago by You", duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: "4 days ago by You", duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: "3 hours ago by You", duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: "1 hour ago by You", duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
+];
+
 
 
 const TestIndex = () => {
@@ -66,11 +67,11 @@ const TestIndex = () => {
   const [fullViewMode, setFullViewMode] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
+  const [modalHeading, setModalHeading] = useState("");
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
   const [ismode, setIsmode] = useState("create");
   // const getSortedTests = () => {
@@ -86,6 +87,7 @@ const TestIndex = () => {
   //     return new Date(b.lastModified) - new Date(a.lastModified);
   //   });
   // };
+
   const [data, setData] = useState(() => {
     const tests = JSON.parse(localStorage.getItem("tests"));
     const savedTests = tests
@@ -153,7 +155,6 @@ const TestIndex = () => {
         )
       })
     }
-
 
     if (filterStatus) {
       result = result.filter((test) => test.status === filterStatus)
@@ -316,7 +317,7 @@ const TestIndex = () => {
             duration: updatedFields.duration || test.duration,
             description: updatedFields.description || test.description,
             instructions: updatedFields.instructions || test.instructions,
-            lastModified: new Date().toISOString()
+            // lastModified: new Date().toISOString()
           }
           : test
       )
@@ -330,14 +331,14 @@ const TestIndex = () => {
           ? {
             ...test,
             test: updatedFields.name || test.test,
-            lastModified: new Date().toISOString()
+            // lastModified: new Date().toISOString()
           }
           : test
       )
     );
   };
 
-  
+
 
   const handleCopyTest = (testId) => {
     let testToCopy = data.find(test => test.id === testId);
@@ -346,7 +347,7 @@ const TestIndex = () => {
         ...testToCopy,
         id: Date.now(),
         test: `${testToCopy.test} (copy)`,
-        lastModified: new Date().toISOString(),
+        // lastModified: new Date().toISOString(),
         status: 'Not Published'
       };
       const originalIndex = data.findIndex(test => test.id === testId);
@@ -364,7 +365,7 @@ const TestIndex = () => {
       test: testData.name,
       owner: "You",
       status: "Not Published",
-      lastModified: new Date().toISOString(),
+      // lastModified: new Date().toISOString(),
       duration: testData.duration,
       description: testData.description,
       instructions: testData.instructions
@@ -433,7 +434,7 @@ const TestIndex = () => {
   const handleDeleteTest = (testId) => {
     setData(prevData => prevData.filter(test => test.id !== testId));
     console.log("deletd");
-    
+
     // Store deleted test in localStorage 'trashedTags' array only if not already present
     const trashedTest = data.find(test => test.id === testId);
     if (trashedTest) {
@@ -481,7 +482,7 @@ const TestIndex = () => {
           name: row.test,
         });
         setIsRenameModalOpen(true);
-       break;
+        break;
       case "pdf":
         handleDownloadPdf(row);
         break;
@@ -502,6 +503,7 @@ const TestIndex = () => {
           id: row.id,
           name: row.test,
         });
+         setModalHeading("Delete Test");
         setIsDeleteModalOpen(true);
         break;
       case "restore":
@@ -515,7 +517,7 @@ const TestIndex = () => {
     }
   };
 
-  
+
 
   const columns = [
     {
@@ -571,7 +573,7 @@ const TestIndex = () => {
       selector: "lastModified",
       sortable: true,
       width: "190px",
-      cell: (row) => <div>{getTimeAgo(row.lastModified)}</div>
+      cell: (row) => <div>{row.lastModified}</div>  // <-- render static string directly
     },
     {
       name: <div className="table-actions">Actions</div>,
@@ -701,7 +703,7 @@ const TestIndex = () => {
         <title>Tests</title>
         <meta name="description" content="Tests" />
       </Helmet>
-     
+
       <div className="test-index-wrapper">
         <TestSidebar
           tags={tags}
@@ -753,8 +755,8 @@ const TestIndex = () => {
               }}
               onAddTag={handleAddTag}
               onAddQuestionsToTag={handleAddQuestionsToTag}
-              isRenameModalOpen={isEditModalOpen}
-              setIsRenameModalOpen={setIsEditModalOpen}
+              // isRenameModalOpen={isRenameModalOpen}
+              setIsRenameModalOpen={setIsRenameModalOpen}
               setEditingTest={setEditingTest}
               allQuestions={data}
             />
@@ -826,9 +828,10 @@ const TestIndex = () => {
         {isDeleteModalOpen && (
           <NewTestModal
             isOpen={isDeleteModalOpen}
-            onClose={() => {setIsDeleteModalOpen(false); setEditingTest(null);}}
+            onClose={() => { setIsDeleteModalOpen(false); setEditingTest(null); }}
             initialName={editingTest?.name || ""}
-            onSubmit={(updatedFields)=> {
+            heading={modalHeading} 
+            onSubmit={(updatedFields) => {
               handleDeleteTest(editingTest.id, updatedFields)
               setIsDeleteModalOpen(false)
             }}
@@ -837,7 +840,7 @@ const TestIndex = () => {
         )
 
         }
-        
+
       </div>
 
       {showPaginationButtons && (
