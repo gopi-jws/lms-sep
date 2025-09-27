@@ -28,7 +28,6 @@ const TestSidebar = ({
   onTagClick,
   onUncategorizedClick,
   activeTag,
-
   setTags,
   onCreateTest
 }) => {

@@ -358,7 +358,7 @@ const TestAdd = () => {
 
 const columns = useMemo(() => [
   {
-    name: "Question Id",
+    name: "QId",
     selector: "id",
     sortable: true,
     isVisible: columnVisibility.id,

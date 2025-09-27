@@ -241,7 +241,8 @@ const DataTable = ({
 
             <div className="table-wrapper">
                 <table className="custom-data-table">
-                    <thead>
+                    {!showQuestionRow && (
+                     <thead>
                         <tr>
                             {selectableRows && (
                                 <th className="col-checkbox">
@@ -295,7 +296,8 @@ const DataTable = ({
                             ))}
                         </tr>
                     </thead>
-
+                    )}
+                    
                     <tbody>
                         {data.length === 0 ? (
                             <tr>
@@ -309,7 +311,7 @@ const DataTable = ({
                                     {/* Main row */}
                                     <tr
                                         onClick={(e) => handleRowClick(row, e)}
-                                        className={`${selectedRows.includes(row.id) ? 'checked-row' : ''}`}
+                                        className={`${selectedRows.includes(row.id) ? 'checked-row' : ''} question-tr `}
                                     >
                                         {selectableRows && (
                                             <td className="col-checkbox" style={{ width: "50px" }}>
@@ -325,61 +327,186 @@ const DataTable = ({
                                             </td>
                                         )}
 
-                                        {columns.map((col, colIndex) => (
-                                            <td key={colIndex} className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`}>
-                                                {col.cell ? col.cell(row) : row[col.selector]}
+
+                                        {/* test question Table */}
+
+                                        {showQuestionRow ? (
+                                            <div className="rows-iteam">
+                                            <td>
+                                                <div className="table-tq-wrapper">
+                                                    {/* Non-Actions columns */}
+                                                    <div className="table-tq-columns">
+                                                        {columns
+                                                            .filter(col => col.name !== "Actions")
+                                                            .map((col, colIndex) => (
+                                                                <div
+                                                                    key={colIndex}
+                                                                    className={`col-${typeof col.name === "string"
+                                                                            ? col.name.toLowerCase().replace(/\s+/g, "-")
+                                                                            : "default-column"
+                                                                        } ${typeof col.name === "string" &&
+                                                                            col.name.toLowerCase() !== "actions" &&
+                                                                            showQuestionRow
+                                                                            ? "table-text-padding"
+                                                                            : ""
+                                                                        }`}
+                                                                >
+                                                                    <div className={showQuestionRow ? "question-td" : ""}>
+                                                                        {showQuestionRow && (
+                                                                            <span className="col-name">{col.name}:</span>
+                                                                        )}
+                                                                        <div>
+                                                                            <span className="col-cell">
+                                                                                {col.cell ? col.cell(row) : row[col.selector]}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                    </div>
+
+                                                    {/* Actions column (separate div for spacing) */}
+                                                    <div className="table-tq-actions">
+                                                        {columns
+                                                            .filter(col => col.name === "Actions")
+                                                            .map((col, colIndex) => (
+                                                                <div key={colIndex} className="test-col-actions">
+                                                                    <span className="col-cell">
+                                                                        {col.cell ? col.cell(row) : row[col.selector]}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                    </div>
+                                                </div>
                                             </td>
-                                        ))}
+                                                    {showQuestionRow && (
+                                                        <tr
+                                                            className="question-row  bg-gray-50 cursor-pointer"
+                                                            onClick={() => toggleQuestionView(row.id)}
+                                                        >
+                                                            <td colSpan={columns.length + (selectableRows ? 1 : 0)} className="p-2 row-link ans-item">
+                                                                {row.question ? (
+                                                                    expandedQuestions.includes(row.id) ? (
+                                                                        <>
+                                                                            {/* Full question */}
+                                                                            {/* the question convent to latex and code */}
+                                                                            {/* <LatexRenderer content={row.question} /> */}
+                                                                            <CKEditorRenderer content={row.question} mode={row.mode} />
+
+                                                                            {/* View Solution button */}
+                                                                            {row.answer && (
+                                                                                <div className="mt-2">
+                                                                                    <button
+                                                                                        className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"}`}
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation(); // Prevent toggling question collapse
+                                                                                            toggleAnswerView(row.id);
+                                                                                        }}
+                                                                                    >
+                                                                                        {showAnswers.includes(row.id) ? "Hide Solution" : "View Solution"}
+                                                                                    </button>
+                                                                                </div>
+                                                                            )}
+
+                                                                            {/* Answer content */}
+                                                                            {showAnswers.includes(row.id) && row.answer && (
+                                                                                <div className="mt-2 p-2 bg-gray-100 rounded">
+                                                                                    <LatexRenderer content={row.answer} />
+                                                                                </div>
+                                                                            )}
+                                                                        </>
+                                                                    ) : (
+                                                                        // Preview: first 80 words with "..."
+                                                                        <span className="truncate">
+                                                                            {row.question.split(" ").slice(0, 80).join(" ")}...
+                                                                            {/* {row.question} */}
+                                                                        </span>
+                                                                    )
+                                                                ) : (
+                                                                    "No Question"
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )} 
+                                            
+                                            </div>
+                                        ) : (
+                                            columns.map((col, colIndex) => (
+                                                <td
+                                                    key={colIndex}
+                                                    className={`col-${typeof col.name === "string"
+                                                            ? col.name.toLowerCase().replace(/\s+/g, "-")
+                                                            : "default-column"
+                                                        } ${typeof col.name === "string" &&
+                                                            col.name.toLowerCase() !== "actions" &&
+                                                            showQuestionRow
+                                                            ? "table-text-padding"
+                                                            : ""
+                                                        }`}
+                                                >
+                                                    <div className={showQuestionRow ? "question-td" : ""}>
+                                                        {showQuestionRow && col.name !== "Actions" && (
+                                                            <span className="col-name">{col.name}:</span>
+                                                        )}
+                                                        <span className="col-cell">
+                                                            {col.cell ? col.cell(row) : row[col.selector]}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            ))
+                                        )}
                                     </tr>
 
-                                    {/* Question row - only for Questions table */}
+                                  
+                                  {/* test question and question */}
                                     {showQuestionRow && (
-                                        <tr
-                                            className="question-row  bg-gray-50 cursor-pointer"
-                                            onClick={() => toggleQuestionView(row.id)}
-                                        >
-                                            <td colSpan={columns.length + (selectableRows ? 1 : 0)} className="p-2 row-link">
-                                                {row.question ? (
-                                                    expandedQuestions.includes(row.id) ? (
-                                                        <>
-                                                            {/* Full question */}
-                                                             {/* the question convent to latex and code */}
-                                                            {/* <LatexRenderer content={row.question} /> */}
-                                                            <CKEditorRenderer content={row.question} mode={row.mode} />
+                                        // <tr
+                                        //     className="question-row  bg-gray-50 cursor-pointer"
+                                        //     onClick={() => toggleQuestionView(row.id)}
+                                        // >
+                                        //     <td colSpan={columns.length + (selectableRows ? 1 : 0)} className="p-2 row-link">
+                                        //         {row.question ? (
+                                        //             expandedQuestions.includes(row.id) ? (
+                                        //                 <>
+                                        //                     {/* Full question */}
+                                        //                      {/* the question convent to latex and code */}
+                                        //                     {/* <LatexRenderer content={row.question} /> */}
+                                        //                     <CKEditorRenderer content={row.question} mode={row.mode} />
 
-                                                            {/* View Solution button */}
-                                                            {row.answer && (
-                                                                <div className="mt-2">
-                                                                    <button
-                                                                        className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"}`}
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation(); // Prevent toggling question collapse
-                                                                            toggleAnswerView(row.id);
-                                                                        }}
-                                                                    >
-                                                                        {showAnswers.includes(row.id) ? "Hide Solution" : "View Solution"}
-                                                                    </button>
-                                                                </div>
-                                                            )}
+                                        //                     {/* View Solution button */}
+                                        //                     {row.answer && (
+                                        //                         <div className="mt-2">
+                                        //                             <button
+                                        //                                 className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"}`}
+                                        //                                 onClick={(e) => {
+                                        //                                     e.stopPropagation(); // Prevent toggling question collapse
+                                        //                                     toggleAnswerView(row.id);
+                                        //                                 }}
+                                        //                             >
+                                        //                                 {showAnswers.includes(row.id) ? "Hide Solution" : "View Solution"}
+                                        //                             </button>
+                                        //                         </div>
+                                        //                     )}
 
-                                                            {/* Answer content */}
-                                                            {showAnswers.includes(row.id) && row.answer && (
-                                                                <div className="mt-2 p-2 bg-gray-100 rounded">
-                                                                    <LatexRenderer content={row.answer} />
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    ) : (
-                                                        // Preview: first 80 words with "..."
-                                                        <span className="truncate">
-                                                            {row.question.split(" ").slice(0, 80).join(" ")}...
-                                                        </span>
-                                                    )
-                                                ) : (
-                                                    "No Question"
-                                                )}
-                                            </td>
-                                        </tr>
+                                        //                     {/* Answer content */}
+                                        //                     {showAnswers.includes(row.id) && row.answer && (
+                                        //                         <div className="mt-2 p-2 bg-gray-100 rounded">
+                                        //                             <LatexRenderer content={row.answer} />
+                                        //                         </div>
+                                        //                     )}
+                                        //                 </>
+                                        //             ) : (
+                                        //                 // Preview: first 80 words with "..."
+                                        //                 <span className="truncate">
+                                        //                     {row.question.split(" ").slice(0, 80).join(" ")}...
+                                        //                 </span>
+                                        //             )
+                                        //         ) : (
+                                        //             "No Question"
+                                        //         )}
+                                        //     </td>
+                                        // </tr>
+                                        <div></div>
                                     )}
 
                                 </React.Fragment>

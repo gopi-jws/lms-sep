@@ -1,0 +1,55 @@
+/* ========================= */
+/* Prism.js Code Block Styling */
+/* ========================= */
+pre[class*="language-"] {
+    /* Dark background for code blocks */
+    color: var(--bs-body-color) !important;
+    /* Default text color */
+    text-align: start;
+    margin: 1em 0;
+    border-radius: 6px;
+    overflow: auto;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+code[class*="language-"] {
+    font-family: 'Fira Code', monospace;
+    font-size: 1.1em;
+}
+
+/* Optional: add line highlight */
+pre[class*="language-"] .line-highlight {
+    background-color: #ffffff !important;
+    display: block;
+    width: 100%;
+}
+
+/* ========================= */
+/* MathJax Styling (Display Math) */
+/* ========================= */
+mjx-container[jax="CHTML"][display="true"] {
+    display: block !important;
+    text-align: start !important;
+    margin: 0.5em 0 !important;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+    font-size: 16px !important;
+}
+
+/* Inline Math (if needed) */
+mjx-container[jax="CHTML"][display="false"] {
+    display: inline !important;
+    margin: 0 0.2em !important;
+}
+
+/* ========================= */
+/* Optional: Adjust KaTeX Styling */
+/* ========================= */
+.katex {
+    font-size: 1.2em;
+    line-height: 1.4;
+}
+
+
