@@ -344,11 +344,6 @@ const DataTable = ({
                                                                     className={`col-${typeof col.name === "string"
                                                                             ? col.name.toLowerCase().replace(/\s+/g, "-")
                                                                             : "default-column"
-                                                                        } ${typeof col.name === "string" &&
-                                                                            col.name.toLowerCase() !== "actions" &&
-                                                                            showQuestionRow
-                                                                            ? "table-text-padding"
-                                                                            : ""
                                                                         }`}
                                                                 >
                                                                     <div className={showQuestionRow ? "question-td" : ""}>
@@ -437,11 +432,6 @@ const DataTable = ({
                                                     className={`col-${typeof col.name === "string"
                                                             ? col.name.toLowerCase().replace(/\s+/g, "-")
                                                             : "default-column"
-                                                        } ${typeof col.name === "string" &&
-                                                            col.name.toLowerCase() !== "actions" &&
-                                                            showQuestionRow
-                                                            ? "table-text-padding"
-                                                            : ""
                                                         }`}
                                                 >
                                                     <div className={showQuestionRow ? "question-td" : ""}>

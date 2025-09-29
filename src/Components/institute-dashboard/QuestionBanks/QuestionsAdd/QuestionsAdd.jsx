@@ -411,18 +411,18 @@ const QuestionsAdd = () => {
       cell: (row) => row.marks ? <span className="marks-display">{row.marks}</span> : "N/A",
       isVisible: columnVisibility.marks,
     },
-    {
-      name: "Modified",
-      selector: "modified",
-      sortable: true,
-      isVisible: columnVisibility.modified,
-    },
-    {
-      name: "Created",
-      selector: "created",
-      sortable: true,
-      isVisible: columnVisibility.created,
-    },
+    // {
+    //   name: "Modified",
+    //   selector: "modified",
+    //   sortable: true,
+    //   isVisible: columnVisibility.modified,
+    // },
+    // {
+    //   name: "Created",
+    //   selector: "created",
+    //   sortable: true,
+    //   isVisible: columnVisibility.created,
+    // },
     {
       name: "Actions",
       selector: "actions",

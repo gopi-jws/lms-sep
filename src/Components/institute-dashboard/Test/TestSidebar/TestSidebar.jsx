@@ -269,6 +269,15 @@ const TestSidebar = ({
 
       </nav>
 
+       {/* Mobile Toggle Button */}
+            <button
+              className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
+              onClick={toggleMobileSidebar}
+              aria-label="Toggle sidebar"
+            >
+              {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
       {/* Modals */}
       <AddTagModal
         isOpen={isNewTagModalOpen}

@@ -36,7 +36,7 @@ a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 960px;
+  width: 970px;
   display: inline-block;
 }
 
@@ -273,6 +273,10 @@ a {
   align-items: center;
 }
 
+.desktop-actions{
+  height: 27px;
+  display: flex;
+}
 
 
 .mobile-actions {
