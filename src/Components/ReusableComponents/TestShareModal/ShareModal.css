@@ -566,15 +566,6 @@
 }
 
 
-
-
-
-
-
-
-/* MCQ Modal Styles */
-
-
 /* Modal overlay */
 .testshare-modal-overlay {
     position: fixed;
@@ -597,8 +588,6 @@
     border-radius: var(--modal-content-border-radius);
     width: var(--modal-content-width);
     max-width: var(--modal-content-max-width);
-    max-height: var(--modal-content-max-height);
-    overflow-y: var(--modal-content-overflow-y);
     box-shadow: var(--modal-content-box-shadow);
     display: var(--modal-content-display);
     flex-direction: var(--modal-content-flex-direction);
@@ -608,9 +597,7 @@
     transform: var(--modal-content-transform);
     animation: var(--modal-content-animation);
 }
-.testshare-modal-content2{
-    width: 55%;
-}
+
 /* Bounce Animation - Adjusted for Correct Positioning */
 @keyframes bounceFrontBack {
     0% {
@@ -955,7 +942,10 @@ input[type="file"]::file-selector-button {
    justify-content: center;
 }
 
-
+.testshare-modal-body{
+    max-height: 300px;
+    overflow-y: var(--modal-content-overflow-y);
+}
 
 
 

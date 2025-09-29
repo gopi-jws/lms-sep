@@ -18,7 +18,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
   const [permission, setPermission] = useState("Viewer");
   const [isFocused, setIsFocused] = useState(false);
   const [permissionError, setPermissionError] = useState("");
-  const [permissionOpen,setPermissionOpen] = useState(false)
+  const [permissionOpen, setPermissionOpen] = useState(false)
 
   // Members and pagination state
   const [sharedMembers, setSharedMembers] = useState([
@@ -318,7 +318,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [setOpen,setPermissionOpen]);
+  }, [setOpen, setPermissionOpen]);
 
   const handleInputFocus = () => setIsFocused(true);
   const handleInputBlur = () => setIsFocused(false);
@@ -378,7 +378,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                 <option value="can-view">Viewer</option>
                 <option value="can-edit">Editor</option>
               </select> */}
-              <div className="permission" onClick={()=>{setPermissionOpen(true)}}>
+              <div className="permission" onClick={() => { setPermissionOpen(true) }}>
                 <div>{permission}</div>
                 <MdOutlineKeyboardArrowDown />
               </div>
@@ -386,19 +386,19 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
               {permissionOpen && (
                 <ul className="more-options permission-options" ref={dropdownRef}>
                   {
-                    permissionvalue.map((per)=>(
-                      <li key={per.value} 
-                      className="more-options-item option-dropdown"
-                        onClick={()=>{handlePermissionChange(per.label)}}>
+                    permissionvalue.map((per) => (
+                      <li key={per.value}
+                        className="more-options-item option-dropdown"
+                        onClick={() => { handlePermissionChange(per.label) }}>
                         <div>{per.label}</div>
 
-                        {permission == per.label &&(
+                        {permission == per.label && (
                           <IoCheckmarkSharp />
                         )}
                       </li>
                     ))
                   }
-                 </ul>
+                </ul>
               )}
             </div>
             <div className="invite-button-div">
@@ -478,20 +478,18 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                               >
 
                                 <div className={`${opt.label == "Remove" ? 'red' : ''}`}>{opt.label}</div>
-                                
+
 
                                 {(member.role === "can-view" && opt.label === "Viewer") ||
                                   (member.role === "can-edit" && opt.label === "Editor") ? (
                                   <IoCheckmarkSharp />
                                 ) : null}
-                               
+
                               </li>
                             ))}
                           </ul>
                         )}
-
                     </div>
-
                   </div>
                 </div>
               ))}
@@ -518,11 +516,12 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
               isSearching={false}
             />
           </div>
-          <div className="testshare-modal-footer">
-            <button className="btn" onClick={onClose}>
-              Close
-            </button>
-          </div>
+
+        </div>
+        <div className="testshare-modal-footer">
+          <button className="btn" onClick={onClose}>
+            Close
+          </button>
         </div>
       </div>
 
