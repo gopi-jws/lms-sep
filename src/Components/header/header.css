@@ -35,7 +35,8 @@
   .top-bar {
     left: 0;
     /* Full width on mobile, assuming sidebar is hidden */
-  }
+  } 
+
 }
 
 @media (max-width: 425px) {
@@ -285,13 +286,28 @@
     width: 110px;
   }
 
+  .logo-left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 90px;
+  }
+
+  .header-logo-icon {
+    font-size: 35px !important;
+  }
+
+  .header-logo-text {
+    font-size: 15px;
+  }
+
   .nav-text {
     display: none;
   }
 
   .nav-menu {
     gap: 2.25rem;
-    margin-left: 59px;
+    margin-left: 0px;
   }
 
   .nav-icon {
@@ -316,6 +332,14 @@
     height: 56px;
     padding: 0 0.75rem;
   }
+
+  .logo-left {
+    margin-left: 70px;
+  }
+
+        .header-logo-icon {
+          font-size: 30px !important;
+        }
 
   .logo {
     margin-right: 0.5rem;

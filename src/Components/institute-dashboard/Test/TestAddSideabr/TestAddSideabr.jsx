@@ -1,12 +1,17 @@
 "use client"
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect} from "react";
 import "./TestAddSideabr.css";
+import { FaPaperPlane, FaCopy, FaFilePdf, FaShare, FaArchive, FaTrashAlt, FaEdit, FaTag } from "react-icons/fa"
+import { BiSolidRename } from "react-icons/bi"
 import {
   PlusCircle,
   Tag,
   Award,
+  Share2,
+  Send,
   Clock,
+  Archive,
   FileText,
   Plus,
   ListChecks,
@@ -24,8 +29,49 @@ import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/T
 import AddTagsComponent from "../../../ReusableComponents/AddTagsComponent/AddTagsComponent";
 import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolderModal";
 import useOutsideClick from '../../../../hooks/useOutsideClick'; // adjust path
+import NewTestModal from '../../../ReusableComponents/NewTestModal/NewTestModal'
+import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal"
+import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal"
+
+import TestIndex from "../TestIndex/TestIndex";
 const TestAddSidebar = () => {
-  const { id } = useParams();
+
+  const initialData = [
+  { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
+  { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
+  { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: "5 days ago by You", duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
+  { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: "8 hours ago by You", duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
+  { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: "3 days ago by You", duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
+  { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: "12 hours ago by You", duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: "1 day ago by You", duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: "6 hours ago by You", duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: "4 days ago by You", duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: "3 hours ago by You", duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
+  { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: "1 hour ago by You", duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
+];
+
+const [selectedTest, setSelectedTest] = useState("")
+const [selectedTestId, setSelectedTestID] = useState("")
+const [editingTest, setEditingTest] = useState(null)
+const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+const [emails, setEmails] = useState([])
+
+
+
+ 
+
+  
+const { id } = useParams(); // id is a string from URL
+
+
+const testItem = initialData.find(item => item.id === Number(id)); // convert id to number
+
+
+
+
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -46,11 +92,13 @@ const TestAddSidebar = () => {
     { name: "Chemistry", tag: "Chemistry", color: "#4caf50" },
     { name: "Maths", tag: "Math", color: "#2196f3" },
   ];
+
+
   // Inside your component
   const dropdownRef = useRef(null);
 
   useOutsideClick(dropdownRef, () => {
-    setShowDescDropdown(false); // or setShowInstrDropdown(false)
+    setActiveDropdown(null);
   });
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,11 +118,166 @@ const TestAddSidebar = () => {
     negativeMarks: -0.25,
     duration: "2h",
   });
+
+  const [mode,setMode] = useState('')
   const [showDescDropdown, setShowDescDropdown] = useState(false);
-  const [showInstrDropdown, setShowInstrDropdown] = useState(false);
+  // const [showInstrDropdown, setShowInstrDropdown] = useState(false);
 
   const handleTagClick = (index) => {
     setShowMoreOptions(showMoreOptions === index ? null : index);
+  };
+
+  // const handleDescription = () =>{
+  //   setShowDescDropdown(!showDescDropdown);
+  //   setShowInstrDropdown(false)
+  // }
+
+  // const handleInstruction = () =>{
+  //   setShowInstrDropdown(!showInstrDropdown);
+  //   setShowDescDropdown(false)
+  // }
+
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
+  // const handleDescription = () => {
+  //   setActiveDropdown((prev) => (prev === "desc" ? null : "desc"));
+  //   setMode('desc');
+  // };
+
+  // const handleInstruction = () => {
+  //   setActiveDropdown((prev) => (prev === "instr" ? null : "instr"));
+  //   setMode('instr');
+  // };
+  const [data, setData] = useState(() => {
+      const tests = JSON.parse(localStorage.getItem("tests"));
+      const savedTests = tests
+      return savedTests ? initialData : initialData;
+    });
+
+   const [tick, setTick] = useState(0);
+    useEffect(() => {
+      const stored = JSON.parse(localStorage.getItem('tests'));
+      setData(stored);
+    }, []);
+    
+
+  const openModal = (testName) => {
+    setSelectedTest(testName.test)
+    setSelectedTestID(testName.id)
+    setIsModalOpen(true)
+    // setOpenDropdownId(null)
+  }
+
+  const openShareModal = (testName) => {
+    setSelectedTest(testName)
+    setIsShareModalOpen(true)
+    // setOpenDropdownId(null)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const refreshTests = () => {
+    const stored = JSON.parse(localStorage.getItem('tests')) || [];
+    setData(stored);
+  };
+
+  const handleUpdateTest = (testId, updatedFields) => {
+    setData(prevData =>
+      prevData.map(test =>
+        test.id === testId
+          ? {
+            ...test,
+            test: updatedFields.name || test.test,
+            duration: updatedFields.duration || test.duration,
+            description: updatedFields.description || test.description,
+            instructions: updatedFields.instructions || test.instructions,
+            // lastModified: new Date().toISOString()
+          }
+          : test
+      )
+    );
+  };
+
+  const handleRenameTest = (testId, updatedFields) => {
+    setData(prevData =>
+      prevData.map(test =>
+        test.id === testId
+          ? {
+            ...test,
+            test: updatedFields.name || test.test,
+            // lastModified: new Date().toISOString()
+          }
+          : test
+      )
+    );
+  };
+
+
+  const handleActionClick = (action,testItem) => {
+    switch (action) {
+
+      case "desc":
+        setActiveDropdown((prev) => (prev === "desc" ? null : "desc"));
+        setMode('desc');
+        break;
+
+      case "instr":
+        setActiveDropdown((prev) => (prev === "instr" ? null : "instr"));
+        setMode('instr');
+        break;
+
+      case "dispatch":
+        openModal(testItem.test);
+        break;
+
+      case "edit":
+        setEditingTest({
+          id: testItem.id,
+          name: testItem.test,
+          duration: testItem.duration,
+          description: testItem.description,
+          instructions: testItem.instructions
+        });
+        setIsEditModalOpen(true);
+        break;
+
+      case "rename":
+        setEditingTest({
+          id: testItem.id,
+          name: testItem.test,
+        });
+        setIsRenameModalOpen(true);
+        break;
+
+      case "pdf":
+        setShowDescDropdown(true)
+        setMode('pdf');
+        break;
+
+      case "copy":
+        setShowDescDropdown(true)
+        setMode('copy');
+        break;
+
+      case "share":
+        openShareModal(testItem.test);
+        break;
+
+      case "archive":
+        setShowDescDropdown(true)
+        setMode('archive');
+        break;
+
+      case "delete":
+        setShowDescDropdown(true)
+        setMode('delete');
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleAddSection = () => {
@@ -110,7 +313,8 @@ const TestAddSidebar = () => {
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)}></div>}
+
 
       {/* Sidebar Container */}
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Test Navigation">
@@ -154,6 +358,7 @@ const TestAddSidebar = () => {
                   {tags.map((tag, index) => (
                     <li key={index} className="tag-item">
                       <Link
+                        to="#"
                         className="sidebar-contents"
                         aria-label={`Tag: ${tag}`}
                       >
@@ -165,7 +370,7 @@ const TestAddSidebar = () => {
                         <div className="w-100 d-flex justify-content-between align-items-center">
                           <span className="sidebar-letters">{tag}</span>
                           <button className="tag-button">
-                            <span className="tag-dropdown-toggle" onClick={() => handleTagClick(index)}></span>
+                            <span className="tag-dropdown-toggle" onClick={() => {handleTagClick(index)}}></span>
                           </button>
                           <TagActionsDropdown
                             isOpen={showMoreOptions === index}
@@ -188,10 +393,88 @@ const TestAddSidebar = () => {
                   Uncategorized<span className="number">(5)</span>
                 </p>
               </div>
-
             </ul>
           </div>
-          <hr></hr>
+          <hr />
+          <div className="test-sidebar-section">
+             <h3 className="sidebar-section-title">Actions</h3>
+             <ul className="test-sidebar-menu">
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => openModal(testItem)}
+                >
+                  <Send className="icon" size={18} />
+                  <span className="sidebar-letters">Published</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => handleActionClick("edit", testItem)}
+                >
+                  <FaEdit className="icon" size={18}/>
+                  <span className="sidebar-letters">Edit</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={()=>handleActionClick("pdf")}
+                >
+                  <FaFilePdf className="icon" size={18} />
+                  <span className="sidebar-letters">Download</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => handleActionClick("rename", testItem)}
+                >
+                  <BiSolidRename className="icon" size={18}/>
+                  <span className="sidebar-letters">Rename</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  to="/test/shared-with-me"
+                  className={`sidebar-contents ${activeSection === "shared-with-me" ? "active" : ""}`}
+                  aria-label="Shared with me"
+                  onClick={() => openShareModal(testItem.test)}
+                >
+                  <Share2 className="icon" size={18} />
+                  <span className="sidebar-letters">Shared with me</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  to="/test/archived"
+                  className={`sidebar-contents ${activeSection === "archived" ? "active" : ""}`}
+                  aria-label="Archived"
+                  onClick={()=>handleActionClick("archive")}
+                >
+                  <Archive className="icon" size={18} />
+                  <span className="sidebar-letters">Archived</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  to="/test/trashed"
+                  className={`sidebar-contents ${activeSection === "trashed" ? "active" : ""}`}
+                  aria-label="Trashed"
+                  onClick={()=>handleActionClick("delete")}
+                >
+                  <Trash2 className="icon" size={18} />
+                  <span className="sidebar-letters">Trashed</span>
+                </div>
+              </li>
+             </ul>
+          </div>
+          <hr />
           <div className="test-sidebar-section">
             <h3 className="sidebar-section-title">Test Information</h3>
             <ul>
@@ -221,89 +504,57 @@ const TestAddSidebar = () => {
                 </Link>
               </li>
               <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") || showDescDropdown ? "active" : ""}`}>
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "desc" ? "active" : ""}`}>
                   <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
                     <div className="d-flex align-items-center gap-2">
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Description</span>
                     </div>
                     <div className="dropdown-icon-container">
-                      <button
-                        className="dropdown-toggle3"
-                        onClick={(e) => {
-                          e.stopPropagation(); // prevent bubbling
-                          setShowDescDropdown(!showDescDropdown);
-                          setShowInstrDropdown(false);
-                        }}
-                      >
+                      <button className="dropdown-toggle3" onClick={()=>handleActionClick("desc")}>
                         <MoreVertical size={16} />
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {showDescDropdown && (
-                  <div className="Description-dropdown" ref={dropdownRef}>
-                    <button
-                      className="Description-option"
-                      onClick={() => {
-                        console.log("Edit Description");
-                        setShowDescDropdown(false);
-                      }}
-                    >
-                      <Edit size={16} />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      className="Description-option"
-                      onClick={() => {
-                        console.log("Settings clicked");
-                        setShowDescDropdown(false);
-                      }}
-                    >
-                      <Settings size={16} />
-                      <span>Settings</span>
-                    </button>
-                  </div>
+                {activeDropdown === "desc" && (
+                  <TagActionsDropdown
+                    isOpen={true}
+                    mode="desc"
+                    onEdit={() => {setShowDescDropdown(true)}}
+                    onRemove={() => console.log("Remove Description")}
+                    onClose={() => setActiveDropdown(null)}
+                  />
                 )}
               </li>
 
-
               <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "instr" ? "active" : ""}`}>
                   <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
                     <div className="d-flex align-items-center gap-2">
                       <BookOpen className="icon" size={20} />
                       <span className="sidebar-letters">Instruction</span>
                     </div>
                     <div className="dropdown-icon-container">
-                      <button
-                        className="dropdown-toggle3"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowInstrDropdown(!showInstrDropdown);
-                          setShowDescDropdown(false);
-                        }}
-                      >
+                      <button className="dropdown-toggle3" onClick={()=>handleActionClick("instr")}>
                         <MoreVertical size={16} />
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {showInstrDropdown && (
-                  <div className="Description-dropdown" ref={dropdownRef}>
-                    <button className="Description-option" onClick={() => console.log("Edit Instruction")}>
-                      <Edit size={16} />
-                      <span>Edit</span>
-                    </button>
-                    <button className="Description-option" onClick={() => console.log("Settings")}>
-                      <Settings size={16} />
-                      <span>Settings</span>
-                    </button>
-                  </div>
+                {activeDropdown === "instr" && (
+                  <TagActionsDropdown
+                    isOpen={true}
+                    mode="instr"
+                    onEdit={() => { setShowDescDropdown(true) }}
+                    onRemove={() => console.log("Remove Description")}
+                    onClose={() => setActiveDropdown(null)}
+                  />
                 )}
               </li>
+
             </ul>
           </div>
         </div>
@@ -323,6 +574,7 @@ const TestAddSidebar = () => {
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
+
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}
@@ -330,6 +582,71 @@ const TestAddSidebar = () => {
         heading={modalHeading}
         selectedSection={selectedSection}
       />
+
+
+      <NewTestModal
+        isOpen={showDescDropdown}
+        mode={mode}
+        onSubmit={() => { setShowDescDropdown(false) }}
+        onClose={() => { setShowDescDropdown(false) }}
+        initialName={testItem.test}
+        initialId={testItem.id}
+        initialDuration={testItem.duration}
+        initialDescription={testItem.description}
+        initialInstructions={testItem.instructions}
+      />
+      
+      <PublishModal 
+      isOpen={isModalOpen} 
+      tags={tags} onClose={closeModal} 
+      selectedTest={selectedTest} 
+      selectedTestId={selectedTestId} 
+      onPublish={refreshTests} 
+      />
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        emails={emails}
+        setEmails={setEmails}
+        testName={selectedTest}
+      />
+      
+        {isEditModalOpen && (
+                 <NewTestModal
+                   isOpen={isEditModalOpen}
+                   onClose={() => {
+                     setIsEditModalOpen(false);
+                     setEditingTest(null);
+                   }}
+                   initialName={editingTest?.name || ""}
+                   initialDuration={editingTest?.duration || 60}
+                   initialDescription={editingTest?.description || ""}
+                   initialInstructions={editingTest?.instructions || ""}
+                   onSubmit={(updatedFields) => {
+                     handleUpdateTest(editingTest.id, updatedFields);
+                     setIsEditModalOpen(false);
+                     setEditingTest(null);
+                   }}
+                   mode="edit"
+                 />
+          )}
+
+
+         {isRenameModalOpen && (
+                  <NewTestModal
+                    isOpen={isRenameModalOpen}
+                    onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
+                    initialName={editingTest?.name || ""}
+                    mode="rename"
+                    onSubmit={(updatedFields) => {
+                      // updatedFields will be { name: 'new name' }
+                      handleRenameTest(editingTest.id, updatedFields);
+                      setIsRenameModalOpen(false);
+                      setEditingTest(null);
+                    }}
+                  />
+          )}
     </div>
   );
 };

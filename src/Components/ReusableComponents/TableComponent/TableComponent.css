@@ -82,6 +82,10 @@
     width: 20%;
     text-align: right !important;
   }
+
+  .test-col-actions{
+    width: 100%;
+  }
   /* .col-actions .table-header-content{
     justify-content: flex-end;
   }
@@ -571,5 +575,50 @@ tr:hover {
 .question-row td {
     border-top: none !important;
     background: #f0f7ff;
+}
+
+.question-td{
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.type-badge{
+   font-size: 14px;
+}
+
+.question-tr{
+padding-top: 40px;
+}
+
+.table-text-padding{
+ padding-top: 10px !important;
+}
+
+
+.table-tq-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.table-tq-columns {
+  display: flex;
+  /* stack non-actions vertically */
+  gap: 20px;
+  /* spacing between them */
+}
+
+.table-tq-actions {
+  margin-left: 20px;
+  /* gap between actions and other columns */
+}
+
+.rows-iteam{
+  display: flex;
+  flex-direction: column;
 }
 

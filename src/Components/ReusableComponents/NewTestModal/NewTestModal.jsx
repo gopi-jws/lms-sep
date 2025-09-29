@@ -111,6 +111,18 @@ const NewTestModal = ({
             return;
         }
 
+        if(mode === "desc"){
+            onSubmit();
+            onClose();
+            return;
+        }
+
+        if(mode === "instr"){
+            onSubmit();
+            onClose();
+            return;
+        }
+
         // ---- CREATE / EDIT ----
         if (!testName.trim()) newErrors.testName = "Test Name is required.";
 
@@ -371,7 +383,7 @@ const NewTestModal = ({
                             {/* <h5 className="delete">{testName}</h5> */}
 
                             <ul >
-                                <li className="delete">
+                                <li className="delete-list">
                                     <h6>{testName}</h6>
                                 </li>
                             </ul>
@@ -452,7 +464,75 @@ const NewTestModal = ({
                                         <button className="btn" onClick={onClose}>Cancel</button>
                                         <button className="btn create-btn" onClick={handleSubmit}>Copy</button>
                                     </div>
-                                </div>) : (
+                                </div>) : mode == "desc" ? (
+                                            <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
+                                                <div className="newtest-modal-header">
+                                                    <h5>Edit Description</h5>
+                                                    <button className="close-btn" onClick={onClose}>
+                                                        &times;
+                                                    </button>
+                                                </div>
+
+                                                <div className="newtest-modal-body">
+                                                    <div className="newtest-form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={description}
+                                                            className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
+                                                            onChange={(e) => setTestName(e.target.value)}
+                                                            placeholder="Enter Description"
+                                                        />
+                                                        {errors.testName && <p className="error-message">{errors.testName}</p>}
+                                                    </div>
+                                                </div>
+
+                                                <div className="newtest-modal-footer">
+                                                    <button className="btn" onClick={onClose}>
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        className="btn create-btn"
+                                                        onClick={handleSubmit}
+                                                    >
+                                                        Update
+                                                    </button>
+                                                </div>
+                                            </div>                                       
+                            ) : mode == "instr" ? (
+                                    <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
+                                                <div className="newtest-modal-header">
+                                                    <h5>Edit Instruction</h5>
+                                                    <button className="close-btn" onClick={onClose}>
+                                                        &times;
+                                                    </button>
+                                                </div>
+
+                                                <div className="newtest-modal-body">
+                                                    <div className="newtest-form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={instructions}
+                                                            className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
+                                                            onChange={(e) => setTestName(e.target.value)}
+                                                            placeholder="Enter Instrutcion"
+                                                        />
+                                                        {errors.testName && <p className="error-message">{errors.testName}</p>}
+                                                    </div>
+                                                </div>
+
+                                                <div className="newtest-modal-footer">
+                                                    <button className="btn" onClick={onClose}>
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        className="btn create-btn"
+                                                        onClick={handleSubmit}
+                                                    >
+                                                        Update
+                                                    </button>
+                                                </div>
+                                            </div>
+                            ) : (
                                     <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                         <div className="newtest-modal-header">
                                             <h5>Archive</h5>

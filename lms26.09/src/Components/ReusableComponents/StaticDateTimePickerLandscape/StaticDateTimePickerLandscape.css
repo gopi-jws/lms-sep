@@ -1,0 +1,302 @@
+/* Updated all class names to include 'date' prefix and ensured equal division */
+
+/* DateTime Picker Styles */
+.date-datetime-picker {
+  position: relative;
+}
+
+.date-input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-input-field:hover {
+  border-color: #9ca3af;
+}
+
+.date-input-text:focus {
+    border: var(--form-control-focus-border);
+    outline: var(--form-control-focus-outline);
+    box-shadow: var(--form-control-focus-box-shadow);
+}
+
+.date-input-placeholder {
+    color: gray;
+    font-size: 16px;
+}
+
+.date-input-icon {
+  width: 20px;
+  height: 20px;
+  color: gray;
+}
+
+/* Modal Styles */
+.date-modal-overlay {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.date-modal-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  /* border-radius: 16px; */
+  background-color: white;
+  overflow: hidden; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* soft shadow */
+}
+
+.date-modal-header,
+.date-modal-footer {
+  flex-shrink: 0; /* keep header/footer fixed */
+  padding: 16px;
+  background-color: white;
+  z-index: 1;
+}
+
+.date-modal-body {
+  flex: 1 1 auto; /* take remaining space */
+  display: flex;
+  overflow-y: auto; /* scroll if content is too tall */
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.date-calendar-section,
+.date-clock-section {
+  flex: 1;
+  padding: 16px;
+  min-width: 0; /* prevents flex overflow on small screens */
+}
+
+.date-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
+.date-close-button {
+  padding: 8px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.date-close-button:hover {
+  background-color: #f3f4f6;
+}
+
+.date-close-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Updated modal content to ensure equal division between calendar and clock */
+.date-modal-content {
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+  min-height: 400px;
+}
+
+.date-calendar-section {
+  flex: 1;
+  width: 50%;
+  border-right: 1px solid #e5e7eb;
+}
+
+.date-clock-section {
+  flex: 1;
+  width: 50%;
+}
+
+.date-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Calendar Styles */
+/* .date-calendar-container {
+  padding: 24px;
+} */
+
+.date-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.date-nav-button {
+  padding: 8px;
+  border: none;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.date-nav-button:hover {
+  background-color: #f3f4f6;
+}
+
+.date-month-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.date-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.date-day-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 8px;
+}
+
+.date-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.date-calendar-day {
+  height: 40px;
+  width: 40px;
+  font-size: 14px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.date-calendar-day:hover:not(.date-invisible) {
+  background-color: #f3f4f6;
+}
+
+.date-calendar-day.date-today {
+  background-color: #f3f4f6;
+  font-weight: 500;
+  color: #374151;
+}
+
+.date-calendar-day.date-selected {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 500;
+}
+
+.date-calendar-day.date-invisible {
+  visibility: hidden;
+}
+
+/* Clock Styles */
+.date-clock-container {
+  /* padding: 24px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.date-clock-wrapper {
+  position: relative;
+}
+
+.date-clock-svg {
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+}
+
+.date-clock-number {
+  font-size: 16px;
+  font-weight: 500;
+  fill: #374151;
+}
+
+.date-time-display {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: #374151;
+}
+
+.date-ampm-container {
+  display: flex;
+  gap: 8px;
+}
+
+.date-ampm-button {
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.date-ampm-button:hover {
+  background-color: #e5e7eb;
+}
+
+.date-ampm-button.date-active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.date-selection-indicator {
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.date-ok-button {
+  padding: 8px 32px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: 500;
+}
+
+.date-ok-button:hover {
+  background-color: #2563eb;
+}
+
