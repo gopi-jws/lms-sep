@@ -24,7 +24,6 @@
   z-index: 1000;
 }
 
-
 @media (max-width: 1024px) {
   .top-bar {
     left: 200px;
@@ -359,5 +358,19 @@
   .avatar {
     width: 32px;
     height: 32px;
+  }
+}
+
+@media (max-width: 424px) {
+  .header-logo-text {
+    display: none;
+  }
+
+  .mobile-toggle-btn {
+    padding: 5px !important;
+  }
+
+  .logo-left {
+    margin-left: 45px;
   }
 }

@@ -87,7 +87,6 @@ const Header = () => {
             <p className="admin-label">Admin</p>
           </button>
 
-
           {isSettingsExpanded && (
             <div className={`settings-dropdown ${isMobile ? "mobile" : ""}`}>
               <a href="/profile" className="header-dropdown-item">My Profile</a>
