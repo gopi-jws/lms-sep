@@ -1,0 +1,17 @@
+.completed-test {
+    background-color: var(--card-background);
+    border-radius: var(--card-border);
+    border: var(--card-border-px);
+    padding: 24px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+.completd-hours-used {
+
+    display: flex;
+    justify-content: flex-end;
+}
+.status{
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,6 +1,6 @@
 "use client"
-
-import { useState, useRef, useEffect } from "react"
+import { useLocation, useParams } from "react-router-dom";
+import React, { useState, useRef, useEffect , forwardRef, useImperativeHandle } from "react"
 import { FaPaperPlane, FaCopy, FaFilePdf, FaShare, FaArchive, FaTrashAlt, FaEdit, FaTag } from "react-icons/fa"
 import { BiSolidRename } from "react-icons/bi"
 import { HiDotsVertical } from "react-icons/hi"
@@ -19,6 +19,7 @@ import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal"
 import { getTimeAgo } from "../../../../utils/time-utils"
 import { getNextId } from "../../../../utils/idGenerator"
 import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
+import TestAddSidebar from "../TestAddSideabr/TestAddSideabr";
 
 const initialData = [
   { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -38,6 +39,7 @@ const initialData = [
 
 
 const TestIndex = () => {
+  const {pathname} = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [emails, setEmails] = useState([])
@@ -341,7 +343,6 @@ const TestIndex = () => {
   };
 
 
-
   const handleCopyTest = (testId, newName, selectedTags = []) => {
     let testToCopy = data.find(test => test.id === testId);
          console.log(testToCopy.test);
@@ -352,7 +353,7 @@ const TestIndex = () => {
         ...testToCopy,
         id: newTestId,
         test: newName || `${testToCopy.test}`,
-        lastModified: new Date().toISOString(),
+        // lastModified: new Date().toISOString(),
         status: "Not Published"
       };
       
@@ -433,7 +434,9 @@ const TestIndex = () => {
     setData(prevData =>
       prevData.map(test =>
         test.id === testId
-          ? { ...test, archived: true, lastModified: new Date().toISOString() }
+          ? { ...test, archived: true,
+            //  lastModified: new Date().toISOString() 
+            }
           : test
       )
     );
@@ -479,6 +482,8 @@ const TestIndex = () => {
     );
   };
   const handleActionClick = (action, row) => {
+    console.log("handleActionClick executed:", action, row);
+    
     setOpenDropdownId(null);
 
     switch (action) {
@@ -544,7 +549,6 @@ const TestIndex = () => {
         break;
     }
   };
-
 
 
   const columns = [
@@ -892,11 +896,7 @@ const TestIndex = () => {
             mode="archive"
           />
         )}
-
-        
-      </div>
-
-     
+      </div> 
 
       {showPaginationButtons && (
         <PaginationButtons
@@ -917,8 +917,11 @@ const TestIndex = () => {
         totalItems={data.length}
         isSearching={searchQuery.length > 0 || filterStatus.length > 0}
       />
+
+
+     
     </>
-  )
+  );
 };
 
 export default TestIndex

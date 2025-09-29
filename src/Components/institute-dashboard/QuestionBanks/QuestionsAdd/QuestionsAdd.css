@@ -36,8 +36,12 @@ a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 500px;
+  width: 960px;
   display: inline-block;
+}
+
+.ans-item {
+  width: 975px;
 }
 
 .full-view .truncate,
@@ -298,7 +302,6 @@ a {
 
   .row-link {
     white-space: nowrap;
-    /* Ensure single-line for non-expanded */
     overflow: hidden;
   }
 
