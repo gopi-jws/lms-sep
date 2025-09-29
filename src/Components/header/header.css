@@ -24,7 +24,6 @@
   z-index: 1000;
 }
 
-
 @media (max-width: 1024px) {
   .top-bar {
     left: 200px;
