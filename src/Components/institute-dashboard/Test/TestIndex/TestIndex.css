@@ -464,11 +464,17 @@
   color: #16a34a;
 }
 
-.copy:hover {
- background-color: lightblue;
-}
-
-.rename:hover{
+.share:hover,
+.pdf:hover,
+.copy:hover,
+.add-to-test:hover,
+.set-mark:hover,
+.move:hover,
+.folder:hover,
+.archive:hover,
+.settings:hover,
+.delete:hover,
+.rename:hover {
   background-color: lightblue;
 }
 
@@ -477,17 +483,10 @@
   color: #dc2626;
 }
 
-.pdf:hover {
-  background-color: lightblue;
-}
 
 .mobile-action-item.share:hover {
   background-color: #f0f9ff;
   color: #0284c7;
-}
-
-.share:hover {
-  background-color: lightblue;
 }
 
 .mobile-action-item.archive:hover {
@@ -495,22 +494,11 @@
   color: #d97706;
 }
 
-.archive:hover {
-  background-color: lightblue;
-}
-
 .mobile-action-item.delete:hover {
   background-color: #fef2f2;
   color: #dc2626;
 }
 
-.delete:hover {
-  background-color: lightblue;
-}
-
-.settings:hover {
-  background-color: lightblue;
-}
 
 /* Mobile Action Item Icon */
 .mobile-action-item svg {

@@ -290,7 +290,7 @@ input[type="file"]::file-selector-button {
 }
 
 /* Responsive Styles */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .first-column {
         flex: 0 0 100%;
     }
@@ -311,4 +311,4 @@ input[type="file"]::file-selector-button {
     .preview-section {
         margin-top: 20px;
     }
-}
+} */

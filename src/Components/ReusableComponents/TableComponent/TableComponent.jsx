@@ -5,9 +5,7 @@ import { FaArrowDown, FaArrowUp, FaSearch, FaPlus, FaCheck, FaMinus, FaEye } fro
 import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
 import StudentBulkActions from "../StudentBulkActions/StudentBulkActions"
-import LatexRenderer from "../LatexRenderer/LatexRenderer"
-import CKEditorRenderer from '../CKEditorRenderer/CKEditorRenderer'
-import NewTestModal from "../NewTestModal/NewTestModal"
+import QuestionEditor from "../Markdown/QuestionEditor";
 import QuestionsBulkActions from "../QuestionsBulkActions/QuestionsBulkActions"
 
 const DataTable = ({
@@ -385,9 +383,7 @@ const DataTable = ({
                                                                         <>
                                                                             {/* Full question */}
                                                                             {/* the question convent to latex and code */}
-                                                                            {/* <LatexRenderer content={row.question} /> */}
-                                                                            <CKEditorRenderer content={row.question} mode={row.mode} />
-
+                                                                            <QuestionEditor content={row.question} mode={row.mode}  />    
                                                                             {/* View Solution button */}
                                                                             {row.answer && (
                                                                                 <div className="mt-2">
@@ -406,7 +402,8 @@ const DataTable = ({
                                                                             {/* Answer content */}
                                                                             {showAnswers.includes(row.id) && row.answer && (
                                                                                 <div className="mt-2 p-2 bg-gray-100 rounded">
-                                                                                    <LatexRenderer content={row.answer} />
+                                                                                    {/* <LatexRenderer content={row.answer} /> */}
+                                                                                <QuestionEditor content={row.answer} mode="both" />    
                                                                                 </div>
                                                                             )}
                                                                         </>

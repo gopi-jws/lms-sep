@@ -2,39 +2,32 @@ import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import rehypeRaw from 'rehype-raw'   // 👈 import this
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export default function QuestionEditor({ content, mode }) {
-    // console.log("Current mode:", mode);
-    // console.log("Content:",content);
-    
-
     if (!content) return <div className="placeholder-text">Content will appear here</div>
 
     const [question, setQuestion] = useState("")
 
     useEffect(() => {
         if (content) {
-            let value = content.replace(/\r\n|\r|\n/g, '\n');
+            let value = content.replace(/\r\n|\r|\n/g, '\n')
 
             if (mode === 'latex') {
-                value = value.replace(/~~~[\s\S]*?~~~/g, ''); // remove code blocks      
+                value = value.replace(/~~~[\s\S]*?~~~/g, '') // remove code blocks
             }
 
             if (mode === 'code') {
-                value = value.replace(/\$\$[\s\S]*?\$\$/g, ''); // remove display math
-                value = value.replace(/\$[^$\n]+\$/g, '');      // remove inline math
+                value = value.replace(/\$\$[\s\S]*?\$\$/g, '') // remove display math
+                value = value.replace(/\$[^$\n]+\$/g, '')      // remove inline math
             }
 
-            setQuestion(value);
-            // console.log("Processed question:", value);
+            setQuestion(value)
         }
-    }, [content, mode]);
+    }, [content, mode])
 
-
-
-    // merge custom style into oneDark theme
     const customCodeStyle = {
         ...codeStyle,
         'code[class*="language-"]': {
@@ -73,16 +66,14 @@ export default function QuestionEditor({ content, mode }) {
         }
     }
 
-    // enable LaTeX only in latex/both mode
     const remark = []
-    const rehype = []
+    const rehype = [rehypeRaw]   // 👈 allow raw HTML like <img>, <sup>, etc.
 
-    if (mode === "latex" || mode === "both") {
+    if (mode === 'latex' || mode === 'both') {
         remark.push(remarkMath)
         rehype.push(rehypeKatex)
     }
 
-    // ✅ RETURN JSX here
     return (
         <ReactMarkdown
             components={components}

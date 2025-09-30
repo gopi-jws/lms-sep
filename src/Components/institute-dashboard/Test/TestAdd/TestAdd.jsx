@@ -39,7 +39,8 @@ const TestAdd = () => {
       ],
       correctAnswer: 0,
       isLaTeXEnabled: true,
-      hasImages: true
+      hasImages: true,
+      mode: "both",
     },
     {
       id: 2,
@@ -62,6 +63,7 @@ const TestAdd = () => {
       ],
       correctAnswer: 3,
       isLaTeXEnabled: true,
+      mode: "both",
     },
     {
       id: 4,
@@ -70,6 +72,7 @@ const TestAdd = () => {
             0         1.00
             10        0.82
             Determine the reaction order and rate constant.`,
+      answer: `The correct solution is option D : 0`,
       type: "Descriptive ",
       isLaTeXEnabled: false,
       section: "Table",
@@ -84,6 +87,7 @@ const TestAdd = () => {
         "Cannot be determined",
       ],
       correctAnswer: 0,
+      mode: "both",
     },
     {
       id: 5,
@@ -102,6 +106,7 @@ const TestAdd = () => {
       tolerance: "±5%",
       isLaTeXEnabled: true,
       units: "m/s",
+      mode: "both",
     },
     {
       id: 6,
@@ -114,6 +119,7 @@ const TestAdd = () => {
       created: "16/03/2025",
       modified: "1 week ago",
       correctAnswer: true,
+      mode: "both",
     },
     {
       id: 7,
@@ -135,6 +141,7 @@ const TestAdd = () => {
       ],
       correctAnswer: 2,
       isLaTeXEnabled: true,
+      mode: "both",
     },
     {
       id: 8,
@@ -149,6 +156,7 @@ const TestAdd = () => {
       options: ["రబి, ఖరీఫ్, బోనాల", "శీతకాల, వేసవికాల, ఆదివార", "పంటల్ని వేరే విభజించలేదు", "ఉష్ణకటిన, ట్రోపికల్, మాన్సూన్"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
+      mode: "both",
     },
     {
       id: 9,
@@ -168,6 +176,7 @@ const TestAdd = () => {
   
             result = factorial(5)
             print(result)`,
+      mode: "both",
     },
     {
       id: 10,
@@ -188,7 +197,8 @@ const TestAdd = () => {
         "15"
       ],
       correctAnswers: [0, 2, 4], // Indices of correct options
-      isLaTeXEnabled: false
+      isLaTeXEnabled: false,
+      mode: "both",
     }
   ];
 
