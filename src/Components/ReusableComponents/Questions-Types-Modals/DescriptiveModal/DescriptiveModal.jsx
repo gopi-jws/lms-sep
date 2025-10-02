@@ -5,6 +5,7 @@ import 'katex/dist/katex.min.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
+import QuestionEditor from "../../Markdown/QuestionEditor";
 
 const DescriptiveModal = ({ open, onClose, initialData }) => {
     const { modalRef, isBouncing } = useBounceModal(open);
@@ -12,6 +13,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
     const [questionImage, setQuestionImage] = useState(initialData?.questionImage || null);
     const [isCodeEnabled, setIsCodeEnabled] = useState(true);
     const [isLaTeXEnabled, setIsLaTeXEnabled] = useState(false);
+    const [isCodeandLaTeXEnabled, setIsCodeandLaTexEnabled] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Handle initial data when modal opens
@@ -51,19 +53,53 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
         if (fileInput) fileInput.value = '';
     };
 
-    const handleCodeToggle = () => {
-        const newCodeState = !isCodeEnabled;
-        setIsCodeEnabled(newCodeState);
-        if (!newCodeState) setIsLaTeXEnabled(true);
-        else setIsLaTeXEnabled(false);
-    };
-
-    const handleLaTeXToggle = () => {
-        const newLaTeXState = !isLaTeXEnabled;
-        setIsLaTeXEnabled(newLaTeXState);
-        if (!newLaTeXState) setIsCodeEnabled(true);
-        else setIsCodeEnabled(false);
-    };
+    const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
+    
+        const handleCodeToggle = () => {
+            if (mode === "code") {
+                setMode("latex"); // toggle to latex if already code
+                setIsCodeEnabled(false)
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+                setQuestionTitle('')
+            } else {
+                setMode("code"); // otherwise force code
+                setIsCodeEnabled(true);
+                setIsLaTeXEnabled(false);
+                setIsCodeandLaTexEnabled(false)
+                setQuestionTitle('')
+            }
+        };
+    
+        const handleLaTeXToggle = () => {
+            if (mode === "latex") {
+                setMode("code"); // toggle back to code if already latex
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(true)
+                setQuestionTitle('')
+            } else {
+                setMode("latex"); // otherwise force latex
+                setIsLaTeXEnabled(true)
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(false)
+                setQuestionTitle('')
+            }
+        };
+    
+        const handleCodeandLaTeXToggle = () => {
+            if (mode === "both") {
+                setMode("code"); // toggle back to code if already both
+                setIsCodeandLaTexEnabled(false)
+                setIsCodeEnabled(true) 
+                setQuestionTitle('')
+            } else {
+                setMode("both"); // otherwise force both
+                setIsCodeandLaTexEnabled(true)
+                setIsLaTeXEnabled(false)
+                setIsCodeEnabled(false)
+                setQuestionTitle('')
+            }
+        };
 
     const cleanLatexInput = (text) => {
         if (!text) return '';
@@ -112,7 +148,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
             <div ref={modalRef} className={`descriptive-modal-content ${isBouncing ? "bounce" : ""}`}>
                 <div className="descriptive-modal-header">
                     <h5>{initialData ? "Edit Descriptive Question" : "Add Descriptive Question"}</h5>
-                    <button className="close-btn" onClick={onClose}>&times;</button>
+                    <button className="close-btn" onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code') }}>&times;</button>
                 </div>
 
                 <div className="descriptive-modal-body">
@@ -124,7 +160,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isCodeEnabled}
+                                            checked={mode == "code"}
                                             onChange={handleCodeToggle}
                                             disabled={isSubmitting}
                                         />
@@ -137,8 +173,21 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
                                             type="checkbox"
-                                            checked={isLaTeXEnabled}
+                                            checked={mode === "latex"}
                                             onChange={handleLaTeXToggle}
+                                            disabled={isSubmitting}
+                                        />
+                                        <span className="slider round"></span>
+                                    </div>
+                                </div>
+
+                                <div className="switch-wrapper">
+                                    <label>Enable Code&LateX</label>
+                                    <div className="switch" onClick={(e) => e.stopPropagation()}>
+                                        <input
+                                            type="checkbox"
+                                            checked={mode == "both"}
+                                            onChange={handleCodeandLaTeXToggle}
                                             disabled={isSubmitting}
                                         />
                                         <span className="slider round"></span>
@@ -147,88 +196,40 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                             </div>
 
                             <div className="descriptive-form-group descriptive-qns-box">
-                                {/* {isLaTeXEnabled ? (
-                                    <textarea
-                                        className="descriptive-form-control latex-input"
-                                        rows="6"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                        disabled={isSubmitting}
-                                    />
-                                ) : (
-                                    <textarea
-                                        className="descriptive-form-control"
-                                        rows="6"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(e.target.value)}
-                                        placeholder="Enter question text"
-                                        disabled={isSubmitting}
-                                    />
-                                )} */}
+
                                 <div className="div">
                                     <label className="pt-3">Question : </label>
                                     {isLaTeXEnabled ? (
-                                    <textarea
-                                            className="descriptive-form-control descriptive-latex-input"
-                                        rows="6"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                        disabled={isSubmitting}
-                                    />
-                                ) : (
-                                    <input
-                                        type="text"
-                                                className="descriptive-form-control descriptive-text-input"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(e.target.value)}
-                                        placeholder="Enter question text"
-                                        disabled={isSubmitting}
-                                    />
-                                )}
-                                </div>
-                                
-                                {/* <div className="image-upload-container">
-                                    <label className="image-upload-label">
-                                        {questionImage ? "Change Question Image" : "Add Question Image"}
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="question-image-upload"
-                                        className="descriptive-form-control"
-                                        onChange={handleQuestionImageUpload}
-                                        accept="image/*"
-                                        disabled={isSubmitting}
-                                    />
-                                    {questionImage && (
-                                        <div className="image-preview-container">
-                                            <div className="image-wrapper">
-                                                <img
-                                                    src={questionImage}
-                                                    alt="Question preview"
-                                                    className="img-preview-small"
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.nextElementSibling.style.display = 'block';
-                                                    }}
-                                                />
-                                            </div>
-                                            <button
-                                                className="btn-remove-image"
-                                                onClick={handleRemoveQuestionImage}
-                                                disabled={isSubmitting}
-                                                aria-label="Remove question image"
-                                                title="Remove image"
-                                            >
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
+                                        <textarea
+                                            className="mcq-form-control latex-input"
+                                            rows="6"
+                                            value={questionTitle}
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
+                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                            disabled={isSubmitting}
+                                        />
+                                    ) : isCodeEnabled ? (
+                                        <textarea
+                                            rows="6"
+                                            className="mcq-form-control"
+                                            style={{ width: "450px", padding: "10px", minHeight: "100px" }}
+                                            value={questionTitle}
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
+                                            placeholder="Enter question text"
+                                            disabled={isSubmitting}
+                                        />
+                                    ) : (
+                                        <textarea
+                                            className="mcq-form-control latex-input"
+                                            rows="6"
+                                            value={questionTitle}
+                                            onChange={(e) => setQuestionTitle(e.target.value)}
+                                            placeholder="Enter both Text and Latex "
+                                            disabled={isSubmitting}
+                                        />
                                     )}
-                                </div> */}
-
+                                </div>
+                            
                                 <div className="image-upload-container descriptive-image-box">
                                     <label className="image-upload-label">
                                         Image
@@ -283,6 +284,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                     <div className="preview-status">
                                         {isLaTeXEnabled && <span className="latex-badge">LaTeX Enabled</span>}
                                         {isCodeEnabled && <span className="code-badge">Code Formatting</span>}
+                                        {isCodeandLaTeXEnabled && <span className="latex-code-badge">Code & LaTex Formatting</span>}
                                     </div>
                                 </div>
 
@@ -290,14 +292,16 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                                     <div className="preview-question">
                                         <div className="preview-label">Question:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer
-                                                    content={questionTitle}
-                                                    isInline={false}
-                                                />
-                                            ) : (
-                                                questionTitle || <span className="placeholder-text">No question added yet</span>
-                                            )}
+                                            {
+                                                isCodeEnabled ? (
+                                                    <QuestionEditor content={questionTitle} mode="code" />
+                                                ) : isLaTeXEnabled ? (
+                                                    <QuestionEditor content={questionTitle} mode="latex" />
+                                                ) : (
+                                                    <QuestionEditor content={questionTitle} mode="both"/>
+                                                )
+                                            }
+
                                             {questionImage && (
                                                 <div className="question-image-container">
                                                     <img
@@ -322,7 +326,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                 <div className="descriptive-modal-footer">
                     <button
                         className="btn btn-cancel"
-                        onClick={onClose}
+                        onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code') }}
                         disabled={isSubmitting}
                     >
                         Cancel

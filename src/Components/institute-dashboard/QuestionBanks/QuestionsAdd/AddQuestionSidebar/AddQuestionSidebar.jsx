@@ -2,11 +2,17 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { Link, useLocation, useParams } from "react-router-dom"
+import { BiSolidRename } from "react-icons/bi"
+import { FaFilePdf, FaEdit, FaFolderPlus } from "react-icons/fa"
+
 import {
   Trash2,
   Folder,
   Tag,
   Plus,
+  Share2,
+  Send,
+  Archive,
   List,
   ListOrdered,
   Calculator,
@@ -211,6 +217,76 @@ const AddQuestionSidebar = () => {
           </div>
           <hr></hr>
           <div className="test-sidebar-section">
+            <h3 className="sidebar-section-title">Actions</h3>
+            <ul className="test-sidebar-menu">
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => handleActionClick("edit", testItem)}
+                >
+                  <FaEdit className="icon" size={18} />
+                  <span className="sidebar-letters">Edit</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => handleActionClick("pdf")}
+                >
+                  <FaFilePdf className="icon" size={18} />
+                  <span className="sidebar-letters">Download</span>
+                </div>
+              </li>
+              {/* <li>
+                <div
+                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  aria-label="Dispatched"
+                  onClick={() => handleActionClick("rename", testItem)}
+                >
+                  <BiSolidRename className="icon" size={18} />
+                  <span className="sidebar-letters">Rename</span>
+                </div>
+              </li> */}
+              <li>
+                <div
+                  to="/test/archived"
+                  className={`sidebar-contents ${activeSection === "archived" ? "active" : ""}`}
+                  aria-label="Archived"
+                  onClick={() => handleActionClick("archive")}
+                >
+                  <FaFolderPlus className="icon" size={18} />
+                  <span className="sidebar-letters">Add to Folder</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  to="/test/archived"
+                  className={`sidebar-contents ${activeSection === "archived" ? "active" : ""}`}
+                  aria-label="Archived"
+                  onClick={() => handleActionClick("archive")}
+                >
+                  <Archive className="icon" size={18} />
+                  <span className="sidebar-letters">Archived</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  to="/test/trashed"
+                  className={`sidebar-contents ${activeSection === "trashed" ? "active" : ""}`}
+                  aria-label="Trashed"
+                  onClick={() => handleActionClick("delete")}
+                >
+                  <Trash2 className="icon" size={18} />
+                  <span className="sidebar-letters">Trashed</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <hr />
+          
+          <div className="test-sidebar-section">
             <ul className="test-sidebar-menu">
               <li className="sidebar-section-title">Question Types</li>
 
@@ -263,8 +339,6 @@ const AddQuestionSidebar = () => {
                   <span className="sidebar-letters">Descriptive (10)</span>
                 </Link>
               </li>
-
-
             </ul>
           </div>
           <hr></hr>

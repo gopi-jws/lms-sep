@@ -594,15 +594,16 @@ tr:hover {
 padding-top: 40px;
 }
 
-.table-text-padding{
+/* .table-text-padding{
  padding-top: 10px !important;
-}
+} */
 
 
 .table-tq-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin-top: 10px;
 }
 
 .table-tq-columns {
@@ -613,8 +614,7 @@ padding-top: 40px;
 }
 
 .table-tq-actions {
-  margin-left: 20px;
-  /* gap between actions and other columns */
+  
 }
 
 .rows-iteam{

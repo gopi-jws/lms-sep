@@ -36,7 +36,7 @@ a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 960px;
+  width: 970px;
   display: inline-block;
 }
 
@@ -273,6 +273,10 @@ a {
   align-items: center;
 }
 
+.desktop-actions{
+  height: 27px;
+  display: flex;
+}
 
 
 .mobile-actions {
@@ -346,7 +350,15 @@ a {
   .data-table td {
     padding: 6px;
   }
+
 }
+
+
+/* @media (min-width:768px) {
+  .ans-item {
+      width: 100vh;
+    }
+} */
 
 /* Animation for Expanded Rows */
 .expanded-row {
