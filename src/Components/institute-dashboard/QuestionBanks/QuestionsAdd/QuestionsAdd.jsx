@@ -70,6 +70,7 @@ const QuestionsAdd = () => {
             0         1.00
             10        0.82
             Determine the reaction order and rate constant.`,
+      answer: `The correct solution is option D : 0`,
       type: "Descriptive ",
       isLaTeXEnabled: false,
       section: "Table",
@@ -411,18 +412,18 @@ const QuestionsAdd = () => {
       cell: (row) => row.marks ? <span className="marks-display">{row.marks}</span> : "N/A",
       isVisible: columnVisibility.marks,
     },
-    {
-      name: "Modified",
-      selector: "modified",
-      sortable: true,
-      isVisible: columnVisibility.modified,
-    },
-    {
-      name: "Created",
-      selector: "created",
-      sortable: true,
-      isVisible: columnVisibility.created,
-    },
+    // {
+    //   name: "Modified",
+    //   selector: "modified",
+    //   sortable: true,
+    //   isVisible: columnVisibility.modified,
+    // },
+    // {
+    //   name: "Created",
+    //   selector: "created",
+    //   sortable: true,
+    //   isVisible: columnVisibility.created,
+    // },
     {
       name: "Actions",
       selector: "actions",

@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import Select from 'react-select';
 import "./MCQModal.css";
 import { FaPlus } from "react-icons/fa";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
-import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
+import QuestionEditor from "../../Markdown/QuestionEditor";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
-import CKEditorRenderer from "../../CKEditorRenderer/CKEditorRenderer";
+import React from "react";
 
 
 const MCQModal = ({ open, onClose, initialData, }) => {
@@ -131,27 +131,6 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                 setIsCodeEnabled(false)
             }
         };
-
-    // const handleCodeToggle = () => {
-    //     const newCodeState = !isCodeEnabled;
-    //     setIsCodeEnabled(newCodeState);
-    //     setIsLaTeXEnabled(!newCodeState);
-    //     setIsCodeandLaTexEnabled(false);
-    // };
-
-    // const handleLaTeXToggle = () => {
-    //     const newLaTeXState = !isLaTeXEnabled;
-    //     setIsLaTeXEnabled(newLaTeXState);
-    //     setIsCodeEnabled(!newLaTeXState);
-    //     setIsCodeandLaTexEnabled(false);
-    // };
-
-    // const handleCodeandLaTeXToggle = () => {
-    //     const newCodeandLaTeXState = !isCodeandLaTeXEnabled;
-    //     setIsCodeandLaTexEnabled(newCodeandLaTeXState);
-    //     setIsCodeEnabled(!newCodeandLaTeXState);
-    //     setIsLaTeXEnabled(false);
-    // };
 
     const addAnswerField = () => {
         if (currentAnswers.length < 10) {
@@ -282,16 +261,6 @@ const MCQModal = ({ open, onClose, initialData, }) => {
         }
     };
 
-    useEffect(() => {
-        if (!isLaTeXEnabled) {
-            setQuestionTitle(prev => cleanLatex(prev));
-            setCodeAnswers(prev => prev.map(answer => ({
-                ...answer,
-                text: cleanLatex(answer.text)
-            })));
-            setSolutionText(prev => cleanLatex(prev));
-        }
-    }, [isLaTeXEnabled]);
 
     if (!open) return null;
 
@@ -360,17 +329,16 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             rows="6"
                                             value={questionTitle}
                                             onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                            placeholder="Enter Latex Input"
                                             disabled={isSubmitting}
                                         />
                                     ) : isCodeEnabled ? (
                                         <textarea
+                                            className="mcq-form-control latex-input"
                                             rows="6"
-                                            className="mcq-form-control"
-                                            style={{ width: "145%", padding: "10px", minHeight: "100px" }}
                                             value={questionTitle}
-                                            onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter question text"
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
+                                            placeholder="Enter Code Input"
                                             disabled={isSubmitting}
                                         />
                                     ) : (
@@ -379,7 +347,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             rows="6"
                                             value={questionTitle}
                                             onChange={(e) => setQuestionTitle(e.target.value)}
-                                            placeholder="Enter both Text and Latex "
+                                            placeholder="Enter both Text and Latex Input"
                                             disabled={isSubmitting}
                                         />
                                     )}
@@ -427,10 +395,12 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                             </div>
 
 
-                            {currentAnswers.map((answer, index) => (
+                             {currentAnswers.map((answer, index) => (
                                 <div className="mcq-form-group option" key={index}>
                                     <div className="answer-header">
+
                                         <label>Option {index + 1}</label>
+
                                         {index > 0 && (
                                             <button
                                                 className="btn-option"
@@ -442,82 +412,82 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                             </button>
                                         )}
 
-                                        {isLaTeXEnabled ? (
-                                            <textarea
-                                                className="mcq-form-control option-latext-input"
-                                                value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text",e.target.value)}
-                                                placeholder="Enter LaTeX equation"
-                                                disabled={isSubmitting}
-                                            />
-                                        ) : isCodeEnabled ? (
-                                            <input
-                                                type="text"
-                                                className="mcq-form-control option-input"
-                                                value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text",e.target.value)}
-                                                placeholder="Enter answer text"
-                                                disabled={isSubmitting}
-                                            />
-                                        ) : (
-                                            <textarea
-                                                className="mcq-form-control option-latext-input"
-                                                value={answer.text}
-                                                onChange={(e) => handleAnswerChange(index, "text", e.target.value)}
-                                                placeholder="Enter both Text and LaTeX equation"
-                                                disabled={isSubmitting}
-                                            />
-                                        )}
-
-
                                     </div>
 
-                                
-                                    <div className="col-2 option-box">
-                                        <label>
-                                            {/* {answer.image ? "Change Image" : "Add Image"} */}
-                                            Image
-                                        </label>
-                                        <div
-                                            className="upload-box"
-                                            onClick={() => document.querySelector(`.option-image-upload-${index}`).click()}
-                                        >
-                                            {!answer.image ? (
-                                                <div className="upload-placeholder">
-                                                    <FaCloudUploadAlt className="upload-icon" />
-                                                </div>
+                                    <div className="option-contanier">
+                                        <div className="option-input">
+                                            {isLaTeXEnabled ? (
+                                                <textarea
+                                                    className="mcq-form-control option-latext-input"
+                                                    value={answer.text}
+                                                    onChange={(e) => { handleAnswerChange(index, "text", cleanLatexInput(e.target.value)); }}
+                                                    placeholder="Enter LaTeX equation"
+                                                    disabled={isSubmitting}
+                                                />
+                                            ) : isCodeEnabled ? (
+                                                <textarea
+                                                    className="mcq-form-control option-latext-input"
+                                                    value={answer.text}
+                                                    onChange={(e) => { handleAnswerChange(index, "text", cleanLatexInput(e.target.value)); }}
+                                                    placeholder="Enter Code equation"
+                                                    disabled={isSubmitting}
+                                                />
                                             ) : (
-                                                <div className="image-preview-container">
-                                                    <img
-                                                        src={answer.image}
-                                                        alt={`Answer ${index + 1} preview`}
-                                                        className="img-preview"
-                                                    />
-
-                                                    <button
-                                                        className="btn-remove-image"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation(); // prevent reopening file picker
-                                                            handleRemoveImage(index);
-                                                        }}
-                                                        disabled={isSubmitting}
-                                                        aria-label={`Remove image for Answer ${index + 1}`}
-                                                    >
-                                                        ×
-                                                    </button>
-                                                </div>
+                                                <textarea
+                                                    className="mcq-form-control option-latext-input"
+                                                    value={answer.text}
+                                                    onChange={(e) => { handleAnswerChange(index, "text", cleanLatexInput(e.target.value)); }}
+                                                    placeholder="Enter both Code and LaTeX equation"
+                                                    disabled={isSubmitting}
+                                                />
                                             )}
-                                            <input
-                                                type="file"
-                                                className={`option-image-upload-${index}`}
-                                                style={{ display: "none" }}
-                                                onChange={(e) => handleImageUpload(e, index)}
-                                                accept="image/*"
-                                                disabled={isSubmitting}
-                                            />
+                                        </div>
+
+                                        <div className="col-2 option-box">
+                                            <label>
+                                                {/* {answer.image ? "Change Image" : "Add Image"} */}
+                                                Image
+                                            </label>
+                                            <div
+                                                className="upload-box"
+                                                onClick={() => document.querySelector(`.option-image-upload-${index}`).click()}
+                                            >
+                                                {!answer.image ? (
+                                                    <div className="upload-placeholder">
+                                                        <FaCloudUploadAlt className="upload-icon" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="image-preview-container">
+                                                        <img
+                                                            src={answer.image}
+                                                            alt={`Answer ${index + 1} preview`}
+                                                            className="img-preview"
+                                                        />
+
+                                                        <button
+                                                            className="btn-remove-image"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // prevent reopening file picker
+                                                                handleRemoveImage(index);
+                                                            }}
+                                                            disabled={isSubmitting}
+                                                            aria-label={`Remove image for Answer ${index + 1}`}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    className={`option-image-upload-${index}`}
+                                                    style={{ display: "none" }}
+                                                    onChange={(e) => handleImageUpload(e, index)}
+                                                    accept="image/*"
+                                                    disabled={isSubmitting}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
                             ))}
 
@@ -553,84 +523,92 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                             </div>
 
                             <div className="mcq-form-group option">
-                                <div className="answer-header">
+                                <div className="Solution">
+
                                     <label>Solution :</label>
+                                      
+                                    <div className="solution-contanier">
 
-                                    {isLaTeXEnabled ? (
-                                        <textarea
-                                            className="mcq-form-control option-latext-input"
-                                            rows="4"
-                                            value={solutionText}
-                                            onChange={(e) =>
-                                                setSolutionText(e.target.value)
-                                            }
-                                            placeholder="Enter solution (supports LaTeX)"
-                                            disabled={isSubmitting}
-                                        />
-                                    ) : isCodeEnabled ? (
-                                        <textarea
-                                            rows="6"
-                                            className="mcq-form-control option-input"
-                                            style={{ padding: "10px", minHeight: "100px" }}
-                                            value={solutionText}
-                                            onChange={(e) => setSolutionText(e.target.value)}
-                                            placeholder="Enter solution text"
-                                            disabled={isSubmitting}
-                                        />
-                                    ) : (
-                                        <textarea
-                                            className="mcq-form-control option-latext-input"
-                                            rows="3"
-                                            value={solutionText}
-                                            onChange={(e) =>
-                                                setSolutionText(e.target.value)
-                                            }
-                                            placeholder="Enter solution (text + LaTeX)"
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
-                                </div>
-
-                                {/* Image upload like option design */}
-                                <div className="col-2 option-box">
-                                    <label>{solutionImage ? "Change Image" : "Add Image"}</label>
-                                    <div
-                                        className="upload-box"
-                                        onClick={() => document.querySelector(`#solution-image-upload`).click()}
-                                    >
-                                        {!solutionImage ? (
-                                            <div className="upload-placeholder">
-                                                <FaCloudUploadAlt className="upload-icon" />
-                                            </div>
-                                        ) : (
-                                            <div className="image-preview-container">
-                                                <img
-                                                    src={solutionImage}
-                                                    alt="Solution preview"
-                                                    className="img-preview"
-                                                />
-                                                <button
-                                                    className="btn-remove-image"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleRemoveSolutionImage();
-                                                    }}
+                                        <div className="solution-input">
+                                            {isLaTeXEnabled ? (
+                                                <textarea
+                                                    className="mcq-form-control option-latext-input"
+                                                    rows="4"
+                                                    value={solutionText}
+                                                    onChange={(e) =>
+                                                        setSolutionText(e.target.value)
+                                                    }
+                                                    placeholder="Enter solution (supports LaTeX)"
                                                     disabled={isSubmitting}
-                                                    aria-label="Remove solution image"
-                                                >
-                                                    ×
-                                                </button>
+                                                />
+                                            ) : isCodeEnabled ? (
+                                                <textarea
+                                                    rows="6"
+                                                    className="mcq-form-control option-input"
+                                                    style={{ padding: "10px", minHeight: "100px" }}
+                                                    value={solutionText}
+                                                    onChange={(e) => setSolutionText(e.target.value)}
+                                                    placeholder="Enter solution text"
+                                                    disabled={isSubmitting}
+                                                />
+                                            ) : (
+                                                <textarea
+                                                    className="mcq-form-control option-latext-input"
+                                                    rows="3"
+                                                    value={solutionText}
+                                                    onChange={(e) =>
+                                                        setSolutionText(e.target.value)
+                                                    }
+                                                    placeholder="Enter solution (text + LaTeX)"
+                                                    disabled={isSubmitting}
+                                                />
+                                            )}
+                                        </div>
+
+                                        {/* Image upload like option design */}
+                                        <div className="col-2 solution-box">
+                                            <label>Image</label>
+                                            <div
+                                                className="upload-box"
+                                                onClick={() => document.querySelector(`#solution-image-upload`).click()}
+                                            >
+                                                {!solutionImage ? (
+                                                    <div className="upload-placeholder">
+                                                        <FaCloudUploadAlt className="upload-icon" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="image-preview-container">
+                                                        <img
+                                                            src={solutionImage}
+                                                            alt="Solution preview"
+                                                            className="img-preview"
+                                                        />
+                                                        <button
+                                                            className="btn-remove-image"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleRemoveSolutionImage();
+                                                            }}
+                                                            disabled={isSubmitting}
+                                                            aria-label="Remove solution image"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    id="solution-image-upload"
+                                                    style={{ display: "none" }}
+                                                    onChange={handleSolutionImageUpload}
+                                                    accept="image/*"
+                                                    disabled={isSubmitting}
+                                                />
                                             </div>
-                                        )}
-                                        <input
-                                            type="file"
-                                            id="solution-image-upload"
-                                            style={{ display: "none" }}
-                                            onChange={handleSolutionImageUpload}
-                                            accept="image/*"
-                                            disabled={isSubmitting}
-                                        />
+                                        </div>
+
                                     </div>
+                                    
                                 </div>
                             </div>
 
@@ -652,27 +630,13 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                         <div className="preview-label">Question:</div>
                                         <div className="modal-preview-content">
 
-                                            {
+                                           {
                                                 isCodeEnabled ? (
-                                                    questionTitle.length === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-                                                    ) : (
-                                                            <CKEditorRenderer content={`<pre><code class="language-">${questionTitle}</code><pre>`} mode="code" />
-                                                    )
+                                                    <QuestionEditor content={questionTitle} mode="code" />
                                                 ) : isLaTeXEnabled ? (
-                                                    questionTitle.length === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={questionTitle} mode="latex" />
-                                                    )
+                                                    <QuestionEditor content={questionTitle} mode="latex" />
                                                 ) : (
-                                                    questionTitle.title === 0 ? (
-                                                        <span className="placeholder-text">No question added yet</span>
-
-                                                    ) : (
-                                                        <CKEditorRenderer content={questionTitle} mode="both" />
-
-                                                    )
+                                                    <QuestionEditor content={questionTitle} mode="both"/>
                                                 )
                                             }
 
@@ -703,37 +667,9 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                                         )}
                                                     </div>
                                                     <div className="answer-content">
-                                                        {/* {isLaTeXEnabled ? (
-                                                            // <LatexRenderer content={answer.text?.trim()} />
-                                                            <CKEditorRenderer content={answer.text?.trim()} />
-                                                        ) : (
-                                                            answer.text?.trim() || <span className="placeholder-text">Empty answer</span>
-                                                        )} */}
-
-                                                        {
-                                                            isCodeEnabled ? (
-                                                                currentAnswers.length === 0 ? (
-                                                                    <span className="placeholder-text">Empty answer</span>
-                                                                ) : (
-                                                                    <CKEditorRenderer content={`<pre><code class="language-">${answer.text?.trim() }</code><pre>`} mode="code" />
-                                                                )
-                                                            ) : isLaTeXEnabled ? (
-                                                                currentAnswers.length === 0 ? (
-                                                                    <span className="placeholder-text">Empty answer</span>
-                                                                ) : (
-                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="latex" />
-                                                                )
-                                                            ) : (
-                                                                currentAnswers.title === 0 ? (
-                                                                    <span className="placeholder-text">Empty answer</span>
-
-                                                                ) : (
-                                                                    <CKEditorRenderer content={answer.text?.trim()} mode="both" />
-
-                                                                )
-                                                            )
-                                                        }
-
+                          
+                                                        <QuestionEditor content={answer.text?.trim()} mode="both" />
+                          
                                                         {answer.image && (
                                                             <div className="answer-image-container">
                                                                 <img
@@ -774,24 +710,10 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                                         <div className="preview-label">Solution:</div>
                                             <div className="modal-preview-content">
                                             {
-                                                isCodeEnabled ? (
-                                                    solutionText.length === 0 ? (
-                                                        <span className="placeholder-text">Empty answer</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={`<pre><code class="language-">${solutionText}</code><pre>`} mode="code" />
-                                                    )
-                                                ) : isLaTeXEnabled ? (
-                                                    solutionText.length === 0 ? (
-                                                        <span className="placeholder-text">Empty answer</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={solutionText} mode="latex" />
-                                                    )
+                                                solutionText.length === 0 ? (
+                                                    <span className="placeholder-text">Empty answer</span>
                                                 ) : (
-                                                    solutionText.length === 0 ? (
-                                                        <span className="placeholder-text">Empty answer</span>
-                                                    ) : (
-                                                        <CKEditorRenderer content={solutionText} mode="both" />
-                                                    )
+                                                    <QuestionEditor content={solutionText} mode="both"/>
                                                 )
                                             }
 
@@ -815,7 +737,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                 <div className="mcq-modal-footer">
                     <button
                         className="btn btn-cancel"
-                        onClick={onClose}
+                        onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code') }}
                         disabled={isSubmitting}
                     >
                         Cancel

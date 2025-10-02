@@ -22,7 +22,7 @@
     background-color: var(--modal-content-bg);
         border-radius: var(--modal-content-border-radius);
         width: var(--modal-content-width);
-        max-width: var(--modal-content-max-width);
+        /* max-width: var(--modal-content-max-width); */
         max-height: var(--modal-content-max-height);
         /* overflow-y: var(--modal-content-overflow-y); */
         box-shadow: var(--modal-content-box-shadow);

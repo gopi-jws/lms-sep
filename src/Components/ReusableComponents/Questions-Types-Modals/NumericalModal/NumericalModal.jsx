@@ -1,11 +1,12 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import "./NumericalModal.css";
-import { FaPlus } from "react-icons/fa";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import 'katex/dist/katex.min.css';
 import LatexRenderer, { cleanLatex } from "../../../ReusableComponents/LatexRenderer/LatexRenderer";
 import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounceModal";
+import QuestionEditor from "../../Markdown/QuestionEditor";
+
 
 const NumericalModal = ({ open, onClose, initialData }) => {
     const { modalRef, isBouncing } = useBounceModal(open);
@@ -16,6 +17,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
     const [isCodeEnabled, setIsCodeEnabled] = useState(true);
     const [isLaTeXEnabled, setIsLaTeXEnabled] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isCodeandLaTeXEnabled, setIsCodeandLaTexEnabled] = useState(false)
 
     // Handle initial data when modal opens
     useEffect(() => {
@@ -81,60 +83,52 @@ const NumericalModal = ({ open, onClose, initialData }) => {
 
     const [mode, setMode] = useState("code"); // "code" | "latex" | "both"
     
-        const handleCodeToggle = () => {
-            if (mode === "code") {
-                setMode("latex"); // toggle to latex if already code
-                setIsCodeEnabled(false)
-                setIsLaTeXEnabled(true)
-                setIsCodeandLaTexEnabled(false)
-            } else {
-                setMode("code"); // otherwise force code
-                setIsCodeEnabled(true);
-                setIsLaTeXEnabled(false);
-                setIsCodeandLaTexEnabled(false)
-            }
-        };
-    
-        const handleLaTeXToggle = () => {
-            if (mode === "latex") {
-                setMode("code"); // toggle back to code if already latex
-                setIsLaTeXEnabled(false)
-                setIsCodeEnabled(true)
-            } else {
-                setMode("latex"); // otherwise force latex
-                setIsLaTeXEnabled(true)
-                setIsCodeandLaTexEnabled(false)
-                setIsCodeEnabled(false)
-            }
-        };
-    
-        const handleCodeandLaTeXToggle = () => {
-            if (mode === "both") {
-                setMode("code"); // toggle back to code if already both
-                setIsCodeandLaTexEnabled(false)
-                setIsCodeEnabled(true) 
-            } else {
-                setMode("both"); // otherwise force both
-                setIsCodeandLaTexEnabled(true)
-                setIsLaTeXEnabled(false)
-                setIsCodeEnabled(false)
-            }
-        };
-    
+       const handleCodeToggle = () => {
+        if (mode === "code") {
+            setMode("latex"); // toggle to latex if already code
+            setIsCodeEnabled(false)
+            setIsLaTeXEnabled(true)
+            setIsCodeandLaTexEnabled(false)
+            setQuestionTitle('')
+        } else {
+            setMode("code"); // otherwise force code
+            setIsCodeEnabled(true);
+            setIsLaTeXEnabled(false);
+            setIsCodeandLaTexEnabled(false)
+            setQuestionTitle('')
+        }
+    };
 
-    // const handleCodeToggle = () => {
-    //     const newCodeState = !isCodeEnabled;
-    //     setIsCodeEnabled(newCodeState);
-    //     if (!newCodeState) setIsLaTeXEnabled(true);
-    //     else setIsLaTeXEnabled(false);
-    // };
+    const handleLaTeXToggle = () => {
+        if (mode === "latex") {
+            setMode("code"); // toggle back to code if already latex
+            setIsLaTeXEnabled(false)
+            setIsCodeEnabled(true)
+            setQuestionTitle('')
+        } else {
+            setMode("latex"); // otherwise force latex
+            setIsLaTeXEnabled(true)
+            setIsCodeandLaTexEnabled(false)
+            setIsCodeEnabled(false)
+            setQuestionTitle('')
+        }
+    };
 
-    // const handleLaTeXToggle = () => {
-    //     const newLaTeXState = !isLaTeXEnabled;
-    //     setIsLaTeXEnabled(newLaTeXState);
-    //     if (!newLaTeXState) setIsCodeEnabled(true);
-    //     else setIsCodeEnabled(false);
-    // };
+    const handleCodeandLaTeXToggle = () => {
+        if (mode === "both") {
+            setMode("code"); // toggle back to code if already both
+            setIsCodeandLaTexEnabled(false)
+            setIsCodeEnabled(true) 
+            setQuestionTitle('')
+        } else {
+            setMode("both"); // otherwise force both
+            setIsCodeandLaTexEnabled(true)
+            setIsLaTeXEnabled(false)
+            setIsCodeEnabled(false)
+            setQuestionTitle('')
+        }
+    };
+    
 
     const cleanLatexInput = (text) => {
         if (!text) return '';
@@ -191,7 +185,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
             <div ref={modalRef} className={`numerical-modal-content ${isBouncing ? "bounce" : ""}`}>
                 <div className="numerical-modal-header">
                     <h5>{initialData ? "Edit Numerical Question" : "Add Numerical Question"}</h5>
-                    <button className="close-btn" onClick={onClose}>&times;</button>
+                    <button className="close-btn" onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code') }}>&times;</button>
                 </div>
 
                 <div className="numerical-modal-body">
@@ -224,7 +218,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     </div>
                                 </div>
 
-                                {/* <div className="switch-wrapper">
+                                <div className="switch-wrapper">
                                     <label>Enable Code&LateX</label>
                                     <div className="switch" onClick={(e) => e.stopPropagation()}>
                                         <input
@@ -235,32 +229,46 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                         />
                                         <span className="slider round"></span>
                                     </div>
-                                </div> */}
+                                </div>
                             </div>
 
                             <div className="numerical-form-group numerical-qns-box">
                                 {/* Question textarea */}
-                                <div className="col-7">
-                                      <label className="pt-3">Question : </label>
-                                {isLaTeXEnabled ? (
-                                    <textarea
-                                        className="numerical-form-control numerical-latex-input"
-                                        rows="4"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(cleanLatexInput(e.target.value))}
-                                        placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
-                                        disabled={isSubmitting}
-                                    />
-                                ) : (
-                                    <input
-                                        type="text"
-                                        className="numerical-form-control numerical-text-input"
-                                        value={questionTitle}
-                                        onChange={(e) => setQuestionTitle(e.target.value)}
-                                        placeholder="Enter question text"
-                                        disabled={isSubmitting}
-                                    />
-                                )}
+                                <div className="col-7 qns-box">
+                                    <label className="pt-3">Question :</label>
+                                    {isLaTeXEnabled ? (
+                                        <textarea
+                                            className="mcq-form-control latex-input"
+                                            rows="6"
+                                            value={questionTitle}
+                                            // onChange={(e) => setQuestionTitle(e.target.value)}
+                                            // onChange={handleChange}
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
+                                            placeholder="Enter content (supports LaTeX with $...$, $$...$$, \(...\), \[...\])"
+                                            disabled={isSubmitting}
+                                        />
+                                    ) : isCodeEnabled ? (
+                                        <textarea
+                                            rows="6"
+                                            className="mcq-form-control"
+                                            style={{ width: "145%", padding: "10px", minHeight: "100px" }}
+                                            value={questionTitle}
+                                            // onChange={(e) => setQuestionTitle(e.target.value)}
+                                            // onChange={handleChange}
+                                            onChange={({ target: { value } }) => setQuestionTitle(value)}
+                                            placeholder="Enter question text"
+                                            disabled={isSubmitting}
+                                        />
+                                    ) : (
+                                        <textarea
+                                            className="mcq-form-control latex-input"
+                                            rows="6"
+                                            value={questionTitle}
+                                            onChange={(e) => setQuestionTitle(e.target.value)}
+                                            placeholder="Enter both Text and Latex "
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
                                 </div>
                                 
                                 {/* Image Upload */}
@@ -320,55 +328,25 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                         placeholder="Enter LaTeX equation for answer"
                                         disabled={isSubmitting}
                                     />
+                                ) : isCodeEnabled ? (
+                                        <textarea
+                                            className="numerical-form-control latex-input"
+                                            rows="2"
+                                            value={correctAnswer}
+                                            onChange={(e) => setCorrectAnswer((e.target.value))}
+                                            placeholder="Enter Code equation for answer"
+                                            disabled={isSubmitting}
+                                        />
                                 ) : (
-                                    <input
-                                        type="text"
-                                        className="numerical-form-control"
+                                    <textarea
+                                        className="numerical-form-control latex-input"
+                                        rows="2"
                                         value={correctAnswer}
-                                        onChange={(e) => setCorrectAnswer(e.target.value)}
-                                        placeholder="Enter correct answer"
+                                        onChange={(e) => setCorrectAnswer(cleanLatexInput(e.target.value))}
+                                        placeholder="Enter Code&LaTeX equation for answer"
                                         disabled={isSubmitting}
                                     />
                                 )}
-                                {/* <div className="image-upload-container">
-                                    <label className="image-upload-label">
-                                        {answerImage ? "Change Answer Image" : "Add Answer Image"}
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="answer-image-upload"
-                                        className="numerical-form-control"
-                                        onChange={handleAnswerImageUpload}
-                                        accept="image/*"
-                                        disabled={isSubmitting}
-                                    />
-                                    {answerImage && (
-                                        <div className="image-preview-container">
-                                            <div className="image-wrapper">
-                                                <img
-                                                    src={answerImage}
-                                                    alt="Answer preview"
-                                                    className="img-preview-small"
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.nextElementSibling.style.display = 'block';
-                                                    }}
-                                                />
-                                            </div>
-                                            <button
-                                                className="btn-remove-image"
-                                                onClick={handleRemoveAnswerImage}
-                                                disabled={isSubmitting}
-                                                aria-label="Remove answer image"
-                                                title="Remove image"
-                                            >
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div> */}
                             </div>
                         </div>
 
@@ -379,6 +357,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     <div className="preview-status">
                                         {isLaTeXEnabled && <span className="latex-badge">LaTeX Enabled</span>}
                                         {isCodeEnabled && <span className="code-badge">Code Formatting</span>}
+                                        {isCodeandLaTeXEnabled && <span className="latex-code-badge">Code & LaTex Formatting</span>}
                                     </div>
                                 </div>
 
@@ -386,14 +365,15 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     <div className="preview-question">
                                         <div className="preview-label">Question:</div>
                                         <div className="modal-preview-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer
-                                                    content={questionTitle}
-                                                    isInline={false}
-                                                />
-                                            ) : (
-                                                questionTitle || <span className="placeholder-text">No question added yet</span>
-                                            )}
+                                            {
+                                                isCodeEnabled ? (
+                                                    <QuestionEditor content={questionTitle} mode="code" />
+                                                ) : isLaTeXEnabled ? (
+                                                    <QuestionEditor content={questionTitle} mode="latex" />
+                                                ) : (
+                                                    <QuestionEditor content={questionTitle} mode="both"/>
+                                                )
+                                            }
                                             {questionImage && (
                                                 <div className="question-image-container">
                                                     <img
@@ -413,11 +393,9 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                                     <div className="preview-correct-answer">
                                         <div className="preview-label">Correct Answer:</div>
                                         <div className="answer-content">
-                                            {isLaTeXEnabled ? (
-                                                <LatexRenderer content={correctAnswer?.trim()} />
-                                            ) : (
-                                                correctAnswer?.trim() || <span className="placeholder-text">No answer provided</span>
-                                            )}
+                                            {
+                                                <QuestionEditor content={correctAnswer?.trim()} mode="both" />
+                                            }
                                             {answerImage && (
                                                 <div className="answer-image-container">
                                                     <img
@@ -442,7 +420,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                 <div className="numerical-modal-footer">
                     <button
                         className="btn btn-cancel"
-                        onClick={onClose}
+                        onClick={() => { onClose(), setIsCodeEnabled(true), setIsCodeandLaTexEnabled(false), setMode('code') }}
                         disabled={isSubmitting}
                     >
                         Cancel

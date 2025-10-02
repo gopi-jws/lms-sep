@@ -22,7 +22,7 @@
     background-color: var(--modal-content-bg);
     border-radius: var(--modal-content-border-radius);
     width: var(--modal-content-width);
-    max-width: var(--modal-content-max-width);
+    /* max-width: var(--modal-content-max-width); */
     max-height: var(--modal-content-max-height);
     /* overflow-y: var(--modal-content-overflow-y); */
     box-shadow: var(--modal-content-box-shadow);
@@ -99,8 +99,8 @@ display: flex;
 /* Row and Column Layout */
 .descriptive-modal-row {
     display: flex;
-        width: 100%;
-        height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .first-column,
@@ -328,7 +328,7 @@ input[type="file"]::file-selector-button {
 }
 
 /* Responsive Styles */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .first-column {
         flex: 0 0 100%;
     }
@@ -345,7 +345,7 @@ input[type="file"]::file-selector-button {
     .preview-section {
         margin-top: 20px;
     }
-}
+} */
 
 
 .descriptive-qns-box {
@@ -356,7 +356,7 @@ input[type="file"]::file-selector-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-left: 5px;
+    padding-left: 30px;
 }
 
 .descriptive-latex-input {
