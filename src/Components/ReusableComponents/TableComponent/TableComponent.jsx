@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef} from "react"
 import { FaArrowDown, FaArrowUp, FaSearch, FaPlus, FaCheck, FaMinus, FaEye } from "react-icons/fa"
 import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
@@ -46,9 +46,13 @@ const DataTable = ({
     onDownload = () => { },
     onChangeSection = () => { },
     onSetMarks = () => { },
-    isRenameModalOpen,
     setIsRenameModalOpen,
-    setEditingTest
+    setIsCopyModalOpen,
+    setIsDeleteModalOpen,
+    setIsArchivedModalOpen,
+    setEditingTest,
+    setEditingQB,
+    modalType,
 }) => {
     const [selectedRows, setSelectedRows] = useState([])
     const [sortColumn, setSortColumn] = useState(null)
@@ -167,6 +171,12 @@ const DataTable = ({
         }
     };
 
+    useEffect(() => {
+        // Clean up selectedRows when data changes
+        setSelectedRows(prev =>
+            prev.filter(id => data.some(row => row.id === id))
+        );
+    }, [data]);
 
 
     return (
@@ -206,9 +216,13 @@ const DataTable = ({
                             onUpdateTest={onUpdateTest}
                             onDelete={onDelete}
                             onArchive={onArchive}
-                            isRenameModalOpen={isRenameModalOpen}
                             setIsRenameModalOpen={setIsRenameModalOpen}
+                            setIsCopyModalOpen={setIsCopyModalOpen}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            setIsArchivedModalOpen={setIsArchivedModalOpen}
                             setEditingTest={setEditingTest}
+                            setEditingQB={setEditingQB}
+                            modalType={modalType}
                         />
                     )}
                     {selectedRows.length > 1 && studentActions.length > 0 && (

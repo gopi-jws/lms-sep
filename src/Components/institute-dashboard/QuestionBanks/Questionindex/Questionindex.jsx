@@ -3,10 +3,10 @@
 import "./Questionindex.css"
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent"
 import React, { useState, useEffect } from "react"
-import { MdOutlineArchive } from "react-icons/md"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
+import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
+
 import {
   FaPaperPlane,
   FaCopy,
@@ -38,6 +38,16 @@ const Questionindex = () => {
     { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You" },
   ]
 
+
+  const [editingQB,setEditingQB] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+  const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [dataItem,setDataItem] = useState(data);
+  const [ispinning, setIsSpinning] = useState(null)
+    
+
   // Pagination state
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
@@ -55,12 +65,11 @@ const Questionindex = () => {
 
   // Filter data based on search
   const getFilteredData = () => {
-    return data.filter((qb) => {
+    return dataItem.filter((qb) => {
       const matchesSearch = searchQuery === "" ||
         qb.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         qb.questions.toString().includes(searchQuery) ||
         qb.lastModified.toLowerCase().includes(searchQuery.toLowerCase())
-
       return matchesSearch
     })
   }
@@ -135,26 +144,78 @@ const Questionindex = () => {
     setOpenDropdownId(openDropdownId === rowId ? null : rowId)
   }
 
+
+
+//Question Bank Name Edit
+  const handleUpdateQB = (QBId, updatedFields) => {    
+    setDataItem(prevData =>
+      prevData.map(qb =>
+        qb.id === QBId
+          ? { ...qb, name: updatedFields.name}
+          : qb
+      )
+    );
+  };
+
+
+  //Question Bank handleArchiveQB   
+  const handleArchiveQB = (QBId) =>{
+    setDataItem(prevData =>
+      prevData.filter(QB =>
+        !QBId.some(st => st.id === QB.id) // remove all selected ids
+      ))
+  }
+
+  //Question Bank handleDeletedQB 
+  const handleDeleteQB = (QBId) => {
+    // setDataItem(prevData => prevData.filter(qb => qb.id !== QBId));
+    setDataItem(prevData =>
+      prevData.filter(QB =>
+        !QBId.some(st => st.id === QB.id) // remove all selected ids
+      ))
+  }
+
+  //Pdf Download
+  const handleDownloadPdf = (row) => {
+    setIsSpinning(row.id)
+    setTimeout(() => {
+      setIsSpinning(null)
+    }, 2000);
+  }
+
+
   const handleActionClick = (action, row) => {
     // Close dropdown first
     setOpenDropdownId(null)
-          console.log(action)
     // Then execute the action
     switch (action) {
       case "pdf":
-        console.log("PDF download for", row.name)
+        handleDownloadPdf(row);
         break
       case "folder":
         console.log("Add to folder for", row.name)
         break
+      case "rename":
+        setEditingQB({
+          id: row.id,
+          name: row.test,
+        });
+        setIsRenameModalOpen(true);
+        break;
       case "edit":
-        console.log("Edit action for", row.name)
+        setEditingQB({
+          id: row.id,
+          name: row.name,
+        });
+        setIsEditModalOpen(true);
         break
       case "archive":
-        console.log("Archive action for", row.name)
+        setEditingQB([{ id: row.id, name: row.name }]);
+        setIsArchivedModalOpen(true)
         break
       case "delete":
-        console.log("Delete action for", row.name)
+        setEditingQB([{ id: row.id, name: row.name }]);
+        setIsDeleteModalOpen(true)
         break
       default:
         break
@@ -210,7 +271,11 @@ const Questionindex = () => {
               {openDropdownId === row.id && (
                 <div className="mobile-actions-menu">
                   <button className="mobile-action-item pdf" onClick={() => handleActionClick("pdf", row)}>
-                    <FaFilePdf />
+                        {ispinning === row.id ? (
+                        <div className="spinner"></div>
+                      ) : (
+                        <FaFilePdf />
+                      )}
                     <span>Download PDF</span>
                   </button>
                   <button className="mobile-action-item folder" onClick={() => handleActionClick("folder", row)}>
@@ -235,8 +300,16 @@ const Questionindex = () => {
           ) : (
             // Desktop: Show all buttons inline
             <div className="flex ">
-              <button className="test-action-button pdf" aria-label="Download PDF">
-                <FaFilePdf />
+              <button 
+                className="test-action-button pdf" 
+                aria-label="Download PDF"
+                onClick={() => handleActionClick("pdf", row)}
+                >
+                  {ispinning === row.id ? (
+                    <div className="spinner"></div>
+                  ) : (
+                    <FaFilePdf />
+                  )}
                 <span className="tooltip-text">Download PDF</span>
               </button>
               <button className="test-action-button copy" aria-label="Add to Folder">
@@ -246,19 +319,23 @@ const Questionindex = () => {
               <button
                 className="test-action-button edit"
                 aria-label="Edit"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  // Handle edit action
-                }}
+                onClick={() => handleActionClick("edit", row)}
               >
                 <FaEdit />
                 <span className="tooltip-text">Edit</span>
               </button>
-              <button className="test-action-button archive" aria-label="Archive">
+              <button 
+                className="test-action-button archive" 
+                aria-label="Archive"
+                onClick={() => handleActionClick("archive", row)}
+              >
                 <FaArchive />
                 <span className="tooltip-text">Archive</span>
               </button>
-              <button className="test-action-button delete" aria-label="Delete">
+              <button 
+                className="test-action-button delete" 
+                aria-label="Delete"
+                onClick={() => handleActionClick("delete", row)}>
                 <FaTrashAlt />
                 <span className="tooltip-text">Delete</span>
               </button>
@@ -285,11 +362,18 @@ const Questionindex = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
+             // data={dataItem}
               availableActions={["delete", "archive", "download", "tag", "more"]}
               enableToggle={false}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
+              allQuestions={data}
+              modalType="QB"
+              setIsRenameModalOpen={setIsRenameModalOpen}
+              setEditingQB={setEditingQB}
+              setIsDeleteModalOpen={setIsDeleteModalOpen}
+              setIsArchivedModalOpen={setIsArchivedModalOpen}
             />
           </div>
         </div>
@@ -313,6 +397,66 @@ const Questionindex = () => {
           totalItems={data.length}
           isSearching={searchQuery.length > 0}
         />
+
+        {isEditModalOpen && (
+          <NewQBModal
+            isOpen={isEditModalOpen}
+            onClose={() => {
+              setIsEditModalOpen(false);
+              setEditingQB(null);
+            }}
+            initialName={editingQB?.name || ""}
+            onSubmit={(updatedFields) => {
+              handleUpdateQB(editingQB.id, updatedFields);
+              setIsEditModalOpen(false);
+              setEditingQB(null);
+            }}
+            mode="edit"
+          />)}
+
+
+        {isArchivedModalOpen && (
+          <NewQBModal
+            isOpen={isArchivedModalOpen}
+            onClose={() => { setIsArchivedModalOpen(false); setEditingQB(null); }}
+            selectedTest={editingQB}
+            onSubmit={(editingQB) => {
+              handleArchiveQB(editingQB);
+              setIsArchivedModalOpen(false)
+            }}
+            mode="archive"
+          />
+        )}
+
+          {isDeleteModalOpen && (
+            <NewQBModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => { setIsDeleteModalOpen(false); setEditingQB(null); }}
+            selectedTest={editingQB}
+            onSubmit={(selectedTest) => {
+                handleDeleteQB(selectedTest);
+                setIsDeleteModalOpen(false)
+              }}
+            mode="delete"
+            />
+         )}
+
+        {isRenameModalOpen && (
+          <NewQBModal
+            isOpen={isRenameModalOpen}
+            onClose={() => {
+              setIsRenameModalOpen(false);
+              setEditingQB(null);
+            }}
+            initialName={editingQB?.name || ""}
+            onSubmit={(updatedFields) => {
+              handleUpdateQB(editingQB.id, updatedFields);
+              setIsRenameModalOpen(false);
+              setEditingQB(null);
+            }}
+            mode="rename"
+          />
+          )}
       </div>
     </>
   )

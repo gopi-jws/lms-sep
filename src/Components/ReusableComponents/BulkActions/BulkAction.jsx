@@ -6,6 +6,7 @@ import AddTagModal from "../../ReusableComponents/AddTagModal/AddTagModal";
 
 import PropTypes from 'prop-types';
 import NewTestModal from "../../ReusableComponents/NewTestModal/NewTestModal";
+import NewQBModal from "../../ReusableComponents/NewQBModal/NewQBModal";
 import { toast } from "react-toastify";
 import { getNextId } from "../../../utils/idGenerator";
 
@@ -22,9 +23,13 @@ const BulkActions = ({
   onDelete = () => toast.warn("Delete functionality not implemented"),
   onArchive = () => toast.warn("Archive functionality not implemented"),
   onDownload = () => toast.warn("Download functionality not implemented"),
-  isRenameModalOpen,
   setIsRenameModalOpen,
-  setEditingTest
+  setIsCopyModalOpen,
+  setIsDeleteModalOpen,
+  setIsArchivedModalOpen,
+  setEditingTest,
+  setEditingQB,
+  modalType,
 }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
@@ -32,6 +37,7 @@ const BulkActions = ({
   const [previousName, setPreviousName] = useState('');
   const [recentlyTagged, setRecentlyTagged] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
 
 
@@ -97,45 +103,108 @@ const BulkActions = ({
       e.stopPropagation();
       switch (action) {
         case "delete":
-          onDelete(selectedRows);
-          const activeTags = JSON.parse(localStorage.getItem("tests")) || [];
-          const trashedTags = JSON.parse(localStorage.getItem("trashedTags")) || [];
+
+              if (modalType === "test") {
+                const selectedTests = selectedRows.map(value => {
+                  const test = allQuestions?.find(q => q.id === value);
+                  return { id: test.id, name: test.test };
+                });
+                setEditingTest(selectedTests)
+
+              } else {
+                const selectedQB = selectedRows.map(value => {
+                  const test = allQuestions?.find(q => q.id === value);
+                  return { id: test.id, name: test.name };
+                });
+
+                setEditingQB(selectedQB); 
+              }
+              setIsDeleteModalOpen(true);
+            
+    
+          // const activeTags = JSON.parse(localStorage.getItem("tests")) || [];
+          // const trashedTags = JSON.parse(localStorage.getItem("trashedTags")) || [];
 
           // Get selected items by index
-          const itemsToDelete = selectedRows
-            .map(index => activeTags[index - 1])
-            .filter(item => item); // remove undefined
-          const trashedIds = new Set(trashedTags.map(item => item.id));
-          // Filter out items that are already trashed
-          const newItemsToAdd = itemsToDelete
-            .filter(item => !trashedIds.has(item.id))
-            .map(item => ({
-              ...item,
-              _id: item.id,// ✅ Add _id key
+          // const itemsToDelete = selectedRows
+          //   .map(index => activeTags[index - 1])
+          //   .filter(item => item); // remove undefined
+          // const trashedIds = new Set(trashedTags.map(item => item.id));
+          // // Filter out items that are already trashed
+          // const newItemsToAdd = itemsToDelete
+          //   .filter(item => !trashedIds.has(item.id))
+          //   .map(item => ({
+          //     ...item,
+          //     _id: item.id,// ✅ Add _id key
 
-            }));
-          const updatedTrashedTags = [...trashedTags, ...newItemsToAdd];
-          localStorage.setItem("trashedTags", JSON.stringify(updatedTrashedTags));
+          //   }));
+
+
+          // const updatedTrashedTags = [...trashedTags, ...newItemsToAdd];
+          // localStorage.setItem("trashedTags", JSON.stringify(updatedTrashedTags));
+
+
           // Update original activeTags array
-          const updatedActiveTags = activeTags.map(item =>
-            newItemsToAdd.find(newItem => newItem.id === item.id)
-              ? { ...item, trashed: true }
-              : item
-          );
-          localStorage.setItem("tests", JSON.stringify(updatedActiveTags));
+          // const updatedActiveTags = activeTags.map(item =>
+          //   newItemsToAdd.find(newItem => newItem.id === item.id)
+          //     ? { ...item, trashed: true }
+          //     : item
+          // );
+          // localStorage.setItem("tests", JSON.stringify(updatedActiveTags));
+
+
           // ✅ Update original testTags with archived: true
-          const updatedTrashTags = activeTags.map(item =>
-            newItemsToAdd.find(newItem => newItem.id === item.id)
-              ? { ...item, trashed: true }
-              : item
-          );
-          localStorage.setItem("tests", JSON.stringify(updatedTrashTags));
+          // const updatedTrashTags = activeTags.map(item =>
+          //   newItemsToAdd.find(newItem => newItem.id === item.id)
+          //     ? { ...item, trashed: true }
+          //     : item
+          // );
+          // localStorage.setItem("tests", JSON.stringify(updatedTrashTags));
+
+
           // ✅ Remove all selected items from activeTags (even if some were already trashed)--upcoming
           // const updatedActiveTags = activeTags.filter((_, index) => !selectedRows.includes(index));
           // localStorage.setItem("tests", JSON.stringify(updatedActiveTags));
           break;
+
+
         case "archive":
-          onArchive(selectedRows);
+
+          if (modalType === "test") {
+            const selectedTests = selectedRows.map(value => {
+              const test = allQuestions?.find(q => q.id === value);
+              return { id: test.id, name: test.test };
+            });
+            setEditingTest(selectedTests)
+            
+          } else {
+            const selectedQB = selectedRows.map(value => {
+              const test = allQuestions?.find(q => q.id === value);
+              return { id: test.id, name: test.name };
+            }); 
+            setEditingQB(selectedQB);
+          }
+
+          setIsArchivedModalOpen(true);
+
+          // if (selectedRows.length === 1) {
+          //   const testId = Number(selectedRows[0]);
+          //   const test = allQuestions?.find(q => q.id === testId);
+
+          //   if (test) {
+          //     if (modalType === "test") {
+          //       setEditingTest({ id: test.id, name: test.test });
+          //     } else {
+          //       setEditingQB({ id: test.id, name: test.name });
+          //     }
+          //     setIsArchivedModalOpen(true);
+          //   } else {
+          //     toast.error("Test not found");
+          //   }
+          // }
+        
+        
+          //onArchive(selectedRows);
 
           // localStorage.removeItem('archivedTestsData');
           // const archived = JSON.parse(localStorage.getItem('archivetags') || '[]');
@@ -145,48 +214,50 @@ const BulkActions = ({
           // const archivedTests = allTests.filter(test => selectedIds.includes(test.id)).map(test => ({ ...test, archived: true }));
           // const remainingTests = allTests.filter(test => !selectedIds.includes(test.id));
           // localStorage.setItem('archivetags', JSON.stringify(archivedTests));
-          const testTags = JSON.parse(localStorage.getItem("tests")) || [];
-          const archivedTags = JSON.parse(localStorage.getItem("archivetags")) || [];
+          // const testTags = JSON.parse(localStorage.getItem("tests")) || [];
+          // const archivedTags = JSON.parse(localStorage.getItem("archivetags")) || [];
           // Get selected items by index
-          const itemsToArchive = selectedRows
-            .map(index => testTags[index - 1])
-            .filter(item => item);
-          const archievedIds = new Set(archivedTags.map(item => item.id));
-          console.log('archivedid', archivedTags);
+          // const itemsToArchive = selectedRows
+          //   .map(index => testTags[index - 1])
+          //   .filter(item => item);
+          // const archievedIds = new Set(archivedTags.map(item => item.id));
+          // console.log('archivedid', archivedTags);
 
-          const newTagsToAdd = itemsToArchive.filter(item => !archievedIds.has(item.id));
-          const updatedArchivetags = [...archivedTags, ...newTagsToAdd];
-          localStorage.setItem("archivetags", JSON.stringify(updatedArchivetags));
+          // const newTagsToAdd = itemsToArchive.filter(item => !archievedIds.has(item.id));
+          // const updatedArchivetags = [...archivedTags, ...newTagsToAdd];
+          // localStorage.setItem("archivetags", JSON.stringify(updatedArchivetags));
           // ✅ Update original testTags with archived: true
-          const updatedTestTags = testTags.map(item =>
-            newTagsToAdd.find(newItem => newItem.id === item.id)
-              ? { ...item, archived: true }
-              : item
-          );
-          localStorage.setItem("tests", JSON.stringify(updatedTestTags));
+          // const updatedTestTags = testTags.map(item =>
+          //   newTagsToAdd.find(newItem => newItem.id === item.id)
+          //     ? { ...item, archived: true }
+          //     : item
+          // );
+          // localStorage.setItem("tests", JSON.stringify(updatedTestTags));
 
 
           /// Questions Archieve
 
-          const QB = JSON.parse(localStorage.getItem("QB")) || [];
-          const archivedQBs = JSON.parse(localStorage.getItem("archivedQues")) || [];
+          // const QB = JSON.parse(localStorage.getItem("QB")) || [];
+          // const archivedQBs = JSON.parse(localStorage.getItem("archivedQues")) || [];
           // Get selected items by index
-          const qbToArchive = selectedRows
-            .map(index => testTags[index - 1])
-            .filter(item => item);
-          const archievedQBIds = new Set(archivedTags.map(item => item.id));
-          console.log('archivedid', archivedTags);
+          // const qbToArchive = selectedRows
+          //   .map(index => testTags[index - 1])
+          //   .filter(item => item);
+          // const archievedQBIds = new Set(archivedTags.map(item => item.id));
+          // console.log('archivedid', archivedTags);
 
-          const newQBToAdd = qbToArchive.filter(item => !archievedQBIds.has(item.id));
-          const updatedArchiveQB = [...archivedTags, ...newQBToAdd];
-          localStorage.setItem("archivedQues", JSON.stringify(updatedArchiveQB));
+          // const newQBToAdd = qbToArchive.filter(item => !archievedQBIds.has(item.id));
+          // const updatedArchiveQB = [...archivedTags, ...newQBToAdd];
+          // localStorage.setItem("archivedQues", JSON.stringify(updatedArchiveQB));
           // ✅ Update original testTags with archived: true
-          const updatedQB = testTags.map(item =>
-            newQBToAdd.find(newItem => newItem.id === item.id)
-              ? { ...item, archived: true }
-              : item
-          );
-          localStorage.setItem("QB", JSON.stringify(updatedQB));
+          // const updatedQB = testTags.map(item =>
+          //   newQBToAdd.find(newItem => newItem.id === item.id)
+          //     ? { ...item, archived: true }
+          //     : item
+          // );
+          // localStorage.setItem("QB", JSON.stringify(updatedQB));
+
+          break;
         case "download":
           onDownload(selectedRows);
           break;
@@ -299,7 +370,7 @@ const BulkActions = ({
             return (
               <React.Fragment key={`${action}-${index}`}>
                 <div className="tube-bulk-button">
-                  {renderActionButton(action, index, isLastVisible)}
+                  {renderActionButton(action, index, isLastVisible,)}
                 </div>
                 {!isLastItem && <div className="tube-divider" />}
               </React.Fragment>
@@ -417,16 +488,23 @@ const BulkActions = ({
               onClick={() => {
                 try {
                   if (selectedRows.length === 1) {
-                    const test = allQuestions.find(q => q.id === selectedRows[0]);
+                    const testId = Number(selectedRows[0]); // ensure type match
+                    const test = allQuestions?.find(q => q.id === testId);
                     if (test) {
-                      setEditingTest({
-                        id: test.id,
-                        name: test.test,
-                        // duration: test.duration,
-                        // description: test.description,
-                        // instructions: test.instructions
-                      });
-                      setIsRenameModalOpen(true);
+                      if(modalType === "test"){
+                        setEditingTest({
+                          id: test.id,
+                          name: test.test,
+                        });
+                        setIsRenameModalOpen(true);
+                      }else{
+                        setEditingQB({
+                          id: test.id,
+                          name: test.name,
+                        });
+                        setIsRenameModalOpen(true);
+                      }
+                     
                     } else {
                       toast.error("Test not found");
                     }
@@ -440,22 +518,33 @@ const BulkActions = ({
             >
               Rename
             </li>
-            <li
-              className="more-options-item"
-              onClick={() => {
-                try {
-                  if (selectedRows.length === 1) {
-                    onCopyTest(selectedRows[0]);
+            {modalType === "test" && (
+              <li
+                className="more-options-item"
+                onClick={() => {
+                  try {
+                   if(selectedRows.length === 1){
+                     const testId = Number(selectedRows[0]); // ensure type match
+                     const test = allQuestions?.find(q => q.id === testId);
+                     setEditingTest(
+                      {
+                        id: test.id,
+                        name: test.test,
+                      }
+                     )
+                     setIsCopyModalOpen(true);
+                   }
+                  } catch (error) {
+                    toast.error("Failed to copy test");
+                    console.error("Copy test error:", error);
                   }
-                } catch (error) {
-                  toast.error("Failed to copy test");
-                  console.error("Copy test error:", error);
-                }
-                setActiveDropdown(null);
-              }}
-            >
-              Make a Copy
-            </li>
+                  setActiveDropdown(null);
+                }}
+              >
+                Make a Copy
+              </li>
+            )}
+            
           </ul>
         </div>
       )}
@@ -493,29 +582,7 @@ const BulkActions = ({
           />
         )
       }
-
-
-      {
-        isRenameModalOpen && (
-          <NewTestModal
-            isOpen={isRenameModalOpen}
-            onClose={() => setIsRenameModalOpen(false)}
-            mode="rename"
-            initialName={previousName}
-            onSubmit={(updatedFields) => {    
-              try {
-                const questionId = selectedRows[0];
-                onUpdateTest(questionId, updatedFields);
-              } catch (error) {
-                toast.error("Failed to update test");
-                console.error("Update test error:", error);
-              }
-              setIsRenameModalOpen(false);
-            }}
-          
-          />
-        )
-      }
+     
     </div >
   );
 };

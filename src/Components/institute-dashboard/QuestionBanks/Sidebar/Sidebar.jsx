@@ -26,6 +26,7 @@ const Sidebar = ({ openModal }) => {
     const storedFolders = localStorage.getItem("folders");
     return storedFolders ? JSON.parse(storedFolders) : [];
   });
+
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [isQbModalOpen, setIsQbModalOpen] = useState(false);
@@ -33,12 +34,13 @@ const Sidebar = ({ openModal }) => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [testName, setTestName] = useState("");
-  const [editingFolderId, setEditingFolderId] = useState(null);
+  const [editingFolder, setEditingFolder] = useState(null);
   const [editedFolderName, setEditedFolderName] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("questionBank");
   const [tags, setTags] = useState(["Folder 1", "Folder 2"]);
+  const [foldersIteam, setFoldersIteam] = useState([{id:1, name: "Folder 1", color: "#9c27b0" }, {id:2, name: "Folder 2", color: "#2196f3" }])
   const [showMoreOptions, setShowMoreOptions] = useState(null);
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -49,8 +51,10 @@ const Sidebar = ({ openModal }) => {
 
   const location = useLocation();
 
-  const handleTagClick = (index) => {
-    setShowMoreOptions((prev) => (prev === index ? null : index));
+  const handleTagClick = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowMoreOptions(showMoreOptions === index ? null : index);
   };
 
   const handleClickOutside = (event) => {
@@ -70,8 +74,28 @@ const Sidebar = ({ openModal }) => {
     };
   }, []);
 
-  const handleAddFolder = ({ name, color }) => {
-    console.log("New Folder Created:", { name, color });
+  const handleAddFolder = (folder) => {
+    setFoldersIteam(prev => {
+      // check if folder with same id already exists
+      const exists = prev.find(f => f.id === folder.id);
+
+      if (exists) {
+        // update existing folder
+        return prev.map(f =>
+          f.id === folder.id
+            ? { ...f, name: folder.name, color: folder.color }
+            : f
+        );
+      } else {
+        // create new folder with new id
+        const newFolder = {
+          id: prev.length > 0 ? Math.max(...prev.map(f => f.id)) + 1 : 1,
+          name: folder.name,
+          color: folder.color,
+        };
+        return [...prev, newFolder];
+      }
+    });
   };
 
   const handleCreateQB = (qbName) => {
@@ -191,13 +215,14 @@ const Sidebar = ({ openModal }) => {
               onClick={() => {
                 setIsFolderModalOpen(true);
                 setModalHeading("New Folder");
+                setEditingFolder(null)
               }}
             >
               <Plus className="icon" size={20} />
               <span className="sidebar-letters">New Folder</span>
             </button>
             <ul className="test-sidebar-menu tags">
-              {tags.map((tag, index) => (
+              {/* {tags.map((tag, index) => (
                 <li key={index} className="tag-item">
                   <Link className="sidebar-contents" aria-label={`Tag: ${tag}`}>
                     <FolderSync
@@ -229,6 +254,43 @@ const Sidebar = ({ openModal }) => {
                     </div>
                   </Link>
                 </li>
+              ))} */}
+
+              {foldersIteam.map((folder, index) => (
+                <li key={index} className="tag-item">
+                  <Link className="sidebar-contents">
+                    <FolderSync
+                      className="icon"
+                      size={20}
+                      color={folder.color}
+                    />
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                      <span className="sidebar-letters">{folder.name}</span>
+
+                      <button className="tag-button" ref={toggleRef}>
+                        <span
+                          className="tag-dropdown-toggle"
+                          onClick={(e) => handleTagClick(e, index)}
+                        ></span>
+                      </button>
+
+                      <TagActionsDropdown
+                        isOpen={showMoreOptions === index}
+                        onEdit={() => {
+                          setIsFolderModalOpen(true);
+                          setShowMoreOptions(null);
+                          setModalHeading("Edit");
+                          setEditingFolder(folder);
+                        }}
+                        onRemove={() => setShowMoreOptions(null)}
+                        onClose={() => setShowMoreOptions(null)}
+                        tagId={folder.id}
+                        tagName={folder.name}
+                        tagColor={folder.color}
+                      />
+                    </div>
+                  </Link>
+                </li>
               ))}
             </ul>
             <p className="sidebar-contents" style={{ fontStyle: "italic" }}>
@@ -243,14 +305,18 @@ const Sidebar = ({ openModal }) => {
           isOpen={isQbModalOpen}
           onClose={() => setIsQbModalOpen(false)}
           onCreate={handleCreateQB}
+          onSubmit={() => setIsQbModalOpen(false)}
+          mode = "create"
         />
+        
         <AddFolderModal
           isOpen={isFolderModalOpen}
-          onClose={() => setIsFolderModalOpen(false)}
-          onAddFolder={handleAddFolder}
+          onClose={() => { setIsFolderModalOpen(false); setEditingFolder(null); }}
+          onAddFolders={handleAddFolder}
           heading={modalHeading}
-          selectedSection={selectedSection}
+          selectedSection={editingFolder}
         />
+
         <AddTagsComponent
           isOpen={isTagModalOpen}
           onClose={() => setIsTagModalOpen(false)}

@@ -211,8 +211,6 @@ const TestSidebar = ({
 
             <ul className="test-sidebar-menu tags">
               {tags?.map((tag, index) =>
-
-
               (
                 <li key={tag.id} className="tag-item">
                   <Link
@@ -244,9 +242,9 @@ const TestSidebar = ({
                         onEdit={() => handleEditTag(tag)}
                         onRemove={() => handleRemoveTag(tag)}
                         onClose={() => setShowMoreOptions(null)}
-                        tagId={tag.id}
-                        tagName={tag.name}
-                        tagColor={tag.color}
+                          tagId={tag.id}
+                          tagName={tag.name}
+                          tagColor={tag.color}
                       />
 
                     </div>
@@ -295,7 +293,6 @@ const TestSidebar = ({
           setEditingTag(null);
         }}
         onAddFolder={handleAddTag}
-
         heading={modalHeading}
         selectedSection={editingTag}
       />

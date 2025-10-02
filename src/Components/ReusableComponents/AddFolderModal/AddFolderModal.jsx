@@ -4,9 +4,11 @@ import { FaPlus } from "react-icons/fa";
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal"; // Import the custom hook
 
 const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSection }) => {
+    
     const { modalRef, isBouncing } = useBounceModal(isOpen); // Corrected line
     const [folderName, setFolderName] = useState("");
-
+    
+    const [isfolderID, setIsFolderID] = useState();
     const [customColor, setCustomColor] = useState("#000000"); // Default custom color
     const [error, setError] = useState("");
     const colorPickerRef = useRef(null); // Ref for the color picker input
@@ -40,6 +42,7 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
         "#FF4BCD",
         "#B943F0", // Pink
     ];
+
     const [selectedColor, setSelectedColor] = useState(colorOptions[0]); // Default selected color
 
     const handleAddFolder = () => {
@@ -48,23 +51,34 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
             return;
         }
 
-        const finalColor = selectedColor || customColor; // Use selected color or custom color
+        const finalColor = selectedColor || customColor;
         if (!finalColor) {
             setError("Please select a color.");
             return;
         }
-        console.log("selected Color", selectedColor);
-        console.log("final Color", finalColor);
-        // Call the onAddFolder function with folder details
-        onAddFolders({ name: folderName, color: finalColor });
+
+        const folderData = {
+            name: folderName,
+            color: finalColor,
+        };
+
+        if (typeof onAddFolders === "function") {
+            onAddFolders(folderData);
+        } else {
+            console.warn("onAddFolders is not defined");
+        }
 
         // Reset form and close modal
+        setIsFolderID("");
         setFolderName("");
-        setSelectedColor(null);
-        setCustomColor("#000000"); // Reset custom color
+        setSelectedColor(colorOptions[0]);
+        setCustomColor("#000000");
         setError("");
         onClose();
     };
+
+
+
     // When selectedSection changes (i.e., edit opened), set folderName & color
     useEffect(() => {
         if (selectedSection) {
@@ -77,6 +91,8 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
             setCustomColor("#000000");
         }
     }, [selectedSection]);
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -101,7 +117,7 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
             <div className={`newfolder-modal-content newtag-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                 {/* Modal Header */}
                 <div className="newfolder-modal-header">
-                    <h5>{heading}{selectedSection}</h5> {/* Display the dynamic heading */}
+                    <h5>{heading}</h5>
                     <button className="close-btn" onClick={onClose}>
                         &times;
                     </button>

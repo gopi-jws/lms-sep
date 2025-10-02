@@ -14,8 +14,7 @@ const TagActionsDropdown = ({
     mode,
 }) => {
     const dropdownRef = useRef(null);
-
-
+     
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,6 +31,8 @@ const TagActionsDropdown = ({
     }, [isOpen, onClose]);
 
     const handleEditClick = (e) => {
+        console.log("tagName"+tagId);
+        
         e.preventDefault();
         e.stopPropagation();
         onEdit({ name: tagName, color: tagColor, id: tagId });
@@ -45,7 +46,7 @@ const TagActionsDropdown = ({
         onClose(); // optional, if you also want to close dropdown
     };
 
-    const handleDescAndInstr = (e) =>{
+    const handleDescAndInstr = (e) => {
         e.preventDefault();
         e.stopPropagation();
         onEdit();
@@ -53,10 +54,10 @@ const TagActionsDropdown = ({
     }
 
     if (!isOpen) return null;
-    
+
 
     return (
-        <div className={`${mode == "desc" || mode == "instr" ? "des-options" :"tag-rename-options"}`} ref={dropdownRef}>
+        <div className={`${mode == "desc" || mode == "instr" ? "des-options" : "tag-rename-options"}`} ref={dropdownRef}>
             {mode == "desc" || mode == "instr" ? (
                 <ul className="tag-list-dropdown">
                     <li
@@ -68,19 +69,19 @@ const TagActionsDropdown = ({
                 </ul >
             ) : (
                 <ul className="tag-list-dropdown">
-                <li
-                    className="testquestionadd-dropdown-item testquestionadd-dropdown-item2"
-                    onClick={handleEditClick}
-                >
-                    Edit
-                </li>
-                <li
-                    className="testquestionadd-dropdown-item"
-                    onClick={handleRemoveClick}
-                >
-                    Remove
-                </li>
-            </ul >
+                    <li
+                        className="testquestionadd-dropdown-item testquestionadd-dropdown-item2"
+                        onClick={handleEditClick}
+                    >
+                        Edit
+                    </li>
+                    <li
+                        className="testquestionadd-dropdown-item"
+                        onClick={handleRemoveClick}
+                    >
+                        Remove
+                    </li>
+                </ul >
             )}
 
         </div>
