@@ -285,10 +285,12 @@ const TestIndex = () => {
     const tagWithId = {
       id: getNextId('testTags'),
       ...newTag,
-      uestions: newTag.questions || []
+      questions: newTag.questions || []
     }
     setTags(prev => [...prev, tagWithId])
   }
+
+  
 
   const handleAddQuestionsToTag = (tagName, questionIds) => {
     setTags(prevTags =>
@@ -305,9 +307,9 @@ const TestIndex = () => {
       })
     );
     console.log("tagssssss", tags);
-
   };
 
+  
   const handleRemoveQuestionFromTag = (tagName, questionId) => {
     setTags(prevTags =>
       prevTags.map(tag => {
@@ -524,6 +526,7 @@ const TestIndex = () => {
         openModal(row.test);
         break;
       case "edit":
+        setModalHeading("Edit Test");
         setEditingTest({
           id: row.id,
           name: row.test,
@@ -534,6 +537,7 @@ const TestIndex = () => {
         setIsEditModalOpen(true);
         break;
       case "rename":
+        setModalHeading("Rename Test");
         setEditingTest({
           id: row.id,
           name: row.test,
@@ -553,12 +557,15 @@ const TestIndex = () => {
           name: row.test,
         });
         setIsCopyModalOpen(true);
+        setModalHeading("Copy Test");
         break;
       case "share":
         openShareModal(row.test);
+        setModalHeading("Share Test");
         break;
       case "archive":
         setEditingTest([{ id: row.id, name: row.test }]);
+        setModalHeading("Archive Test");
         setIsArchivedModalOpen(true)
         break;
       case "delete":
@@ -775,7 +782,7 @@ const TestIndex = () => {
           onTagClick={handleTagClick}
           onUncategorizedClick={handleUncategorizedClick}
           activeTag={activeTag}
-          onAddTag={handleAddTag}
+          // onAddTag={handleAddTag}
           onCreateTest={handleCreateTest}
           archivedCount={data.filter(test => test.archived).length}
           trashedCount={data.filter(test => test.trashed).length}
@@ -818,6 +825,7 @@ const TestIndex = () => {
               }}
               onAddTag={handleAddTag}
               onAddQuestionsToTag={handleAddQuestionsToTag}
+              setModalHeading={setModalHeading}
               setIsRenameModalOpen={setIsRenameModalOpen}
               setIsCopyModalOpen={setIsCopyModalOpen}
               setEditingTest={setEditingTest}
@@ -847,8 +855,10 @@ const TestIndex = () => {
           onAddTag={handleAddTag}
           allQuestions={data}
         />
+
         {isEditModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
@@ -869,6 +879,7 @@ const TestIndex = () => {
 
         {isRenameModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isRenameModalOpen}
             onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
             initialName={editingTest?.name || ""}
@@ -884,6 +895,7 @@ const TestIndex = () => {
 
         {isNewTestModalOpen && (
           <NewTestModal
+            heading="Create New Test"
             isOpen={isNewTestModalOpen}
             onClose={() => setIsNewTestModalOpen(false)}
             onSubmit={handleCreateTest}
@@ -909,6 +921,7 @@ const TestIndex = () => {
 
         {isCopyModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isCopyModalOpen}
             onClose={() => setIsCopyModalOpen(false)}
             initialName={editingTest?.name || ""}
@@ -920,6 +933,7 @@ const TestIndex = () => {
 
         {isArchivedModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isArchivedModalOpen}
             onClose={() => { setIsArchivedModalOpen(false); setEditingTest(null); }}
             selectedTest={editingTest}

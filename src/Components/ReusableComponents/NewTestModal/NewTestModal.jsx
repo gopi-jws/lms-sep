@@ -9,6 +9,7 @@ const NewTestModal = ({
     onSubmit,
     heading,
     selectedTest,
+    selectedTag,
     initialName = "",
     initialId = "",
     initialDuration = "",
@@ -16,7 +17,8 @@ const NewTestModal = ({
     initialInstructions = "",
     mode = "",
 }) => {
-    
+
+
     const [tags, setTags] = useState(() => {
         const savedTags = localStorage.getItem("testTags");
         return savedTags ? JSON.parse(savedTags) : [
@@ -196,7 +198,7 @@ const NewTestModal = ({
             {mode === "rename" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>Rename Test</h5>
+                        <h5>{heading}</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -230,7 +232,7 @@ const NewTestModal = ({
             ) : mode === "create" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>{mode === "create" ? "Create New Test" : "Edit Test"}</h5>
+                        <h5>Create New test</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -299,7 +301,7 @@ const NewTestModal = ({
             ) : mode === "edit" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>{mode === "create" ? "Create New Test" : "Edit Test"}</h5>
+                        <h5>{heading}</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -368,7 +370,8 @@ const NewTestModal = ({
             ) : mode == "delete" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>Delete</h5>
+                        <h5>{heading}</h5>
+                        {/* <h5>Delete</h5> */}
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -377,14 +380,26 @@ const NewTestModal = ({
                     <div className="newtest-modal-body">
                         <div className="newtest-form-group">
                             <h6 className="pop-titale">You are about to trash the following projects:</h6>
+                             
+                             {selectedTest && (
+                                            <ul >
+                                                {selectedTest.map((test, index) => (
+                                                    <li key={index} className="delete-list">
+                                                        <h6>{test.name}</h6>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                             )}
 
-                            <ul >
-                                {selectedTest.map((test, index) => (
-                                    <li key={index} className="delete-list">
-                                        <h6>{test.name}</h6>
-                                    </li>
-                                ))}                     
-                            </ul>
+                            {selectedTag && (
+                                <ul>
+                                        <li className="delete-list">
+                                            <h6>{selectedTag.name}</h6>
+                                        </li>
+                                </ul>
+                            )}
+
+                            
 
                             {errors.testName && <p className="error-message">{errors.testName}</p>}
                         </div>
@@ -405,7 +420,7 @@ const NewTestModal = ({
                         ) : mode == "copy" ? (
                                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                     <div className="newtest-modal-header">
-                                        <h5>Copy</h5>
+                                        <h5>{heading}</h5>
                                         <button className="close-btn" onClick={onClose}>
                                             &times;
                                         </button>
@@ -532,7 +547,7 @@ const NewTestModal = ({
                             ) : (
                                     <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                         <div className="newtest-modal-header">
-                                            <h5>Archive</h5>
+                                            <h5>{heading}</h5>
                                             <button className="close-btn" onClick={onClose}>
                                                 &times;
                                             </button>

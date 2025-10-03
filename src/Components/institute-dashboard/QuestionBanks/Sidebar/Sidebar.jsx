@@ -21,7 +21,7 @@ import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolder
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown";
 import "./Sidebar.css";
 
-const Sidebar = ({ openModal }) => {
+const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
   const [folders, setFolders] = useState(() => {
     const storedFolders = localStorage.getItem("folders");
     return storedFolders ? JSON.parse(storedFolders) : [];
@@ -34,16 +34,17 @@ const Sidebar = ({ openModal }) => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [testName, setTestName] = useState("");
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [editingFolder, setEditingFolder] = useState(null);
   const [editedFolderName, setEditedFolderName] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("questionBank");
-  const [tags, setTags] = useState(["Folder 1", "Folder 2"]);
-  const [foldersIteam, setFoldersIteam] = useState([{id:1, name: "Folder 1", color: "#9c27b0" }, {id:2, name: "Folder 2", color: "#2196f3" }])
+  //const [foldersIteam, setFoldersIteam] = useState([{id:1, name: "Folder 1", color: "#9c27b0" }, {id:2, name: "Folder 2", color: "#2196f3" }])
   const [showMoreOptions, setShowMoreOptions] = useState(null);
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [selectedFolder, setselectedFolder] = useState(null);
 
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0'];
   const dropdownRef = useRef(null);
@@ -52,9 +53,11 @@ const Sidebar = ({ openModal }) => {
   const location = useLocation();
 
   const handleTagClick = (e, index) => {
+    
     e.preventDefault();
     e.stopPropagation();
     setShowMoreOptions(showMoreOptions === index ? null : index);
+    setselectedFolder({id:foldersIteam[index].id,name:foldersIteam[index].name,color:foldersIteam[index].color})
   };
 
   const handleClickOutside = (event) => {
@@ -74,31 +77,53 @@ const Sidebar = ({ openModal }) => {
     };
   }, []);
 
-  const handleAddFolder = (folder) => {
-    setFoldersIteam(prev => {
-      // check if folder with same id already exists
-      const exists = prev.find(f => f.id === folder.id);
 
-      if (exists) {
-        // update existing folder
-        return prev.map(f =>
-          f.id === folder.id
-            ? { ...f, name: folder.name, color: folder.color }
+  const handleEditFolder = (folder) =>{
+    setIsFolderModalOpen(true);
+    setShowMoreOptions(null);
+    setModalHeading("Edit Folder");
+    setEditingFolder(folder);
+  }
+
+  const handleAddFolder = ({ name, color }) => {
+    if (editingFolder) {
+      // update existing folder
+      setFoldersIteam(prev =>
+        prev.map(f =>
+          f.id === editingFolder.id
+            ? { ...f, name, color }
             : f
-        );
-      } else {
-        // create new folder with new id
-        const newFolder = {
+        )
+      );
+      setEditingFolder(null);
+    } else {
+      // add new folder
+      setFoldersIteam(prev => [
+        ...prev,
+        {
           id: prev.length > 0 ? Math.max(...prev.map(f => f.id)) + 1 : 1,
-          name: folder.name,
-          color: folder.color,
-        };
-        return [...prev, newFolder];
-      }
-    });
+          name,
+          color,
+          QB:[],
+        },
+      ]);
+    }
   };
 
+
+  const handleRemoveTag = (folder) =>{
+    setselectedFolder(folder);
+    setModalHeading("Delete Folder");
+    setIsRemoveModalOpen(true)
+  }
+
+  const removeFolder = (removeFolder) =>{
+    setFoldersIteam(prev => prev.filter(foldersIteam => foldersIteam.id !== removeFolder.id))
+  }
+
   const handleCreateQB = (qbName) => {
+    console.log(qbName);
+    
     setQBs([...qbs, qbName]);
   };
 
@@ -120,7 +145,7 @@ const Sidebar = ({ openModal }) => {
       folder.id === id ? { ...folder, name: editedFolderName } : folder
     );
     setFolders(updatedFolders);
-    setEditingFolderId(null);
+    setEditingFolder(null);
     setEditedFolderName("");
   };
 
@@ -146,6 +171,7 @@ const Sidebar = ({ openModal }) => {
   };
 
   const isActive = (path) => location.pathname === path;
+  
 
   return (
     <div className="sidebar-wrapper">
@@ -216,6 +242,7 @@ const Sidebar = ({ openModal }) => {
                 setIsFolderModalOpen(true);
                 setModalHeading("New Folder");
                 setEditingFolder(null)
+                setModalHeading("Create New Folder")
               }}
             >
               <Plus className="icon" size={20} />
@@ -265,7 +292,16 @@ const Sidebar = ({ openModal }) => {
                       color={folder.color}
                     />
                     <div className="w-100 d-flex justify-content-between align-items-center">
-                      <span className="sidebar-letters">{folder.name}</span>
+                      <span className="sidebar-letters tag-letters-container">
+                        <span className="tag-name-wrapper">
+                          <span className="tag-name-text">
+                            {folder.name}
+                          </span>
+                        </span>
+                        <span className="tag-count">
+                          ({folder.QB?.length})
+                        </span>
+                      </span>
 
                       <button className="tag-button" ref={toggleRef}>
                         <span
@@ -276,17 +312,13 @@ const Sidebar = ({ openModal }) => {
 
                       <TagActionsDropdown
                         isOpen={showMoreOptions === index}
-                        onEdit={() => {
-                          setIsFolderModalOpen(true);
-                          setShowMoreOptions(null);
-                          setModalHeading("Edit");
-                          setEditingFolder(folder);
-                        }}
-                        onRemove={() => setShowMoreOptions(null)}
+                        onEdit={() => {handleEditFolder(folder)}}
+                        onRemove={() => {handleRemoveTag(folder)}}
                         onClose={() => setShowMoreOptions(null)}
-                        tagId={folder.id}
-                        tagName={folder.name}
-                        tagColor={folder.color}
+                        folderId={selectedFolder?.id}
+                        folderName={selectedFolder?.name}
+                        folderColor={selectedFolder?.color}
+                        mode="folder"
                       />
                     </div>
                   </Link>
@@ -303,16 +335,35 @@ const Sidebar = ({ openModal }) => {
         {/* Modals */}
         <NewQBModal
           isOpen={isQbModalOpen}
+          heading="Create New QB"
           onClose={() => setIsQbModalOpen(false)}
           onCreate={handleCreateQB}
           onSubmit={() => setIsQbModalOpen(false)}
           mode = "create"
         />
+
+        {/* Remove Folder */}
+        <NewQBModal
+                isOpen={isRemoveModalOpen}
+                onClose={() => {
+                  setIsRemoveModalOpen(false);
+                  selectedFolder(null);
+                }}
+                mode="delete"
+                selectedFolder={selectedFolder}
+                heading={modalHeading}
+                onSubmit={() => {
+                  removeFolder(selectedFolder); // ✅ must use selectedTagId
+                  setIsRemoveModalOpen(false);
+                  selectedFolder(null);
+                }}
+          />
+        
         
         <AddFolderModal
           isOpen={isFolderModalOpen}
           onClose={() => { setIsFolderModalOpen(false); setEditingFolder(null); }}
-          onAddFolders={handleAddFolder}
+          onAddFolder={handleAddFolder}
           heading={modalHeading}
           selectedSection={editingFolder}
         />

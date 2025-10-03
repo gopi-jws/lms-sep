@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
 import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
+import Sidebar from "/src/Components/institute-dashboard/QuestionBanks/Sidebar/Sidebar";
 
 import {
   FaPaperPlane,
@@ -21,6 +22,7 @@ import {
 import { Link } from "react-router-dom"
 import { HiDotsVertical } from "react-icons/hi";
 import { Helmet } from "react-helmet";
+
 const Questionindex = () => {
   // Static rows for the table with IDs
   const data = [
@@ -37,8 +39,10 @@ const Questionindex = () => {
     { id: 11, name: "QB 11", questions: 15, lastModified: "1 day ago by You" },
     { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You" },
   ]
-
-
+  const [foldersIteam, setFoldersIteam] = useState([
+    {id:1, name: "Folder 1", color: "#9c27b0" ,QB:[]}, 
+    {id:2, name: "Folder 2", color: "#2196f3" ,QB:[]}])
+  const [modalHeading, setModalHeading] = useState("");
   const [editingQB,setEditingQB] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
@@ -184,6 +188,20 @@ const Questionindex = () => {
   }
 
 
+  //add to folder
+  const handleAddFolder = ({ name, color }) => {
+      setFoldersIteam(prev => [
+        ...prev,
+        {
+          id: prev.length > 0 ? Math.max(...prev.map(f => f.id)) + 1 : 1,
+          name,
+          color,
+          QB:[]
+        },
+      ]);
+  };
+
+
   const handleActionClick = (action, row) => {
     // Close dropdown first
     setOpenDropdownId(null)
@@ -200,6 +218,7 @@ const Questionindex = () => {
           id: row.id,
           name: row.test,
         });
+        setModalHeading("Rename QB")
         setIsRenameModalOpen(true);
         break;
       case "edit":
@@ -207,14 +226,17 @@ const Questionindex = () => {
           id: row.id,
           name: row.name,
         });
+        setModalHeading("Edit QB")
         setIsEditModalOpen(true);
         break
       case "archive":
         setEditingQB([{ id: row.id, name: row.name }]);
+        setModalHeading("Archive QB")
         setIsArchivedModalOpen(true)
         break
       case "delete":
         setEditingQB([{ id: row.id, name: row.name }]);
+        setModalHeading("Delete QB")
         setIsDeleteModalOpen(true)
         break
       default:
@@ -353,6 +375,10 @@ const Questionindex = () => {
         <meta name="description" content="Question Banks List" />
       </Helmet>
       <div className="questionbank-index-wrapper">
+        <Sidebar
+          foldersIteam={foldersIteam}
+          setFoldersIteam={setFoldersIteam}
+        />
         <div className="questionbank-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Question Bank Lists</h1>
@@ -362,8 +388,10 @@ const Questionindex = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-             // data={dataItem}
+              folder={foldersIteam}
+              onAddFolder={handleAddFolder}
               availableActions={["delete", "archive", "download", "tag", "more"]}
+              setModalHeading={setModalHeading}
               enableToggle={false}
               searchoption={true}
               searchQuery={searchQuery}
@@ -400,6 +428,7 @@ const Questionindex = () => {
 
         {isEditModalOpen && (
           <NewQBModal
+            heading={modalHeading}
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
@@ -417,6 +446,7 @@ const Questionindex = () => {
 
         {isArchivedModalOpen && (
           <NewQBModal
+            heading={modalHeading}
             isOpen={isArchivedModalOpen}
             onClose={() => { setIsArchivedModalOpen(false); setEditingQB(null); }}
             selectedTest={editingQB}
@@ -430,6 +460,7 @@ const Questionindex = () => {
 
           {isDeleteModalOpen && (
             <NewQBModal
+            heading={modalHeading}
             isOpen={isDeleteModalOpen}
             onClose={() => { setIsDeleteModalOpen(false); setEditingQB(null); }}
             selectedTest={editingQB}
@@ -443,6 +474,7 @@ const Questionindex = () => {
 
         {isRenameModalOpen && (
           <NewQBModal
+            heading={modalHeading}
             isOpen={isRenameModalOpen}
             onClose={() => {
               setIsRenameModalOpen(false);

@@ -3,12 +3,10 @@ import "./AddFolderModal.css"; // Import the CSS file
 import { FaPlus } from "react-icons/fa";
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal"; // Import the custom hook
 
-const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSection }) => {
+const AddFolderModal = ({ isOpen, onClose, onAddFolder, heading, selectedSection }) => {
     
     const { modalRef, isBouncing } = useBounceModal(isOpen); // Corrected line
     const [folderName, setFolderName] = useState("");
-    
-    const [isfolderID, setIsFolderID] = useState();
     const [customColor, setCustomColor] = useState("#000000"); // Default custom color
     const [error, setError] = useState("");
     const colorPickerRef = useRef(null); // Ref for the color picker input
@@ -57,23 +55,7 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
             return;
         }
 
-        const folderData = {
-            name: folderName,
-            color: finalColor,
-        };
-
-        if (typeof onAddFolders === "function") {
-            onAddFolders(folderData);
-        } else {
-            console.warn("onAddFolders is not defined");
-        }
-
-        // Reset form and close modal
-        setIsFolderID("");
-        setFolderName("");
-        setSelectedColor(colorOptions[0]);
-        setCustomColor("#000000");
-        setError("");
+        onAddFolder({ name: folderName, color: finalColor });
         onClose();
     };
 
@@ -205,7 +187,7 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolders, heading, selectedSectio
                         onClick={handleAddFolder}
                         disabled={!folderName.trim()} // Disable if folderName is empty
                     >
-                        Add Folder
+                        {heading.startsWith("Edit") ? "Update" : "Create"}
                     </button>
 
                 </div>

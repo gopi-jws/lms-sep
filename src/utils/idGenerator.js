@@ -2,6 +2,8 @@
 
 export const getNextId = (storageKey) => {
     const data = JSON.parse(localStorage.getItem(storageKey)) || [];
+    console.log(data);
+    
 
     if (!Array.isArray(data) || data.length === 0) {
         return 1;

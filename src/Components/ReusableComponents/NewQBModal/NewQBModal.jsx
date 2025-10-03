@@ -6,6 +6,8 @@ const NewQBModal = ({
     isOpen,
     onClose,
     onSubmit,
+    heading,
+    selectedFolder,
     selectedTest,
     initialName = "",
     mode = "",  
@@ -69,7 +71,8 @@ const NewQBModal = ({
             >
                 <div className="newqb-modal-header">
                     <h5>
-                        {mode === "edit" ? "Edit QB" : mode === "delete" ? "Delete QB" : mode === "archive" ? "Archive QB" : mode === "rename" ? "Rename QB" : "Create New QB"}
+                        {heading}
+                        {/* {mode === "edit" ? "Edit QB" : mode === "delete" ? "Delete QB" : mode === "archive" ? "Archive QB" : mode === "rename" ? "Rename QB" : "Create New QB"} */}
                     </h5>
                     <button className="close-btn" onClick={onClose}>
                         &times;
@@ -99,13 +102,25 @@ const NewQBModal = ({
                     <div className="newqb-modal-body">
                         <div className="newqb-form-group">
                             <h6 className="pop-titale">You are about to trash the following projects:</h6>
-                            <ul >
-                                {selectedTest.map((test, index) => (
-                                    <li key={index} className="delete-list">
-                                        <h6>{test.name}</h6>
+                            {selectedTest && (
+                                <ul >
+                                    {selectedTest.map((test, index) => (
+                                        <li key={index} className="delete-list">
+                                            <h6>{test.name}</h6>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+
+                            {selectedFolder && (
+                                <ul>
+                                    <li className="delete-list">
+                                        <h6>{selectedFolder.name}</h6>
                                     </li>
-                                ))}
-                            </ul>
+                                </ul>
+                            )}
+
+
                             {error && <p className="error-message">{error}</p>}
                         </div>
                     </div>

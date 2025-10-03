@@ -12,6 +12,7 @@ const DataTable = ({
     columns,
     data,
     tags,
+    folder,
     availableActions = [],
     showQuestionRow = false,
     studentActions = [],
@@ -38,6 +39,7 @@ const DataTable = ({
     onAddQuestionsToTag,
     onAddQBToFolder,
     onAddTag,
+    onAddFolder,
     allQuestions,
     onCopyTest = () => { },
     onUpdateTest = () => { },
@@ -46,6 +48,7 @@ const DataTable = ({
     onDownload = () => { },
     onChangeSection = () => { },
     onSetMarks = () => { },
+    setModalHeading,
     setIsRenameModalOpen,
     setIsCopyModalOpen,
     setIsDeleteModalOpen,
@@ -202,6 +205,7 @@ const DataTable = ({
                         <BulkActions
                             selectedRows={selectedRows}
                             tags={tags}
+                            folder={folder}
                             setShowTagOptions={setShowTagOptions}
                             setIsTagModalOpen={setIsTagModalOpen}
                             showMoreOptions={showMoreOptions}
@@ -209,6 +213,7 @@ const DataTable = ({
                             studentActions={studentActions}
                             availableActions={availableActions}
                             onAddQuestionsToTag={onAddQuestionsToTag} // Add this
+                            onAddFolder={onAddFolder}
                             onAddTag={onAddTag}
                             onAddQBToFolder={onAddQBToFolder}
                             allQuestions={allQuestions}
@@ -216,6 +221,7 @@ const DataTable = ({
                             onUpdateTest={onUpdateTest}
                             onDelete={onDelete}
                             onArchive={onArchive}
+                            setModalHeading={setModalHeading}
                             setIsRenameModalOpen={setIsRenameModalOpen}
                             setIsCopyModalOpen={setIsCopyModalOpen}
                             setIsDeleteModalOpen={setIsDeleteModalOpen}

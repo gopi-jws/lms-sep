@@ -5,7 +5,7 @@ import './AddTagModal.css';
 import { FaPlus } from "react-icons/fa";
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal";
 
-const AddTagModal = ({ isOpen, onClose, onAddFolder, heading ="Create New Tag", selectedSection }) => {
+const AddTagModal = ({ isOpen, onClose, onAddTag, heading ="Create New Tag", selectedSection }) => {
     const { modalRef, isBouncing } = useBounceModal(isOpen);
     const [folderName, setFolderName] = useState("");
     const [customColor, setCustomColor] = useState("#000000");
@@ -41,6 +41,7 @@ const AddTagModal = ({ isOpen, onClose, onAddFolder, heading ="Create New Tag", 
     }, [isOpen]);
 
     const handleAddtag = () => {
+
         if (!folderName.trim()) {
             setError("Folder name is required.");
             return;
@@ -52,7 +53,11 @@ const AddTagModal = ({ isOpen, onClose, onAddFolder, heading ="Create New Tag", 
             return;
         }
 
-        onAddFolder({ name: folderName, color: finalColor });
+        console.log("name :"+folderName);
+        console.log("color :"+finalColor)
+
+
+        onAddTag({ name: folderName, color: finalColor });
         onClose();
     };
 
@@ -104,7 +109,7 @@ const AddTagModal = ({ isOpen, onClose, onAddFolder, heading ="Create New Tag", 
                                     style={{ backgroundColor: color }}
                                     onClick={() => {
                                         setSelectedColor(color);
-                                        setCustomColor("");
+                                        setCustomColor("#000000");
                                     }}
                                 >
                                     {selectedColor === color && <span className="tick-icon">✔</span>}

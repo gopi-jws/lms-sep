@@ -3,6 +3,7 @@ import { Trash2, Archive, Download, Check ,RotateCcw } from "lucide-react";
 import { BiSolidTag } from "react-icons/bi";
 import "./BulkAction.css";
 import AddTagModal from "../../ReusableComponents/AddTagModal/AddTagModal";
+import AddFolderModal from "../../ReusableComponents/AddFolderModal/AddFolderModal";
 
 import PropTypes from 'prop-types';
 import NewTestModal from "../../ReusableComponents/NewTestModal/NewTestModal";
@@ -14,8 +15,10 @@ const BulkActions = ({
   selectedRows = [],
   availableActions = [],
   tags = [],
+  folder = [],
   onAddQuestionsToTag = () => toast.warn("Add to tag functionality not implemented"),
-  onAddQBToFolder = () => { "Add to FOlder functionality not implemented" },
+  onAddQBToFolder = () => toast.warn("Add to FOlder functionality not implemented" ),
+  onAddFolder = () => toast.warn("Add folder functionality not implemented"),
   onAddTag = () => toast.warn("Add tag functionality not implemented"),
   allQuestions = [],
   onCopyTest = () => toast.warn("Copy test functionality not implemented"),
@@ -23,6 +26,7 @@ const BulkActions = ({
   onDelete = () => toast.warn("Delete functionality not implemented"),
   onArchive = () => toast.warn("Archive functionality not implemented"),
   onDownload = () => toast.warn("Download functionality not implemented"),
+  setModalHeading,
   setIsRenameModalOpen,
   setIsCopyModalOpen,
   setIsDeleteModalOpen,
@@ -31,12 +35,15 @@ const BulkActions = ({
   setEditingQB,
   modalType,
 }) => {
+
+  
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
   const [previousName, setPreviousName] = useState('');
   const [recentlyTagged, setRecentlyTagged] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
 
   useEffect(() => {
 
@@ -55,12 +62,16 @@ const BulkActions = ({
   };
 
   const handleAddToTag = (tagName) => {
+    console.log(tagName);
+    
     try {
       const tag = tags.find(t => t.name === tagName);
       if (!tag) {
         toast.error("Tag not found");
         return;
       }
+      console.log(selectedRows);
+      
       const newQuestions = selectedRows.filter(id => {
         if (tag.hasOwnProperty("questions")) {
           return !tag.questions.includes(id)
@@ -91,6 +102,7 @@ const BulkActions = ({
       else {
         toast.info("All selected questions already exist in this tag");
       } setActiveDropdown(null);
+
     } catch (error) {
       toast.error("Failed to add questions to tag");
       console.error("Error in handleAddToTag:", error);
@@ -109,6 +121,7 @@ const BulkActions = ({
                   const test = allQuestions?.find(q => q.id === value);
                   return { id: test.id, name: test.test };
                 });
+                setModalHeading("Delete Tests")
                 setEditingTest(selectedTests)
 
               } else {
@@ -116,7 +129,7 @@ const BulkActions = ({
                   const test = allQuestions?.find(q => q.id === value);
                   return { id: test.id, name: test.name };
                 });
-
+                setModalHeading("Delete QBs")
                 setEditingQB(selectedQB); 
               }
               setIsDeleteModalOpen(true);
@@ -175,6 +188,7 @@ const BulkActions = ({
               const test = allQuestions?.find(q => q.id === value);
               return { id: test.id, name: test.test };
             });
+            setModalHeading("Archive Tests")
             setEditingTest(selectedTests)
             
           } else {
@@ -182,6 +196,7 @@ const BulkActions = ({
               const test = allQuestions?.find(q => q.id === value);
               return { id: test.id, name: test.name };
             }); 
+            setModalHeading("Archive QBs")
             setEditingQB(selectedQB);
           }
 
@@ -401,83 +416,135 @@ const BulkActions = ({
 
       {/* Tag Dropdown */}
       {activeDropdown === "tag" && (
+        <>
+          {modalType === "test" ? (
+            // --- TAG MODE ---
+            <div className="tag-options">
+              <p className="addtotag-box-heading">Add To Tag</p>
+              <ul className="tag-options-list">
+                {tags.filter(tag => "questions" in tag).map((tag) => {
+                  const alreadyTaggedCount = selectedRows.filter(id =>
+                    tag.questions.includes(id)
+                  ).length;
 
+                  const isRecentlyTagged =
+                    recentlyTagged[tag.name] &&
+                    Date.now() - recentlyTagged[tag.name] < 2000;
 
-        <div className="tag-options">
-          <p className="addtotag-box-heading"  >{tags.some(tag => 'questions' in tag) ? 'Add To Tag' : 'Add To Folder'}</p>
-          <ul className="tag-options-list">
-            {tags.map((tag) => {
+                  const willAddNew = selectedRows.some(id =>
+                    !tag.questions.includes(id)
+                  );
 
-
-              const alreadyTaggedCount = selectedRows.filter(id => {
-                if (tag.hasOwnProperty("questions")) {
-
-                  return tag.questions.includes(id)
-
-
-                } else if (tag.hasOwnProperty("QB")) {
-
-
-                  return tag.QB.includes(id)
-                }
-
-              }).length;
-              const isRecentlyTagged = recentlyTagged[tag.name] &&
-                (Date.now() - recentlyTagged[tag.name] < 2000);
-              const willAddNewQuestions = selectedRows.some(id => {
-                if (tag.hasOwnProperty("questions")) {
-                  return !tag.questions.includes(id);
-                }
-                else if (tag.hasOwnProperty("QB")) {
-                  return !tag.QB.includes(id);
-                }
-              })
-              console.log('willAddNewQuestions', willAddNewQuestions);
-
-              return (
-                <li
-                  key={tag.id}
-                  className={`tag-options-item ${alreadyTaggedCount === selectedRows.length ? 'all-tagged' : ''}`}
-                  onClick={() => handleAddToTag(tag.name)}
-                >
-                  <div className="tag-container">
-                    <span className="tick-mark" onClick={() => {
-                      console.log("tick", alreadyTaggedCount, selectedRows.length,);
-                    }}>
-                      {alreadyTaggedCount === selectedRows.length ? '✓' : ''}
-                    </span>
-                    <span className="dot-name-wrapper">
-                      <span
-                        className="tag-dot"
-                        style={{ backgroundColor: tag.color || "#000" }}
-                      ></span>
-                      <span className="tag-name">{tag.name}</span>
-                    </span>
-                    {isRecentlyTagged && (
-                      <span className="tag-checkmark">
-                        <Check size={16} />
-                        {willAddNewQuestions ? (
-                          <span className="tooltip">Added to tag</span>
-                        ) : (
-                          <span className="tooltip">Already in tag</span>
+                  return (
+                    <li
+                      key={tag.id}
+                      className={`tag-options-item ${alreadyTaggedCount === selectedRows.length ? "all-tagged" : ""}`}
+                      onClick={() => handleAddToTag(tag.name)}
+                    >
+                      <div className="tag-container">
+                        <span className="tick-mark">
+                          {alreadyTaggedCount === selectedRows.length ? "✓" : ""}
+                        </span>
+                        <span className="dot-name-wrapper">
+                          <span
+                            className="tag-dot"
+                            style={{ backgroundColor: tag.color || "#000" }}
+                          ></span>
+                          <span className="tag-name">{tag.name}</span>
+                        </span>
+                        {isRecentlyTagged && (
+                          <span className="tag-checkmark">
+                            <Check size={16} />
+                            {willAddNew ? (
+                              <span className="tooltip">Added to tag</span>
+                            ) : (
+                              <span className="tooltip">Already in tag</span>
+                            )}
+                          </span>
                         )}
-                      </span>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-          <div>
-            <button
-              className="tags-create-button"
-              onClick={() => setIsNewTagModalOpen(true)}
-            >
-              Create New tag
-            </button>
-          </div>
-        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div>
+                <button
+                  className="tags-create-button"
+                  onClick={() => {
+                    setIsNewTagModalOpen(true);
+                    setActiveDropdown(null);
+                  }}
+                >
+                  Create New Tag
+                </button>
+              </div>
+            </div>
+          ) : (
+            // --- FOLDER MODE ---
+            <div className="tag-options">
+              <p className="addtotag-box-heading">Add To Folder</p>
+              <ul className="tag-options-list">
+                {folder.filter(folder => "QB" in folder).map((folder) => {
+                  const alreadyTaggedCount = selectedRows.filter(id =>
+                    folder.QB.includes(id)
+                  ).length;
+
+                  const isRecentlyTagged =
+                    recentlyTagged[folder.name] &&
+                    Date.now() - recentlyTagged[folder.name] < 2000;
+
+                  const willAddNew = selectedRows.some(id =>
+                    !folder.QB.includes(id)
+                  );
+
+                  return (
+                    <li
+                      key={folder.id}
+                      className={`tag-options-item ${alreadyTaggedCount === selectedRows.length ? "all-tagged" : ""}`}
+                      onClick={() => handleAddToTag(folder.name)}
+                    >
+                      <div className="tag-container">
+                        <span className="tick-mark">
+                          {alreadyTaggedCount === selectedRows.length ? "✓" : ""}
+                        </span>
+                        <span className="dot-name-wrapper">
+                          <span
+                            className="tag-dot"
+                            style={{ backgroundColor: folder.color || "#000" }}
+                          ></span>
+                          <span className="tag-name">{folder.name}</span>
+                        </span>
+                        {isRecentlyTagged && (
+                          <span className="tag-checkmark">
+                            <Check size={16} />
+                            {willAddNew ? (
+                              <span className="tooltip">Added to folder</span>
+                            ) : (
+                              <span className="tooltip">Already in folder</span>
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div>
+                <button
+                  className="tags-create-button"
+                  onClick={() => {
+                    setIsNewTagModalOpen(true);
+                    setActiveDropdown(null);
+                  }}
+                >
+                  Create New Folder
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
+
 
       {/* More Options Dropdown */}
       {activeDropdown === "more" && (
@@ -496,12 +563,14 @@ const BulkActions = ({
                           id: test.id,
                           name: test.test,
                         });
+                        setModalHeading("Rename Tests")
                         setIsRenameModalOpen(true);
                       }else{
                         setEditingQB({
                           id: test.id,
                           name: test.name,
                         });
+                        setModalHeading("Rename QB")
                         setIsRenameModalOpen(true);
                       }
                      
@@ -532,6 +601,7 @@ const BulkActions = ({
                         name: test.test,
                       }
                      )
+                     setModalHeading("Copy Tests")
                      setIsCopyModalOpen(true);
                    }
                   } catch (error) {
@@ -550,22 +620,12 @@ const BulkActions = ({
       )}
 
 
-      {/* Modals */}
-      <>
-        <AddTagModal
-          isOpen={isNewTagModalOpen}
-          onClose={() => setIsNewTagModalOpen(false)}
-          onAddFolder={onAddTag}
-          heading="Create New Tag"
-        />
-
-      </>
-      {/* Modal */}
+      {/*Create tag and folder Modal */}
       {
-        isModalOpen && modelType === "test" && (
+        modalType === "test" && (
           <AddTagModal
             isOpen={isNewTagModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => setIsNewTagModalOpen(false)}
             onAddTag={onAddTag}
             heading="Create New Tag"
           />
@@ -573,11 +633,11 @@ const BulkActions = ({
       }
 
       {
-        isModalOpen && modelType === "QB" && (
-          <AddFolderModel
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onAddFolder={onAddTag}
+        modalType !== "test" && (
+          <AddFolderModal
+            isOpen={isNewTagModalOpen}
+            onClose={() => setIsNewTagModalOpen(false)}
+            onAddFolder={onAddFolder}
             heading="Create New Folder"
           />
         )
