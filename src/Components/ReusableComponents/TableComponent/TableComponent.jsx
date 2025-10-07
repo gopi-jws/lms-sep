@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef} from "react"
 import { FaArrowDown, FaArrowUp, FaSearch, FaPlus, FaCheck, FaMinus, FaEye } from "react-icons/fa"
 import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
@@ -12,6 +12,7 @@ const DataTable = ({
     columns,
     data,
     tags,
+    folder,
     availableActions = [],
     showQuestionRow = false,
     studentActions = [],
@@ -38,6 +39,7 @@ const DataTable = ({
     onAddQuestionsToTag,
     onAddQBToFolder,
     onAddTag,
+    onAddFolder,
     allQuestions,
     onCopyTest = () => { },
     onUpdateTest = () => { },
@@ -46,9 +48,14 @@ const DataTable = ({
     onDownload = () => { },
     onChangeSection = () => { },
     onSetMarks = () => { },
-    isRenameModalOpen,
+    setModalHeading,
     setIsRenameModalOpen,
-    setEditingTest
+    setIsCopyModalOpen,
+    setIsDeleteModalOpen,
+    setIsArchivedModalOpen,
+    setEditingTest,
+    setEditingQB,
+    modalType,
 }) => {
     const [selectedRows, setSelectedRows] = useState([])
     const [sortColumn, setSortColumn] = useState(null)
@@ -167,6 +174,12 @@ const DataTable = ({
         }
     };
 
+    useEffect(() => {
+        // Clean up selectedRows when data changes
+        setSelectedRows(prev =>
+            prev.filter(id => data.some(row => row.id === id))
+        );
+    }, [data]);
 
 
     return (
@@ -192,6 +205,7 @@ const DataTable = ({
                         <BulkActions
                             selectedRows={selectedRows}
                             tags={tags}
+                            folder={folder}
                             setShowTagOptions={setShowTagOptions}
                             setIsTagModalOpen={setIsTagModalOpen}
                             showMoreOptions={showMoreOptions}
@@ -199,6 +213,7 @@ const DataTable = ({
                             studentActions={studentActions}
                             availableActions={availableActions}
                             onAddQuestionsToTag={onAddQuestionsToTag} // Add this
+                            onAddFolder={onAddFolder}
                             onAddTag={onAddTag}
                             onAddQBToFolder={onAddQBToFolder}
                             allQuestions={allQuestions}
@@ -206,9 +221,14 @@ const DataTable = ({
                             onUpdateTest={onUpdateTest}
                             onDelete={onDelete}
                             onArchive={onArchive}
-                            isRenameModalOpen={isRenameModalOpen}
+                            setModalHeading={setModalHeading}
                             setIsRenameModalOpen={setIsRenameModalOpen}
+                            setIsCopyModalOpen={setIsCopyModalOpen}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            setIsArchivedModalOpen={setIsArchivedModalOpen}
                             setEditingTest={setEditingTest}
+                            setEditingQB={setEditingQB}
+                            modalType={modalType}
                         />
                     )}
                     {selectedRows.length > 1 && studentActions.length > 0 && (
@@ -410,7 +430,7 @@ const DataTable = ({
                                                                     ) : (
                                                                         // Preview: first 80 words with "..."
                                                                         <span className="truncate">
-                                                                            {row.question.split(" ").slice(0, 80).join(" ")}...
+                                                                            {row.question.split(" ").slice(0, 10).join(" ")}...
                                                                             {/* {row.question} */}
                                                                         </span>
                                                                     )

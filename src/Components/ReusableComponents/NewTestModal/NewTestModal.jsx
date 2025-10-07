@@ -8,6 +8,8 @@ const NewTestModal = ({
     onClose,
     onSubmit,
     heading,
+    selectedTest,
+    selectedTag,
     initialName = "",
     initialId = "",
     initialDuration = "",
@@ -15,6 +17,7 @@ const NewTestModal = ({
     initialInstructions = "",
     mode = "",
 }) => {
+
 
     const [tags, setTags] = useState(() => {
         const savedTags = localStorage.getItem("testTags");
@@ -47,6 +50,7 @@ const NewTestModal = ({
             setInstructions(initialInstructions);
             setErrors({});
             setSelectedCopyTags([]); // reset when opening
+        
         }
     }, [isOpen, initialName, initialId, initialDuration, initialDescription, initialInstructions]);
 
@@ -68,12 +72,16 @@ const NewTestModal = ({
         }
 
         if (mode === "archive") {
-            if (!testName.trim()) {
-                newErrors.testName = "New name is required.";
-                setErrors(newErrors);
-                return;
-            }
-            onSubmit({ name: testName.trim() });
+            // if (!testName.trim()) {
+            //     newErrors.testName = "New name is required.";
+            //     setErrors(newErrors);
+            //     return;
+            // }
+            // onSubmit({ name: testName.trim() });
+            // onClose();
+            // return;
+        
+            onSubmit(selectedTest);
             onClose();
             return;
         }
@@ -93,7 +101,7 @@ const NewTestModal = ({
         }
 
         if (mode === "delete") {
-            onSubmit({ delete: true });
+            onSubmit(selectedTest);
             onClose();
             return;
         }
@@ -190,7 +198,7 @@ const NewTestModal = ({
             {mode === "rename" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>Rename Test</h5>
+                        <h5>{heading}</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -224,7 +232,7 @@ const NewTestModal = ({
             ) : mode === "create" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>{mode === "create" ? "Create New Test" : "Edit Test"}</h5>
+                        <h5>Create New test</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -293,7 +301,7 @@ const NewTestModal = ({
             ) : mode === "edit" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>{mode === "create" ? "Create New Test" : "Edit Test"}</h5>
+                        <h5>{heading}</h5>
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -301,49 +309,49 @@ const NewTestModal = ({
 
                     <div className="newtest-modal-body">
                         <div className="newtest-form-group">
-                            <input
-                                type="text"
-                                value={testName}
-                                className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
-                                onChange={(e) => setTestName(e.target.value)}
-                                placeholder="Enter test name"
-                            />
-                            {errors.testName && <p className="error-message">{errors.testName}</p>}
+                                    <input
+                                        type="text"
+                                        value={testName}
+                                        className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
+                                        onChange={(e) => setTestName(e.target.value)}
+                                        placeholder="Enter test name"
+                                    />
+                                    {errors.testName && <p className="error-message">{errors.testName}</p>}
                         </div>
 
                         <div className="newtest-form-group">
-                            <input
-                                type="number"
-                                value={duration}
-                                className={`newtest-form-control ${errors.duration ? 'error' : ''}`}
-                                onChange={handleDurationChange}
-                                placeholder="Enter duration (minutes)"
-                                min="0"
-                                max="600"
-                            />
-                            {errors.duration && <p className="error-message">{errors.duration}</p>}
+                                    <input
+                                        type="number"
+                                        value={duration}
+                                        className={`newtest-form-control ${errors.duration ? 'error' : ''}`}
+                                        onChange={handleDurationChange}
+                                        placeholder="Enter duration (minutes)"
+                                        min="0"
+                                        max="600"
+                                    />
+                                    {errors.duration && <p className="error-message">{errors.duration}</p>}
                         </div>
 
                         <div className="newtest-form-group">
-                            <textarea
-                                value={description}
-                                className={`newtest-form-control ${errors.description ? 'error' : ''}`}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description"
-                                rows="3"
-                            />
-                            {errors.description && <p className="error-message">{errors.description}</p>}
+                                    <textarea
+                                        value={description}
+                                        className={`newtest-form-control ${errors.description ? 'error' : ''}`}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        placeholder="Enter description"
+                                        rows="3"
+                                    />
+                                    {errors.description && <p className="error-message">{errors.description}</p>}
                         </div>
 
                         <div className="newtest-form-group">
-                            <textarea
-                                value={instructions}
-                                className={`newtest-form-control ${errors.instructions ? 'error' : ''}`}
-                                onChange={(e) => setInstructions(e.target.value)}
-                                placeholder="Enter instructions"
-                                rows="3"
-                            />
-                            {errors.instructions && <p className="error-message">{errors.instructions}</p>}
+                                    <textarea
+                                        value={instructions}
+                                        className={`newtest-form-control ${errors.instructions ? 'error' : ''}`}
+                                        onChange={(e) => setInstructions(e.target.value)}
+                                        placeholder="Enter instructions"
+                                        rows="3"
+                                    />
+                                    {errors.instructions && <p className="error-message">{errors.instructions}</p>}
                         </div>
                     </div>
 
@@ -362,7 +370,8 @@ const NewTestModal = ({
             ) : mode == "delete" ? (
                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                     <div className="newtest-modal-header">
-                        <h5>Delete</h5>
+                        <h5>{heading}</h5>
+                        {/* <h5>Delete</h5> */}
                         <button className="close-btn" onClick={onClose}>
                             &times;
                         </button>
@@ -371,23 +380,26 @@ const NewTestModal = ({
                     <div className="newtest-modal-body">
                         <div className="newtest-form-group">
                             <h6 className="pop-titale">You are about to trash the following projects:</h6>
-                            {/* <input
-                                            type="text"
-                                            value={testName}
-                                            className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
-                                            onChange={(e) => setTestName(e.target.value)}
-                                            placeholder="Enter test name"
-                                        /> */}
+                             
+                             {selectedTest && (
+                                            <ul >
+                                                {selectedTest.map((test, index) => (
+                                                    <li key={index} className="delete-list">
+                                                        <h6>{test.name}</h6>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                             )}
 
+                            {selectedTag && (
+                                <ul>
+                                        <li className="delete-list">
+                                            <h6>{selectedTag.name}</h6>
+                                        </li>
+                                </ul>
+                            )}
 
-                            {/* <h5 className="delete">{testName}</h5> */}
-
-                            <ul >
-                                <li className="delete-list">
-                                    <h6>{testName}</h6>
-                                </li>
-                            </ul>
-
+                            
 
                             {errors.testName && <p className="error-message">{errors.testName}</p>}
                         </div>
@@ -408,7 +420,7 @@ const NewTestModal = ({
                         ) : mode == "copy" ? (
                                 <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                     <div className="newtest-modal-header">
-                                        <h5>Copy</h5>
+                                        <h5>{heading}</h5>
                                         <button className="close-btn" onClick={onClose}>
                                             &times;
                                         </button>
@@ -479,7 +491,7 @@ const NewTestModal = ({
                                                             type="text"
                                                             value={description}
                                                             className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
-                                                            onChange={(e) => setTestName(e.target.value)}
+                                                            onChange={(e) => setDescription(e.target.value)}
                                                             placeholder="Enter Description"
                                                         />
                                                         {errors.testName && <p className="error-message">{errors.testName}</p>}
@@ -513,7 +525,7 @@ const NewTestModal = ({
                                                             type="text"
                                                             value={instructions}
                                                             className={`newtest-form-control ${errors.testName ? 'error' : ''}`}
-                                                            onChange={(e) => setTestName(e.target.value)}
+                                                            onChange={(e) => setInstructions(e.target.value)}
                                                             placeholder="Enter Instrutcion"
                                                         />
                                                         {errors.testName && <p className="error-message">{errors.testName}</p>}
@@ -535,7 +547,7 @@ const NewTestModal = ({
                             ) : (
                                     <div className={`newtest-modal-content newtest-modal-content2 ${isBouncing ? "bounce" : ""}`} ref={modalRef}>
                                         <div className="newtest-modal-header">
-                                            <h5>Archive</h5>
+                                            <h5>{heading}</h5>
                                             <button className="close-btn" onClick={onClose}>
                                                 &times;
                                             </button>
@@ -544,11 +556,13 @@ const NewTestModal = ({
                                         <div className="newtest-modal-body">
                                             <div className="newtest-form-group">
                                                 <h6 className="pop-titale">You are about to trash the following projects:</h6>
-                                                <ul >
-                                                    <li className="delete">
-                                                        <h6>{testName}</h6>
-                                                    </li>
-                                                </ul>
+                                                        <ul >
+                                                            {selectedTest.map((test, index) => (
+                                                                <li key={index} className="delete-list">
+                                                                    <h6>{test.name}</h6>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
                                                 {errors.testName && <p className="error-message">{errors.testName}</p>}
                                             </div>
                                         </div>

@@ -289,6 +289,14 @@ input[type="file"]::file-selector-button {
     opacity: var(--create-btn-disabled-opacity);
 }
 
+.newqb-form-group ul{
+    margin-top: 20px;
+}
+
+.newqb-form-group ul .delete-list{
+    margin-left: 40px;
+}
+
 /* Responsive Styles */
 /* @media (max-width: 768px) {
     .first-column {

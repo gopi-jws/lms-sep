@@ -35,12 +35,10 @@ const TestSidebar = ({
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const location = useLocation();
   const [activeSection, setActiveSection] = useState("Alltest");
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
-  const [selectedTagName, setSelectedTagName] = useState("");
   const [selectedTagId, setSelectedTagId] = useState(null);
-  const [tagsList, setTagsList] = useState([]);
+
   const [modalHeading, setModalHeading] = useState("");
   const [editingTag, setEditingTag] = useState(null);
   const [mode, setMode] = useState("")
@@ -95,19 +93,18 @@ const TestSidebar = ({
 
  
   // Remove tag function (updates state + localStorage)
-  const removeTag = (id) => {
-    setTags(prev => prev.filter(tag => tag.id !== id)); // ✅ updates parent state
+  const removeTag = (removeTag) => {
+    setTags(prev => prev.filter(tag => tag.id !== removeTag.id)); // ✅ updates parent state
   };
 
-  const handleEditTag = (tag) => {
+  const handleEditTag = (tag) => {   
     setEditingTag(tag);
     setModalHeading("Edit Tag");
     setIsNewTagModalOpen(true);
   };
 
   const handleRemoveTag = (tag) => {
-    setSelectedTagName(tag.name);
-    setSelectedTagId(tag.id);
+    setSelectedTagId(tag);
     setModalHeading("Delete Tag");
     setIsRemoveModalOpen(true);
   };
@@ -211,8 +208,6 @@ const TestSidebar = ({
 
             <ul className="test-sidebar-menu tags">
               {tags?.map((tag, index) =>
-
-
               (
                 <li key={tag.id} className="tag-item">
                   <Link
@@ -244,9 +239,9 @@ const TestSidebar = ({
                         onEdit={() => handleEditTag(tag)}
                         onRemove={() => handleRemoveTag(tag)}
                         onClose={() => setShowMoreOptions(null)}
-                        tagId={tag.id}
-                        tagName={tag.name}
-                        tagColor={tag.color}
+                          tagId={tag.id}
+                          tagName={tag.name}
+                          tagColor={tag.color}
                       />
 
                     </div>
@@ -294,8 +289,7 @@ const TestSidebar = ({
           setIsNewTagModalOpen(false);
           setEditingTag(null);
         }}
-        onAddFolder={handleAddTag}
-
+        onAddTag={handleAddTag}
         heading={modalHeading}
         selectedSection={editingTag}
       />
@@ -314,16 +308,14 @@ const TestSidebar = ({
         isOpen={isRemoveModalOpen}
         onClose={() => {
           setIsRemoveModalOpen(false);
-          setSelectedTagName("");
           setSelectedTagId(null);
         }}
         mode="delete"
-        initialName={selectedTagName}
+        selectedTag={selectedTagId}
         heading={modalHeading}
         onSubmit={() => {
           removeTag(selectedTagId); // ✅ must use selectedTagId
           setIsRemoveModalOpen(false);
-          setSelectedTagName("");
           setSelectedTagId(null);
         }}
       />

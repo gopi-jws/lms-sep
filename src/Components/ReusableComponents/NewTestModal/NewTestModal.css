@@ -115,6 +115,7 @@
     margin-bottom: var(--form-group-margin-bottom);
 }
 
+
 .newtest-form-group label {
     display: var(--form-label-display);
     margin-bottom: var(--form-label-margin-bottom);
@@ -251,8 +252,12 @@ input[type="file"]::file-selector-button {
     opacity: var(--create-btn-disabled-opacity);
 }
 
+.newtest-form-group ul{
+    margin: 20px;
+}
+
 .delete-list{
-    margin: 20px 0px 20px 40px;
+    margin-left:20px;
     list-style: disc;
     font-weight: bolder;
 }

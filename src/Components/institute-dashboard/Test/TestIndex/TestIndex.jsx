@@ -74,10 +74,12 @@ const TestIndex = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
   const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false)
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
-  const [editingTest, setEditingTest] = useState(null)
+  const [editingTest, setEditingTest] = useState([])
   const [modalHeading, setModalHeading] = useState("");
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
   const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
+
+  const [ispinning, setIsSpinning] = useState(null)
   // const getSortedTests = () => {
   //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
 
@@ -92,12 +94,25 @@ const TestIndex = () => {
   //   });
   // };
 
+  // const [data, setData] = useState(() => {
+  //   const savedTests = JSON.parse(localStorage.getItem("tests"));
+  //   return savedTests || initialData;
+  // });
+
   const [data, setData] = useState(() => {
     const tests = JSON.parse(localStorage.getItem("tests"));
     const savedTests = tests
     return savedTests ? initialData : initialData;
   });
 
+  // useEffect(() => {
+  //   localStorage.setItem("tests", JSON.stringify(data));
+  // }, [data]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('tests'));
+    setData(stored);
+  }, []);
 
   const [tags, setTags] = useState(() => {
     ///localStorage.removeItem('testTags')
@@ -114,10 +129,6 @@ const TestIndex = () => {
 
 
   const [tick, setTick] = useState(0);
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('tests'));
-    setData(stored);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -274,10 +285,12 @@ const TestIndex = () => {
     const tagWithId = {
       id: getNextId('testTags'),
       ...newTag,
-      uestions: newTag.questions || []
+      questions: newTag.questions || []
     }
     setTags(prev => [...prev, tagWithId])
   }
+
+  
 
   const handleAddQuestionsToTag = (tagName, questionIds) => {
     setTags(prevTags =>
@@ -294,9 +307,9 @@ const TestIndex = () => {
       })
     );
     console.log("tagssssss", tags);
-
   };
 
+  
   const handleRemoveQuestionFromTag = (tagName, questionId) => {
     setTags(prevTags =>
       prevTags.map(tag => {
@@ -312,6 +325,10 @@ const TestIndex = () => {
   };
 
   const handleUpdateTest = (testId, updatedFields) => {
+    console.log(testId);
+    console.log(updatedFields);
+    
+    
     setData(prevData =>
       prevData.map(test =>
         test.id === testId
@@ -392,6 +409,16 @@ const TestIndex = () => {
     };
     setData(prev => [...prev, newTest]);
   };
+
+
+  const handleDownloadPdf = (row) =>{
+    setIsSpinning(row.id)
+    setTimeout(() => {
+      setIsSpinning(null)
+    }, 2000); 
+  }
+
+  
   // Add this useEffect for persisting data
   useEffect(() => {
     localStorage.setItem("tests", JSON.stringify(data));
@@ -431,15 +458,21 @@ const TestIndex = () => {
     setActiveTag("uncategorized")
   }
   const handleArchiveTest = (testId) => {
+    
     setData(prevData =>
-      prevData.map(test =>
-        test.id === testId
-          ? { ...test, archived: true,
-            //  lastModified: new Date().toISOString() 
-            }
-          : test
+      prevData.filter(test =>
+        !testId.some(st => st.id === test.id) // remove all selected ids
       )
-    );
+    )
+    // setData(prevData =>
+    //   prevData.map(test =>
+    //     test.id === testId
+    //       ? { ...test, archived: true,
+    //         //  lastModified: new Date().toISOString() 
+    //         }
+    //       : test
+    //   )
+    // );
 
     // Store archived test in localStorage 'archivetags' array only if not already present
     const archivedTest = data.find(test => test.id === testId);
@@ -454,9 +487,13 @@ const TestIndex = () => {
 
 
   const handleDeleteTest = (testId) => {
-    setData(prevData => prevData.filter(test => test.id !== testId));
-    console.log("deletd");
-
+    setData(prevData =>
+      prevData.filter(test =>
+        !testId.some(st => st.id === test.id) // remove all selected ids
+      )
+    )
+    
+    
     // Store deleted test in localStorage 'trashedTags' array only if not already present
     const trashedTest = data.find(test => test.id === testId);
     if (trashedTest) {
@@ -482,8 +519,6 @@ const TestIndex = () => {
     );
   };
   const handleActionClick = (action, row) => {
-    console.log("handleActionClick executed:", action, row);
-    
     setOpenDropdownId(null);
 
     switch (action) {
@@ -491,6 +526,7 @@ const TestIndex = () => {
         openModal(row.test);
         break;
       case "edit":
+        setModalHeading("Edit Test");
         setEditingTest({
           id: row.id,
           name: row.test,
@@ -501,6 +537,7 @@ const TestIndex = () => {
         setIsEditModalOpen(true);
         break;
       case "rename":
+        setModalHeading("Rename Test");
         setEditingTest({
           id: row.id,
           name: row.test,
@@ -520,23 +557,20 @@ const TestIndex = () => {
           name: row.test,
         });
         setIsCopyModalOpen(true);
+        setModalHeading("Copy Test");
         break;
       case "share":
         openShareModal(row.test);
+        setModalHeading("Share Test");
         break;
       case "archive":
-        setEditingTest({
-          id: row.id,
-          name: row.test,
-        });
+        setEditingTest([{ id: row.id, name: row.test }]);
+        setModalHeading("Archive Test");
         setIsArchivedModalOpen(true)
         break;
       case "delete":
-        setEditingTest({
-          id: row.id,
-          name: row.test,
-        });
-         setModalHeading("Delete Test");
+        setEditingTest([{ id: row.id, name: row.test }]);
+        setModalHeading("Delete Test");
         setIsDeleteModalOpen(true);
         break;
       case "restore":
@@ -681,9 +715,13 @@ const TestIndex = () => {
               <button
                 className="test-action-button pdf"
                 aria-label="Download PDF"
-                onClick={() => handleActionClick("pdf", row)}
-              >
-                <FaFilePdf />
+                onClick={() => { handleActionClick("pdf", row)}}
+                >
+                  {ispinning === row.id ? (
+                    <div className="spinner"></div>
+                  ) : (
+                    <FaFilePdf />
+                  )}
                 <span className="tooltip-text">Download PDF</span>
               </button>
               <button
@@ -744,7 +782,7 @@ const TestIndex = () => {
           onTagClick={handleTagClick}
           onUncategorizedClick={handleUncategorizedClick}
           activeTag={activeTag}
-          onAddTag={handleAddTag}
+          // onAddTag={handleAddTag}
           onCreateTest={handleCreateTest}
           archivedCount={data.filter(test => test.archived).length}
           trashedCount={data.filter(test => test.trashed).length}
@@ -787,10 +825,14 @@ const TestIndex = () => {
               }}
               onAddTag={handleAddTag}
               onAddQuestionsToTag={handleAddQuestionsToTag}
-              // isRenameModalOpen={isRenameModalOpen}
+              setModalHeading={setModalHeading}
               setIsRenameModalOpen={setIsRenameModalOpen}
+              setIsCopyModalOpen={setIsCopyModalOpen}
               setEditingTest={setEditingTest}
+              setIsDeleteModalOpen={setIsDeleteModalOpen}
+              setIsArchivedModalOpen={setIsArchivedModalOpen}
               allQuestions={data}
+              modalType="test"
             />
           </div>
 
@@ -813,8 +855,10 @@ const TestIndex = () => {
           onAddTag={handleAddTag}
           allQuestions={data}
         />
+
         {isEditModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
@@ -835,6 +879,7 @@ const TestIndex = () => {
 
         {isRenameModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isRenameModalOpen}
             onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
             initialName={editingTest?.name || ""}
@@ -850,6 +895,7 @@ const TestIndex = () => {
 
         {isNewTestModalOpen && (
           <NewTestModal
+            heading="Create New Test"
             isOpen={isNewTestModalOpen}
             onClose={() => setIsNewTestModalOpen(false)}
             onSubmit={handleCreateTest}
@@ -861,10 +907,10 @@ const TestIndex = () => {
           <NewTestModal
             isOpen={isDeleteModalOpen}
             onClose={() => { setIsDeleteModalOpen(false); setEditingTest(null); }}
-            initialName={editingTest?.name || ""}
+            selectedTest={editingTest}
             heading={modalHeading} 
-            onSubmit={(updatedFields) => {
-              handleDeleteTest(editingTest.id, updatedFields)
+            onSubmit={(deleteTests) => {
+              handleDeleteTest(deleteTests)
               setIsDeleteModalOpen(false)
             }}
             mode="delete"
@@ -875,6 +921,7 @@ const TestIndex = () => {
 
         {isCopyModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isCopyModalOpen}
             onClose={() => setIsCopyModalOpen(false)}
             initialName={editingTest?.name || ""}
@@ -886,11 +933,12 @@ const TestIndex = () => {
 
         {isArchivedModalOpen && (
           <NewTestModal
+            heading={modalHeading} 
             isOpen={isArchivedModalOpen}
             onClose={() => { setIsArchivedModalOpen(false); setEditingTest(null); }}
-            initialName={editingTest?.name || ""}
-            onSubmit={() => {
-              handleArchiveTest(editingTest.id);
+            selectedTest={editingTest}
+            onSubmit={(archivedTests) => {
+              handleArchiveTest(archivedTests);
               setIsArchivedModalOpen(false)
             }}
             mode="archive"
