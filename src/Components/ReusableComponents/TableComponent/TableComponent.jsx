@@ -430,7 +430,7 @@ const DataTable = ({
                                                                     ) : (
                                                                         // Preview: first 80 words with "..."
                                                                         <span className="truncate">
-                                                                            {row.question.split(" ").slice(0, 80).join(" ")}...
+                                                                            {row.question.split(" ").slice(0, 10).join(" ")}...
                                                                             {/* {row.question} */}
                                                                         </span>
                                                                     )

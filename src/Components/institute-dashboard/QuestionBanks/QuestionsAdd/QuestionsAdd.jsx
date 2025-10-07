@@ -178,7 +178,8 @@ const QuestionsAdd = () => {
     },
     {
       id: 10,
-      question: q1,
+      question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
+            Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
       answer: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
       marks: 3,

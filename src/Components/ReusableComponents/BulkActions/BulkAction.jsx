@@ -62,7 +62,6 @@ const BulkActions = ({
   };
 
   const handleAddToTag = (tagName) => {
-    console.log(tagName);
     
     try {
       const tag = tags.find(t => t.name === tagName);
@@ -70,8 +69,7 @@ const BulkActions = ({
         toast.error("Tag not found");
         return;
       }
-      console.log(selectedRows);
-      
+ 
       const newQuestions = selectedRows.filter(id => {
         if (tag.hasOwnProperty("questions")) {
           return !tag.questions.includes(id)
@@ -106,6 +104,39 @@ const BulkActions = ({
     } catch (error) {
       toast.error("Failed to add questions to tag");
       console.error("Error in handleAddToTag:", error);
+    }
+  };
+
+
+  const handleAddToFolder = (folderName) => {
+
+    try{
+      console.log(folderName);
+      
+      const folder = folder.find(f => f.name === folderName);
+
+      console.log(folder);
+      
+      if (!folder) {
+        toast.error("Folder not found");
+        return;
+      }
+
+      const newQuestions = selectedRows.filter(id => !folder.QB.includes(id));
+      
+      console.log("NewQuestions"+newQuestions);
+      
+
+      if (newQuestions.length > 0) {
+        onAddQBToFolder(folderName, newQuestions);
+        toast.success("Added to folder!");
+      } else {
+        toast.info("All selected questions already exist in this folder");
+      }
+
+    }catch(error){
+      toast.error("Failed to add QB to Folder");
+      console.error("Error in handleAddToFolder:", error);
     }
   };
 
@@ -501,7 +532,7 @@ const BulkActions = ({
                     <li
                       key={folder.id}
                       className={`tag-options-item ${alreadyTaggedCount === selectedRows.length ? "all-tagged" : ""}`}
-                      onClick={() => handleAddToTag(folder.name)}
+                      onClick={() => handleAddToFolder(folder.name)}
                     >
                       <div className="tag-container">
                         <span className="tick-mark">
