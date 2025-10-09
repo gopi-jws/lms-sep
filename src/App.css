@@ -29,7 +29,7 @@ html, body {
     --font-size-h5: 18px;
     --font-size-h6: 16px;
     --font-size-paragraph: 16px;
-    --font-weight-sidebar: 400;
+    --font-weight-sidebar: 500;
     --font-weight-table-head: 600;
     --font-weight-sidebar-head: 500;
     --font-weight-active: 700;
@@ -335,22 +335,91 @@ a{
 
 /* buttons styles */
 
-/* sidebar letters styles */
 .sidebar-contents {
-    padding: 7px 12px;
+    padding: 10px 12px;
     cursor: pointer;
-    border-radius: 0 !important;
-    transition: all 0.3s;
+    border-radius: 8px;
+    transition: all .3s;
+    color: var(--sidebar-text-color);
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 15px;
+    gap: var(--sidebar-gap);
+    font-size: var(--sidebar-font-size);
+    font-weight: var(--font-weight-sidebar);
     margin-bottom: 4px;
     position: relative;
     width: 100%;
+    margin: 0;
 }
 
+.sidebar-contents {
+  position: relative;
+}
 
+.sidebar-contents:hover {
+  background-color: #f4f5f6;
+  color: #037de2;
+}
+
+.sidebar-contents.active {
+  background-color: #f2f9ff;
+  color: #037de2;
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-active);
+}
+
+.newtest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* .sidebar-contents :hover {
+  background-color: #f2f9ff;
+} */
+
+.sidebar-contents:hover a {
+  color: #037de2;
+}
+
+.sidebar-contents::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background-color: #037de2;
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-contents::after {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0 !important;
+  transition: all 0.3s ease;
+}
+
+.sidebar-contents:hover::after {
+  opacity: 1 !important;
+  transform: translate(5px, -50%);
+}
+
+/* .sidebar-contents.active,
+.sidebar-contents.active:hover {} */
+
+.sidebar-contents.active a,
+.sidebar-contents.active:hover a {
+  color: #037de2;
+}
+
+.sidebar-contents.active::after {
+  opacity: 1 !important;
+  transform: translate(5px, -50%);
+}
 /* dropdown test styles */
 .dropdown-letters {
 

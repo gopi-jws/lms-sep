@@ -158,9 +158,7 @@
         padding: 15px 0;
     }
 
-    .sidebar-contents {
-        padding: 8px 12px;
-    }
+ 
 }
 
 @media (max-width: 768px) {
@@ -185,9 +183,7 @@
         font-size: 15px;
     }
 
-    .sidebar-contents {
-        padding: 12px 15px;
-    }
+
 
     .icon {
         font-size: 18px;
@@ -319,74 +315,6 @@
     color: #037de2;
 }
 
-.sidebar-contents {
-    position: relative;
-}
-
-.sidebar-contents:hover {
-    background-color: #f2f9ff;
-    color: #037de2;
-}
-
-.sidebar-contents.active {
-    background-color: #f2f9ff;
-    color: #037de2;
-    font-size: var(--font-size-regular);
-    font-weight: var(--font-weight-active);
-}
-
-.newtest-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sidebar-contents :hover {
-    background-color: #f2f9ff;
-}
-
-.sidebar-contents:hover a {
-    color: #037de2;
-}
-
-.sidebar-contents::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background-color: #037de2;
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-}
-
-.sidebar-contents::after {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0 !important;
-    transition: all 0.3s ease;
-}
-
-.sidebar-contents:hover::after {
-    opacity: 1 !important;
-    transform: translate(5px, -50%);
-}
-
-.sidebar-contents.active,
-.sidebar-contents.active:hover {}
-
-.sidebar-contents.active a,
-.sidebar-contents.active:hover a {
-    color: #037de2;
-}
-
-.sidebar-contents.active::after {
-    opacity: 1 !important;
-    transform: translate(5px, -50%);
-}
 
 .icon {
     font-size: 18px;
@@ -556,9 +484,6 @@
         padding: 20px;
     }
 
-    .sidebar-contents {
-        padding: 15px 10px;
-    }
 
     .icon {
         font-size: 24px;

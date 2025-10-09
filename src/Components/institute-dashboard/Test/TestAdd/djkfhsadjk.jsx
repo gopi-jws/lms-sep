@@ -25,7 +25,7 @@ const TestAdd = () => {
         {
             id: 1,
             question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:
-    <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
+          <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
             answer: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
             type: "MCQ",
             marks: 3,
@@ -171,6 +171,7 @@ const TestAdd = () => {
             result = factorial(5)
             print(result)`,
         },
+        
     ];
 
 

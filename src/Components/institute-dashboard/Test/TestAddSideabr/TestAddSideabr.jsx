@@ -1,9 +1,12 @@
 "use client"
 
-import React, { useState, useRef,useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./TestAddSideabr.css";
 import { FaPaperPlane, FaCopy, FaFilePdf, FaShare, FaArchive, FaTrashAlt, FaEdit, FaTag } from "react-icons/fa"
 import { BiSolidRename } from "react-icons/bi"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear,faChevronDown  } from "@fortawesome/free-solid-svg-icons";
+
 import {
   PlusCircle,
   Tag,
@@ -18,10 +21,10 @@ import {
   X,
   Menu,
   BookOpen,
-  Trash2,   
+  Trash2,
   MinusCircle,
-  ChevronDown, Edit, Settings, MoreVertical ,
-  Bookmark  
+  ChevronDown, Edit, Settings, MoreVertical,
+  Bookmark
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -37,37 +40,35 @@ import TestIndex from "../TestIndex/TestIndex";
 const TestAddSidebar = () => {
 
   const initialData = [
-  { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
-  { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
-  { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: "5 days ago by You", duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
-  { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: "8 hours ago by You", duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
-  { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: "3 days ago by You", duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
-  { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: "12 hours ago by You", duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: "1 day ago by You", duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: "6 hours ago by You", duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: "4 days ago by You", duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: "3 hours ago by You", duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
-  { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: "1 hour ago by You", duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
-];
+    { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
+    { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
+    { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: "5 days ago by You", duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
+    { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: "8 hours ago by You", duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
+    { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: "3 days ago by You", duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
+    { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: "12 hours ago by You", duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: "1 day ago by You", duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: "6 hours ago by You", duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: "4 days ago by You", duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: "3 hours ago by You", duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
+    { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: "1 hour ago by You", duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
+  ];
 
-const [selectedTest, setSelectedTest] = useState("")
-const [selectedTestId, setSelectedTestID] = useState("")
-const [editingTest, setEditingTest] = useState(null)
-const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
-const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-const [emails, setEmails] = useState([])
-
-
-
- 
-
-  
-const { id } = useParams(); // id is a string from URL
+  const [selectedTest, setSelectedTest] = useState("")
+  const [selectedTestId, setSelectedTestID] = useState("")
+  const [editingTest, setEditingTest] = useState(null)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+  const [emails, setEmails] = useState([])
 
 
-const testItem = initialData.find(item => item.id === Number(id)); // convert id to number
+
+
+  const { id } = useParams(); // id is a string from URL
+
+
+  const testItem = initialData.find(item => item.id === Number(id)); // convert id to number
 
 
 
@@ -80,7 +81,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
   const handleNewQuestionClick = () => {
     const id = "1";
     sessionStorage.setItem("testQuestionData", JSON.stringify({ id }));
-    window.open(`/lms-sep/test/${id}/movetest/testquestionadd`, "_blank");
+    window.open(`/lms-sep1/test/${id}/movetest/testquestionadd`, "_blank");
   };
 
   const handleAddFolder = ({ name, color }) => {
@@ -112,6 +113,8 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0'];
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const [testInfo] = useState({
     marks: 100,
     noOfQuestions: 50,
@@ -119,7 +122,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
     duration: "2h",
   });
 
-  const [mode,setMode] = useState('')
+  const [mode, setMode] = useState('')
   const [showDescDropdown, setShowDescDropdown] = useState(false);
   // const [showInstrDropdown, setShowInstrDropdown] = useState(false);
 
@@ -149,17 +152,17 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
   //   setMode('instr');
   // };
   const [data, setData] = useState(() => {
-      const tests = JSON.parse(localStorage.getItem("tests"));
-      const savedTests = tests
-      return savedTests ? initialData : initialData;
-    });
+    const tests = JSON.parse(localStorage.getItem("tests"));
+    const savedTests = tests
+    return savedTests ? initialData : initialData;
+  });
 
-   const [tick, setTick] = useState(0);
-    useEffect(() => {
-      const stored = JSON.parse(localStorage.getItem('tests'));
-      setData(stored);
-    }, []);
-    
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('tests'));
+    setData(stored);
+  }, []);
+
 
   const openModal = (testName) => {
     setSelectedTest(testName.test)
@@ -215,7 +218,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
   };
 
 
-  const handleActionClick = (action,testItem) => {
+  const handleActionClick = (action, testItem) => {
     switch (action) {
 
       case "desc":
@@ -310,6 +313,11 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
 
   const isActive = (path) => location.pathname === path;
 
+  const handleSettingsClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
@@ -329,7 +337,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
             </button>
           </div>
         </div>
-         
+
         <div className="test-sidebar-scroll">
 
           <div className=" test-sidebar-section">
@@ -370,7 +378,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
                         <div className="w-100 d-flex justify-content-between align-items-center">
                           <span className="sidebar-letters">{tag}</span>
                           <button className="tag-button">
-                            <span className="tag-dropdown-toggle" onClick={() => {handleTagClick(index)}}></span>
+                            <span className="tag-dropdown-toggle" onClick={() => { handleTagClick(index) }}></span>
                           </button>
                           <TagActionsDropdown
                             isOpen={showMoreOptions === index}
@@ -397,82 +405,90 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
           </div>
           <hr />
           <div className="test-sidebar-section">
-             <h3 className="sidebar-section-title">Actions</h3>
-             <ul className="test-sidebar-menu">
-              <li>
-                <div
-                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
-                  aria-label="Dispatched"
-                  onClick={() => openModal(testItem)}
-                >
-                  <Send className="icon" size={18} />
-                  <span className="sidebar-letters">Published</span>
+            <h3 className="sidebar-section-title">Actions</h3>
+            <div className="settings-dropdown-container" ref={dropdownRef}>
+              {/* Settings Button */}
+              <button
+                className="settings-trigger-btn sidebar-contents"
+                onClick={handleSettingsClick}
+                aria-label="Test settings"
+                aria-expanded={isDropdownOpen}
+              >
+                <FontAwesomeIcon icon={faGear} className="icon" size="lg" />
+                Settings <span className="tag-dropdown-toggle ms-auto"></span>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="settings-dropdown-menu">
+                  <ul className="test-sidebar-menu">
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                         onClick={() => openModal(testItem)}
+                      >
+                        <Send className="icon" size={18} />
+                        <span className="dropdown-text">Published</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                       onClick={() => handleActionClick("edit", testItem)}
+                      >
+                        <FaEdit className="icon" size={18} />
+                        <span className="dropdown-text">Edit</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={()=>handleActionClick("pdf")}
+                      >
+                        <FaFilePdf className="icon" size={18} />
+                        <span className="dropdown-text">Download</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("rename", testItem)}
+                      >
+                        <BiSolidRename className="icon" size={18} />
+                        <span className="dropdown-text">Rename</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                       onClick={() => openShareModal(testItem.test)}
+                      >
+                        <Share2 className="icon" size={18} />
+                        <span className="dropdown-text">Shared with me</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={()=>handleActionClick("archive")}
+                      >
+                        <Archive className=" icon" size={18} />
+                        <span className="dropdown-text">Archived</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={()=>handleActionClick("delete")}
+                      >
+                        <Trash2 className="icon" size={18} />
+                        <span className="dropdown-text">Trashed</span>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
-              </li>
-              <li>
-                <div
-                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
-                  aria-label="Dispatched"
-                  onClick={() => handleActionClick("edit", testItem)}
-                >
-                  <FaEdit className="icon" size={18}/>
-                  <span className="sidebar-letters">Edit</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
-                  aria-label="Dispatched"
-                  onClick={()=>handleActionClick("pdf")}
-                >
-                  <FaFilePdf className="icon" size={18} />
-                  <span className="sidebar-letters">Download</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
-                  aria-label="Dispatched"
-                  onClick={() => handleActionClick("rename", testItem)}
-                >
-                  <BiSolidRename className="icon" size={18}/>
-                  <span className="sidebar-letters">Rename</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  to="/test/shared-with-me"
-                  className={`sidebar-contents ${activeSection === "shared-with-me" ? "active" : ""}`}
-                  aria-label="Shared with me"
-                  onClick={() => openShareModal(testItem.test)}
-                >
-                  <Share2 className="icon" size={18} />
-                  <span className="sidebar-letters">Shared with me</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  to="/test/archived"
-                  className={`sidebar-contents ${activeSection === "archived" ? "active" : ""}`}
-                  aria-label="Archived"
-                  onClick={()=>handleActionClick("archive")}
-                >
-                  <Archive className="icon" size={18} />
-                  <span className="sidebar-letters">Archived</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  to="/test/trashed"
-                  className={`sidebar-contents ${activeSection === "trashed" ? "active" : ""}`}
-                  aria-label="Trashed"
-                  onClick={()=>handleActionClick("delete")}
-                >
-                  <Trash2 className="icon" size={18} />
-                  <span className="sidebar-letters">Trashed</span>
-                </div>
-              </li>
-             </ul>
+              )}
+            </div>
           </div>
           <hr />
           <div className="test-sidebar-section">
@@ -511,7 +527,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
                       <span className="sidebar-letters">Description</span>
                     </div>
                     <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={()=>handleActionClick("desc")}>
+                      <button className="dropdown-toggle3" onClick={() => handleActionClick("desc")}>
                         <MoreVertical size={16} />
                       </button>
                     </div>
@@ -522,7 +538,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
                   <TagActionsDropdown
                     isOpen={true}
                     mode="desc"
-                    onEdit={() => {setShowDescDropdown(true)}}
+                    onEdit={() => { setShowDescDropdown(true) }}
                     onRemove={() => console.log("Remove Description")}
                     onClose={() => setActiveDropdown(null)}
                   />
@@ -537,7 +553,7 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
                       <span className="sidebar-letters">Instruction</span>
                     </div>
                     <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={()=>handleActionClick("instr")}>
+                      <button className="dropdown-toggle3" onClick={() => handleActionClick("instr")}>
                         <MoreVertical size={16} />
                       </button>
                     </div>
@@ -595,13 +611,13 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
         initialDescription={testItem.description}
         initialInstructions={testItem.instructions}
       />
-      
-      <PublishModal 
-      isOpen={isModalOpen} 
-      tags={tags} onClose={closeModal} 
-      selectedTest={selectedTest} 
-      selectedTestId={selectedTestId} 
-      onPublish={refreshTests} 
+
+      <PublishModal
+        isOpen={isModalOpen}
+        tags={tags} onClose={closeModal}
+        selectedTest={selectedTest}
+        selectedTestId={selectedTestId}
+        onPublish={refreshTests}
       />
 
       <ShareModal
@@ -611,42 +627,42 @@ const testItem = initialData.find(item => item.id === Number(id)); // convert id
         setEmails={setEmails}
         testName={selectedTest}
       />
-      
-        {isEditModalOpen && (
-                 <NewTestModal
-                   isOpen={isEditModalOpen}
-                   onClose={() => {
-                     setIsEditModalOpen(false);
-                     setEditingTest(null);
-                   }}
-                   initialName={editingTest?.name || ""}
-                   initialDuration={editingTest?.duration || 60}
-                   initialDescription={editingTest?.description || ""}
-                   initialInstructions={editingTest?.instructions || ""}
-                   onSubmit={(updatedFields) => {
-                     handleUpdateTest(editingTest.id, updatedFields);
-                     setIsEditModalOpen(false);
-                     setEditingTest(null);
-                   }}
-                   mode="edit"
-                 />
-          )}
+
+      {isEditModalOpen && (
+        <NewTestModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingTest(null);
+          }}
+          initialName={editingTest?.name || ""}
+          initialDuration={editingTest?.duration || 60}
+          initialDescription={editingTest?.description || ""}
+          initialInstructions={editingTest?.instructions || ""}
+          onSubmit={(updatedFields) => {
+            handleUpdateTest(editingTest.id, updatedFields);
+            setIsEditModalOpen(false);
+            setEditingTest(null);
+          }}
+          mode="edit"
+        />
+      )}
 
 
-         {isRenameModalOpen && (
-                  <NewTestModal
-                    isOpen={isRenameModalOpen}
-                    onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
-                    initialName={editingTest?.name || ""}
-                    mode="rename"
-                    onSubmit={(updatedFields) => {
-                      // updatedFields will be { name: 'new name' }
-                      handleRenameTest(editingTest.id, updatedFields);
-                      setIsRenameModalOpen(false);
-                      setEditingTest(null);
-                    }}
-                  />
-          )}
+      {isRenameModalOpen && (
+        <NewTestModal
+          isOpen={isRenameModalOpen}
+          onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
+          initialName={editingTest?.name || ""}
+          mode="rename"
+          onSubmit={(updatedFields) => {
+            // updatedFields will be { name: 'new name' }
+            handleRenameTest(editingTest.id, updatedFields);
+            setIsRenameModalOpen(false);
+            setEditingTest(null);
+          }}
+        />
+      )}
     </div>
   );
 };

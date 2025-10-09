@@ -532,3 +532,8 @@ a {
   line-height: 1.6em;
   max-height: 3em;
 }
+.questions-page-table .tube-bulk-actions-container{
+   position: absolute;
+   bottom: 3.5rem;
+   right: 0;
+}

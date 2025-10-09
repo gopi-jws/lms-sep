@@ -98,7 +98,13 @@
   position: relative;
 }
 
-.nav-item:hover,
+.nav-item:hover{
+  background-color: #f4f5f6;
+  color: #037de2;
+  font-weight: 500;
+}
+
+
 .nav-item.active {
   background-color: #f0f7ff;
   color: #037de2;

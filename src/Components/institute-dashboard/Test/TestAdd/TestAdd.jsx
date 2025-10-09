@@ -18,7 +18,7 @@ const TestAdd = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const testName = location.state?.testName || "Unknown Test"
-  const INITIAL_ROWS_PER_PAGE = 10
+  const INITIAL_ROWS_PER_PAGE = 5
   const data = [
     {
       id: 1,
@@ -289,7 +289,7 @@ const TestAdd = () => {
       setRowsPerPage(INITIAL_ROWS_PER_PAGE);
       setExpandedRows([]); // Collapse all rows
     }
-    setFullViewMode(!fullViewMode);
+    setFullViewMode((prev) => !prev);
   };
   
   // Question CRUD operations

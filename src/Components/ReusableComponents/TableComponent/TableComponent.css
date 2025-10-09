@@ -538,43 +538,33 @@ tr:hover {
   max-width: 300px; */
 }
 
-.view-solution-btn {
-  padding: 8px 20px;    
+.view-solution-btn {  
   margin-top: 10px;      /* px-5 py-2 equivalent */
   border-radius: 50px;         /* rounded-lg */
-  font-weight: 600;           /* font-semibold */
-  color: #fff;                /* text-white */
+  font-weight: 600;           /* font-semibold */        
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* shadow-md */
-  border: none;
-  outline: none;
-}
-
-.view-solution-btn:hover {
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* hover:shadow-lg */
-}
-
-.view-solution-btn.view {
-  background-color: #3b82f6;  /* bg-blue-500 */
+  color: var(--link-color);  
 }
 
 .view-solution-btn.view:hover {
-  background-color: #2563eb;  /* hover:bg-blue-600 */
+  color: var(--link-color);  
+  text-decoration: underline;
 }
 
 .view-solution-btn.hide {
-  background-color: #ef4444;  /* bg-red-500 */
+  color: #ef4444;  /* bg-red-500 */
 }
 
-.view-solution-btn.hide:hover {
-  background-color: #dc2626;  /* hover:bg-red-600 */
+.view-solution-btn.hide:hover{
+  color: #ef4444;
+  text-decoration: underline;
 }
 
 /* Remove top border for question row */
 .question-row td {
     border-top: none !important;
-    background: #f0f7ff;
+    /* background: #f0f7ff; */
 }
 
 .question-td{
@@ -584,6 +574,7 @@ tr:hover {
   justify-content: center;
   gap: 4px;
   text-align: center;
+  color: #6c6c6c;
 }
 
 .type-badge{
@@ -622,3 +613,21 @@ padding-top: 40px;
   flex-direction: column;
 }
 
+.rows-iteam td{
+  padding: 0;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+.truncate p{
+  margin-bottom: 0;
+}
+
+.question-row .row-link{
+  color: var(--sidebar-text-color)
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef} from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { FaArrowDown, FaArrowUp, FaSearch, FaPlus, FaCheck, FaMinus, FaEye } from "react-icons/fa"
 import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
@@ -260,62 +260,62 @@ const DataTable = ({
             <div className="table-wrapper">
                 <table className="custom-data-table">
                     {!showQuestionRow && (
-                     <thead>
-                        <tr>
-                            {selectableRows && (
-                                <th className="col-checkbox">
-                                    <div className="custom-checkbox-container">
-                                        <input
-                                            type="checkbox"
-                                            ref={selectAllCheckboxRef}
-                                            onChange={(e) => {
-                                                e.stopPropagation()
-                                                handleSelectAll(e)
-                                            }}
-                                            checked={selectedRows.length === data.length && data.length > 0}
-                                        />
-                                        {selectedRows.length > 0 && selectedRows.length < data.length ? (
-                                            <FaMinus className="checkbox-icon indeterminate-icon" />
-                                        ) : selectedRows.length === data.length && data.length > 0 ? (
-                                            <FaCheck className="checkbox-icon checked-icon" />
-                                        ) : null}
-                                    </div>
-                                </th>
-                            )}
+                        <thead>
+                            <tr>
+                                {selectableRows && (
+                                    <th className="col-checkbox">
+                                        <div className="custom-checkbox-container">
+                                            <input
+                                                type="checkbox"
+                                                ref={selectAllCheckboxRef}
+                                                onChange={(e) => {
+                                                    e.stopPropagation()
+                                                    handleSelectAll(e)
+                                                }}
+                                                checked={selectedRows.length === data.length && data.length > 0}
+                                            />
+                                            {selectedRows.length > 0 && selectedRows.length < data.length ? (
+                                                <FaMinus className="checkbox-icon indeterminate-icon" />
+                                            ) : selectedRows.length === data.length && data.length > 0 ? (
+                                                <FaCheck className="checkbox-icon checked-icon" />
+                                            ) : null}
+                                        </div>
+                                    </th>
+                                )}
 
-                            {columns.map((col, colIndex) => (
-                                <th
-                                    key={colIndex}
-                                    className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`}
-                                    style={{ width: col.width || "auto" }}
-                                >
-                                    <div className="table-header-content" style={{ display: "flex", alignItems: "center" }}>
-                                        <span
-                                            style={{ cursor: col.selector ? "pointer" : "default" }}
-                                            onClick={() => col.selector && handleSort(col.selector)}
-                                        >
-                                            {col.name}
-                                        </span>
-                                        {sortColumn === col.selector && (
-                                            isAscending
-                                                ? <FaArrowUp
-                                                    className="ml-2 sorting-arrow"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => col.selector && handleSort(col.selector)}
-                                                />
-                                                : <FaArrowDown
-                                                    className="ml-2 sorting-arrow"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => col.selector && handleSort(col.selector)}
-                                                />
-                                        )}
-                                    </div>
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
+                                {columns.map((col, colIndex) => (
+                                    <th
+                                        key={colIndex}
+                                        className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`}
+                                        style={{ width: col.width || "auto" }}
+                                    >
+                                        <div className="table-header-content" style={{ display: "flex", alignItems: "center" }}>
+                                            <span
+                                                style={{ cursor: col.selector ? "pointer" : "default" }}
+                                                onClick={() => col.selector && handleSort(col.selector)}
+                                            >
+                                                {col.name}
+                                            </span>
+                                            {sortColumn === col.selector && (
+                                                isAscending
+                                                    ? <FaArrowUp
+                                                        className="ml-2 sorting-arrow"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => col.selector && handleSort(col.selector)}
+                                                    />
+                                                    : <FaArrowDown
+                                                        className="ml-2 sorting-arrow"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => col.selector && handleSort(col.selector)}
+                                                    />
+                                            )}
+                                        </div>
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
                     )}
-                    
+
                     <tbody>
                         {data.length === 0 ? (
                             <tr>
@@ -350,105 +350,114 @@ const DataTable = ({
 
                                         {showQuestionRow ? (
                                             <div className="rows-iteam">
-                                            <td>
-                                                <div className="table-tq-wrapper">
-                                                    {/* Non-Actions columns */}
-                                                    <div className="table-tq-columns">
-                                                        {columns
-                                                            .filter(col => col.name !== "Actions")
-                                                            .map((col, colIndex) => (
-                                                                <div
-                                                                    key={colIndex}
-                                                                    className={`col-${typeof col.name === "string"
+                                                <td>
+                                                    <div className="table-tq-wrapper">
+                                                        {/* Non-Actions columns */}
+                                                        <div className="table-tq-columns">
+                                                            {columns
+                                                                .filter(col => col.name !== "Actions")
+                                                                .map((col, colIndex) => (
+                                                                    <div
+                                                                        key={colIndex}
+                                                                        className={`col-${typeof col.name === "string"
                                                                             ? col.name.toLowerCase().replace(/\s+/g, "-")
                                                                             : "default-column"
-                                                                        }`}
-                                                                >
-                                                                    <div className={showQuestionRow ? "question-td" : ""}>
-                                                                        {showQuestionRow && (
-                                                                            <span className="col-name">{col.name}:</span>
-                                                                        )}
-                                                                        <div>
-                                                                            <span className="col-cell">
-                                                                                {col.cell ? col.cell(row) : row[col.selector]}
-                                                                            </span>
+                                                                            }`}
+                                                                    >
+                                                                        <div className={showQuestionRow ? "question-td" : ""}>
+                                                                            {showQuestionRow && (
+                                                                                <span className="col-name">{col.name}:</span>
+                                                                            )}
+                                                                            <div>
+                                                                                <span className="col-cell">
+                                                                                    {col.cell ? col.cell(row) : row[col.selector]}
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            ))}
-                                                    </div>
+                                                                ))}
+                                                        </div>
 
-                                                    {/* Actions column (separate div for spacing) */}
-                                                    <div className="table-tq-actions">
-                                                        {columns
-                                                            .filter(col => col.name === "Actions")
-                                                            .map((col, colIndex) => (
-                                                                <div key={colIndex} className="test-col-actions">
-                                                                    <span className="col-cell">
-                                                                        {col.cell ? col.cell(row) : row[col.selector]}
-                                                                    </span>
-                                                                </div>
-                                                            ))}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                                    {showQuestionRow && (
-                                                        <tr
-                                                            className="question-row  bg-gray-50 cursor-pointer"
-                                                            onClick={() => toggleQuestionView(row.id)}
-                                                        >
-                                                            <td colSpan={columns.length + (selectableRows ? 1 : 0)} className="p-2 row-link ans-item">
-                                                                {row.question ? (
-                                                                    expandedQuestions.includes(row.id) ? (
-                                                                        <>
-                                                                            {/* Full question */}
-                                                                            {/* the question convent to latex and code */}
-                                                                            <QuestionEditor content={row.question} mode={row.mode}  />    
-                                                                            {/* View Solution button */}
-                                                                            {row.answer && (
-                                                                                <div className="mt-2">
-                                                                                    <button
-                                                                                        className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"}`}
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation(); // Prevent toggling question collapse
-                                                                                            toggleAnswerView(row.id);
-                                                                                        }}
-                                                                                    >
-                                                                                        {showAnswers.includes(row.id) ? "Hide Solution" : "View Solution"}
-                                                                                    </button>
-                                                                                </div>
-                                                                            )}
-
-                                                                            {/* Answer content */}
-                                                                            {showAnswers.includes(row.id) && row.answer && (
-                                                                                <div className="mt-2 p-2 bg-gray-100 rounded">
-                                                                                    {/* <LatexRenderer content={row.answer} /> */}
-                                                                                <QuestionEditor content={row.answer} mode="both" />    
-                                                                                </div>
-                                                                            )}
-                                                                        </>
-                                                                    ) : (
-                                                                        // Preview: first 80 words with "..."
-                                                                        <span className="truncate">
-                                                                            {row.question.split(" ").slice(0, 10).join(" ")}...
-                                                                            {/* {row.question} */}
+                                                        {/* Actions column (separate div for spacing) */}
+                                                        <div className="table-tq-actions">
+                                                            {columns
+                                                                .filter(col => col.name === "Actions")
+                                                                .map((col, colIndex) => (
+                                                                    <div key={colIndex} className="test-col-actions">
+                                                                        <span className="col-cell">
+                                                                            {col.cell ? col.cell(row) : row[col.selector]}
                                                                         </span>
-                                                                    )
+                                                                    </div>
+                                                                ))}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {showQuestionRow && (
+                                                    <tr
+                                                        className="question-row bg-gray-50 cursor-pointer"
+                                                        onClick={() => {
+                                                            if (!fullViewMode) toggleQuestionView(row.id); // only toggle in normal mode
+                                                        }}
+                                                    >
+                                                        <td
+                                                            colSpan={columns.length + (selectableRows ? 1 : 0)}
+                                                            className="p-2 row-link ans-item"
+                                                        >
+                                                            {row.question ? (
+                                                                fullViewMode || expandedQuestions.includes(row.id) ? (
+                                                                    <>
+                                                                        {/* ✅ Full Question (rendered in both expanded or full view mode) */}
+                                                                        <QuestionEditor content={row.question} mode={row.mode} />
+
+                                                                        {/* ✅ View Solution button (works same as before) */}
+                                                                        {row.answer && (
+                                                                            <div className="mt-2">
+                                                                                <a
+                                                                                    className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"
+                                                                                        }`}
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation(); // prevent row collapse in normal mode
+                                                                                        toggleAnswerView(row.id);
+                                                                                    }}
+                                                                                >
+                                                                                    {showAnswers.includes(row.id)
+                                                                                        ? "Hide Solution"
+                                                                                        : "Solution"}
+                                                                                </a>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* ✅ Answer (only show when toggled) */}
+                                                                        {showAnswers.includes(row.id) && row.answer && (
+                                                                            <div className="mt-2 p-2 bg-gray-100 rounded">
+                                                                                <QuestionEditor content={row.answer} mode="both" />
+                                                                            </div>
+                                                                        )}
+                                                                    </>
                                                                 ) : (
-                                                                    "No Question"
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    )} 
-                                            
+                                                                    // ✅ Collapsed Preview (normal mode only)
+                                                                    <span className="truncate block w-full">
+                                                                        {row.question.split(" ").length > 50
+                                                                            ? row.question.split(" ").slice(0, 50).join(" ") + "..."
+                                                                            : row.question}
+                                                                    </span>
+                                                                )
+                                                            ) : (
+                                                                "No Question"
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                )}
+
+
                                             </div>
                                         ) : (
                                             columns.map((col, colIndex) => (
                                                 <td
                                                     key={colIndex}
                                                     className={`col-${typeof col.name === "string"
-                                                            ? col.name.toLowerCase().replace(/\s+/g, "-")
-                                                            : "default-column"
+                                                        ? col.name.toLowerCase().replace(/\s+/g, "-")
+                                                        : "default-column"
                                                         }`}
                                                 >
                                                     <div className={showQuestionRow ? "question-td" : ""}>
@@ -464,8 +473,8 @@ const DataTable = ({
                                         )}
                                     </tr>
 
-                                  
-                                  {/* test question and question */}
+
+                                    {/* test question and question */}
                                     {showQuestionRow && (
                                         // <tr
                                         //     className="question-row  bg-gray-50 cursor-pointer"
