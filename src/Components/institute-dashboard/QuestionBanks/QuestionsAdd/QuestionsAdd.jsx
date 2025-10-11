@@ -38,7 +38,8 @@ const QuestionsAdd = () => {
       correctAnswer: 0,
       isLaTeXEnabled: true,
       hasImages: true,
-      mode:"both"
+      codeMode: true,
+      latexMode:true,
     },
     {
       id: 2,
@@ -61,7 +62,9 @@ const QuestionsAdd = () => {
       ],
       correctAnswer: 3,
       isLaTeXEnabled: true,
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 4,
@@ -85,6 +88,8 @@ const QuestionsAdd = () => {
         "Cannot be determined",
       ],
       correctAnswer: 0,
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 5,
@@ -103,7 +108,9 @@ const QuestionsAdd = () => {
       tolerance: "±5%",
       isLaTeXEnabled: true,
       units: "m/s",
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 6,
@@ -116,7 +123,9 @@ const QuestionsAdd = () => {
       created: "16/03/2025",
       modified: "1 week ago",
       correctAnswer: true,
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 7,
@@ -138,7 +147,9 @@ const QuestionsAdd = () => {
       ],
       correctAnswer: 2,
       isLaTeXEnabled: true,
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 8,
@@ -153,13 +164,20 @@ const QuestionsAdd = () => {
       options: ["రబి, ఖరీఫ్, బోనాల", "శీతకాల, వేసవికాల, ఆదివార", "పంటల్ని వేరే విభజించలేదు", "ఉష్ణకటిన, ట్రోపికల్, మాన్సూన్"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 9,
-      question: `In Python, what will be the output of the following code? def factorial(n):
-        <pre><code class="language-python">def add(a, b):
-  return a + b</code></pre>`,
+      question: `In Python, what will be the output of the following code? 
+      ~~~python
+        fruits = ["apple", "banana", "cherry"]
+        for x in fruits:
+            print(x)
+            if x == "banana":
+                break
+        ~~~`,
       answer: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
@@ -167,14 +185,15 @@ const QuestionsAdd = () => {
       isLaTeXEnabled: false,
       hasCode: true,                 
       mode: "both",
-      code: `def factorial(n):
-            if n == 0:
-            return 1
-            else:
-            return n * factorial(n-1)
-  
-            result = factorial(5)
-            print(result)`,
+      code: `~~~python
+fruits = ["apple", "banana", "cherry"]
+for x in fruits:
+    print(x)
+    if x == "banana":
+        break
+~~~`,
+      codeMode: true,
+      latexMode: true,
     },
     {
       id: 10,
@@ -189,7 +208,9 @@ const QuestionsAdd = () => {
       modified: "1 day ago",
       correctAnswers: [0, 2, 4], // Indices of correct options
       isLaTeXEnabled: false,
-      mode: "both"
+      mode: "both",
+      codeMode: true,
+      latexMode: true,
     }
   ];
 

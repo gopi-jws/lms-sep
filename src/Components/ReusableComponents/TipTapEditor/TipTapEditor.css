@@ -1,0 +1,334 @@
+/* TipTap Editor Container */
+.tiptap-editor {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+}
+
+/* Menu Bar Styles */
+.menu-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-right: 12px;
+    border-right: 1px solid #e2e8f0;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: white;
+    color: #4b5563;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+.toolbar-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #374151;
+}
+
+.toolbar-btn.is-active {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+/* Editor Content Area */
+.tiptap-editor .ProseMirror {
+    min-height: 200px;
+    padding: 16px;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.tiptap-editor .ProseMirror:focus {
+    outline: none;
+    background: #fafafa;
+}
+
+/* Placeholder */
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #9ca3af;
+    pointer-events: none;
+    height: 0;
+}
+
+/* Headings */
+.tiptap-editor .ProseMirror h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin: 1.5rem 0 1rem 0;
+    color: #111827;
+}
+
+.tiptap-editor .ProseMirror h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1.25rem 0 0.75rem 0;
+    color: #111827;
+}
+
+.tiptap-editor .ProseMirror h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+    color: #111827;
+}
+
+/* Paragraphs */
+.tiptap-editor .ProseMirror p {
+    margin: 0 0 1rem 0;
+}
+
+/* LISTS - FIXED STYLING */
+.tiptap-editor .ProseMirror ul,
+.tiptap-editor .ProseMirror ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+}
+
+/* Bullet List Styling */
+.tiptap-editor .ProseMirror ul {
+    list-style-type: disc !important;
+}
+
+.tiptap-editor .ProseMirror ul li {
+    display: list-item !important;
+    list-style-type: disc !important;
+    margin: 0.25rem 0;
+    padding-left: 0.25rem;
+}
+
+.tiptap-editor .ProseMirror ul li::marker {
+    color: #4b5563;
+    font-size: 1.2em;
+}
+
+/* Nested bullet lists */
+.tiptap-editor .ProseMirror ul ul {
+    list-style-type: circle !important;
+    margin: 0.25rem 0;
+}
+
+.tiptap-editor .ProseMirror ul ul ul {
+    list-style-type: square !important;
+}
+
+/* Numbered List Styling */
+.tiptap-editor .ProseMirror ol {
+    list-style-type: decimal !important;
+}
+
+.tiptap-editor .ProseMirror ol li {
+    display: list-item !important;
+    list-style-type: decimal !important;
+    margin: 0.25rem 0;
+    padding-left: 0.25rem;
+}
+
+.tiptap-editor .ProseMirror ol li::marker {
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* Nested numbered lists */
+.tiptap-editor .ProseMirror ol ol {
+    list-style-type: lower-alpha !important;
+}
+
+.tiptap-editor .ProseMirror ol ol ol {
+    list-style-type: lower-roman !important;
+}
+
+/* List items */
+.tiptap-editor .ProseMirror li {
+    display: list-item;
+    margin: 0.25rem 0;
+    padding-left: 0.25rem;
+}
+
+.tiptap-editor .ProseMirror li p {
+    margin: 0;
+    display: inline;
+}
+
+/* Code Blocks */
+.tiptap-editor .ProseMirror .code-block {
+    background: #1f2937;
+    color: #f9fafb;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.tiptap-editor .ProseMirror .inline-code {
+    background: #f3f4f6;
+    color: #dc2626;
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875em;
+    border: 1px solid #e5e7eb;
+}
+
+/* Tables */
+.tiptap-editor .ProseMirror .editor-table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+    overflow: hidden;
+    table-layout: fixed;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.tiptap-editor .ProseMirror .editor-table td,
+.tiptap-editor .ProseMirror .editor-table th {
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    min-width: 100px;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.tiptap-editor .ProseMirror .editor-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    text-align: left;
+    color: #374151;
+}
+
+/* Images */
+.tiptap-editor .ProseMirror .editor-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 0.5rem 0;
+    border: 1px solid #e5e7eb;
+}
+
+.tiptap-editor .ProseMirror .editor-image.ProseMirror-selectednode {
+    outline: 2px solid #3b82f6;
+}
+
+/* Text Alignment */
+.tiptap-editor .ProseMirror [data-text-align="left"] {
+    text-align: left;
+}
+
+.tiptap-editor .ProseMirror [data-text-align="center"] {
+    text-align: center;
+}
+
+.tiptap-editor .ProseMirror [data-text-align="right"] {
+    text-align: right;
+}
+
+/* Math Equations - Basic Styling */
+.tiptap-editor .ProseMirror .math-inline {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Times New Roman', serif;
+    font-style: italic;
+    border: 1px solid #e9ecef;
+    color: #d63384;
+}
+
+/* Blockquotes */
+.tiptap-editor .ProseMirror blockquote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: #6b7280;
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Horizontal Rule */
+.tiptap-editor .ProseMirror hr {
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 2rem 0;
+}
+
+/* Links */
+.tiptap-editor .ProseMirror a {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.tiptap-editor .ProseMirror a:hover {
+    color: #1d4ed8;
+}
+
+/* Bold and Italic */
+.tiptap-editor .ProseMirror strong {
+    font-weight: 700;
+    color: #111827;
+}
+
+.tiptap-editor .ProseMirror em {
+    font-style: italic;
+    color: #4b5563;
+}
+
+.tiptap-editor .ProseMirror u {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-bar {
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .toolbar-group {
+        padding-right: 8px;
+    }
+
+    .toolbar-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .tiptap-editor .ProseMirror {
+        padding: 12px;
+        font-size: 16px;
+    }
+}

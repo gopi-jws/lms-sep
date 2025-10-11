@@ -407,7 +407,7 @@ const DataTable = ({
                                                                 fullViewMode || expandedQuestions.includes(row.id) ? (
                                                                     <>
                                                                         {/* ✅ Full Question (rendered in both expanded or full view mode) */}
-                                                                        <QuestionEditor content={row.question} mode={row.mode} />
+                                                                        <QuestionEditor content={row.question} mode={row.mode} codeMode="true" latexMode="true" />
 
                                                                         {/* ✅ View Solution button (works same as before) */}
                                                                         {row.answer && (
@@ -430,7 +430,7 @@ const DataTable = ({
                                                                         {/* ✅ Answer (only show when toggled) */}
                                                                         {showAnswers.includes(row.id) && row.answer && (
                                                                             <div className="mt-2 p-2 bg-gray-100 rounded">
-                                                                                <QuestionEditor content={row.answer} mode="both" />
+                                                                                <QuestionEditor content={row.answer} mode="both" codeMode="true" latexMode="true" />
                                                                             </div>
                                                                         )}
                                                                     </>

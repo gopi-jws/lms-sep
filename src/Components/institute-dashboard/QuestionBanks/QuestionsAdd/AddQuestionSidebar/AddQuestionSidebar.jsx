@@ -55,7 +55,7 @@ const AddQuestionSidebar = () => {
   const [isTrueFalseModalOpen, setIsTrueFalseModalOpen] = useState(false)
   const [isDescriptiveModalOpen, setIsDescriptiveModalOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState(null);
+  // const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null)
 
   const toggleDropdown = () => {
@@ -178,9 +178,9 @@ const AddQuestionSidebar = () => {
     setIsMobileOpen(false)
   }
 
-   const handleSettingsClick = () => {
-    setOpenDropdown(!openDropdown);
-  };
+  //  const handleSettingsClick = () => {
+  //   setOpenDropdown(!openDropdown);
+  // };
 
 
 
@@ -226,10 +226,10 @@ const AddQuestionSidebar = () => {
             </ul>
           </div>
           <hr></hr>
-          <div className="test-sidebar-section">
+          {/* <div className="test-sidebar-section">
             <h3 className="sidebar-section-title">Actions</h3>
             <div className="settings-dropdown-container" ref={dropdownRef}>
-              {/* Settings Button */}
+            
               <button
                 className="settings-trigger-btn sidebar-contents"
                 onClick={handleSettingsClick}
@@ -241,7 +241,7 @@ const AddQuestionSidebar = () => {
                 <span className="tag-dropdown-toggle ms-auto"></span>
               </button>
 
-              {/* Dropdown Menu */}
+             
               {openDropdown && (
                 <div className="settings-dropdown-menu">
                   <ul className="test-sidebar-menu">
@@ -299,7 +299,7 @@ const AddQuestionSidebar = () => {
               )}
             </div>
 
-          </div>
+          </div> */}
           <hr />
 
           <div className="test-sidebar-section">

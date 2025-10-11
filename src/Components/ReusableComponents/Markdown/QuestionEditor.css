@@ -1,0 +1,25 @@
+/* ✅ Force bullet dots to appear in your markdown preview */
+.question-editor-preview ul,
+.question-editor-preview .markdown-ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+    padding-left: 30px !important;
+    margin: 10px 0 !important;
+}
+
+.question-editor-preview ol,
+.question-editor-preview .markdown-ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+    padding-left: 30px !important;
+    margin: 10px 0 !important;
+}
+
+.question-editor-preview li,
+.question-editor-preview .markdown-li {
+    display: list-item !important;
+    /* ✅ Force bullet rendering */
+    list-style-type: inherit !important;
+    position: relative !important;
+    margin: 4px 0 !important;
+}

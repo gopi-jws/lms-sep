@@ -1,0 +1,119 @@
+.ck.ck-sticky-panel__content_sticky {
+    /* position: fixed !important;
+    top: 60px !important;
+    z-index: 9999 !important;
+    background: white !important;
+    border-bottom: 1px solid #ddd;
+    width: 80% !important; */
+    z-index: -9999 !important;
+}
+
+
+.ck.ck-editor {
+    min-height: 170px !important;
+}
+
+.ck.ck-editor__editable {
+    min-height: 170px !important;
+    /* If you want fixed height */
+    /* For exact fixed height */
+    overflow-y: auto !important;
+    /* Add scroll if content exceeds */
+}
+
+/* CKEditor Table Styles with List Fixes */
+
+/* Fix for bullet list visibility */
+.ck-editor__editable ul {
+    list-style-type: disc !important;
+    padding-left: 2em !important;
+}
+
+.ck-editor__editable ul li {
+    list-style-type: disc !important;
+}
+
+.ck-editor__editable ul li::marker {
+    color: #000000 !important;
+}
+
+/* Fix for numbered list visibility */
+.ck-editor__editable ol {
+    list-style-type: decimal !important;
+    padding-left: 2em !important;
+}
+
+.ck-editor__editable ol li {
+    list-style-type: decimal !important;
+}
+
+.ck-editor__editable ol li::marker {
+    color: #000000 !important;
+    font-weight: normal !important;
+}
+
+/* Ensure proper spacing and visibility in the editor */
+.ck-editor__editable {
+    min-height: 400px;
+    /* padding: 15px !important; */
+    background-color: white !important;
+    color: #000000 !important;
+}
+
+/* Fix for nested lists */
+.ck-editor__editable ul ul {
+    list-style-type: circle !important;
+}
+
+.ck-editor__editable ul ul ul {
+    list-style-type: square !important;
+}
+
+.ck-editor__editable ol ol {
+    list-style-type: lower-alpha !important;
+}
+
+.ck-editor__editable ol ol ol {
+    list-style-type: lower-roman !important;
+}
+
+/* Table styling for better visibility */
+.ck-editor__editable table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ck-editor__editable table td,
+.ck-editor__editable table th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    min-width: 50px;
+}
+
+.ck-editor__editable table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+/* Fix for editor focus state */
+.ck-editor__editable:focus {
+    outline: none !important;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Ensure proper text contrast */
+.ck-editor__editable p,
+.ck-editor__editable li,
+.ck-editor__editable td,
+.ck-editor__editable th {
+    color: #000000 !important;
+}
+
+/* Fix for placeholder text */
+.ck-editor__editable .ck-placeholder {
+    color: #6c757d !important;
+}
+
+.ck-editor__editable p{
+    margin-bottom: 5px !important;
+}
