@@ -1,6 +1,6 @@
 "use client"
 import { useLocation, useParams } from "react-router-dom";
-import React, { useState, useRef, useEffect , forwardRef, useImperativeHandle } from "react"
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react"
 import { FaPaperPlane, FaCopy, FaFilePdf, FaShare, FaArchive, FaTrashAlt, FaEdit, FaTag } from "react-icons/fa"
 import { BiSolidRename } from "react-icons/bi"
 import { HiDotsVertical } from "react-icons/hi"
@@ -39,7 +39,7 @@ const initialData = [
 
 
 const TestIndex = () => {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [emails, setEmails] = useState([])
@@ -71,13 +71,14 @@ const TestIndex = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen]  = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false)
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
   const [editingTest, setEditingTest] = useState([])
   const [modalHeading, setModalHeading] = useState("");
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
   const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const [ispinning, setIsSpinning] = useState(null)
   // const getSortedTests = () => {
@@ -179,13 +180,18 @@ const TestIndex = () => {
     setFilteredCount(result.length)
   }, [activeTag, searchQuery, filterStatus, tags, data])
 
+
   const getCurrentPageData = () => {
+    const dataToUse = sortedFilteredData;
+
     if (fullViewMode) {
-      return filteredData
+      return dataToUse;
     }
-    const startIndex = (currentPage - 1) * rowsPerPage
-    return filteredData.slice(startIndex, startIndex + rowsPerPage)
-  }
+
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    return dataToUse.slice(startIndex, startIndex + rowsPerPage);
+  };
+
 
   const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
 
@@ -290,8 +296,6 @@ const TestIndex = () => {
     setTags(prev => [...prev, tagWithId])
   }
 
-  
-
   const handleAddQuestionsToTag = (tagName, questionIds) => {
     setTags(prevTags =>
       prevTags.map(tag => {
@@ -309,7 +313,6 @@ const TestIndex = () => {
     console.log("tagssssss", tags);
   };
 
-  
   const handleRemoveQuestionFromTag = (tagName, questionId) => {
     setTags(prevTags =>
       prevTags.map(tag => {
@@ -327,8 +330,7 @@ const TestIndex = () => {
   const handleUpdateTest = (testId, updatedFields) => {
     console.log(testId);
     console.log(updatedFields);
-    
-    
+
     setData(prevData =>
       prevData.map(test =>
         test.id === testId
@@ -362,8 +364,8 @@ const TestIndex = () => {
 
   const handleCopyTest = (testId, newName, selectedTags = []) => {
     let testToCopy = data.find(test => test.id === testId);
-         console.log(testToCopy.test);
-         
+    console.log(testToCopy.test);
+
     if (testToCopy) {
       const newTestId = Date.now();
       const newTest = {
@@ -373,7 +375,7 @@ const TestIndex = () => {
         // lastModified: new Date().toISOString(),
         status: "Not Published"
       };
-      
+
 
       const originalIndex = data.findIndex(test => test.id === testId);
 
@@ -411,14 +413,14 @@ const TestIndex = () => {
   };
 
 
-  const handleDownloadPdf = (row) =>{
+  const handleDownloadPdf = (row) => {
     setIsSpinning(row.id)
     setTimeout(() => {
       setIsSpinning(null)
-    }, 2000); 
+    }, 2000);
   }
 
-  
+
   // Add this useEffect for persisting data
   useEffect(() => {
     localStorage.setItem("tests", JSON.stringify(data));
@@ -458,7 +460,7 @@ const TestIndex = () => {
     setActiveTag("uncategorized")
   }
   const handleArchiveTest = (testId) => {
-    
+
     setData(prevData =>
       prevData.filter(test =>
         !testId.some(st => st.id === test.id) // remove all selected ids
@@ -492,8 +494,8 @@ const TestIndex = () => {
         !testId.some(st => st.id === test.id) // remove all selected ids
       )
     )
-    
-    
+
+
     // Store deleted test in localStorage 'trashedTags' array only if not already present
     const trashedTest = data.find(test => test.id === testId);
     if (trashedTest) {
@@ -518,6 +520,26 @@ const TestIndex = () => {
       )
     );
   };
+
+  const getTimeFromString = (text) => {
+    const now = new Date();
+    const match = text.match(/(\d+)\s+(hour|hours|day|days)/i);
+    if (!match) return now.getTime();
+
+    const value = parseInt(match[1], 10);
+    const unit = match[2].toLowerCase();
+
+    if (unit.startsWith("hour")) return now.getTime() - value * 60 * 60 * 1000;
+    if (unit.startsWith("day")) return now.getTime() - value * 24 * 60 * 60 * 1000;
+
+    return now.getTime();
+  };
+
+  const sortedFilteredData = [...filteredData].sort(
+    (a, b) => getTimeFromString(b.lastModified) - getTimeFromString(a.lastModified)
+  );
+
+
   const handleActionClick = (action, row) => {
     setOpenDropdownId(null);
 
@@ -589,6 +611,7 @@ const TestIndex = () => {
     {
       name: "Test Names",
       selector: "test",
+      sortable: true,
       width: "170px", // Set fixed width
       cell: (row) => (
         <div className="flex items-center">
@@ -715,13 +738,13 @@ const TestIndex = () => {
               <button
                 className="test-action-button pdf"
                 aria-label="Download PDF"
-                onClick={() => { handleActionClick("pdf", row)}}
-                >
-                  {ispinning === row.id ? (
-                    <div className="spinner"></div>
-                  ) : (
-                    <FaFilePdf />
-                  )}
+                onClick={() => { handleActionClick("pdf", row) }}
+              >
+                {ispinning === row.id ? (
+                  <div className="spinner"></div>
+                ) : (
+                  <FaFilePdf />
+                )}
                 <span className="tooltip-text">Download PDF</span>
               </button>
               <button
@@ -775,18 +798,22 @@ const TestIndex = () => {
       </Helmet>
 
       <div className="test-index-wrapper">
-        <TestSidebar
-          tags={tags}
-          setTags={setTags}
-          uncategorizedCount={uncategorizedCount}
-          onTagClick={handleTagClick}
-          onUncategorizedClick={handleUncategorizedClick}
-          activeTag={activeTag}
-          // onAddTag={handleAddTag}
-          onCreateTest={handleCreateTest}
-          archivedCount={data.filter(test => test.archived).length}
-          trashedCount={data.filter(test => test.trashed).length}
-        />
+        <div className="d-none d-md-block">
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            uncategorizedCount={uncategorizedCount}
+            onTagClick={handleTagClick}
+            onUncategorizedClick={handleUncategorizedClick}
+            activeTag={activeTag}
+            // onAddTag={handleAddTag}
+            onCreateTest={handleCreateTest}
+            archivedCount={data.filter(test => test.archived).length}
+            trashedCount={data.filter(test => test.trashed).length}
+          />
+
+
+        </div>
 
         <NotificationShared
           sender="Akash"
@@ -796,7 +823,37 @@ const TestIndex = () => {
 
         <div className="test-index-container">
           <div className="test-index-header">
-            <h1 className="breadcrumb">All Tests</h1>
+            <h1 className="breadcrumb desktop-title">All Tests</h1>
+
+            {/* Mobile dropdown button */}
+            <div className="mobile-title">
+              <button
+                className="mobile-dropdown-btn"
+                onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+              >
+                {activeTag || "All Tests"} ▼
+              </button>
+
+              {showMobileSidebar && (
+                <div className="mobile-sidebar-dropdown">
+                  <div className="test-sidebar-container">
+                    <TestSidebar
+                      className="d-block d-md-none"
+                      tags={tags}
+                      setTags={setTags}
+                      uncategorizedCount={uncategorizedCount}
+                      onTagClick={handleTagClick}
+                      onUncategorizedClick={handleUncategorizedClick}
+                      activeTag={activeTag}
+                      onCreateTest={handleCreateTest}
+                      archivedCount={data.filter((test) => test.archived).length}
+                      trashedCount={data.filter((test) => test.trashed).length}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
             {activeTag && (
               <div className="active-tag-indicator">
                 Showing tests for:{" "}
@@ -858,7 +915,7 @@ const TestIndex = () => {
 
         {isEditModalOpen && (
           <NewTestModal
-            heading={modalHeading} 
+            heading={modalHeading}
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
@@ -879,7 +936,7 @@ const TestIndex = () => {
 
         {isRenameModalOpen && (
           <NewTestModal
-            heading={modalHeading} 
+            heading={modalHeading}
             isOpen={isRenameModalOpen}
             onClose={() => { setIsRenameModalOpen(false); setEditingTest(null); }}
             initialName={editingTest?.name || ""}
@@ -908,7 +965,7 @@ const TestIndex = () => {
             isOpen={isDeleteModalOpen}
             onClose={() => { setIsDeleteModalOpen(false); setEditingTest(null); }}
             selectedTest={editingTest}
-            heading={modalHeading} 
+            heading={modalHeading}
             onSubmit={(deleteTests) => {
               handleDeleteTest(deleteTests)
               setIsDeleteModalOpen(false)
@@ -921,7 +978,7 @@ const TestIndex = () => {
 
         {isCopyModalOpen && (
           <NewTestModal
-            heading={modalHeading} 
+            heading={modalHeading}
             isOpen={isCopyModalOpen}
             onClose={() => setIsCopyModalOpen(false)}
             initialName={editingTest?.name || ""}
@@ -933,7 +990,7 @@ const TestIndex = () => {
 
         {isArchivedModalOpen && (
           <NewTestModal
-            heading={modalHeading} 
+            heading={modalHeading}
             isOpen={isArchivedModalOpen}
             onClose={() => { setIsArchivedModalOpen(false); setEditingTest(null); }}
             selectedTest={editingTest}
@@ -944,7 +1001,7 @@ const TestIndex = () => {
             mode="archive"
           />
         )}
-      </div> 
+      </div>
 
       {showPaginationButtons && (
         <PaginationButtons
@@ -966,8 +1023,6 @@ const TestIndex = () => {
         isSearching={searchQuery.length > 0 || filterStatus.length > 0}
       />
 
-
-     
     </>
   );
 };

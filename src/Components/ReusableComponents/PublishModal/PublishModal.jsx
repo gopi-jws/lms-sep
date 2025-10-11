@@ -53,7 +53,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     const [emailTags, setEmailTags] = useState([]);
     const [currentEmail, setCurrentEmail] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [emailThroughEmail, setEmailThroughEmail] = useState(false);
+    const [emailThroughEmail, setEmailThroughEmail] = useState(true);
     const [enrollOption, setEnrollOption] = useState("email");
 
     const [warningPopupOpen, setWarningPopupOpen] = useState(false);
@@ -169,67 +169,72 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     // }, [availableHours, requiredHours]);
 
 
-
     const [showPopup, setShowPopup] = useState(false);
 
     const proceedWithPublish = () => {
-        //localStorage.removeItem('publishedTests')
-        // Automatically generate ID
+        // Get existing published tests
         const existing = JSON.parse(localStorage.getItem("publishedTests")) || [];
-        const alreadyPublished = existing.some(
-            (item) => { return (item.testId === selectedTestId) } // Or use item.id if using IDs
+
+        // ✅ No need to check if already published — allow multiple publishes
+        const newId = existing.length === 0
+            ? 1
+            : existing[existing.length - 1].id + 1;
+
+        const publishData = {
+            id: newId,
+            testName: selectedTest,
+            testId: selectedTestId,
+            scheduled: isScheduled,
+            dateTime: isScheduled ? dateTime?.toISOString() : null,
+            selectedClasses,
+            invitedEmails: emailTags,
+            generateLink: emailThroughEmail,
+            maxEnrollments: emailThroughEmail ? attemptLimit : null,
+            enrollmentDeadline: enrollmentDeadline?.toISOString() || null,
+            publishResult,
+            resultDelay: publishResult === "after-time" ? resultDelay : null,
+            rankCalculation,
+            timerStart: isCustom ? customDuration : duration,
+            timeAfterScheduled,
+            examName: examName,
+            totalHoursRequired: totalHoursRequired.toFixed(2),
+            examDuration: examDuration,
+            participations: participations,
+            setIsScheduled: examDuration,
+            publishedAt: new Date().toISOString(),
+            published: true
+        };
+
+        // Add new publish record
+        const updated = [...existing, publishData];
+
+        // Update main tests list to reflect "Published" status
+        const tests = JSON.parse(localStorage.getItem("tests")) || [];
+        const updatedTestPublish = tests.map(test =>
+            test.id === selectedTestId
+                ? {
+                    ...test,
+                    status: "Published",
+                    lastModified: new Date().toISOString(),
+                }
+                : test
         );
-        if (alreadyPublished == false) {
-            const newId = existing.length == 0 ? 1 : existing.length > 0
-                ? existing[existing.length - 1].id + 1
-                : 1;
 
-            const publishData = {
-                id: newId,
-                testName: selectedTest,
-                testId: selectedTestId,
-                scheduled: isScheduled,
-                dateTime: isScheduled ? dateTime?.toISOString() : null,
-                selectedClasses,
-                invitedEmails: emailTags,
-                generateLink: emailThroughEmail,
-                maxEnrollments: emailThroughEmail ? attemptLimit : null,
-                enrollmentDeadline: enrollmentDeadline?.toISOString() || null,
-                publishResult,
-                resultDelay: publishResult === "after-time" ? resultDelay : null,
-                rankCalculation,
-                timerStart: isCustom ? customDuration : duration,
-                timeAfterScheduled,
-                examName: examName,
-                totalHoursRequired: totalHoursRequired.toFixed(2),
-                examDuration: examDuration,
-                participations: participations,
-                setIsScheduled: examDuration,
-                publishedAt: new Date().toISOString(),
-                published: true
-            };
-            const updated = [...existing, publishData];
-            const tests = JSON.parse(localStorage.getItem("tests")) || [];
-            const updatedTestPublish = tests.map(test =>
-                test.id === selectedTestId ? { ...test, status: "Published", lastModified: new Date().toISOString(), } : test
-            );
-            localStorage.setItem('tests', JSON.stringify(updatedTestPublish))
-            setData(updatedTestPublish)
-            onPublish();
+        // Save updates
+        localStorage.setItem('tests', JSON.stringify(updatedTestPublish));
+        setData(updatedTestPublish);
+        localStorage.setItem("publishedTests", JSON.stringify(updated));
 
-            localStorage.setItem("publishedTests", JSON.stringify(updated));
-            setShowPopup(true); // Show popup on click
-            setTimeout(() => {
-                setShowPopup(false);
-                onClose() // Auto-close popup after 3 seconds
-            }, 3000);
-            setWarningPopupOpen(false); // Close warning modal
-            setSuccessPopupOpen(true);  // Show success popup
-        } else {
-            toast.error("This test has already been published.");
-        }
+        // UI updates
+        onPublish();
+        setShowPopup(true);
+        setTimeout(() => {
+            setShowPopup(false);
+            onClose(); // Auto-close popup after 3 seconds
+        }, 3000);
 
-
+        setWarningPopupOpen(false);
+        setSuccessPopupOpen(true);
     };
 
 
@@ -385,6 +390,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
         }
     }, [isOpen]);
 
+
     const handleClose = () => {
         setIsZoomOut(true); // Trigger zoom-out animation
     };
@@ -402,6 +408,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
         }, 300);
     };
     if (!isOpen) return null;
+
 
     return (
         <div className="publish-modal-overlay">
@@ -462,8 +469,6 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                     onKeyDown={handleBackspace}
                                     placeholder="Click to select..."
                                     style={{ border: "none", outline: "none" }}
-
-
                                 />
 
                                 {selectedClasses.length > 0 && (
@@ -508,7 +513,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                         onDateChange={handleDateTimeChange}
                                         className=""
                                     />
-                                    
+
                                 </div>
 
 
@@ -538,88 +543,140 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                 <span>{showAdvanced ? "Hide Advanced Options" : "Advanced Options"}</span>
                             </button>
 
-
-
                             {showAdvanced && (
-                                <div className={`advanced-options ${showAdvanced ? "open" : "closed"}`}>
-                                    <div className="pb-2">
-                                        <label>Invite/Enroll</label>
-                                        <div
-                                            className={`tags-container ${isFocused ? "focused" : ""}`}
-                                            onClick={() => document.querySelector(".tags-input-field").focus()}
-                                        >
-                                            {emailTags.map((email, index) => (
-                                                <span key={index} className="email-tag">
-                                                    {email}
-                                                    <span onClick={() => handleDeleteTag(email)}>&times;</span>
-                                                </span>
-                                            ))}
-                                            <input
-                                                type="email"
-                                                value={currentEmail}
-                                                onChange={handleChange}
-                                                onKeyDown={handleKeyDown}
-                                                onFocus={() => setIsFocused(true)}
-                                                onBlur={() => setIsFocused(false)}
-                                                placeholder="Email Address separated by comma & space"
-                                                className="tags-input-field"
-                                            />
+                                isScheduled ? (
+                                    <div className={`advanced-options ${showAdvanced ? "open" : "closed"}`}>
+                                        {/* Scheduled Test Fields */}
+                                        <div className="pb-2">
+                                            <label>Invite/Enroll</label>
+                                            <div
+                                                className={`tags-container ${isFocused ? "focused" : ""}`}
+                                                onClick={() => document.querySelector(".tags-input-field").focus()}
+                                            >
+                                                {emailTags.map((email, index) => (
+                                                    <span key={index} className="email-tag">
+                                                        {email}
+                                                        <span onClick={() => handleDeleteTag(email)}>&times;</span>
+                                                    </span>
+                                                ))}
+                                                <input
+                                                    type="email"
+                                                    value={currentEmail}
+                                                    onChange={handleChange}
+                                                    onKeyDown={handleKeyDown}
+                                                    onFocus={() => setIsFocused(true)}
+                                                    onBlur={() => setIsFocused(false)}
+                                                    placeholder="Email Address separated by comma & space"
+                                                    className="tags-input-field"
+                                                />
+                                            </div>
+                                            {emailError && <div className="error-text">{emailError}</div>}
                                         </div>
 
-                                        {emailError && <div className="error-text">{emailError}</div>}
-                                    </div>
-
-                                    <div className="publish-form-group">
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={emailThroughEmail}
-                                                onChange={() => setEmailThroughEmail(!emailThroughEmail)}
-                                                style={{
-                                                    marginRight: "8px",   // ✅ camelCase + comma
-                                                    padding: "0"           // ✅ camelCase + comma
-                                                }}
-                                                className="publish-form-control"
-                                            />
-                                            Generate a Link for others to enroll for the test
-                                        </label>
-                                    </div>
-
-                                    {emailThroughEmail && (
                                         <div className="publish-form-group">
-                                            <label>Enter maximum allowed Enrollments</label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={emailThroughEmail}
+                                                    onChange={() => setEmailThroughEmail(!emailThroughEmail)}
+                                                    style={{ marginRight: "8px", padding: "0" }}
+                                                    className="publish-form-control"
+                                                />
+                                                Generate a Link for others to enroll for the test
+                                            </label>
+                                        </div>
+
+                                        {emailThroughEmail && (
+                                            <div className="publish-form-group">
+                                                <label>Enter maximum allowed Attempts</label>
+                                                <input
+                                                    type="number"
+                                                    value={attemptLimit}
+                                                    onChange={(e) => {
+                                                        const value = Number(e.target.value);
+                                                        if (value >= 0) setAttemptLimit(value);
+                                                    }}
+                                                    placeholder="Enter maximum allowed Attempts"
+                                                    className="mcq-form-control"
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="publish-form-group">
+                                            <label>Expiry Date</label>
+                                            <div>
+                                                <CustomDateTimePicker
+                                                    selectedDate={enrollmentDeadline}
+                                                    onDateChange={setEnrollmentDeadline}
+                                                    className={`${errors.enrollmentDeadline ? "error" : ""}`}
+                                                    placeholder="Select date and time"
+                                                />
+                                                {errors.enrollmentDeadline && (
+                                                    <div className="error-message">{errors.enrollmentDeadline}</div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className={`advanced-options ${showAdvanced ? "open" : "closed"}`}>
+                                        {/* Scheduled Test Fields */}
+                                        <div className="pb-2 publish-form-group">
+                                            <label>Invite/Enroll with Share</label>
+                                            <div
+                                                className={`tags-container ${isFocused ? "focused" : ""}`}
+                                                onClick={() => document.querySelector(".tags-input-field").focus()}
+                                            >
+                                                {emailTags.map((email, index) => (
+                                                    <span key={index} className="email-tag">
+                                                        {email}
+                                                        <span onClick={() => handleDeleteTag(email)}>&times;</span>
+                                                    </span>
+                                                ))}
+                                                <input
+                                                    type="email"
+                                                    value={currentEmail}
+                                                    onChange={handleChange}
+                                                    onKeyDown={handleKeyDown}
+                                                    onFocus={() => setIsFocused(true)}
+                                                    onBlur={() => setIsFocused(false)}
+                                                    placeholder="Email Address separated by comma & space"
+                                                    className="tags-input-field"
+                                                />
+                                            </div>
+                                            {emailError && <div className="error-text">{emailError}</div>}
+                                        </div>
+
+                                        <div className="publish-form-group">
+                                            <label>Enter maximum allowed Attempts</label>
                                             <input
                                                 type="number"
                                                 value={attemptLimit}
                                                 onChange={(e) => {
                                                     const value = Number(e.target.value);
-                                                    if (value >= 0) {
-                                                        setAttemptLimit(value);
-                                                    }
+                                                    if (value >= 0) setAttemptLimit(value);
                                                 }}
-                                                placeholder="Enter maximum allowed enrollments"
+                                                placeholder="Enter maximum allowed Attempts"
                                                 className="mcq-form-control"
                                             />
                                         </div>
-                                    )}
-                                    <div className="publish-form-group"
->
-                                        <label>Enrollment Deadline</label>
-                                        <div className="">
-                                            <CustomDateTimePicker
-                                                selectedDate={enrollmentDeadline}
-                                                onDateChange={setEnrollmentDeadline}
-                                                className={`${errors.enrollmentDeadline ? "error" : ""}`}
-                                                placeholder="Select date and time"
-                                            />
 
-                                            {errors.enrollmentDeadline && (
-                                                <div className="error-message">{errors.enrollmentDeadline}</div>
-                                            )}
+
+                                        <div className="publish-form-group">
+                                            <label>Expiry Date</label>
+                                            <div>
+                                                <CustomDateTimePicker
+                                                    selectedDate={enrollmentDeadline}
+                                                    onDateChange={setEnrollmentDeadline}
+                                                    className={`${errors.enrollmentDeadline ? "error" : ""}`}
+                                                    placeholder="Select date and time"
+                                                />
+                                                {errors.enrollmentDeadline && (
+                                                    <div className="error-message">{errors.enrollmentDeadline}</div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-
-                                </div>
+                                )
                             )}
 
                         </div>
@@ -640,8 +697,6 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                         {/* Settings Section - Hidden when Unscheduled is selected */}
                         {isScheduled && !isUnscheduled && showSettings && (
                             <div className="settings-options">
-
-
 
                                 <div className="publish-form-group">
                                     <label>Timer to Start Before Scheduled Time</label>
@@ -686,8 +741,6 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                     </div>
                                 )}
 
-
-
                                 {entryType === "sharp-time-allowed" && (
                                     <div className="publish-form-group">
                                         <label>Time Not Allowed After Scheduled Time (minutes)</label>
@@ -729,13 +782,12 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                     <select
                                         value={rankCalculation}
                                         onChange={(e) => setRankCalculation(e.target.value)}
-                                         className="mcq-form-control"
+                                        className="mcq-form-control"
                                     >
                                         <option value="absolute">Absolute Ranking</option>
                                         {/* <option value="percentage">Percentage Ranking with Tie Breaks</option> */}
                                     </select>
                                 </div>
-
 
                             </div>
                         )}
@@ -794,7 +846,6 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                     <p><span>Default Duration:</span> {duration} minutes</p>
                   </div> */}
                                 </div>
-
 
 
                                 <h4>Hours Summary</h4>

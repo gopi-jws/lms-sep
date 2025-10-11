@@ -12,6 +12,10 @@ import ActionDropdown from "../../../ReusableComponents/ActionDropdown/ActionDro
 import LatexRenderer from "../../../ReusableComponents/LatexRenderer/LatexRenderer"
 import { Helmet } from "react-helmet"
 import { Truck } from "lucide-react"
+import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/fa"
+import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal";
+import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal";
+import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal";
 
 const TestAdd = () => {
   const { id } = useParams()
@@ -66,7 +70,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 4,
+      id: 3,
       question: `The following table shows experimental data for a reaction:
             Time (s)  Concentration (M)
             0         1.00
@@ -90,7 +94,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 5,
+      id: 4,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
       answer: `The root mean square speed is calculated using:
@@ -109,7 +113,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 6,
+      id: 5,
       question: `The Pythagorean theorem states $$c^2 = a^2 + b^2$$ for right triangles. true false`,
       answer: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
       type: "True or False",
@@ -122,7 +126,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 7,
+      id: 6,
       question: `एक आयाम में ऊष्मा समीकरण पर विचार करें:
             $$\\frac{\\partial u(x,t)}{\\partial t} = \\alpha \\frac{\\partial^2 u(x,t)}{\\partial x^2}$$
             सामान्य समाधान है:`,
@@ -144,7 +148,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 8,
+      id: 7,
       question: `సత్యనారాయణ వ్యవసాయం లో ఏ మూడు భాగాలు ఉంటాయి?`,
       answer: `రబి, ఖరీఫ్, బోనాల`,
       type: "Single Answer ",
@@ -159,13 +163,13 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 9,
+      id: 8,
       question: `In Python, what will be the output of the following code?`,
       answer: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
-       owner: "Admin",
+      owner: "Admin",
       isLaTeXEnabled: false,
       hasCode: true,
       code: `def factorial(n):
@@ -179,7 +183,7 @@ const TestAdd = () => {
       mode: "both",
     },
     {
-      id: 10,
+      id: 9,
       question: `Which of the following are prime numbers? (Select all that apply)`,
       answer: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
@@ -216,7 +220,67 @@ const TestAdd = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [isDropdownOpen, setDropdownOpen] = useState(false)
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [selectedTest, setSelectedTest] = useState("");
+  const [modalHeading, setModalHeading] = useState("");
 
+
+  const [tags, setTags] = useState([
+    // Example initial state (can come from API)
+    { id: 1, name: "Folder 1", color: "#f00", questions: [1, 2,5,7,9] },
+    { id: 2, name: "Folder 2", color: "#0f0", questions: [3,4,6,8] },
+  ]);
+
+  const handleAddQuestionToTag = (tagId, questionId) => {
+    setTags(prevTags =>
+      prevTags.map(tag =>
+        tag.id === tagId
+          ? { ...tag, questions: [...tag.questions, questionId] }
+          : tag
+      )
+    );
+  };
+
+  const handleRemoveQuestionFromTag = (tagName, questionId) => {
+    setTags(prevTags =>
+      prevTags.map(tag =>
+        tag.name === tagName
+          ? { ...tag, questions: tag.questions.filter(id => id !== questionId) }
+          : tag
+      )
+    );
+  };
+
+  const openPublishModal = (test) => {
+    setSelectedTest(test || "Test 1");
+    setShowPublishModal(true);
+  };
+
+  const openEditModal = (test) => {
+    setSelectedTest(test);
+    setShowEditModal(true);
+    setModalHeading("Edit Test")
+  };
+
+  const openShareModal = (test) => {
+    setSelectedTest(test);
+    setShowShareModal(true);
+  };
+
+  const openDownloadModal = (test) => {
+    setSelectedTest(test);
+    setShowDownloadModal(true);
+  };
+
+  const closeAllModals = () => {
+    setShowPublishModal(false);
+    setShowEditModal(false);
+    setShowShareModal(false);
+    setShowDownloadModal(false);
+  };
 
   const getFilteredData = () => {
     return data.filter((question) => {
@@ -233,9 +297,11 @@ const TestAdd = () => {
     });
   };
 
+
   const toggleSolution = (id) => {
     setShowSolutions((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
 
   const filteredData = getFilteredData()
 
@@ -291,7 +357,7 @@ const TestAdd = () => {
     }
     setFullViewMode((prev) => !prev);
   };
-  
+
   // Question CRUD operations
   const handleAddQuestion = () => {
     console.log("Add question")
@@ -364,134 +430,169 @@ const TestAdd = () => {
     type: true,
     marks: true,
     actions: true,
+    section: true,
   })
 
 
-const columns = useMemo(() => [
-  {
-    name: "QId",
-    selector: "id",
-    sortable: true,
-    isVisible: columnVisibility.id,
-  },
-  {
-    name: "Owner",
-    selector: "owner",
-    sortable: true,
-    isVisible: columnVisibility.owner,
-  },
-  {
-    name: "Type",
-    selector: "type",
-    sortable: true,
-    cell: (row) => (
-      <span className={`type-badge ${row.type.toLowerCase().replace("/", "")}`}>
-        {row.type}
-      </span>
-    ),
-    isVisible: columnVisibility.type,
-  },
-  {
-    name: "Marks",
-    selector: "marks",
-    sortable: true,
-    cell: (row) =>
-      row.marks ? <span className="marks-display">{row.marks}</span> : "N/A",
-    isVisible: columnVisibility.marks,
-  },
-  {
-    name: "Actions",
-    selector: "actions",
-    sortable: false,
-    cell: (row) => (
-      <div className="test-action-buttons flex">
-        <div className="desktop-actions">
-          <button
-            className="test-action-button copy"
-            aria-label="Copy"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopyQuestion(row.id);
-            }}
-          >
-            <FaCopy />
-            <span className="tooltip-text">Copy</span>
-          </button>
-          <button
-            className="test-action-button edit"
-            aria-label="Edit"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEditQuestion(row.id);
-            }}
-          >
-            <FaEdit />
-            <span className="tooltip-text">Edit</span>
-          </button>
-          <button
-            className="test-action-button delete"
-            aria-label="Delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteQuestion(row.id);
-            }}
-          >
-            <FaTrashAlt />
-            <span className="tooltip-text">Delete</span>
-          </button>
-          <button
-            className="test-action-button add-to-test"
-            aria-label="Move to Test"
-            onClick={(e) => {
-              e.stopPropagation();
-              handlemoveQuestion(row.id);
-            }}
-          >
-            <FaArrowRight />
-            <span className="tooltip-text">Move to Section</span>
-          </button>
-          <button
-            className="test-action-button set-mark"
-            aria-label="Set Mark"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetMarks(row.id);
-            }}
-          >
-            <span className="mark-symbol">M</span>
-            <span className="tooltip-text">Set Mark</span>
-          </button>
-        </div>
-        <div className="mobile-actions">
-          <ActionDropdown questionId={row.id} onAction={handleActionFromDropdown} />
-        </div>
-      </div>
-    ),
-    isVisible: columnVisibility.actions,
-  },
+  const columns = useMemo(() => [
+    {
+      name: "QId",
+      selector: "id",
+      sortable: true,
+      isVisible: columnVisibility.id,
+    },
+    {
+      name: "Owner",
+      selector: "owner",
+      sortable: true,
+      isVisible: columnVisibility.owner,
+    },
+    {
+      name: "Type",
+      selector: "type",
+      sortable: true,
+      cell: (row) => (
+        <span className={`type-badge ${row.type.toLowerCase().replace("/", "")}`}>
+          {row.type}
+        </span>
+      ),
+      isVisible: columnVisibility.type,
+    },
+    {
+      name: "Marks",
+      selector: "marks",
+      sortable: true,
+      cell: (row) =>
+        row.marks ? <span className="marks-display">{row.marks}</span> : "N/A",
+      isVisible: columnVisibility.marks,
+    },
 
-  // // 🔹 NEW Questions column (second line always visible)
-  // {
-  //   name: "Questions",
-  //   selector: (row) => row?.id || "N/A",
-  //   sortable: false,
-  //   cell: (row) => (
-  //     <div className="w-full text-left mt-2">
-  //       <LatexRenderer content={row.question || "No Question"} />
-  //     </div>
-  //   ),
-  //   isVisible: columnVisibility.questions,
-  // },
-], [columnVisibility]);
+    {
+      name: "Section",
+      selector: "section",
+      sortable: true,
+      cell: (row) => (
+        <div className="question-tags">
+          {tags
+            .filter(tag => tag.questions?.includes(row.id)) // only tags for this question
+            .map(tag => (
+              <div key={tag.id} className="question-tag-container">
+                <div className="question-tag questions-page-question-tag">
+                  <span
+                    className="tag-color-dot questions-page-color-dot"
+                    style={{ backgroundColor: tag.color }}
+                  ></span>
+                  <span className="index-tag-name questions-page-tag-name">{tag.name}</span>
+                </div>
+                <span
+                  className="tag-remove questionpage-tag-remove"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveQuestionFromTag(tag.name, row.id); // dynamically remove tag
+                  }}
+                >
+                  &times;
+                </span>
+              </div>
+            ))}
+        </div>
+      ),
+      isVisible: columnVisibility.section,
+    },
+
+    {
+      name: "Actions",
+      selector: "actions",
+      sortable: false,
+      cell: (row) => (
+        <div className="test-action-buttons flex">
+          <div className="desktop-actions">
+            <button
+              className="test-action-button copy"
+              aria-label="Copy"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopyQuestion(row.id);
+              }}
+            >
+              <FaCopy />
+              <span className="tooltip-text">Copy</span>
+            </button>
+            <button
+              className="test-action-button edit"
+              aria-label="Edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditQuestion(row.id);
+              }}
+            >
+              <FaEdit />
+              <span className="tooltip-text">Edit</span>
+            </button>
+            <button
+              className="test-action-button delete"
+              aria-label="Delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteQuestion(row.id);
+              }}
+            >
+              <FaTrashAlt />
+              <span className="tooltip-text">Delete</span>
+            </button>
+            <button
+              className="test-action-button add-to-test"
+              aria-label="Move to Test"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlemoveQuestion(row.id);
+              }}
+            >
+              <FaArrowRight />
+              <span className="tooltip-text">Move to Section</span>
+            </button>
+            <button
+              className="test-action-button set-mark"
+              aria-label="Set Mark"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSetMarks(row.id);
+              }}
+            >
+              <span className="mark-symbol">M</span>
+              <span className="tooltip-text">Set Mark</span>
+            </button>
+          </div>
+          <div className="mobile-actions">
+            <ActionDropdown questionId={row.id} onAction={handleActionFromDropdown} />
+          </div>
+        </div>
+      ),
+      isVisible: columnVisibility.actions,
+    },
+
+    // // 🔹 NEW Questions column (second line always visible)
+    // {
+    //   name: "Questions",
+    //   selector: (row) => row?.id || "N/A",
+    //   sortable: false,
+    //   cell: (row) => (
+    //     <div className="w-full text-left mt-2">
+    //       <LatexRenderer content={row.question || "No Question"} />
+    //     </div>
+    //   ),
+    //   isVisible: columnVisibility.questions,
+    // },
+  ], [columnVisibility]);
 
 
   // Toggle column visibility function
-  // const toggleColumnVisibility = (columnSelector) => {
-  //   setColumnVisibility((prev) => ({
-  //     ...prev,
-  //     [columnSelector]: !prev[columnSelector],
-  //   }))
-  // }
+  const toggleColumnVisibility = (columnSelector) => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      [columnSelector]: !prev[columnSelector],
+    }))
+  }
 
   const visibleColumns = columns.filter((column) => column.isVisible)
 
@@ -520,14 +621,34 @@ const columns = useMemo(() => [
         <title>Questions</title>
         <meta name="description" content="Questions" />
       </Helmet>
-   
+
       <div className="testadd-index-wrapper">
         <div className="testadd-index-container">
           <div className="test-index-header">
             <h3 className="breadcrumb">Test {id} Questions</h3>
-            {/* <div className="columnvisibility-wrapper">
-              <ColumnVisibilityDropdown columns={columns} onToggleColumn={toggleColumnVisibility} />
-            </div> */}
+
+            <div className="test-header-icons">
+              <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
+                <FaPaperPlane />
+                <span className="tooltip-text">Publish</span>
+              </button>
+
+              <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+                <FaEdit />
+                <span className="tooltip-text">Edit</span>
+              </button>
+
+              <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+                <FaFilePdf />
+                <span className="tooltip-text">Download PDF</span>
+              </button>
+
+              <button className="test-action-button share" onClick={() => openShareModal(selectedTest)}>
+                <FaShare />
+                <span className="tooltip-text">Share</span>
+              </button>
+            </div>
+
           </div>
 
           <div className="my-data-table">
@@ -620,6 +741,34 @@ const columns = useMemo(() => [
         totalItems={data.length}
         isSearching={searchQuery.length > 0 || filterType.length > 0}
       />
+
+
+      <PublishModal
+        isOpen={showPublishModal}
+        onClose={closeAllModals}
+        testData={selectedTest}
+      />
+
+      <NewTestModal
+        isOpen={showEditModal}
+        onClose={closeAllModals}
+        testData={selectedTest}
+        mode="edit"
+        heading={modalHeading}
+      />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={closeAllModals}
+        testData={selectedTest}
+      />
+
+      {/* <DownloadModal
+        isOpen={showDownloadModal}
+        onClose={closeAllModals}
+        testData={selectedTest}
+      /> */}
+
     </>
   )
 }

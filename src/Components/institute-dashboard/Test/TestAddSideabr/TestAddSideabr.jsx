@@ -403,6 +403,91 @@ const TestAddSidebar = () => {
               </div>
             </ul>
           </div>
+
+          <hr />
+          <div className="test-sidebar-section">
+            <h3 className="sidebar-section-title">Test Information</h3>
+            <ul>
+              <li>
+                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
+                  <Award className="icon" size={20} />
+                  <span className="sidebar-letters">Marks : (10)</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
+                  <ListChecks className="icon" size={20} />
+                  <span className="sidebar-letters">No. of Q : (10)</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
+                  <MinusCircle className="icon" size={20} />
+                  <span className="sidebar-letters">Neg : (10)</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
+                  <Clock className="icon" size={20} />
+                  <span className="sidebar-letters">Duration : (10)</span>
+                </Link>
+              </li>
+              <li className="dropdown-container">
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "desc" ? "active" : ""}`}>
+                  <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
+                    <div className="d-flex align-items-center gap-2">
+                      <FileText className="icon" size={20} />
+                      <span className="sidebar-letters">Description</span>
+                    </div>
+                    <div className="dropdown-icon-container">
+                      <button className="dropdown-toggle3" onClick={() => handleActionClick("desc")}>
+                        <MoreVertical size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {activeDropdown === "desc" && (
+                  <TagActionsDropdown
+                    isOpen={true}
+                    mode="desc"
+                    onEdit={() => { setShowDescDropdown(true) }}
+                    onRemove={() => console.log("Remove Description")}
+                    onClose={() => setActiveDropdown(null)}
+                  />
+                )}
+              </li>
+
+              <li className="dropdown-container">
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "instr" ? "active" : ""}`}>
+                  <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
+                    <div className="d-flex align-items-center gap-2">
+                      <BookOpen className="icon" size={20} />
+                      <span className="sidebar-letters">Instruction</span>
+                    </div>
+                    <div className="dropdown-icon-container">
+                      <button className="dropdown-toggle3" onClick={() => handleActionClick("instr")}>
+                        <MoreVertical size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {activeDropdown === "instr" && (
+                  <TagActionsDropdown
+                    isOpen={true}
+                    mode="instr"
+                    onEdit={() => { setShowDescDropdown(true) }}
+                    onRemove={() => console.log("Remove Description")}
+                    onClose={() => setActiveDropdown(null)}
+                  />
+                )}
+              </li>
+
+            </ul>
+          </div>
+
           <hr />
           <div className="test-sidebar-section">
             <h3 className="sidebar-section-title">Actions</h3>
@@ -490,95 +575,14 @@ const TestAddSidebar = () => {
               )}
             </div>
           </div>
-          <hr />
-          <div className="test-sidebar-section">
-            <h3 className="sidebar-section-title">Test Information</h3>
-            <ul>
-              <li>
-                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
-                  <Award className="icon" size={20} />
-                  <span className="sidebar-letters">Marks : (10)</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
-                  <ListChecks className="icon" size={20} />
-                  <span className="sidebar-letters">No. of Q : (10)</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
-                  <MinusCircle className="icon" size={20} />
-                  <span className="sidebar-letters">Neg : (10)</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link to="#" className={`sidebar-contents ${isActive("") ? "active" : ""}`}>
-                  <Clock className="icon" size={20} />
-                  <span className="sidebar-letters">Duration : (10)</span>
-                </Link>
-              </li>
-              <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") || activeDropdown === "desc" ? "active" : ""}`}>
-                  <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
-                    <div className="d-flex align-items-center gap-2">
-                      <FileText className="icon" size={20} />
-                      <span className="sidebar-letters">Description</span>
-                    </div>
-                    <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={() => handleActionClick("desc")}>
-                        <MoreVertical size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {activeDropdown === "desc" && (
-                  <TagActionsDropdown
-                    isOpen={true}
-                    mode="desc"
-                    onEdit={() => { setShowDescDropdown(true) }}
-                    onRemove={() => console.log("Remove Description")}
-                    onClose={() => setActiveDropdown(null)}
-                  />
-                )}
-              </li>
-
-              <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") || activeDropdown === "instr" ? "active" : ""}`}>
-                  <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
-                    <div className="d-flex align-items-center gap-2">
-                      <BookOpen className="icon" size={20} />
-                      <span className="sidebar-letters">Instruction</span>
-                    </div>
-                    <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={() => handleActionClick("instr")}>
-                        <MoreVertical size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {activeDropdown === "instr" && (
-                  <TagActionsDropdown
-                    isOpen={true}
-                    mode="instr"
-                    onEdit={() => { setShowDescDropdown(true) }}
-                    onRemove={() => console.log("Remove Description")}
-                    onClose={() => setActiveDropdown(null)}
-                  />
-                )}
-              </li>
-
-            </ul>
-          </div>
         </div>
 
         <AddTagsComponent
           isOpen={isTagModalOpen}
           onClose={() => setIsTagModalOpen(false)}
         />
+
+        
       </nav>
 
       {/* Mobile Toggle Button */}

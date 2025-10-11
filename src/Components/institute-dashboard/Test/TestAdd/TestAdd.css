@@ -14,15 +14,15 @@ a {
     /* box-shadow: var(--index-container-box-shadow); */
     padding: var(--index-container-padding);
     position: relative;
-    overflow-x: auto;
+    /* overflow-x: auto; */
     border: 1px solid #e7e9ee;
 }
 
 /* Header */
 .test-index-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  /* justify-content: space-between;
+  align-items: center; */
   padding: 10px;
 }
 
@@ -536,4 +536,10 @@ a {
    position: absolute;
    bottom: 3.5rem;
    right: 0;
+}
+
+@media (max-width: 1024px){
+  .testadd-index-container{
+    overflow: auto;
+  }
 }

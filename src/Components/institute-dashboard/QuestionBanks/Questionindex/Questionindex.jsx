@@ -87,12 +87,15 @@ const Questionindex = () => {
 
   // Get current page data
   const getCurrentPageData = () => {
+    const dataToUse = sortedFilteredData;
+
     if (fullViewMode) {
-      return filteredData
+      return dataToUse;
     }
-    const startIndex = (currentPage - 1) * rowsPerPage
-    return filteredData.slice(startIndex, startIndex + rowsPerPage)
-  }
+
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    return dataToUse.slice(startIndex, startIndex + rowsPerPage);
+  };
 
   // Check if we should show pagination buttons
   const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
@@ -187,7 +190,7 @@ const Questionindex = () => {
     }, 2000);
   }
 
-
+  
   //add to folder
   const handleAddFolder = ({ name, color }) => {
       setFoldersIteam(prev => [
@@ -200,7 +203,6 @@ const Questionindex = () => {
         },
       ]);
   };
-
 
   const handleActionClick = (action, row) => {
     // Close dropdown first
@@ -243,6 +245,25 @@ const Questionindex = () => {
         break
     }
   }
+
+  const getTimeFromString = (text) => {
+    const now = new Date();
+    const match = text.match(/(\d+)\s+(hour|hours|day|days)/i);
+    if (!match) return now.getTime();
+
+    const value = parseInt(match[1], 10);
+    const unit = match[2].toLowerCase();
+
+    if (unit.startsWith("hour")) return now.getTime() - value * 60 * 60 * 1000;
+    if (unit.startsWith("day")) return now.getTime() - value * 24 * 60 * 60 * 1000;
+
+    return now.getTime();
+  };
+
+  const sortedFilteredData = [...filteredData].sort(
+    (a, b) => getTimeFromString(b.lastModified) - getTimeFromString(a.lastModified)
+  );
+
 
   const columns = [
     {
@@ -371,7 +392,7 @@ const Questionindex = () => {
   return (
     <>
       <Helmet>
-        <title> QuestionBanks</title>
+        <title>QuestionBanks</title>
         <meta name="description" content="Question Banks List" />
       </Helmet>
       <div className="questionbank-index-wrapper">
