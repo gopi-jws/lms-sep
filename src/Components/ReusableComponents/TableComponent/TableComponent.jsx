@@ -134,6 +134,18 @@ const DataTable = ({
         setIsAscending(ascending)
     }
 
+    const sortedData = [...data].sort((a, b) => {
+        if (!sortColumn) return 0
+
+        const aValue = a[sortColumn] ?? ""
+        const bValue = b[sortColumn] ?? ""
+
+        return isAscending
+            ? aValue.toString().localeCompare(bValue.toString())
+            : bValue.toString().localeCompare(aValue.toString())
+    })
+
+
     const toggleRowExpansion = (rowId, e) => {
         e?.stopPropagation();
         if (setExpandedRows) {
@@ -150,18 +162,6 @@ const DataTable = ({
         e.stopPropagation()
         toggleRowExpansion(rowId)
     }
-
-    const sortedData = [...data].sort((a, b) => {
-        if (!sortColumn) return 0
-
-        const aValue = a[sortColumn] ?? ""
-        const bValue = b[sortColumn] ?? ""
-
-        return isAscending
-            ? aValue.toString().localeCompare(bValue.toString())
-            : bValue.toString().localeCompare(aValue.toString())
-    })
-
 
     const handleRowClick = (row, e) => {
         if (typeof onRowClicked === "function") {
@@ -438,7 +438,7 @@ const DataTable = ({
                                                                     // ✅ Collapsed Preview (normal mode only)
                                                                     <span className="truncate block w-full">
                                                                         {row.question.split(" ").length > 50
-                                                                            ? row.question.split(" ").slice(0, 50).join(" ") + "..."
+                                                                            ? row.question.split(" ").slice(0, 80).join(" ") + "..."
                                                                             : row.question}
                                                                     </span>
                                                                 )

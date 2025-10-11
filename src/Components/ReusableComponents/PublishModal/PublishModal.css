@@ -977,11 +977,18 @@ input {
 .publish-modal-content2{
     width: 56%;
 }
+@media (max-width:1199px) {
+    .publish-modal-content2 {
+            width:95%;  
+         }
+}
+
 @media (max-width:768px) {
     .publish-modal-content2 {
             width:95%;  
          }
 }
+
 .settings-options{
  
             width: 100%;

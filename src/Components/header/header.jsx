@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { NavLink, useLocation } from "react-router-dom"
-import { LayoutDashboard, BookOpen, Database, GraduationCap, Users, CircleUser } from 'lucide-react'
+import { LayoutDashboard, BookOpen, Database, GraduationCap, Users, CircleUser, Menu, X } from 'lucide-react'
 import { FaGraduationCap } from "react-icons/fa";
 import "./header.css"
 
@@ -17,13 +17,19 @@ const navItems = [
 const Header = () => {
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
   const dropdownRef = useRef(null)
+  const navRef = useRef(null)
   const location = useLocation()
 
   // Check if screen is mobile size
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768)
+      const mobile = window.innerWidth <= 768
+      setIsMobile(mobile)
+      if (!mobile) {
+        setIsNavOpen(false) // Close mobile menu when resizing to desktop
+      }
     }
 
     checkMobile()
@@ -32,11 +38,21 @@ const Header = () => {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close settings dropdown
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsSettingsExpanded(false)
+      }
+
+      // Close mobile nav menu when clicking outside
+      if (navRef.current && !navRef.current.contains(event.target) && isNavOpen) {
+        // Check if the click is not on the hamburger button
+        const hamburgerButton = document.querySelector('.navbar-toggler')
+        if (!hamburgerButton || !hamburgerButton.contains(event.target)) {
+          setIsNavOpen(false)
+        }
       }
     }
 
@@ -44,10 +60,20 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [])
+  }, [isNavOpen])
 
   const toggleDropdown = () => {
     setIsSettingsExpanded(!isSettingsExpanded)
+  }
+
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen)
+  }
+
+  const closeMobileNav = () => {
+    if (isMobile) {
+      setIsNavOpen(false)
+    }
   }
 
   return (
@@ -59,7 +85,12 @@ const Header = () => {
           <span className="header-logo-text">LMS Admin</span>
         </div>
 
-        <nav className="nav-menu">
+
+        {/* Navigation Menu */}
+        <nav
+          ref={navRef}
+          className={`nav-menu ${isNavOpen ? 'nav-menu-open' : ''}`}
+        >
           {navItems.map((item) => {
             const isDashboard = item.href === "/"
             const isActiveDashboard = isDashboard && (
@@ -73,6 +104,7 @@ const Header = () => {
                 key={item.href}
                 to={item.href}
                 className={({ isActive }) => `nav-item ${isActive || isActiveDashboard ? "active" : ""}`}
+                onClick={closeMobileNav}
               >
                 <item.icon className="nav-icon" />
                 <span className="nav-text">{item.name}</span>
@@ -98,6 +130,17 @@ const Header = () => {
               <a href="/logout" className="header-dropdown-item logout">Logout</a>
             </div>
           )}
+
+          {/* Hamburger Button for Mobile */}
+          <button
+            className="navbar-toggler "
+            type="button"
+            onClick={toggleNav}
+            aria-label="Toggle navigation"
+          >
+            {isNavOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
         </div>
       </div>
     </header>

@@ -243,6 +243,7 @@
 
 .header-right2 {
   gap: 12px;
+  display: flex;
 }
 
 /* Settings dropdown styles */
@@ -307,10 +308,6 @@
     font-size: 15px;
   }
 
-  .nav-text {
-    display: none;
-  }
-
   .nav-menu {
     gap: 2.25rem;
     margin-left: 0px;
@@ -343,9 +340,9 @@
     margin-left: 70px;
   }
 
-        .header-logo-icon {
-          font-size: 30px !important;
-        }
+  .header-logo-icon {
+    font-size: 30px !important;
+  }
 
   .logo {
     margin-right: 0.5rem;
@@ -358,7 +355,6 @@
 
   .nav-item {
     padding: 0.5rem;
-    border-radius: 50%;
   }
 
   .avatar {
@@ -378,5 +374,62 @@
 
   .logo-left {
     margin-left: 45px;
+  }
+}
+
+/* Default nav menu for desktop */
+@media (min-width: 769px){
+  .nav-menu {
+  display: flex;
+  gap: 20px;
+}
+
+/* Hide mobile hamburger by default */
+.navbar-toggler {
+  display: none !important;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  /* Show hamburger button on mobile */
+  .navbar-toggler {
+    display: block;
+  }
+
+  /* Mobile nav menu hidden by default */
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* adjust based on header height */
+    right: 0;
+    width: 100%;
+    max-width: 300px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 10px 0;
+    z-index: 1000;
+  }
+
+  /* Show menu when open */
+  .nav-menu.nav-menu-open {
+    display: flex;
+  }
+
+.nav-item {
+    padding: 12px 20px;
+    width: 100%;
+    gap: 11px;
+    max-width: 300px;
+}
+
+  .nav-item.active {
+    background-color: #f0f0f0;
   }
 }

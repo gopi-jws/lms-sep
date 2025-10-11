@@ -187,7 +187,7 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolder, heading, selectedSection
                         onClick={handleAddFolder}
                         disabled={!folderName.trim()} // Disable if folderName is empty
                     >
-                        {heading.startsWith("Edit") ? "Update" : "Create"}
+                        {heading?.startsWith("Edit") ? "Update" : "Create"}
                     </button>
 
                 </div>

@@ -1,17 +1,19 @@
 
-import { useState, useEffect ,useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent"
 import { FaCopy, FaEdit, FaTrashAlt, FaArrowRight, FaFolderPlus } from "react-icons/fa"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
 import ColumnVisibilityDropdown from "../../../ReusableComponents/ColumnVisibilityDropdown/ColumnVisibilityDropdown"
 import ActionDropdown from "../../../ReusableComponents/ActionDropdown/ActionDropdown"
+import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/fa"
 import "./QuestionsAdd.css"
 import Modal from "react-modal"
 import LatexRenderer from "../../../ReusableComponents/LatexRenderer/LatexRenderer"
 import "katex/dist/katex.min.css"
 import { Helmet } from "react-helmet"
 import QuestionAddDropdown from "../../../ReusableComponents/QuestionAddDropdown/QuestionAddDropdown"
+import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal"
 
 const QuestionsAdd = () => {
 
@@ -67,7 +69,7 @@ const QuestionsAdd = () => {
       latexMode: true,
     },
     {
-      id: 4,
+      id: 3,
       question: `The following table shows experimental data for a reaction:
             Time (s)  Concentration (M)
             0         1.00
@@ -92,7 +94,7 @@ const QuestionsAdd = () => {
       latexMode: true,
     },
     {
-      id: 5,
+      id: 4,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
       answer: `The root mean square speed is calculated using:
@@ -113,7 +115,7 @@ const QuestionsAdd = () => {
       latexMode: true,
     },
     {
-      id: 6,
+      id: 5,
       question: `The Pythagorean theorem states $$c^2 = a^2 + b^2$$ for right triangles. true false`,
       answer: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
       type: "True or False",
@@ -128,7 +130,7 @@ const QuestionsAdd = () => {
       latexMode: true,
     },
     {
-      id: 7,
+      id: 6,
       question: `एक आयाम में ऊष्मा समीकरण पर विचार करें:
             $$\\frac{\\partial u(x,t)}{\\partial t} = \\alpha \\frac{\\partial^2 u(x,t)}{\\partial x^2}$$
             सामान्य समाधान है:`,
@@ -152,7 +154,7 @@ const QuestionsAdd = () => {
       latexMode: true,
     },
     {
-      id: 8,
+      id: 7,
       question: `సత్యనారాయణ వ్యవసాయం లో ఏ మూడు భాగాలు ఉంటాయి?`,
       answer: `రబి, ఖరీఫ్, బోనాల`,
       type: "Single Answer ",
@@ -183,7 +185,7 @@ const QuestionsAdd = () => {
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
-      hasCode: true,                 
+      hasCode: true,
       mode: "both",
       code: `~~~python
 fruits = ["apple", "banana", "cherry"]
@@ -196,7 +198,7 @@ for x in fruits:
       latexMode: true,
     },
     {
-      id: 10,
+      id: 9,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
       answer: `The prime numbers in the list are 2, 7, and 13.`,
@@ -216,7 +218,7 @@ for x in fruits:
 
 
   // State management
-  const INITIAL_ROWS_PER_PAGE = 10
+  const INITIAL_ROWS_PER_PAGE = 5
   const [rowsPerPage, setRowsPerPage] = useState(INITIAL_ROWS_PER_PAGE)
   const [currentPage, setCurrentPage] = useState(1)
   const [expandedRows, setExpandedRows] = useState([])
@@ -229,7 +231,31 @@ for x in fruits:
   const [isMobile, setIsMobile] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState(null)
   const [modalIsOpen, setModalIsOpen] = useState(false)
- 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedTest, setSelectedTest] = useState("");
+  const [modalHeading, setModalHeading] = useState("");
+
+
+  const openEditModal = () => {
+    setSelectedTest({
+      id: 1,
+      name: "Question Bank 1",
+    });
+
+    setModalHeading("Edit QB");
+    setShowEditModal(true);
+  };
+
+
+  const closeAllModals = () => {
+    setShowEditModal(false);
+  };
+
+  const [tags, setTags] = useState([
+    // Example initial state (can come from API)
+    { id: 1, name: "Folder 1", color: "#f00", questions: [1, 2,4,7,9] },
+    { id: 2, name: "Folder 2", color: "#0f0", questions: [3,5,6,8] },
+  ]);
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -359,17 +385,38 @@ for x in fruits:
 
   // Define columns with visibility state
 
-  
+  const handleAddQuestionToTag = (tagId, questionId) => {
+  setTags(prevTags =>
+    prevTags.map(tag =>
+      tag.id === tagId
+        ? { ...tag, questions: [...tag.questions, questionId] }
+        : tag
+    )
+  );
+};
+
+const handleRemoveQuestionFromTag = (tagName, questionId) => {
+  setTags(prevTags =>
+    prevTags.map(tag =>
+      tag.name === tagName
+        ? { ...tag, questions: tag.questions.filter(id => id !== questionId) }
+        : tag
+    )
+  );
+};
+
+
   // Column visibility state - only Questions visible by default
   const [columnVisibility, setColumnVisibility] = useState({
     id: true,
     questions: true,
     type: true,
-    section:true,
+    section: true,
     marks: true,
-    modified:true,
-    created:true,
+    modified: true,
+    created: true,
     actions: true,
+    category:true,
   })
 
   const columns = useMemo(() => [
@@ -446,6 +493,40 @@ for x in fruits:
     //   sortable: true,
     //   isVisible: columnVisibility.created,
     // },
+
+    {
+      name: "Category",
+      selector: "category",
+      sortable: true,
+      cell: (row) => (
+        <div className="question-tags">
+          {tags
+            .filter(tag => tag.questions?.includes(row.id)) // only tags for this question
+            .map(tag => (
+              <div key={tag.id} className="question-tag-container">
+                <div className="question-tag questions-page-question-tag">
+                  <span
+                    className="tag-color-dot questions-page-color-dot"
+                    style={{ backgroundColor: tag.color }}
+                  ></span>
+                  <span className="index-tag-name questions-page-tag-name">{tag.name}</span>
+                </div>
+                <span
+                  className="tag-remove questionpage-tag-remove"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveQuestionFromTag(tag.name, row.id); // dynamically remove tag
+                  }}
+                >
+                  &times;
+                </span>
+              </div>
+            ))}
+        </div>
+      ),
+      isVisible: columnVisibility.category,
+    },
+
     {
       name: "Actions",
       selector: "actions",
@@ -536,7 +617,7 @@ for x in fruits:
       </div>
     );
   };
-  
+
 
   // Toggle column visibility function
   // const toggleColumnVisibility = (columnSelector) => {
@@ -565,9 +646,20 @@ for x in fruits:
         <div className="questionsadd-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">QB 1 Questions</h1>
-            {/* <div className="columnvisibility-wrapper">
-              <ColumnVisibilityDropdown columns={columns} onToggleColumn={toggleColumnVisibility} />
-            </div> */}
+
+            <div className="test-header-icons">
+
+              <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+                <FaEdit />
+                <span className="tooltip-text">Edit</span>
+              </button>
+
+              <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+                <FaFilePdf />
+                <span className="tooltip-text">Download PDF</span>
+              </button>
+
+            </div>
           </div>
 
           <div className="my-data-table">
@@ -627,6 +719,16 @@ for x in fruits:
           </Modal>
         </div>
       </div>
+
+      <NewQBModal
+        isOpen={showEditModal}
+        onClose={closeAllModals}
+        testData={selectedTest}
+        setTestData={setSelectedTest}
+        mode="edit"
+        heading={modalHeading}
+      />
+
       {showPaginationButtons && (
         <PaginationButtons
           filteredQuestions={filteredData}

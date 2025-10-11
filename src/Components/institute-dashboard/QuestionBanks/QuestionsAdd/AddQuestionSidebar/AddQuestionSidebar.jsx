@@ -5,7 +5,7 @@ import { Link, useLocation, useParams } from "react-router-dom"
 import { BiSolidRename } from "react-icons/bi"
 import { FaFilePdf, FaEdit, FaFolderPlus } from "react-icons/fa"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear,faChevronDown  } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Trash2,
@@ -58,6 +58,8 @@ const AddQuestionSidebar = () => {
   // const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null)
 
+  const opendropdownRef = useRef(null)
+
   const toggleDropdown = () => {
     setIsDropdownOpen(prev => !prev)
   }
@@ -94,9 +96,6 @@ const AddQuestionSidebar = () => {
     setShowMoreOptions(showMoreOptions === index ? null : index)
   }
 
-  const handleAddFolder = ({ name, color }) => {
-    console.log("New Folder Created:", { name, color })
-  }
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -183,7 +182,6 @@ const AddQuestionSidebar = () => {
   // };
 
 
-
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
@@ -232,7 +230,7 @@ const AddQuestionSidebar = () => {
             
               <button
                 className="settings-trigger-btn sidebar-contents"
-                onClick={handleSettingsClick}
+                onClick={() => setOpenDropdown(!openDropdown)}
                 aria-label="Test settings"
                 aria-expanded={openDropdown}
               >
@@ -431,6 +429,7 @@ const AddQuestionSidebar = () => {
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
+
       </button>
       <MCQModal open={isModalOpen} onClose={() => setIsModalOpen(false)} ShortAnswerModalOpen={isShortAnswerModalOpen} />
       <NumericalModal open={isNumericalModalOpen} onClose={() => setIsNumericalModalOpen(false)} />
@@ -439,15 +438,19 @@ const AddQuestionSidebar = () => {
         open={isDescriptiveModalOpen}
         onClose={() => setIsDescriptiveModalOpen(false)}
       />
+
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}
-        onAddFolder={handleAddFolder}
+        heading="Create New Category"   // ✅ pass heading here
       />
+
+
       <AddTagsComponent
         isOpen={isTagModalOpen}
         onClose={() => setIsTagModalOpen(false)}
       />
+
     </div>
   )
 }

@@ -69,9 +69,9 @@
   .col-test{
     width: 20%;
   }
-  .col-owner{
+  /* .col-owner{
     width: 20%;
-  }
+  } */
   .col-staus{
     width: 20%
   }
@@ -599,9 +599,8 @@ padding-top: 40px;
 
 .table-tq-columns {
   display: flex;
-  /* stack non-actions vertically */
   gap: 20px;
-  /* spacing between them */
+  width: 100%;
 }
 
 .table-tq-actions {

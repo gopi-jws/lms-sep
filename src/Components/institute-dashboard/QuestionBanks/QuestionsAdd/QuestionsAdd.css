@@ -21,8 +21,9 @@ a {
 /* Header */
 .test-index-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  /* justify-content: space-between;
+  align-items: center; */
+  gap: 15px;
   padding: 10px;
 }
 
@@ -62,9 +63,6 @@ a {
   white-space: nowrap;
 
 } */
-
-
-
 
 /* LaTeX Content Styling */
 .row-link .katex {
@@ -425,3 +423,16 @@ a {
   background-color: white;
 }
 
+.questions-page-color-dot{
+    width: 5px;
+    height: 5px;
+}
+
+.questions-page-tag-name{
+    font-size: 0.675rem;
+}
+
+.questionpage-tag-remove{
+    width: 15px;
+    height: 15px;
+}

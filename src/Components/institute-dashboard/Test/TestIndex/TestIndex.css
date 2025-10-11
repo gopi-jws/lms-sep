@@ -693,3 +693,25 @@ width: 100%;
   text-wrap: wrap;
   
 }
+
+
+/* mobile responsive  */
+
+.desktop-title {
+  display: block;
+}
+
+.mobile-title {
+  display: none;
+}
+
+/* On small screens, hide desktop title and show mobile dropdown */
+@media (max-width: 768px) {
+  .desktop-title {
+    display: none;
+  }
+
+  .mobile-title {
+    display: block;
+  }
+}

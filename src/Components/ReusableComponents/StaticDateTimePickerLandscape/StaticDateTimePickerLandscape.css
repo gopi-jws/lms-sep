@@ -300,3 +300,16 @@
   background-color: #2563eb;
 }
 
+@media (max-width: 699px){
+  .date-modal-body{
+    flex-direction: column;
+  }
+  
+  .date-calendar-section{
+    width: 100%;
+  }
+
+  .date-clock-section{
+    width: 100%;
+  }
+}
