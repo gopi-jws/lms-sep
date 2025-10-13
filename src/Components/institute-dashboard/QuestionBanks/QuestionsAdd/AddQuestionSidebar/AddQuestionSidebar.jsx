@@ -55,7 +55,7 @@ const AddQuestionSidebar = () => {
   const [isTrueFalseModalOpen, setIsTrueFalseModalOpen] = useState(false)
   const [isDescriptiveModalOpen, setIsDescriptiveModalOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  // const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null)
 
   const opendropdownRef = useRef(null)
@@ -177,9 +177,9 @@ const AddQuestionSidebar = () => {
     setIsMobileOpen(false)
   }
 
-  //  const handleSettingsClick = () => {
-  //   setOpenDropdown(!openDropdown);
-  // };
+  const handleSettingsClick = () => {
+    setOpenDropdown(!openDropdown);
+  };
 
 
   return (
@@ -223,81 +223,7 @@ const AddQuestionSidebar = () => {
               </li>
             </ul>
           </div>
-          <hr></hr>
-          {/* <div className="test-sidebar-section">
-            <h3 className="sidebar-section-title">Actions</h3>
-            <div className="settings-dropdown-container" ref={dropdownRef}>
-            
-              <button
-                className="settings-trigger-btn sidebar-contents"
-                onClick={() => setOpenDropdown(!openDropdown)}
-                aria-label="Test settings"
-                aria-expanded={openDropdown}
-              >
-                <FontAwesomeIcon icon={faGear} className="icon" size="lg" />
-                Settings
-                <span className="tag-dropdown-toggle ms-auto"></span>
-              </button>
 
-             
-              {openDropdown && (
-                <div className="settings-dropdown-menu">
-                  <ul className="test-sidebar-menu">
-                    <li>
-                      <button
-                        className="dropdown-menu-item sidebar-contents"
-                        onClick={() => handleActionClick("edit", testItem)}
-                      >
-                        <FaEdit className="icon" size={18} />
-                        <span className="dropdown-text">Edit</span>
-                      </button>
-                    </li>
-
-                    <li>
-                      <button
-                        className="dropdown-menu-item sidebar-contents"
-                        onClick={() => handleActionClick("pdf")}
-                      >
-                        <FaFilePdf className="icon" size={18} />
-                        <span className="dropdown-text">Download</span>
-                      </button>
-                    </li>
-
-                    <li>
-                      <button
-                        className="dropdown-menu-item sidebar-contents"
-                        onClick={() => handleActionClick("addToFolder")}
-                      >
-                        <FaFolderPlus className="icon" size={18} />
-                        <span className="dropdown-text">Add to Folder</span>
-                      </button>
-                    </li>
-
-                    <li>
-                      <button
-                        className="dropdown-menu-item sidebar-contents"
-                        onClick={() => handleActionClick("archive")}
-                      >
-                        <Archive className="icon" size={18} />
-                        <span className="dropdown-text">Archived</span>
-                      </button>
-                    </li>
-
-                    <li>
-                      <button
-                        className="dropdown-menu-item sidebar-contents"
-                        onClick={() => handleActionClick("delete")}
-                      >
-                        <Trash2 className="icon" size={18} />
-                        <span className="dropdown-text">Trashed</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-          </div> */}
           <hr />
 
           <div className="test-sidebar-section">
@@ -419,7 +345,84 @@ const AddQuestionSidebar = () => {
             </ul>
           </div>
 
+          <hr></hr>
+          <div className="test-sidebar-section">
+            <h3 className="sidebar-section-title">Actions</h3>
+            <div className="settings-dropdown-container" ref={opendropdownRef}>
+
+              <button
+                className="settings-trigger-btn sidebar-contents"
+                onClick={() => setOpenDropdown(!openDropdown)}
+                aria-label="Test settings"
+                aria-expanded={openDropdown}
+              >
+                <FontAwesomeIcon icon={faGear} className="icon" size="lg" />
+                Settings
+                <span className="tag-dropdown-toggle ms-auto"></span>
+              </button>
+
+
+              {openDropdown && (
+                <div className="settings-dropdown-menu">
+                  <ul className="test-sidebar-menu">
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("edit", testItem)}
+                      >
+                        <FaEdit className="icon" size={18} />
+                        <span className="dropdown-text">Edit</span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("pdf")}
+                      >
+                        <FaFilePdf className="icon" size={18} />
+                        <span className="dropdown-text">Download</span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("addToFolder")}
+                      >
+                        <FaFolderPlus className="icon" size={18} />
+                        <span className="dropdown-text">Add to Folder</span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("archive")}
+                      >
+                        <Archive className="icon" size={18} />
+                        <span className="dropdown-text">Archived</span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className="dropdown-menu-item sidebar-contents"
+                        onClick={() => handleActionClick("delete")}
+                      >
+                        <Trash2 className="icon" size={18} />
+                        <span className="dropdown-text">Trashed</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
+          </div>
+
         </div>
+
 
       </nav>
       {/* Mobile Toggle Button */}

@@ -29,7 +29,7 @@
 .test-sidebar-scroll {
     overflow-y: auto;
     /* max-height: 100%; */
-    height: calc(100% - 150px);
+    height: calc(100% - 125px);
 }
 
 .test-sidebar-header {
