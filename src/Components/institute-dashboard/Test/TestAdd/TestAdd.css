@@ -540,6 +540,11 @@ a {
 
 @media (max-width: 1024px){
   .testadd-index-container{
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: hidden;
   }
+}
+
+.mark-image{
+  display: flew !important;
 }

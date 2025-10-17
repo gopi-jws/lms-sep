@@ -239,17 +239,21 @@ input[type="file"]::file-selector-button {
 }
 
 
-
-
-
-
 /* Modal Footer */
 .newteacher-modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: var(--modal-footer-gap);
     padding: var(--modal-footer-padding);
     border-top: var(--modal-footer-border-top);
+}
+.Excel-icon{
+    font-size: 16px;
+    margin-right: 8px;
+}
+.action{
+    display: flex;
+    gap: 10px;
 }
 
 /* Active Create Button Styling */

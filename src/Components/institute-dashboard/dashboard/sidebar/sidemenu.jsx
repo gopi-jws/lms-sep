@@ -23,10 +23,13 @@ import {
 } from "lucide-react"
 import "./sidemenu.css"
 
-const SidebarMenu = () => {
+const SidebarMenu = ({ isMobileOpen }) => {
+
+  console.log(isMobileOpen);
+  
   const location = useLocation()
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  // const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const currentPath = location.pathname
 

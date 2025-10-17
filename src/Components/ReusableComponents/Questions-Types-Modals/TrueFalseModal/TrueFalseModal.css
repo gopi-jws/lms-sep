@@ -1,5 +1,8 @@
 /* MCQ Modal Styles */
-
+.true-false-modal-overlay,
+.true-false-modal-overlay *{
+color: black !important;
+}
 
 /* Modal overlay */
 .true-false-modal-overlay {
@@ -88,22 +91,22 @@
 
 /* Modal Body */
 .true-false-modal-body {
-
-  
-            display: flex;
-            height: 100%;
-            overflow-y: var(--modal-body-overflow-y);
-            padding: var(--modal-body-padding);
-            flex: var(--modal-body-flex);   }
-          
+    display: flex;
+    height: 100%;
+    overflow-y: var(--modal-body-overflow-y);
+    padding: var(--modal-body-padding);
+    flex: var(--modal-body-flex);
+}
 
 
 /* Row and Column Layout */
 .true-false-modal-row {
-   
-            display: flex;
-            width: 100%;
-            height: 100%;   }
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 10PX;
+    padding-bottom: 30px;
+}
 
 
 .first-column,

@@ -125,7 +125,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     const isTimeSufficient = hoursAvailable >= totalHoursRequired;
     const handleAdjustExamSettings = () => {
         console.log("AdjustExamSettings");
-
+        setWarningPopupOpen(false);
     };
     const inputRef = useRef(null);
     const containerRef = useRef(null);
@@ -360,6 +360,12 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     };
 
     const handlePublish = () => {
+        console.log(selectedClasses);
+
+        if (selectedClasses[0] === "Class 2"){
+            setParticipations(50);
+        }
+        
         setWarningPopupOpen(true);
     };
 
@@ -621,7 +627,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
                                     <div className={`advanced-options ${showAdvanced ? "open" : "closed"}`}>
                                         {/* Scheduled Test Fields */}
                                         <div className="pb-2 publish-form-group">
-                                            <label>Invite/Enroll with Share</label>
+                                            <label>Invite</label>
                                             <div
                                                 className={`tags-container ${isFocused ? "focused" : ""}`}
                                                 onClick={() => document.querySelector(".tags-input-field").focus()}

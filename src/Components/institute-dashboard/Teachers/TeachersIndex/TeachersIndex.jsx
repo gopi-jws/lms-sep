@@ -275,10 +275,7 @@ const TeachersIndex = () => {
       <div className="test-index-wrapper">
         <div className="test-index-container">
           <div className="test-index-header">
-            <h1 className="breadcrumb">All Teachers Lists</h1>
-
-            
-           
+            <h1 className="breadcrumb">All Teachers Lists</h1>      
           </div>
 
           <div className="my-data-table">

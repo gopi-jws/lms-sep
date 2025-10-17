@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 import DataTable from "../../../../../Components/ReusableComponents/TableComponent/TableComponent";
 import PaginationButtons from "../../../../../Components/ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../../../Components/ReusableComponents/Pagination/PaginationInfo";
+import TestSidebar from "../../TestSidebar/TestSidebar";
+import { VscTriangleDown } from "react-icons/vsc";
 
 const data = [
   { id: 1, test: "Shared Test 1", owner: "John Doe", status: "Published", lastModified: "2 days ago by You" },
@@ -67,6 +69,8 @@ const SharedWithMe = () => {
   const [selectedTest, setSelectedTest] = useState("");
   const tagOptionsRef = useRef(null);
   const moreOptionsRef = useRef(null);
+     //mobile View side bar
+    const [isMobileOpen, setIsMobileOpen] = useState(false)
   // New state for mobile dropdown
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -129,6 +133,43 @@ const SharedWithMe = () => {
     setSelectedTest(testName);
     setIsModalOpen(true);
     setOpenDropdownId(null); // Close dropdown when action is taken
+  };
+
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
   };
 
   // Pagination functions
@@ -329,7 +370,33 @@ const SharedWithMe = () => {
   return (
     <>
       <div className="test-index-wrapper">
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">Shared With Me</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
         <div className="test-index-container">
+          {isMobileOpen && (
+            <div ref={sidebarRef}>
+              <TestSidebar
+                tags={tags}
+                setTags={setTags}
+                isMobileOpen={isMobileOpen}
+                setIsMobileOpen={setIsMobileOpen}
+                // // uncategorizedCount={uncategorizedCount}
+                // onTagClick={handleTagClick}
+                // onUncategorizedClick={handleUncategorizedClick}
+                // activeTag={activeTag}
+                // newTest={handleNewTest}
+                // // onAddTag={handleAddTag}
+                // onCreateTest={handleCreateTest}
+                // archivedCount={data.filter(test => test.archived).length}
+                // trashedCount={data.filter(test => test.trashed).length}
+              />
+            </div>
+          )}
+
           <div className="test-index-header">
             <h1 className="breadcrumb">Shared With Me</h1>
             <div className="test-index-actions"></div>

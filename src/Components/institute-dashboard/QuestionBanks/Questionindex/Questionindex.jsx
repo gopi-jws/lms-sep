@@ -2,7 +2,8 @@
 
 import "./Questionindex.css"
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent"
-import React, { useState, useEffect } from "react"
+import { VscTriangleDown } from "react-icons/vsc";
+import React, { useState, useEffect ,useRef} from "react"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
 import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
@@ -23,6 +24,7 @@ import { Link } from "react-router-dom"
 import { HiDotsVertical } from "react-icons/hi";
 import { Helmet } from "react-helmet";
 
+
 const Questionindex = () => {
   // Static rows for the table with IDs
   const data = [
@@ -42,6 +44,7 @@ const Questionindex = () => {
   const [foldersIteam, setFoldersIteam] = useState([
     {id:1, name: "Folder 1", color: "#9c27b0" ,QB:[]}, 
     {id:2, name: "Folder 2", color: "#2196f3" ,QB:[]}])
+  const [qbs, setQBs] = useState([]);
   const [modalHeading, setModalHeading] = useState("");
   const [editingQB,setEditingQB] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -49,8 +52,12 @@ const Questionindex = () => {
   const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [dataItem,setDataItem] = useState(data);
-  const [ispinning, setIsSpinning] = useState(null)
-    
+  const [ispinning, setIsSpinning] = useState(null);
+  //new Question Bank Add
+  const [isQbModalOpen, setIsQbModalOpen] = useState(false);
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+ 
 
   // Pagination state
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -65,7 +72,7 @@ const Questionindex = () => {
 
   // Mobile dropdown state
   const [openDropdownId, setOpenDropdownId] = useState(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
   // Filter data based on search
   const getFilteredData = () => {
@@ -118,17 +125,42 @@ const Questionindex = () => {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".mobile-actions-dropdown")) {
-        setOpenDropdownId(null)
-      }
-    }
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);  
+  };
 
   // Pagination functions
   const loadMore = () => {
@@ -151,6 +183,17 @@ const Questionindex = () => {
     setOpenDropdownId(openDropdownId === rowId ? null : rowId)
   }
 
+  const handleNewQuestionBank = () =>{
+    setIsQbModalOpen(true)    
+  }
+
+
+  // Function to create a new QB
+  const handleCreateQB = (qbData) => {
+    console.log("New QB created:", qbData);
+    setDataItem((prev) => [...prev, qbData]);
+    setIsQbModalOpen(false);
+  };
 
 
 //Question Bank Name Edit
@@ -163,7 +206,6 @@ const Questionindex = () => {
       )
     );
   };
-
 
   //Question Bank handleArchiveQB   
   const handleArchiveQB = (QBId) =>{
@@ -248,6 +290,10 @@ const Questionindex = () => {
 
   const getTimeFromString = (text) => {
     const now = new Date();
+
+    // 🧩 Prevent crash if text is missing or not a string
+    if (!text || typeof text !== "string") return now.getTime();
+
     const match = text.match(/(\d+)\s+(hour|hours|day|days)/i);
     if (!match) return now.getTime();
 
@@ -260,9 +306,11 @@ const Questionindex = () => {
     return now.getTime();
   };
 
-  const sortedFilteredData = [...filteredData].sort(
-    (a, b) => getTimeFromString(b.lastModified) - getTimeFromString(a.lastModified)
+
+  const sortedFilteredData = [...filteredData].sort((a, b) =>
+    getTimeFromString(b?.lastModified) - getTimeFromString(a?.lastModified)
   );
+
 
 
   const columns = [
@@ -399,12 +447,35 @@ const Questionindex = () => {
         <Sidebar
           foldersIteam={foldersIteam}
           setFoldersIteam={setFoldersIteam}
+          createNewQuestionBank={handleNewQuestionBank}
         />
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Question Bank Lists</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+       
         <div className="questionbank-index-container">
+
+       
+          {isMobileOpen && (
+            <div ref={sidebarRef}>
+              <Sidebar
+                foldersIteam={foldersIteam}
+                setFoldersIteam={setFoldersIteam}
+                isMobileOpen={isMobileOpen}
+                setIsMobileOpen={setIsMobileOpen}
+                createNewQuestionBank={handleNewQuestionBank}
+              />
+            </div>
+          )}
+
+        
           <div className="test-index-header">
             <h1 className="breadcrumb">All Question Bank Lists</h1>
           </div>
 
+         
           <div className="my-data-table">
             <DataTable
               columns={columns}
@@ -419,10 +490,12 @@ const Questionindex = () => {
               onSearchChange={handleSearchChange}
               allQuestions={data}
               modalType="QB"
+              setIsQbModalOpen={setIsQbModalOpen}
               setIsRenameModalOpen={setIsRenameModalOpen}
               setEditingQB={setEditingQB}
               setIsDeleteModalOpen={setIsDeleteModalOpen}
               setIsArchivedModalOpen={setIsArchivedModalOpen}
+              newQuestioBank ={handleNewQuestionBank}
             />
           </div>
         </div>
@@ -447,6 +520,14 @@ const Questionindex = () => {
           isSearching={searchQuery.length > 0}
         />
 
+         <NewQBModal
+          isOpen={isQbModalOpen}
+          heading="Create New QB"
+          onClose={() => setIsQbModalOpen(false)}
+          onSubmit={handleCreateQB}
+          mode = "create"
+        />
+
         {isEditModalOpen && (
           <NewQBModal
             heading={modalHeading}
@@ -463,7 +544,6 @@ const Questionindex = () => {
             }}
             mode="edit"
           />)}
-
 
         {isArchivedModalOpen && (
           <NewQBModal
@@ -510,6 +590,7 @@ const Questionindex = () => {
             mode="rename"
           />
           )}
+
       </div>
     </>
   )

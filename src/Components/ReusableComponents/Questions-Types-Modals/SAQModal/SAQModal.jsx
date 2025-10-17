@@ -10,15 +10,17 @@ import useBounceModal from "../../../ReusableComponents/useBounceModal/useBounce
 import QuestionEditor from "../../Markdown/QuestionEditor";
 
 const SAQModal = ({ open, onClose, initialData }) => {
+
+    
     const { modalRef, isBouncing } = useBounceModal(open);
-    const [questionTitle, setQuestionTitle] = useState(initialData?.questionTitle || "");
-    const [answers, setAnswers] = useState(initialData?.answers || [{ text: "", image: null }]);
+    const [questionTitle, setQuestionTitle] = useState(initialData?.question || "");
+    const [questionImages, setQuestionImages] = useState(initialData?.questionImages || []);
+    const [answers, setAnswers] = useState(initialData?.options || [{ text: "", image: null }]);
     const [correctAnswers, setCorrectAnswers] = useState(initialData?.correctAnswers || []);
     const [isCodeEnabled, setIsCodeEnabled] = useState(initialData?.isCodeEnabled ?? false);
     const [isLaTeXEnabled, setIsLaTeXEnabled] = useState(initialData?.isLaTeXEnabled ?? false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [questionImages, setQuestionImages] = useState(initialData?.questionImages || []);
-    const [solutionText, setSolutionText] = useState(initialData?.solutionText || "");
+    const [solutionText, setSolutionText] = useState(initialData?.solution || "");
     const [solutionImage, setSolutionImage] = useState(initialData?.solutionImage || null);
 
     // Text selection state
@@ -66,18 +68,18 @@ const SAQModal = ({ open, onClose, initialData }) => {
     // Handle initial data when modal opens
     useEffect(() => {
         if (open && initialData) {
-            setQuestionTitle(initialData.questionTitle || "");
+            setQuestionTitle(initialData.question || "");
             const initialQuestionImages = initialData.questionImages
                 ? Array.isArray(initialData.questionImages)
                     ? initialData.questionImages
                     : [initialData.questionImages]
                 : [];
             setQuestionImages(initialQuestionImages);
-            setAnswers(initialData.answers || [{ text: "", image: null }]);
+            setAnswers(initialData.options || [{ text: "", image: null }]);
             setCorrectAnswers(initialData.correctAnswers || []);
             setIsCodeEnabled(initialData.isCodeEnabled ?? false);
             setIsLaTeXEnabled(initialData.isLaTeXEnabled ?? false);
-            setSolutionText(initialData.solutionText || "");
+            setSolutionText(initialData.solution || "");
             setSolutionImage(initialData.solutionImage || null);
 
             // Initialize history
@@ -418,13 +420,37 @@ const SAQModal = ({ open, onClose, initialData }) => {
         correctAnswers.includes(option.value)
     );
 
+
     // Simple toggle functions
     const handleCodeToggle = () => {
-        setIsCodeEnabled(!isCodeEnabled);
-    };
+        const textarea = questionRef.current;
+        if (!textarea) return;
 
-    const handleLaTeXToggle = () => {
-        setIsLaTeXEnabled(!isLaTeXEnabled);
+        console.log("textarea :" + textarea);
+
+
+        const cursorStart = textarea.selectionStart;
+        const cursorEnd = textarea.selectionEnd;
+
+        console.log("cursorStart :" + cursorStart);
+        console.log("cursorEnd :" + cursorEnd);
+
+        const language = "\n~~~language\n//code here\n~~~";
+
+        // Insert at cursor position
+        const newValue =
+            questionTitle.slice(0, cursorStart) +
+            language +
+            questionTitle.slice(cursorEnd);
+
+        setQuestionTitle(newValue);
+
+        // Reset cursor position after inserting
+        setTimeout(() => {
+            const newCursorPos = cursorStart + language.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }, 0);
     };
 
     const addAnswerField = () => {
@@ -645,13 +671,12 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                     <label
                                         style={{
                                             cursor: "pointer",
-                                            textDecoration: isCodeEnabled ? "none" : "line-through",
                                         }}
                                         onClick={handleCodeToggle}
                                     >
-                                        Code {isCodeEnabled ? "✓" : ""}
+                                        Code
                                     </label>
-                                    <label
+                                    {/* <label
                                         style={{
                                             cursor: "pointer",
                                             textDecoration: isLaTeXEnabled ? "none" : "line-through",
@@ -659,11 +684,11 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                         onClick={handleLaTeXToggle}
                                     >
                                         LaTeX {isLaTeXEnabled ? "✓" : ""}
-                                    </label>
+                                    </label> */}
                                 </div>
 
                                 {/* Question Input */}
-                                <label className="editing-option">Question</label>
+                                
                                 <textarea
                                     ref={questionRef}
                                     className="qtn-textarea"
@@ -814,7 +839,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                                     answerRefs.current[index] = el;
                                                     if (el) handleAutoResize(el);
                                                 }}
-                                                className="qtn-textarea"
+                                                className="qtn-textarea qtn-textarea-option"
                                                 value={answer.text || ""}
                                                 onChange={(e) => {
                                                     handleAnswerChange(index, "text", e.target.value);
@@ -863,7 +888,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                                 //         }
                                                 //     }
                                                 // }}
-                                                onSelect={handleTextSelection(`answer-${index}`)}
+                                                // onSelect={handleTextSelection(`answer-${index}`)}
                                                 placeholder="Enter option text..."
                                                 disabled={isSubmitting}
                                             />
@@ -929,6 +954,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                     <label>Correct Answer(s)</label>
                                     <Select
                                         isMulti
+                                        isClearable={false} 
                                         options={answerOptions}
                                         value={selectedCorrectAnswers}
                                         onChange={handleCorrectAnswersChange}
@@ -1006,7 +1032,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                         handleAutoResize(e.target);
                                         saveToHistory('solution', e.target.value);
                                     }}
-                                    onSelect={handleTextSelection('solution')}
+                                    // onSelect={handleTextSelection('solution')}
                                     onKeyDown={(e) => handleKeyDown('solution', e)}
                                     placeholder="Enter solution text..."
                                     disabled={isSubmitting}
@@ -1065,8 +1091,6 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                     <div className="input">
                                         <QuestionEditor
                                             content={questionTitle}
-                                            codeMode={isCodeEnabled}
-                                            latexMode={isLaTeXEnabled}
                                             className="question-editor-preview"
                                         />
                                     </div>
@@ -1096,7 +1120,6 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                                 key={index}
                                             >
                                                 <div className="answer-header">
-                                                    <span className="answer-number">Option {index + 1}</span>
                                                     {correctAnswers.includes(`answer${index + 1}`) && (
                                                         <span className="correct-badge">Correct</span>
                                                     )}
@@ -1104,8 +1127,6 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                                 <div className="answer-content">
                                                     <QuestionEditor
                                                         content={answer.text?.trim() || ""}
-                                                        codeMode={true}
-                                                        latexMode={true}
                                                     />
                                                     {answer.image && (
                                                         <div className="answer-image-container">
@@ -1131,8 +1152,6 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                         ) : (
                                             <QuestionEditor
                                                 content={solutionText}
-                                                codeMode={true}
-                                                latexMode={true}
                                             />
                                         )}
                                         {solutionImage && (

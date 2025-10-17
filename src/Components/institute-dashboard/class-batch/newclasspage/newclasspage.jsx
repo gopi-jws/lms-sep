@@ -6,7 +6,10 @@ import "./newclasspage.css";
 import { FaCopy } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const AddClass = () => {
+const AddClass = ({ onClose, onOpen }) => {
+
+    console.log(onOpen);
+    
     const navigate = useNavigate();
 
     const [className, setClassName] = useState("");
@@ -43,6 +46,18 @@ const AddClass = () => {
         setTimeout(() => setCopied(false), 2000); // Hide message after 2 seconds
     };
 
+
+    const handleClose = () => {
+        if (typeof onClose === "function") {
+            onClose();
+        } else {
+            console.error("onClose is not a function");
+            console.log(onOpen);
+            
+        }
+    };
+
+
     // Handle form submission
     // const handleSubmit = (e) => {
     //     e.preventDefault();
@@ -62,161 +77,161 @@ const AddClass = () => {
 
     return (
         <>
-           
-        <div className="add-class-container">
-            <Form className="add-class-form">
-                <h5 className="addnewclass-title">Add New Class</h5>
+        
+            <div className="newqb-modal-overlay">
+                <div className="add-class-container">
+                    <Form className="add-class-form">
+                        <h5 className="addnewclass-title">Add New Class</h5>
 
-                <div className="newclass-form-content">
-                    <div className="newclass-form-inner">
+                        <div className="newclass-form-content">
+                            <div className="newclass-form-inner">
 
-                        {/* Class Name */}
-                        <div className="mb-3">
-                            <label className="form-label">Class Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter class name"
-                                value={className}
-                                onChange={(e) => setClassName(e.target.value)}
-                                className="form-control"
-                            />
-                            {errors.className && <small className="text-danger">{errors.className}</small>}
-                        </div>
+                                {/* Class Name */}
+                                <div className="mb-3">
+                                    <label className="form-label">Class Name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter class name"
+                                        value={className}
+                                        onChange={(e) => setClassName(e.target.value)}
+                                        className="form-control"
+                                    />
+                                    {errors.className && <small className="text-danger">{errors.className}</small>}
+                                </div>
 
-                        {/* Students Type (Radio buttons) */}
-                        <div className="mb-3">
-                            <label className="form-label">Add Students</label>
-                            <div className="radio-buttons">
-                                <input id="admin" type="radio" value="admin" checked={studentsType === "admin"} onChange={(e) => setStudentsType(e.target.value)} />
-                                <label htmlFor="admin">Only By Admin</label>
+                                {/* Students Type (Radio buttons) */}
+                                <div className="mb-3">
+                                    <label className="form-label">Add Students</label>
+                                    <div className="radio-buttons">
+                                        <input id="admin" type="radio" value="admin" checked={studentsType === "admin"} onChange={(e) => setStudentsType(e.target.value)} />
+                                        <label htmlFor="admin">Only By Teacher</label>
 
-                                <input id="both" type="radio" value="both" checked={studentsType === "both"} onChange={(e) => setStudentsType(e.target.value)} />
-                                <label htmlFor="both">Hybrid (Both Way)</label>
+                                        <input id="student" type="radio" value="student" checked={studentsType === "student"} onChange={(e) => setStudentsType(e.target.value)} />
+                                        <label htmlFor="student">By Them Self (Students)</label>
 
-                                <input id="student" type="radio" value="student" checked={studentsType === "student"} onChange={(e) => setStudentsType(e.target.value)} />
-                                <label htmlFor="student">Only By Students</label>
-                            </div>
-
-                        </div>
-
-                        {/* Max Strength (only if "Admin Only" is selected) */}
-                        {studentsType === "admin" && (
-                            <div className="mb-3">
-                                <label className="form-label">Max Strength</label>
-                                <input
-                                    type="number"
-                                    value={maxStrength}
-                                    onChange={(e) => setMaxStrength(e.target.value)}
-                                    className="form-control"
-                                />
-                                {errors.maxStrength && <small className="text-danger">{errors.maxStrength}</small>}
-                            </div>
-                        )}
-
-                        {/* Permission (Radio buttons) */}
-                        <div className="mb-3">
-                            <label className="form-label">Permission</label>
-                            <div className="radio-buttons">
-                                <input type="radio" name="permission" value="auto" checked={permission === "auto"} onChange={(e) => setPermission(e.target.value)} /> Auto Activation
-                                <input type="radio" name="permission" value="manual" checked={permission === "manual"} onChange={(e) => setPermission(e.target.value)} /> Manual Activation
-                            </div>
-                        </div>
-
-                        {/* Expiry Date and Time */}
-                        <div className="mb-3">
-                            <label className="form-label">Expiry Date and Time</label>
-                            <div className="date-time-container">
-                                <DatePicker
-                                    selected={expiryDate}
-                                    onChange={setExpiryDate}
-                                    dateFormat="yyyy-MM-dd"
-                                    className="form-control form-date"
-                                    placeholderText="Select a date"
-                                />
-                                {errors.expiryDate && <small className="text-danger">{errors.expiryDate}</small>}
-
-                                <DatePicker
-                                    selected={expiryTime}
-                                    onChange={setExpiryTime}
-                                    showTimeSelect
-                                    showTimeSelectOnly
-                                    timeIntervals={15}
-                                    timeCaption="Time"
-                                    dateFormat="h:mm aa"
-                                    className="form-control form-time"
-                                    placeholderText="Select a time"
-                                />
-                                {errors.expiryTime && <small className="text-danger">{errors.expiryTime}</small>}
-                            </div>
-                        </div>
-
-                        {/* Class Link */}
-                        <div className="mb-3">
-                            <label className="form-label">Class Link</label>
-                            <div className="link-container">
-                                {classLink ? (
-                                    <div className="input-group">
-                                        <input
-                                            value={classLink}
-                                            readOnly
-                                            type="text"
-                                            className="form-control new-class-link-input"
-                                        />
-                                        <button
-                                            type="button"
-                                            className="btn btn-outline-secondary copy-button"
-                                            onClick={handleCopy}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                        {copied && <span className="copy-message">Link copied!</span>}
+                                        <input id="both" type="radio" value="both" checked={studentsType === "both"} onChange={(e) => setStudentsType(e.target.value)} />
+                                        <label htmlFor="both">By Both Ways (Hybrid)</label>
                                     </div>
-                                ) : (
-                                    <Button
-                                        variant="outline-primary"
-                                        type="button"
-                                        onClick={generateLink}
-                                        className="generate-link-button"
-                                    >
-                                        Generate Link
-                                    </Button>
+
+                                </div>
+
+                                {/* Max Strength (only if "Admin Only" is selected) */}
+                                {studentsType === "admin" && (
+                                    <div className="mb-3">
+                                        <label className="form-label">Max Strength</label>
+                                        <input
+                                            type="number"
+                                            value={maxStrength}
+                                            onChange={(e) => setMaxStrength(e.target.value)}
+                                            className="form-control"
+                                        />
+                                        {errors.maxStrength && <small className="text-danger">{errors.maxStrength}</small>}
+                                    </div>
                                 )}
-                                {classLink && (
-                                    <Button
-                                        variant="outline-primary"
-                                        type="button"
-                                        onClick={generateLink}
-                                        className="regenerate-link-button"
-                                    >
-                                        Regenerate Link
-                                    </Button>
-                                )}
+
+                                {/* Permission (Radio buttons) */}
+                                <div className="mb-3">
+                                    <label className="form-label">Permission</label>
+                                    <div className="radio-buttons">
+                                        <input type="radio" name="permission" value="auto" checked={permission === "auto"} onChange={(e) => setPermission(e.target.value)} /> Auto Activation
+                                        <input type="radio" name="permission" value="manual" checked={permission === "manual"} onChange={(e) => setPermission(e.target.value)} /> Manual Activation
+                                    </div>
+                                </div>
+
+                                {/* Expiry Date and Time */}
+                                <div className="mb-3">
+                                    <label className="form-label">Expiry Date and Time</label>
+                                    <div className="date-time-container">
+                                        <DatePicker
+                                            selected={expiryDate}
+                                            onChange={setExpiryDate}
+                                            dateFormat="yyyy-MM-dd"
+                                            className="form-control form-date"
+                                            placeholderText="Select a date"
+                                        />
+                                        {errors.expiryDate && <small className="text-danger">{errors.expiryDate}</small>}
+
+                                        <DatePicker
+                                            selected={expiryTime}
+                                            onChange={setExpiryTime}
+                                            showTimeSelect
+                                            showTimeSelectOnly
+                                            timeIntervals={15}
+                                            timeCaption="Time"
+                                            dateFormat="h:mm aa"
+                                            className="form-control form-time"
+                                            placeholderText="Select a time"
+                                        />
+                                        {errors.expiryTime && <small className="text-danger">{errors.expiryTime}</small>}
+                                    </div>
+                                </div>
+
+                                {/* Class Link */}
+                                <div className="mb-3">
+                                    <label className="form-label">Class Link</label>
+                                    <div className="link-container">
+                                        {classLink ? (
+                                            <div className="input-group">
+                                                <input
+                                                    value={classLink}
+                                                    readOnly
+                                                    type="text"
+                                                    className="form-control new-class-link-input"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-secondary copy-button"
+                                                    onClick={handleCopy}
+                                                >
+                                                    <FaCopy />
+                                                </button>
+                                                {copied && <span className="copy-message">Link copied!</span>}
+                                            </div>
+                                        ) : (
+                                            <Button
+                                                variant="outline-primary"
+                                                type="button"
+                                                onClick={generateLink}
+                                                className="generate-link-button"
+                                            >
+                                                Generate Link
+                                            </Button>
+                                        )}
+                                        {classLink && (
+                                            <Button
+                                                variant="outline-primary"
+                                                type="button"
+                                                onClick={generateLink}
+                                                className="regenerate-link-button"
+                                            >
+                                                Regenerate Link
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+
                             </div>
+
+                            {/* Footer Buttons */}
+                            <div className="mcq-modal-footer">
+                                <button className="btn" onClick={(e) => { e.preventDefault(); handleClose(); navigate("/class"); }}>
+                                    Close
+                                </button>
+
+                                <button className="btn create-btn" type="button" disabled={!className || !expiryDate || !expiryTime} onClick={(e) => {
+                                    e.preventDefault(); // Prevents page reload
+                                    navigate("/class");
+                                }}>
+                                    Add Class
+                                </button>
+                            </div>
+
+
                         </div>
-
-                    </div>
-
-                    {/* Footer Buttons */}
-                    <div className="mcq-modal-footer">
-                        <button className="btn" onClick={(e) => {
-                            e.preventDefault(); // Prevents page reload
-                            navigate("/class");
-                        }}>
-                            Close
-                        </button>
-
-                        <button className="btn create-btn" type="button" disabled={!className || !expiryDate || !expiryTime} onClick={(e) => {
-                            e.preventDefault(); // Prevents page reload
-                            navigate("/class");
-                        }}>
-                            Add Class
-                        </button>
-                    </div>
-
-
+                    </Form>
                 </div>
-            </Form>
-        </div>
+            </div>
+       
         </>
     );
 };

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import DispatchModal from "../../../Test/DispatchModal/DispatchModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VscTriangleDown } from "react-icons/vsc";
+import TestSidebar from "../../TestSidebar/TestSidebar";
 import {
   FaPaperPlane,
   FaCopy,
@@ -70,6 +72,9 @@ const Trashed = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showButtons, setShowButtons] = useState(true);
   const [selectedTest, setSelectedTest] = useState("");
+
+  //mobile View side bar
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   // Search and filter related state
   const [searchQuery, setSearchQuery] = useState("");
@@ -217,6 +222,42 @@ const Trashed = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
+  };
 
   // Pagination functions
   const loadMore = () => {
@@ -425,7 +466,32 @@ const Trashed = () => {
   return (
     <>
       <div className="test-index-wrapper">
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">Trashed</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
         <div className="test-index-container">
+          {isMobileOpen && (
+            <div ref={sidebarRef}>
+              <TestSidebar
+                tags={tags}
+                setTags={setTags}
+                isMobileOpen={isMobileOpen}
+                setIsMobileOpen={setIsMobileOpen}
+                // uncategorizedCount={uncategorizedCount}
+                // onTagClick={handleTagClick}
+                // onUncategorizedClick={handleUncategorizedClick}
+                // activeTag={activeTag}
+                // newTest={handleNewTest}
+                // // onAddTag={handleAddTag}
+                // onCreateTest={handleCreateTest}
+                // archivedCount={data.filter(test => test.archived).length}
+                // trashedCount={data.filter(test => test.trashed).length}
+              />
+            </div>
+          )}
           <div className="test-index-header">
             <h1 className="breadcrumb">Trashed</h1>
           </div>

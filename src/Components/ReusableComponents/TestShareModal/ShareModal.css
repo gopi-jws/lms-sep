@@ -948,6 +948,27 @@ input[type="file"]::file-selector-button {
 }
 
 
+.remove-btn{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.remove-btn button{
+    outline: none;
+    border: 1px solid #555;
+    background-color: white;
+    border-radius: 20px;
+    width: 50px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.remove-btn button:hover{
+    background-color: #f2f9ff;
+}
+
+
 
 
 

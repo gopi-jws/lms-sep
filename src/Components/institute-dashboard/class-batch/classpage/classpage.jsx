@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
 import Header from "../../../header/header";
+import AddClass from "../newclasspage/newclasspage";
 import {
   FaPaperPlane,
   FaCopy,
@@ -15,10 +16,11 @@ import {
   FaEdit,
   FaEllipsisH
 } from "react-icons/fa";
-import { Settings, FilePenLine, Archive,Trash2  } from 'lucide-react';
+import { Settings, FilePenLine, Archive, Trash2 } from 'lucide-react';
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+
 const ClassPage = () => {
   const data = [
     { id: "1", name: "Class 1", strength: 30, maximumallowed: 50, expiryDate: new Date(2024, 5, 30) },
@@ -35,6 +37,7 @@ const ClassPage = () => {
   const [fullViewMode, setFullViewMode] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [showNewClass, setShowNewClass] = useState(false); // Renamed for clarity
 
   // Filter data based on search
   const getFilteredData = () => {
@@ -145,7 +148,7 @@ const ClassPage = () => {
         </div>
       ),
       selector: "name",
-      width: "200px", 
+      width: "200px",
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/class/${row.id}/classdetailpage`} state={{ className: row.name, classId: row.id }}>
@@ -158,26 +161,26 @@ const ClassPage = () => {
       name: <div className="cursor-pointer">Strength</div>,
       selector: "strength",
       sortable: true,
-      width: "200px", 
+      width: "200px",
     },
     {
       name: <div className="cursor-pointer">Maximum Allowed</div>,
       selector: "maximumallowed",
       sortable: true,
-      width: "200px", 
+      width: "200px",
     },
     {
       name: <div className="cursor-pointer">Expiry Date</div>,
       selector: "expiryDate",
       sortable: true,
-      width: "200px", 
+      width: "200px",
       cell: (row) => <span>{row.expiryDate.toLocaleDateString()}</span>,
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px", 
+      width: "200px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (
@@ -230,7 +233,7 @@ const ClassPage = () => {
                 aria-label="Settings"
                 onClick={() => handleActionClick("settings", row)}
               >
-                  <FaCog  />
+                <FaCog />
                 <span className="tooltip-text">Settings</span>
               </button>
               <button
@@ -238,7 +241,7 @@ const ClassPage = () => {
                 aria-label="Rename"
                 onClick={() => handleActionClick("rename", row)}
               >
-                  <FaEdit  />
+                <FaEdit />
                 <span className="tooltip-text">Rename</span>
               </button>
               <button
@@ -246,7 +249,7 @@ const ClassPage = () => {
                 aria-label="Archive"
                 onClick={() => handleActionClick("archive", row)}
               >
-                  <FaArchive  />
+                <FaArchive />
                 <span className="tooltip-text">Archive</span>
               </button>
               <button
@@ -254,7 +257,7 @@ const ClassPage = () => {
                 aria-label="Delete"
                 onClick={() => handleActionClick("delete", row)}
               >
-                  <FaTrashAlt  />
+                <FaTrashAlt />
                 <span className="tooltip-text">Delete</span>
               </button>
             </div>
@@ -274,8 +277,14 @@ const ClassPage = () => {
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Classes Lists</h1>
+            {/* Add button to open new class modal
+            <button
+              onClick={() => setShowNewClass(true)}
+              className="btn btn-primary"
+            >
+              Add New Class
+            </button> */}
           </div>
-
           <div className="my-data-table">
             <DataTable
               columns={columns}
@@ -308,6 +317,8 @@ const ClassPage = () => {
           totalItems={data.length}
           isSearching={searchQuery.length > 0}
         />
+
+
       </div>
     </>
   );

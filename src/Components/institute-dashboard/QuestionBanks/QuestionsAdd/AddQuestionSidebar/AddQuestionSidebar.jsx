@@ -347,7 +347,7 @@ const AddQuestionSidebar = () => {
 
           <hr></hr>
           <div className="test-sidebar-section">
-            <h3 className="sidebar-section-title">Actions</h3>
+            {/* <h3 className="sidebar-section-title">Actions</h3> */}
             <div className="settings-dropdown-container" ref={opendropdownRef}>
 
               <button

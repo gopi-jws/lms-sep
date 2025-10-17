@@ -98,9 +98,11 @@ const TestAddSidebar = () => {
   // Inside your component
   const dropdownRef = useRef(null);
 
-  useOutsideClick(dropdownRef, () => {
-    setActiveDropdown(null);
-  });
+  // useOutsideClick(dropdownRef, () => {
+  //   setActiveDropdown(null);
+  // });
+
+  
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sections, setSections] = useState(initialSections);
@@ -340,11 +342,11 @@ const TestAddSidebar = () => {
 
         <div className="test-sidebar-scroll">
 
-          <div className=" test-sidebar-section">
+          {/* <div className=" test-sidebar-section">
             <h3 className=" test-sidebar-section snap-chat-btn">Snap Shot</h3>
           </div>
 
-          <hr />
+          <hr /> */}
 
           <div className="test-sidebar-section">
             <h3 className="sidebar-section-title">Sections</h3>
@@ -452,11 +454,16 @@ const TestAddSidebar = () => {
                   <TagActionsDropdown
                     isOpen={true}
                     mode="desc"
-                    onEdit={() => { setShowDescDropdown(true) }}
+                    onEdit={() => {
+                      console.log("Edit function called");
+                      setShowDescDropdown(true);
+                      setMode("desc");
+                    }}
                     onRemove={() => console.log("Remove Description")}
-                    onClose={() => setActiveDropdown(null)}
+                    onClose={() => setActiveDropdown(null)} // ✅ REQUIRED
                   />
                 )}
+
               </li>
 
               <li className="dropdown-container">
@@ -490,7 +497,7 @@ const TestAddSidebar = () => {
 
           <hr />
           <div className="test-sidebar-section">
-            <h3 className="sidebar-section-title">Actions</h3>
+            {/* <h3 className="sidebar-section-title">Actions</h3> */}
             <div className="settings-dropdown-container" ref={dropdownRef}>
               {/* Settings Button */}
               <button

@@ -1,6 +1,7 @@
-/* MCQ Modal Styles */
-
-/* Modal Overlay */
+.descriptive-modal-overlay,
+.descriptive-modal-overlay *{
+    color: black !important;
+}
 /* Modal overlay */
 .descriptive-modal-overlay {
     position: fixed;
@@ -101,6 +102,8 @@ display: flex;
     display: flex;
     width: 100%;
     height: 100%;
+    gap: 15px;
+    padding-bottom: 30px;
 }
 
 .first-column,

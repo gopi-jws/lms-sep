@@ -115,11 +115,9 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Class Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
-            <Link to="/class/addclass">
-              <button className="allbuttons" aria-label="Create New Class">
+              <button className="allbuttons" aria-label="Create New Class" onClick={()=>setIsNewClassModalOpen(true)}>
                 <span className="sidebar-letters">New Class</span>
               </button>
-            </Link>
           </div>
         </div>
 
@@ -127,7 +125,6 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
            <div className="test-sidebar-section">
           <ul className="test-sidebar-menu">
    
-
             <li>
               <Link
                 to="/class"
@@ -230,10 +227,15 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      <AddClassModal
-        open={isNewClassModalOpen}
-        onClose={() => setIsNewClassModalOpen(false)}
-      />
+
+      {isNewClassModalOpen && (
+        <AddClassModal
+          omOpen={isNewClassModalOpen}
+          onClose={() => setIsNewClassModalOpen(false)}
+        />
+      )}
+      
+      
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}

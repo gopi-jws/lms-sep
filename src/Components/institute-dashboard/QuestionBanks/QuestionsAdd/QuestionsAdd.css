@@ -19,12 +19,24 @@ a {
 }
 
 /* Header */
-.test-index-header {
+/* .test-index-header {
   display: flex;
-  /* justify-content: space-between;
-  align-items: center; */
-  gap: 15px;
+  gap: 10px;
   padding: 10px;
+} */
+
+/* TriagbleDown */
+
+.test-index-header-moblie{
+ display: flex;
+ gap: 15px;
+ margin-left: 5px;
+ display: none;
+}
+
+.TriagbleDown{
+  margin-top: 4px;
+  font-size: 20px;
 }
 
 /* Column Visibility Wrapper */
@@ -283,6 +295,15 @@ a {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+
+  .test-index-header{
+    display: none;
+  }
+
+  .test-index-header-moblie{
+    display: flex;
+  }
+  
   .desktop-actions {
     display: none;
   }
@@ -299,7 +320,6 @@ a {
 
   .truncate {
     max-width: 300px;
-    /* Reduced for mobile to fit screen */
   }
 
   .row-link {
@@ -348,6 +368,13 @@ a {
     padding: 6px;
   }
 
+}
+
+
+@media (max-width: 390px){
+  .truncate {
+      max-width: 220px;
+    }
 }
 
 
@@ -424,15 +451,21 @@ a {
 }
 
 .questions-page-color-dot{
-    width: 5px;
-    height: 5px;
+    width: 8px;
+    height: 8px;
 }
 
 .questions-page-tag-name{
-    font-size: 0.675rem;
+    color: black;
 }
 
-.questionpage-tag-remove{
-    width: 15px;
-    height: 15px;
+
+
+.test-header-icons{
+  margin-top: -3px;
+}
+
+.test-header-icons .test-action-button{
+  font-size: 18px;
+  color: #34495E;
 }

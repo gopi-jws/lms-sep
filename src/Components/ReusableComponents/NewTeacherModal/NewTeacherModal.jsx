@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import * as XLSX from "xlsx";
 import './NewTeacherModal.css'
+import { toast } from "react-toastify";
+import { PiMicrosoftExcelLogoBold } from "react-icons/pi";
 
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal"; // Import the custom hook
 
-const NewTeacherModal = ({ isOpen, onClose, onCreate }) => {
+const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
 
     const { modalRef, isBouncing } = useBounceModal(isOpen); // Corrected line
     const [names, setNames] = useState([]); // State to store name tags
@@ -14,6 +17,27 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate }) => {
     const [isEmailFocused, setIsEmailFocused] = useState(false); // State to track email input focus
     const [nameError, setNameError] = useState(""); // State for name validation error
     const [emailError, setEmailError] = useState(""); // State for email validation error
+    const [data, setData] = useState([]); // excel data stored
+    const [loading, setLoading] = useState(false);
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const bstr = evt.target.result;
+            const workbook = XLSX.read(bstr, { type: "binary" });
+            const sheetName = workbook.SheetNames[0]; // first sheet
+            const sheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+            // defval ensures empty cells are not undefined
+            setData(jsonData);
+        };
+        reader.readAsBinaryString(file);
+        onClose();
+        success();
+    };
 
     // Validate email format
     const validateEmail = (email) => {
@@ -147,68 +171,78 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate }) => {
                 {/* Modal Header */}
                 <div className="newteacher-modal-header">
                     <h5>Add New Teachers</h5>
-                    <button className="close-btn" onClick={onClose}>
+                    <button className="close-btn" onClick={() => { onClose(); setNameInputValue(""); setEmailInputValue(""); }}>
                         &times;
                     </button>
                 </div>
 
-                {/* Modal Body */}
-                <div className="newteacher-modal-body">
-                    <div className="newteacher-form-group">
-                        {/* <label className="pb-1">Add Names</label> */}
-                        <div className={`email-tags ${isNameFocused ? "focused" : ""}`}>
-                            {names.map((name, index) => (
-                                <span key={index} className="email-tag">
-                                    {index + 1}. {name}
-                                    <button onClick={() => removeName(name)}>&times;</button>
-                                </span>
-                            ))}
-                            <input
-                                type="text"
-                                value={nameInputValue}
-                                onChange={handleNameInputChange}
-                                onKeyDown={handleNameInputKeyDown}
-                                onFocus={handleNameInputFocus}
-                                onBlur={handleNameInputBlur}
-                                placeholder="Name separated by comma & space"
-                                className="email-input"
-                            />
-                        </div>
-                        {nameError && <p className="error-message-email">{nameError}</p>}
-                    </div>
+                {loading ? (
+                    <div className="loading">Loading Excel...</div>
+                ) : (
+                    <div className="newteacher-modal-body">
 
-                    <div className="newteacher-form-group">
-                        {/* <label className="pb-1">Add Emails</label> */}
-                        <div className={`email-tags ${isEmailFocused ? "focused" : ""}`}>
-                            {emails.map((email, index) => (
-                                <span key={index} className="email-tag">
-                                    {index + 1}. {email}
-                                    <button onClick={() => removeEmail(email)}>&times;</button>
-                                </span>
-                            ))}
-                            <input
-                                type="text"
-                                value={emailInputValue}
-                                onChange={handleEmailInputChange}
-                                onKeyDown={handleEmailInputKeyDown}
-                                onFocus={handleEmailInputFocus}
-                                onBlur={handleEmailInputBlur}
-                                placeholder="Email Address separated by comma & space"
-                                className="email-input"
-                            />
+                        {/* 🔹 Names Input */}
+                        <div className="newteacher-form-group">
+                            <div className={`email-tags ${isNameFocused ? "focused" : ""}`}>
+                                {names.map((name, index) => (
+                                    <span key={index} className="email-tag">
+                                        {index + 1}. {name}
+                                        <button onClick={() => removeName(name)}>&times;</button>
+                                    </span>
+                                ))}
+                                <input
+                                    type="text"
+                                    value={nameInputValue}
+                                    onChange={handleNameInputChange}
+                                    onFocus={handleNameInputFocus}
+                                    onBlur={handleNameInputBlur}
+                                    placeholder="Name separated by comma & space"
+                                    className="email-input"
+                                />
+                            </div>
+                            {nameError && <p className="error-message-email">{nameError}</p>}
                         </div>
-                        {emailError && <p className="error-message-email">{emailError}</p>}
+
+                        {/* 🔹 Emails Input */}
+                        <div className="newteacher-form-group">
+                            <div className={`email-tags ${isEmailFocused ? "focused" : ""}`}>
+                                {emails.map((email, index) => (
+                                    <span key={index} className="email-tag">
+                                        {index + 1}. {email}
+                                        <button onClick={() => removeEmail(email)}>&times;</button>
+                                    </span>
+                                ))}
+                                <input
+                                    type="text"
+                                    value={emailInputValue}
+                                    onChange={handleEmailInputChange}
+                                    onFocus={handleEmailInputFocus}
+                                    onBlur={handleEmailInputBlur}
+                                    placeholder="Email Address separated by comma & space"
+                                    className="email-input"
+                                />
+                            </div>
+                            {emailError && <p className="error-message-email">{emailError}</p>}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Modal Footer */}
                 <div className="newteacher-modal-footer">
-                    <button className="btn" onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button className="btn" onClick={handleCreate}>
-                        Add
-                    </button>
+                    
+                    <button className="btn" onClick={() => document.querySelector(".add-teacher").click()}>
+                        <PiMicrosoftExcelLogoBold className="Excel-icon"/> Import Excel</button>
+                    <input type="file" accept=".xlsx, .xls" className="add-teacher" style={{display:"none"}} onChange={handleFileUpload} />
+
+                    <div className="action">
+                        <button className="btn" onClick={() => { onClose(); setNameInputValue(""); setEmailInputValue(""); }}>
+                            Cancel
+                        </button>
+                        <button className="btn" onClick={handleCreate}>
+                            Add
+                        </button>
+                    </div>
+                    
                 </div>
             </div>
         </div>

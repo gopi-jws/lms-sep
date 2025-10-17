@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef} from "react"
+import { useLocation } from "react-router-dom";
 import { FaArrowDown, FaArrowUp, FaSearch, FaPlus, FaCheck, FaMinus, FaEye } from "react-icons/fa"
 import "./TableComponent.css"
 import BulkActions from "../BulkActions/BulkAction"
@@ -48,6 +49,8 @@ const DataTable = ({
     onDownload = () => { },
     onChangeSection = () => { },
     onSetMarks = () => { },
+    newQuestioBank,
+    newTest,
     setModalHeading,
     setIsRenameModalOpen,
     setIsCopyModalOpen,
@@ -57,6 +60,29 @@ const DataTable = ({
     setEditingQB,
     modalType,
 }) => {
+    const testlocation = useLocation();
+    const pathParts = testlocation.pathname.split("/"); // ["", "lms-sep2", "test", "12", "movetest"]
+    const pathModel = pathParts[1];
+    const id = pathParts[2]; // index 3 → "12"
+
+    console.log("Extracted ID:", id);
+
+    const initialData = [
+        { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
+        { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
+        { id: 3, test: "Test 3", owner: "Mark Johnson", status: "Not Published", lastModified: "5 days ago by You", duration: 90, description: "Sample test 3", instructions: "Complete all sections", trashed: false, archived: false },
+        { id: 4, test: "Test 4", owner: "Mark Johnson", status: "Not Published", lastModified: "8 hours ago by You", duration: 30, description: "Sample test 4", instructions: "Time-bound test", trashed: false, archived: false },
+        { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Not Published", lastModified: "3 days ago by You", duration: 75, description: "Sample test 5", instructions: "Answer all questions", trashed: false, archived: false },
+        { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Not Published", lastModified: "12 hours ago by You", duration: 60, description: "Sample test 6", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 7, test: "Test 7", owner: "Mark Johnson", status: "Not Published", lastModified: "1 day ago by You", duration: 60, description: "Sample test 7", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 8, test: "Test 8", owner: "Mark Johnson", status: "Not Published", lastModified: "6 hours ago by You", duration: 60, description: "Sample test 8", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 9, test: "Test 9", owner: "Mark Johnson", status: "Not Published", lastModified: "4 days ago by You", duration: 60, description: "Sample test 9", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 10, test: "Test 10", owner: "Mark Johnson", status: "Not Published", lastModified: "3 hours ago by You", duration: 60, description: "Sample test 10", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 11, test: "Test 11", owner: "Mark Johnson", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 11", instructions: "Follow instructions", trashed: false, archived: false },
+        { id: 12, test: "Test 12", owner: "Mark Johnson", status: "Not Published", lastModified: "1 hour ago by You", duration: 60, description: "Sample test 12", instructions: "Follow instructions", trashed: false, archived: false },
+    ];
+    const test = initialData.find(item => item.id == id);
+    
     const [selectedRows, setSelectedRows] = useState([])
     const [sortColumn, setSortColumn] = useState(null)
     const [isAscending, setIsAscending] = useState(true)
@@ -68,6 +94,14 @@ const DataTable = ({
     const [showMcqOptions, setShowMcqOptions] = useState({})
     const [expandedQuestions, setExpandedQuestions] = useState([]);
     const [showAnswers, setShowAnswers] = useState([]);
+
+
+
+    const location = useLocation();
+    const path = location.pathname;
+
+    // ✅ Check if "question" exists in the path
+    const includesQuestion = path.toLowerCase().includes("question");
 
     const selectAllCheckboxRef = useRef()
 
@@ -185,6 +219,37 @@ const DataTable = ({
     return (
         <div className={fullViewMode ? "full-view" : ""}>
             <div className="test-index-actions">
+
+                <div className="test-sidebar-header-res">
+                    <div className="w-100 d-flex justify-content-center">
+
+                        {includesQuestion === true ? (
+                            <button
+                                onClick={newQuestioBank}
+                                className="allbuttons"
+                                aria-label="Create New Question Bank"
+                            >
+                                <span className="sidebar-letters">
+                                    New QB
+                                </span>
+
+                            </button>
+                        ) : (
+                            <button
+                                onClick={newTest}
+                                className="allbuttons"
+                                aria-label="Create New Question Bank"
+                            >
+                                <span className="sidebar-letters">
+                                    New Test
+                                </span>
+
+                            </button>
+                        )}
+
+                    </div>
+                </div>
+
                 <div className="test-search-container mb-1 d-flex justify-content-between align-items-center">
                     <div className="search-input-wrapper">
                         {searchoption && (
@@ -255,6 +320,53 @@ const DataTable = ({
                         />
                     )}
                 </div>
+
+                {showQuestionRow && pathModel === "test" &&(
+                    <div className="test-information">
+
+                        <div className="test-AllSelected">
+                            {selectableRows && (
+                                    <div className="custom-checkbox-container">
+                                        <input
+                                            type="checkbox"
+                                            ref={selectAllCheckboxRef}
+                                            onChange={(e) => {
+                                                e.stopPropagation()
+                                                handleSelectAll(e)
+                                            }}
+                                            checked={selectedRows.length === data.length && data.length > 0}
+                                        />
+                                        {selectedRows.length > 0 && selectedRows.length < data.length ? (
+                                            <FaMinus className="checkbox-icon indeterminate-icon" />
+                                        ) : selectedRows.length === data.length && data.length > 0 ? (
+                                            <FaCheck className="checkbox-icon checked-icon" />
+                                        ) : null}
+                                    </div>
+                                
+                            )}
+                        </div>
+                        <div className="test-Owner">
+                            <label>Owner :</label>
+                            <span> {test.owner}</span>
+                        </div>
+                        <div className="test-Owner">
+                            <label>Total Marks :</label>
+                            <span> 35</span>
+                        </div>
+                        <div className="test-Owner">
+                            <label>Duration :</label>
+                            <span> {test.duration}</span>
+                        </div>
+                        <div className="test-Owner">
+                            <label>Description :</label>
+                            <span> {test.description}</span>
+                        </div>
+                        <div className="test-Owner">
+                            <label>Instructions :</label>
+                            <span> {test.instructions}</span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="table-wrapper">
@@ -366,7 +478,7 @@ const DataTable = ({
                                                                     >
                                                                         <div className={showQuestionRow ? "question-td" : ""}>
                                                                             {showQuestionRow && (
-                                                                                <span className="col-name">{col.name}:</span>
+                                                                                <span className="col-name">{col.name}{col.name === "" ? "" : ":"}</span>
                                                                             )}
                                                                             <div>
                                                                                 <span className="col-cell">
@@ -401,16 +513,25 @@ const DataTable = ({
                                                     >
                                                         <td
                                                             colSpan={columns.length + (selectableRows ? 1 : 0)}
-                                                            className="p-2 row-link ans-item"
+                                                            className="py-2 row-link ans-item"
                                                         >
                                                             {row.question ? (
                                                                 fullViewMode || expandedQuestions.includes(row.id) ? (
                                                                     <>
                                                                         {/* ✅ Full Question (rendered in both expanded or full view mode) */}
-                                                                        <QuestionEditor content={row.question} mode={row.mode} codeMode="true" latexMode="true" />
+                                                                        <QuestionEditor content={row.question} mode={row.mode} />
+
+                                                                        {/* ✅ Question Images */}
+                                                                        <div className="question-Images">
+                                                                            {Array.isArray(row?.questionImages) &&
+                                                                                row.questionImages.map((img, index) => (
+                                                                                    <img key={index} src={img} alt={`Image ${index + 1}`} className="qtn-image" />
+                                                                                ))}
+                                                                        </div>
+
 
                                                                         {/* ✅ View Solution button (works same as before) */}
-                                                                        {row.answer && (
+                                                                        {row.solution && (
                                                                             <div className="mt-2">
                                                                                 <a
                                                                                     className={`view-solution-btn ${showAnswers.includes(row.id) ? "hide" : "view"
@@ -428,11 +549,12 @@ const DataTable = ({
                                                                         )}
 
                                                                         {/* ✅ Answer (only show when toggled) */}
-                                                                        {showAnswers.includes(row.id) && row.answer && (
+                                                                        {showAnswers.includes(row.id) && row.solution && (
                                                                             <div className="mt-2 p-2 bg-gray-100 rounded">
-                                                                                <QuestionEditor content={row.answer} mode="both" codeMode="true" latexMode="true" />
+                                                                                <QuestionEditor content={row.solution} />
                                                                             </div>
                                                                         )}
+
                                                                     </>
                                                                 ) : (
                                                                     // ✅ Collapsed Preview (normal mode only)
@@ -525,12 +647,18 @@ const DataTable = ({
                                         <div></div>
                                     )}
 
+
+
                                 </React.Fragment>
                             ))
                         )}
                     </tbody>
                 </table>
             </div>
+
+
+           
+           
         </div>
     )
 }

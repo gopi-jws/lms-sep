@@ -1,7 +1,8 @@
 "use client";
-
+import { toast } from "react-toastify";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
 import {
   Users,
   Archive,
@@ -39,6 +40,13 @@ const TeachersSidebar = () => {
     setActiveSection(section);
     setIsMobileOpen(false);
   };
+
+  const popup = () =>{
+     toast.success(
+          `Add Teachers SuccessFully`,
+          { position: "top-right", autoClose: 3000 }
+        );
+  }
 
   const handleSetActiveTag = (tag) => {
     setActiveTag(tag);
@@ -174,7 +182,7 @@ const TeachersSidebar = () => {
               ))}
             </ul>
 
-            <p className="sidebar-contents" style={{ fontStyle: "italic" }}> Uncategorized<span className="number">(5)</span></p>
+            <p className="sidebar-contents" style={{ fontStyle: "italic" }} onClick={popup}> Uncategorized<span className="number">(5)</span></p>
           </div>
         </div>
       </nav>
@@ -193,6 +201,7 @@ const TeachersSidebar = () => {
         isOpen={isNewTeacherModalOpen}
         onClose={() => setIsNewTeacherModalOpen(false)}
         onCreate={handleCreateTeacher}
+        success={popup}
       />
 
       <AddFolderModal

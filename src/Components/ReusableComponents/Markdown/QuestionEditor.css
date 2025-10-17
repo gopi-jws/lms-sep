@@ -23,3 +23,8 @@
     position: relative !important;
     margin: 4px 0 !important;
 }
+
+
+.code-language-label{
+    text-align: end;
+}

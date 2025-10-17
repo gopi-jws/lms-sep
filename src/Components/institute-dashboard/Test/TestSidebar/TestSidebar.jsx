@@ -25,16 +25,19 @@ import { getNextId } from "../../../../utils/idGenerator";
 const TestSidebar = ({
   tags = [],
   uncategorizedCount,
+  isMobileOpen,
+  setIsMobileOpen,
   onTagClick,
   onUncategorizedClick,
   activeTag,
   setTags,
+  newTest,
   onCreateTest
 }) => {
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
-  const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
+  // const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(null);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Alltest");
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [selectedTagId, setSelectedTagId] = useState(null);
@@ -50,6 +53,16 @@ const TestSidebar = ({
   useEffect(() => {
     localStorage.setItem('tags', JSON.stringify(tags));
   }, [tags]);
+
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Get path like /test/archived → extract the last part
+    const currentPath = location.pathname.split("/").pop();
+    setActiveSection(currentPath || "Alltest");
+  }, [location]);
+
 
 
   const handleSetActive = (section) => {
@@ -112,13 +125,13 @@ const TestSidebar = ({
 
   return (
     <div className="sidebar-wrapper">
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+      {/* {isMobileOpen && <div className="mobile-overlay-test" onClick={() => setIsMobileOpen(false)} />} */}
 
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Main Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={() => setIsNewTestModalOpen(true)}
+              onClick={newTest}
               className="allbuttons"
               aria-label="Create New Test"
             >
@@ -295,7 +308,7 @@ const TestSidebar = ({
         selectedSection={editingTag}
       />
 
-      <NewTestModal
+      {/* <NewTestModal
         isOpen={isNewTestModalOpen}
         onClose={() => setIsNewTestModalOpen(false)}
         onSubmit={(testData) => {
@@ -303,7 +316,7 @@ const TestSidebar = ({
           setIsNewTestModalOpen(false);
         }}
         mode="create"
-      />
+      /> */}
       
       <NewTestModal
         isOpen={isRemoveModalOpen}

@@ -21,7 +21,7 @@ import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolder
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown";
 import "./Sidebar.css";
 
-const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
+const Sidebar = ({ foldersIteam = [], setFoldersIteam, isMobileOpen, setIsMobileOpen, createNewQuestionBank }) => {
   const [folders, setFolders] = useState(() => {
     const storedFolders = localStorage.getItem("folders");
     return storedFolders ? JSON.parse(storedFolders) : [];
@@ -29,7 +29,7 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
 
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
-  const [isQbModalOpen, setIsQbModalOpen] = useState(false);
+  //  const [isQbModalOpen, setIsQbModalOpen] = useState(true);
   const [qbs, setQBs] = useState([]);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,12 +43,13 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
   //const [foldersIteam, setFoldersIteam] = useState([{id:1, name: "Folder 1", color: "#9c27b0" }, {id:2, name: "Folder 2", color: "#2196f3" }])
   const [showMoreOptions, setShowMoreOptions] = useState(null);
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  //const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [selectedFolder, setselectedFolder] = useState(null);
 
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0'];
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
+  const sidebarRef = useRef(null); // Add ref for sidebar container
 
   const location = useLocation();
 
@@ -59,24 +60,6 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
     setShowMoreOptions(showMoreOptions === index ? null : index);
     setselectedFolder({id:foldersIteam[index].id,name:foldersIteam[index].name,color:foldersIteam[index].color})
   };
-
-  const handleClickOutside = (event) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target) &&
-      !toggleRef.current?.contains(event.target)
-    ) {
-      setShowMoreOptions(null);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
 
   const handleEditFolder = (folder) =>{
     setIsFolderModalOpen(true);
@@ -176,14 +159,15 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+      {/* {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />} */}
+
 
       {/* Sidebar Container */}
-      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Question Bank Navigation">
+      <nav className={`test-sidebar-container test-sidebar-container-option ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Question Bank Navigation" ref={sidebarRef} >
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={() => setIsQbModalOpen(true)}
+              onClick={createNewQuestionBank}
               className="allbuttons"
               aria-label="Create New Question Bank"
             >
@@ -333,14 +317,14 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
         </div>
 
         {/* Modals */}
-        <NewQBModal
+        {/* <NewQBModal
           isOpen={isQbModalOpen}
           heading="Create New QB"
           onClose={() => setIsQbModalOpen(false)}
-          onCreate={handleCreateQB}
+          
           onSubmit={() => setIsQbModalOpen(false)}
           mode = "create"
-        />
+        /> */}
 
         {/* Remove Folder */}
         <NewQBModal
@@ -375,13 +359,13 @@ const Sidebar = ({ foldersIteam = [], setFoldersIteam }) => {
       </nav>
 
       {/* Mobile Toggle Button */}
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
     </div>
   );
 };

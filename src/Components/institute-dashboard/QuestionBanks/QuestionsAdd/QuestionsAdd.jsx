@@ -4,8 +4,6 @@ import DataTable from "../../../ReusableComponents/TableComponent/TableComponent
 import { FaCopy, FaEdit, FaTrashAlt, FaArrowRight, FaFolderPlus } from "react-icons/fa"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
-import ColumnVisibilityDropdown from "../../../ReusableComponents/ColumnVisibilityDropdown/ColumnVisibilityDropdown"
-import ActionDropdown from "../../../ReusableComponents/ActionDropdown/ActionDropdown"
 import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/fa"
 import "./QuestionsAdd.css"
 import Modal from "react-modal"
@@ -14,6 +12,7 @@ import "katex/dist/katex.min.css"
 import { Helmet } from "react-helmet"
 import QuestionAddDropdown from "../../../ReusableComponents/QuestionAddDropdown/QuestionAddDropdown"
 import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal"
+import SAQModal from "../../../ReusableComponents/Questions-Types-Modals/SAQModal/SAQModal"
 
 const QuestionsAdd = () => {
 
@@ -22,51 +21,45 @@ const QuestionsAdd = () => {
   const data = [
     {
       id: 1,
-      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:
-    <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
-      answer: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
-      type: "Single Answer ",
+      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:`,
+      questionImages: [`https://insightsedu.in/new/3.png`, "https://insightsedu.in/new/4.png"],
+      solution: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
+      solutionImage: `https://insightsedu.in/new/3.png`,
+      type: "Single Answer",
       marks: 3,
       owner: "Admin",
       section: "Trigonometry",
       created: "15/03/2025",
       modified: "3 weeks ago",
       options: [
-        `<img src="https://insightsedu.in/new/4.png" alt="Option A"> Sine Wave`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option B"> Straight Line`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option C"> Parabola`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option D"> Exponential Curve`
+        {text:"Option A", image :`https://insightsedu.in/new/4.png`},
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` }, 
+        { text: "Option C", image: `https://insightsedu.in/new/4.png` }, 
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` },
       ],
       correctAnswer: 0,
-      isLaTeXEnabled: true,
       hasImages: true,
-      codeMode: true,
-      latexMode:true,
     },
     {
       id: 2,
       question: `A particle moves along a path defined by:
             $$x(t) = R \\cos(\\omega t), \\quad y(t) = R \\sin(\\omega t), \\quad z(t) = kt^2$$
             Which of the following represents the arc length $$S$$?`,
-      answer: `The correct solution is option D:
+      solution: `The correct solution is option D:
             $$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
-      type: "Single Answer ",
+      type: "Single Answer",
       marks: 10,
       owner: "Admin",
       section: "Advanced Mathematics",
       created: "15/03/2025",
       modified: "1 day ago",
       options: [
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\tan^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$", image: `` },
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
       ],
       correctAnswer: 3,
-      isLaTeXEnabled: true,
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 3,
@@ -75,7 +68,7 @@ const QuestionsAdd = () => {
             0         1.00
             10        0.82
             Determine the reaction order and rate constant.`,
-      answer: `The correct solution is option D : 0`,
+      solution: `The correct solution is option D : 0`,
       type: "Descriptive ",
       isLaTeXEnabled: false,
       section: "Table",
@@ -90,14 +83,12 @@ const QuestionsAdd = () => {
         "Cannot be determined",
       ],
       correctAnswer: 0,
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 4,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
-      answer: `The root mean square speed is calculated using:
+      solution: `The root mean square speed is calculated using:
             $$v_{rms} = \\sqrt{\\frac{3RT}{M}}$$
             Result: 483.56 m/s`,
       type: "Numerical Answer ",
@@ -110,14 +101,11 @@ const QuestionsAdd = () => {
       tolerance: "±5%",
       isLaTeXEnabled: true,
       units: "m/s",
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 5,
       question: `The Pythagorean theorem states $$c^2 = a^2 + b^2$$ for right triangles. true false`,
-      answer: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
+      solution: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
       type: "True or False",
       marks: 2,
       owner: "Admin",
@@ -125,16 +113,13 @@ const QuestionsAdd = () => {
       created: "16/03/2025",
       modified: "1 week ago",
       correctAnswer: true,
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 6,
       question: `एक आयाम में ऊष्मा समीकरण पर विचार करें:
             $$\\frac{\\partial u(x,t)}{\\partial t} = \\alpha \\frac{\\partial^2 u(x,t)}{\\partial x^2}$$
             सामान्य समाधान है:`,
-      answer: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
+      solution: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
       type: "Single Answer ",
       marks: 7,
       owner: "Admin",
@@ -148,15 +133,11 @@ const QuestionsAdd = () => {
         "समाधान को स्वदेशी मानों के रूप में व्यक्त नहीं किया जा सकता",
       ],
       correctAnswer: 2,
-      isLaTeXEnabled: true,
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 7,
       question: `సత్యనారాయణ వ్యవసాయం లో ఏ మూడు భాగాలు ఉంటాయి?`,
-      answer: `రబి, ఖరీఫ్, బోనాల`,
+      solution: `రబి, ఖరీఫ్, బోనాల`,
       type: "Single Answer ",
       marks: 2,
       owner: "Admin",
@@ -166,9 +147,6 @@ const QuestionsAdd = () => {
       options: ["రబి, ఖరీఫ్, బోనాల", "శీతకాల, వేసవికాల, ఆదివార", "పంటల్ని వేరే విభజించలేదు", "ఉష్ణకటిన, ట్రోపికల్, మాన్సూన్"],
       correctAnswer: 0,
       isLaTeXEnabled: false,
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     },
     {
       id: 9,
@@ -180,13 +158,11 @@ const QuestionsAdd = () => {
             if x == "banana":
                 break
         ~~~`,
-      answer: `The correct solution is option A:`,
+      solution: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
-      isLaTeXEnabled: false,
       hasCode: true,
-      mode: "both",
       code: `~~~python
 fruits = ["apple", "banana", "cherry"]
 for x in fruits:
@@ -194,14 +170,13 @@ for x in fruits:
     if x == "banana":
         break
 ~~~`,
-      codeMode: true,
-      latexMode: true,
+      
     },
     {
       id: 9,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
-      answer: `The prime numbers in the list are 2, 7, and 13.`,
+      solution: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
       marks: 3,
       owner: "Admin",
@@ -209,10 +184,6 @@ for x in fruits:
       created: "18/03/2025",
       modified: "1 day ago",
       correctAnswers: [0, 2, 4], // Indices of correct options
-      isLaTeXEnabled: false,
-      mode: "both",
-      codeMode: true,
-      latexMode: true,
     }
   ];
 
@@ -229,11 +200,13 @@ for x in fruits:
   const [fullViewMode, setFullViewMode] = useState(false)
   const [allRowsExpanded, setAllRowsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [selectedQuestion, setSelectedQuestion] = useState(null)
-  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [questionType, setQuestionType] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState("");
   const [modalHeading, setModalHeading] = useState("");
+
 
 
   const openEditModal = () => {
@@ -350,38 +323,39 @@ for x in fruits:
     }
     setFullViewMode(!fullViewMode)
   }
-  const handleActionFromDropdown = (actionType, questionId) => {
-    // Your existing action handler
-  };
+ 
 
-  const handleAddQuestionAction = (actionType, questionId) => {
-    console.log(`Add action: ${actionType} for question ID: ${questionId}`);
-    // Implement your add question logic here
-  };
+  // const handleAddQuestionAction = (actionType, questionId) => {
+  //   console.log(`Add action: ${actionType} for question ID: ${questionId}`);
+  //   // Implement your add question logic here
+  // };
+
   // Handle action from dropdown
-  // const handleActionFromDropdown = (actionType, questionId) => {
-  //   const row = data.find((q) => q.id === questionId)
-  //         switch (actionType) {
-  //     case "copy":
-  //         console.log("Copy action for", questionId)
-  //         break
-  //         case "edit":
-  //         setSelectedQuestion(row)
-  //         setModalIsOpen(true)
-  //         break
-  //         case "move":
-  //         console.log("Move to test action for", questionId)
-  //         break
-  //         case "folder":
-  //         console.log("Add to section action for", questionId)
-  //         break
-  //         case "delete":
-  //         console.log("Delete action for", questionId)
-  //         break
-  //         default:
-  //         console.log("Unknown action:", actionType)
-  //   }
-  // }
+  const handleAction = (actionType, questionId) => {
+    const row = data.find((q) => q.id === questionId)
+    switch (actionType) {
+      case "copy":
+        console.log("Copy action for", questionId)
+        break
+      case "edit":
+        console.log(row);
+        setSelectedQuestion(row);
+        setQuestionType(row.type);
+        setModalIsOpen(true);
+        break
+      case "move":
+        console.log("Move to test action for", questionId)
+        break
+      case "folder":
+        console.log("Add to section action for", questionId)
+        break
+      case "delete":
+        console.log("Delete action for", questionId)
+        break
+      default:
+        console.log("Unknown action:", actionType)
+    }
+  }
 
   // Define columns with visibility state
 
@@ -495,7 +469,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
     // },
 
     {
-      name: "Category",
+      name: "",
       selector: "category",
       sortable: true,
       cell: (row) => (
@@ -538,7 +512,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               aria-label="Copy"
               onClick={(e) => {
                 e.stopPropagation()
-                handleActionFromDropdown("copy", row.id)
+                handleAction("copy", row.id)
               }}
             >
               <FaCopy />
@@ -549,7 +523,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               aria-label="Edit"
               onClick={(e) => {
                 e.stopPropagation()
-                handleActionFromDropdown("edit", row.id)
+                handleAction("edit", row.id)
               }}
             >
               <FaEdit />
@@ -560,7 +534,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               aria-label="Move to Test"
               onClick={(e) => {
                 e.stopPropagation()
-                handleActionFromDropdown("move", row.id)
+                handleAction("move", row.id)
               }}
             >
               <FaArrowRight />
@@ -571,7 +545,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               aria-label="Add to Section"
               onClick={(e) => {
                 e.stopPropagation()
-                handleActionFromDropdown("folder", row.id)
+                handleAction("folder", row.id)
               }}
             >
               <FaFolderPlus />
@@ -582,7 +556,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               aria-label="Delete"
               onClick={(e) => {
                 e.stopPropagation()
-                handleActionFromDropdown("delete", row.id)
+                handleAction("delete", row.id)
               }}
             >
               <FaTrashAlt />
@@ -590,7 +564,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
             </button>
           </div>
           <div className="mobile-actions">
-            <QuestionAddDropdown onAddAction={(actionType) => handleAddQuestionAction(actionType, row.id)} />
+            <QuestionAddDropdown onAddAction={(actionType) => handleAction(actionType, row.id)} />
           </div>
 
         </div>
@@ -644,6 +618,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
       </Helmet>
       <div className="questionsadd-index-wrapper">
         <div className="questionsadd-index-container">
+       
           <div className="test-index-header">
             <h1 className="breadcrumb">QB 1 Questions</h1>
 
@@ -658,9 +633,11 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>
+              
 
             </div>
           </div>
+         
 
           <div className="my-data-table">
             <DataTable
@@ -682,7 +659,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
             />
           </div>
 
-          <Modal
+          {/* <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
             className="modal-content"
@@ -716,7 +693,8 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
                 </div>
               </div>
             )}
-          </Modal>
+          </Modal> */}
+
         </div>
       </div>
 
@@ -748,6 +726,67 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
         totalItems={data.length}
         isSearching={searchQuery.length > 0 || filterType.length > 0 || filterSection.length > 0}
       />
+
+      {questionType === "Single Answer" && (
+        <SAQModal open={modalIsOpen} onClose={() => { setModalIsOpen(false) }} initialData = {selectedQuestion} />
+      )}
+
+      {
+        (() => {
+          switch (questionType) {
+            case "SAQ":
+              return (
+                <SAQModal
+                  open={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                  initialData={selectedQuestion}
+                />
+              );
+
+            case "MCQ":
+              return (
+                <MCQModal
+                  open={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                  initialData={selectedQuestion}
+                />
+              );
+
+            case "Numerical":
+              return (
+                <NumericalModal
+                  open={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                  initialData={selectedQuestion}
+                />
+              );
+
+            case "True/False":
+              return (
+                <TrueORFalseModal
+                  open={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                  initialData={selectedQuestion}
+                />
+              );
+
+            case "Descriptive":
+              return (
+                <DescriptiveModal
+                  open={modalIsOpen}
+                  onClose={() => setModalIsOpen(false)}
+                  initialData={selectedQuestion}
+                />
+              );
+
+            default:
+              return null;
+          }
+        })()
+      }
+
+
+      
     </>
   )
 }

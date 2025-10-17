@@ -623,6 +623,11 @@ input[type="file"]::file-selector-button {
     word-wrap: break-word;
     /* ✅ breaks long words if needed */
     overflow-wrap: break-word;
+    background: #f9f9f9;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        transition: all 0.2s ease;
 }
 
 /* Answers List */
@@ -701,10 +706,10 @@ input[type="file"]::file-selector-button {
 .answer-image ,
 .question-image,
 .solution-image{
-    max-width: 100%;
-    max-height: 150px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    margin-top: 10px;
 }
 
 .image-error {
@@ -1088,6 +1093,10 @@ border:var(--form-control-border);
     /* Add smooth transition */
 }
 
+.qtn-textarea-option{
+    min-height: 85px;
+}
+
 /* Use more specific selector and add outline */
 .qtn-textarea:focus,
 .qtn-textarea:focus-visible,
@@ -1100,6 +1109,8 @@ border:var(--form-control-border);
         outline: var(--form-control-focus-outline);
         box-shadow: var(--form-control-focus-box-shadow);
 }
+
+
 
 
 /* Responsive Styles */

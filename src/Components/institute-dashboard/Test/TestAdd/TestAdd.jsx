@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faMemoCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FaEdit, FaCopy, FaTrashAlt, FaArrowRight } from "react-icons/fa"
 import { AiFillCarryOut } from "react-icons/ai";
 import Modal from "react-modal"
@@ -28,7 +30,7 @@ const TestAdd = () => {
       id: 1,
       question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:
     <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
-      answer: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
+      solution: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
       type: "Single Answer ",
       marks: 3,
       owner: "Admin",
@@ -51,7 +53,7 @@ const TestAdd = () => {
       question: `A particle moves along a path defined by:
             $$x(t) = R \\cos(\\omega t), \\quad y(t) = R \\sin(\\omega t), \\quad z(t) = kt^2$$
             Which of the following represents the arc length $$S$$?`,
-      answer: `The correct solution is option D:
+      solution: `The correct solution is option D:
             $$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
       type: "Single Answer ",
       marks: 10,
@@ -76,7 +78,7 @@ const TestAdd = () => {
             0         1.00
             10        0.82
             Determine the reaction order and rate constant.`,
-      answer: `The correct solution is option D : 0`,
+      solution: `The correct solution is option D : 0`,
       type: "Descriptive ",
       isLaTeXEnabled: false,
       section: "Table",
@@ -97,7 +99,7 @@ const TestAdd = () => {
       id: 4,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
-      answer: `The root mean square speed is calculated using:
+      solution: `The root mean square speed is calculated using:
             $$v_{rms} = \\sqrt{\\frac{3RT}{M}}$$
             Result: 483.56 m/s`,
       type: "Numerical Answer ",
@@ -115,7 +117,7 @@ const TestAdd = () => {
     {
       id: 5,
       question: `The Pythagorean theorem states $$c^2 = a^2 + b^2$$ for right triangles. true false`,
-      answer: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
+      solution: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
       type: "True or False",
       marks: 2,
       owner: "Admin",
@@ -130,7 +132,7 @@ const TestAdd = () => {
       question: `एक आयाम में ऊष्मा समीकरण पर विचार करें:
             $$\\frac{\\partial u(x,t)}{\\partial t} = \\alpha \\frac{\\partial^2 u(x,t)}{\\partial x^2}$$
             सामान्य समाधान है:`,
-      answer: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
+      solution: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
       type: "Single Answer ",
       marks: 7,
       owner: "Admin",
@@ -150,7 +152,7 @@ const TestAdd = () => {
     {
       id: 7,
       question: `సత్యనారాయణ వ్యవసాయం లో ఏ మూడు భాగాలు ఉంటాయి?`,
-      answer: `రబి, ఖరీఫ్, బోనాల`,
+      solution: `రబి, ఖరీఫ్, బోనాల`,
       type: "Single Answer ",
       marks: 2,
       owner: "Admin",
@@ -165,7 +167,7 @@ const TestAdd = () => {
     {
       id: 8,
       question: `In Python, what will be the output of the following code?`,
-      answer: `The correct solution is option A:`,
+      solution: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
@@ -185,7 +187,7 @@ const TestAdd = () => {
     {
       id: 9,
       question: `Which of the following are prime numbers? (Select all that apply)`,
-      answer: `The prime numbers in the list are 2, 7, and 13.`,
+      solution: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
       marks: 3,
       owner: "Admin",
@@ -468,7 +470,7 @@ const TestAdd = () => {
     },
 
     {
-      name: "Section",
+      name: "",
       selector: "section",
       sortable: true,
       cell: (row) => (
@@ -507,6 +509,7 @@ const TestAdd = () => {
       cell: (row) => (
         <div className="test-action-buttons flex">
           <div className="desktop-actions">
+            <img className="mark-image" src="/public/Screenshot 2025-10-17 162907.png" alt="" />
             <button
               className="test-action-button copy"
               aria-label="Copy"
@@ -559,7 +562,10 @@ const TestAdd = () => {
                 handleSetMarks(row.id);
               }}
             >
-              <span className="mark-symbol">M</span>
+              {/* <FontAwesomeIcon icon={faMemoCircleCheck} /> */}
+              <span className="mark-symbol">
+                M
+              </span>
               <span className="tooltip-text">Set Mark</span>
             </button>
           </div>
