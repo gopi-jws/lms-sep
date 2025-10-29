@@ -74,7 +74,7 @@ const QuestionEditor = ({
                     src={props.src}
                     alt={props.alt || 'Image'}
                     className="markdown-image"
-                    style={{ maxWidth: '15%', height: 'auto', display: 'block', margin: '10px 0' }}
+                    style={{ maxWidth: '50%', height: 'auto', display: 'block', margin: '10px 0' }}
                 />
             );},
 

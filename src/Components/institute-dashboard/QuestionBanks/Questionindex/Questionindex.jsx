@@ -331,7 +331,7 @@ const Questionindex = () => {
       ),
     },
     {
-      name: <div className="cursor-pointer">Questions</div>,
+      name: "Questions" ,
       selector: "questions",
       sortable: true,
       width: "150px", 
@@ -443,22 +443,28 @@ const Questionindex = () => {
         <title>QuestionBanks</title>
         <meta name="description" content="Question Banks List" />
       </Helmet>
+      
       <div className="questionbank-index-wrapper">
-        <Sidebar
-          foldersIteam={foldersIteam}
-          setFoldersIteam={setFoldersIteam}
-          createNewQuestionBank={handleNewQuestionBank}
-        />
-
+        
         <div className="test-index-header-moblie">
           <h1 className="breadcrumb">All Question Bank Lists</h1>
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+         
+        <div ref={sidebarRef}>
+          <Sidebar
+            foldersIteam={foldersIteam}
+            setFoldersIteam={setFoldersIteam}
+            createNewQuestionBank={handleNewQuestionBank}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
         </div>
        
         <div className="questionbank-index-container">
 
        
-          {isMobileOpen && (
+          {/* {isMobileOpen && (
             <div ref={sidebarRef}>
               <Sidebar
                 foldersIteam={foldersIteam}
@@ -468,8 +474,8 @@ const Questionindex = () => {
                 createNewQuestionBank={handleNewQuestionBank}
               />
             </div>
-          )}
-
+          )} */}
+          
         
           <div className="test-index-header">
             <h1 className="breadcrumb">All Question Bank Lists</h1>
@@ -520,13 +526,13 @@ const Questionindex = () => {
           isSearching={searchQuery.length > 0}
         />
 
-         <NewQBModal
+         {/* <NewQBModal
           isOpen={isQbModalOpen}
           heading="Create New QB"
           onClose={() => setIsQbModalOpen(false)}
           onSubmit={handleCreateQB}
           mode = "create"
-        />
+        /> */}
 
         {isEditModalOpen && (
           <NewQBModal

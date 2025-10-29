@@ -441,27 +441,16 @@ const Archived = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
-        <div className="test-index-container">
+        <div ref={sidebarRef}>
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
 
-          {isMobileOpen && (
-            <div ref={sidebarRef}>
-              <TestSidebar
-                tags={tags}
-                setTags={setTags}
-                isMobileOpen={isMobileOpen}
-                setIsMobileOpen={setIsMobileOpen}
-                // uncategorizedCount={uncategorizedCount}
-                // onTagClick={handleTagClick}
-                // onUncategorizedClick={handleUncategorizedClick}
-                // activeTag={activeTag}
-                // newTest={handleNewTest}
-                // onAddTag={handleAddTag}
-                // onCreateTest={handleCreateTest}
-                // archivedCount={data.filter(test => test.archived).length}
-                // trashedCount={data.filter(test => test.trashed).length}
-              />
-            </div>
-          )}
+        <div className="test-index-container">
 
           <div className="test-index-header">
             <h1 className="breadcrumb">Archived</h1>

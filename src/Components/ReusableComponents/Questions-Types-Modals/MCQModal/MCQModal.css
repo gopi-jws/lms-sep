@@ -1115,25 +1115,27 @@ border:var(--form-control-border);
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    /* .first-column {
-        flex: 0 0 100%;
+
+    .modal-mcq-row {
+        flex-direction: column;
     }
 
-    .secound-column {
-        flex: 0 0 100%;
+    .first-column1 {
+        width: 100%;
     }
 
-    .preview-section {
-        margin-top: 10px;
-    } */
-     .mcq-modal-content{     
-            left:90% ;
-            width: 100vh;  
-     }
-
-         .modal-mcq-row {
-             flex-direction: column;
-         }
+    .secound-column2{
+        width: 100%;
+    }
 
 }
+
+@media (max-width:417px){
+.editing-option label {     
+    padding: 4px 8px;
+    font-size: 12px;
+    }
+}
     
+
+

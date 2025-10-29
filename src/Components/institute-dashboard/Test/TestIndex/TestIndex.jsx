@@ -720,7 +720,7 @@ const TestIndex = () => {
       cell: (row) => <div>{row.lastModified}</div>  // <-- render static string directly
     },
     {
-      name: <div className="table-actions">Actions</div>,
+      name: "Actions",
       selector: "actions",
       sortable: false,
       width: "300px",
@@ -853,24 +853,6 @@ const TestIndex = () => {
       </Helmet>
 
       <div className="test-index-wrapper">
-        <div className="d-none d-md-block">
-          <TestSidebar
-            tags={tags}
-            setTags={setTags}
-            isMobileOpen={isMobileOpen}
-            setIsMobileOpen={setIsMobileOpen}
-            uncategorizedCount={uncategorizedCount}
-            onTagClick={handleTagClick}
-            onUncategorizedClick={handleUncategorizedClick}
-            activeTag={activeTag}
-            newTest={handleNewTest}
-            // onAddTag={handleAddTag}
-            onCreateTest={handleCreateTest}
-            archivedCount={data.filter(test => test.archived).length}
-            trashedCount={data.filter(test => test.trashed).length}
-          />
-        </div>
-
         <NotificationShared
           sender="Akash"
           projectName="Numerical Analysis Assignment-I"
@@ -882,10 +864,27 @@ const TestIndex = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
+        <div  ref={sidebarRef}>
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+            uncategorizedCount={uncategorizedCount}
+            onTagClick={handleTagClick}
+            onUncategorizedClick={handleUncategorizedClick}
+            activeTag={activeTag}
+            // newTest={handleNewTest}
+            // onAddTag={handleAddTag}
+            onCreateTest={handleCreateTest}
+            archivedCount={data.filter(test => test.archived).length}
+            trashedCount={data.filter(test => test.trashed).length}
+          />
+        </div>
+
         <div className="test-index-container">
       
-
-          {isMobileOpen && (
+          {/* {isMobileOpen && (
             <div ref={sidebarRef}>
               <TestSidebar
                 tags={tags}
@@ -904,8 +903,8 @@ const TestIndex = () => {
               />
             </div>
           )}
-          
-       
+           */}
+           
           <div className="test-index-header">
             <h1 className="breadcrumb desktop-title">All Tests</h1>
 
@@ -943,7 +942,6 @@ const TestIndex = () => {
               setEditingTest={setEditingTest}
               setIsDeleteModalOpen={setIsDeleteModalOpen}
               setIsArchivedModalOpen={setIsArchivedModalOpen}
-              newTest={handleNewTest}
               allQuestions={data}
               modalType="test"
             />
@@ -1006,7 +1004,7 @@ const TestIndex = () => {
           />
         )}
 
-        {isNewTestModalOpen && (
+        {/* {isNewTestModalOpen && (
           <NewTestModal
             heading="Create New Test"
             isOpen={isNewTestModalOpen}
@@ -1014,7 +1012,7 @@ const TestIndex = () => {
             onSubmit={handleCreateTest}
             mode="create"
           />
-        )}
+        )} */}
 
         {isDeleteModalOpen && (
           <NewTestModal

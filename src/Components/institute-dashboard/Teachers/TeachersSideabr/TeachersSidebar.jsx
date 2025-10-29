@@ -20,18 +20,25 @@ import NewTeacherModal from "../../../ReusableComponents/NewTeacherModal/NewTeac
 import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolderModal";
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown";
 import "./TeachersSidebar.css";
+import { setIsNewTeacherModalOpen } from "../../../../slices/allTeacher";
+import { useDispatch, useSelector } from "react-redux";
 
-const TeachersSidebar = () => {
+const TeachersSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
-  const [isNewTeacherModalOpen, setIsNewTeacherModalOpen] = useState(false);
+  // const [isNewTeacherModalOpen, setIsNewTeacherModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(null);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("AllTeachers");
   const [activeTag, setActiveTag] = useState("");
   const [folders, setFolders] = useState(["Folder 1", "Folder 2"]);
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
+
+
+  //Get the value for in Redux
+  const dispatch = useDispatch();
+  const isNewTeacherModalOpen = useSelector((state) => state.AllTeacher.isNewTeacherModalOpen);
 
   // Icon colors for folders
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0'];
@@ -79,7 +86,7 @@ const TeachersSidebar = () => {
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={() => setIsNewTeacherModalOpen(true)}
+              onClick={() => dispatch(setIsNewTeacherModalOpen(true))}
               className="allbuttons"
               aria-label="Create New Teacher"
             >
@@ -188,18 +195,18 @@ const TeachersSidebar = () => {
       </nav>
 
       {/* Mobile Toggle Button */}
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
 
       {/* Modals */}
       <NewTeacherModal
         isOpen={isNewTeacherModalOpen}
-        onClose={() => setIsNewTeacherModalOpen(false)}
+        onClose={() => dispatch(setIsNewTeacherModalOpen(false))}
         onCreate={handleCreateTeacher}
         success={popup}
       />

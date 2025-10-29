@@ -289,6 +289,20 @@
   }
 }
 
+/* @media (max-width:920px){
+.logo-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+    .header-logo-icon {
+      font-size: 35px !important;
+    }
+        .header-logo-text {
+          font-size: 15px;
+        }
+} */
+
 @media (max-width: 768px) {
   .logo img {
     width: 110px;

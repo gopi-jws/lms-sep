@@ -55,7 +55,7 @@ const QuestionsBulkActions = ({
                         className={`tube-action-button dropdown-toggle2 ${activeDropdown === "section" ? "active" : ""}`}
                         onClick={() => toggleDropdown("section")}
                     >
-                        Change Section
+                        Section
                     </button>
                     {activeDropdown === "section" && (
                         <ChangeSectionDropdown

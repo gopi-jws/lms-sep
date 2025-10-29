@@ -17,17 +17,20 @@ import {
 import AddStudentModal from '../../../../ReusableComponents/AddStudentModal/AddStudentModal';
 import AddTagModal from '../../../../ReusableComponents/AddTagModal/AddTagModal';
 import TagActionsDropdown from '../../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown';
+import { useSelector, useDispatch } from "react-redux";
+import { setIsAddStudentModalOpen } from "../../../../../slices/addStudent";
 
 
 const ClassDetailPageSideMenu = ({
   archivedCount,
-  trashedCount
+  trashedCount,
+  isMobileOpen,
+  setIsMobileOpen,
 }) => {
   const location = useLocation();
   const { id } = useParams();
-  const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
+  // const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("allStudents");
   const [showMoreOptions, setShowMoreOptions] = useState(null);
   const [tags, setTags] = useState(["Top Students", "Needs Attention"]);
@@ -36,6 +39,11 @@ const ClassDetailPageSideMenu = ({
 
   // Icon colors for tags
   const iconColors = ['#4CAF50', '#FFC107', '#2196F3', '#9C27B0'];
+
+  //Get the value in Redux
+  const dispatch = useDispatch();
+
+  const isAddStudentModalOpen = useSelector((state) => state.AddStudent.isAddStudentModalOpen);
 
   // Mobile responsiveness
   useEffect(() => {
@@ -54,9 +62,6 @@ const ClassDetailPageSideMenu = ({
     setIsMobileOpen(false);
   };
 
-  const toggleMobileSidebar = () => {
-    setIsMobileOpen(!isMobileOpen);
-  };
 
   const handleTagClick = (index) => {
     setShowMoreOptions(showMoreOptions === index ? null : index);
@@ -84,7 +89,7 @@ const ClassDetailPageSideMenu = ({
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={() => setIsAddStudentModalOpen(true)}
+              onClick={() => dispatch(setIsAddStudentModalOpen(true))}
               className="allbuttons"
               aria-label="Add New Student"
             >
@@ -170,18 +175,18 @@ const ClassDetailPageSideMenu = ({
       </nav>
 
       {/* Mobile Toggle Button */}
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
 
       {/* Modals */}
       <AddStudentModal
         isOpen={isAddStudentModalOpen}
-        onClose={() => setIsAddStudentModalOpen(false)}
+        onClose={() => dispatch(setIsAddStudentModalOpen(false))}
         onSave={(student) => {
           // Handle student save logic here
           setIsAddStudentModalOpen(false);

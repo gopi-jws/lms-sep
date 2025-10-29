@@ -260,7 +260,7 @@ a{
         color: inherit;
 }
 .allbuttons {
-    width: calc(100% - 40px);
+    /* width: calc(100% - 40px); */
     width: var(--button-width);
     height: var(--button-height);
     background-color: var(--button-bg-color);
@@ -278,6 +278,8 @@ a{
     background-color: var(--primary-main-color) !important;
     color: #fff !important;
 }
+
+
 
 .load-more-button {
     display: flex;
@@ -887,12 +889,13 @@ background-color: #e0e0e0 !important;
 }
 
 .test-search-input {
-    padding: var(--search-padding);
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
     border-radius: 4px;
     font-size: var(--search-font-size);
     border: var(--search-border);
     color: var(--search-text-color);
     font-family: "Noto Sans", serif;
+    width: 300px;
 }
 @media (max-width:768px) {
 .test-search-input{

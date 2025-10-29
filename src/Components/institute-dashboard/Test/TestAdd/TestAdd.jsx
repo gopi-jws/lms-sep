@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef} from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faMemoCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FaEdit, FaCopy, FaTrashAlt, FaArrowRight } from "react-icons/fa"
+import { VscTriangleDown } from "react-icons/vsc";
 import { AiFillCarryOut } from "react-icons/ai";
 import Modal from "react-modal"
 import "./TestAdd.css"
@@ -18,6 +19,7 @@ import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/
 import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal";
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal";
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal";
+import TestAddSidebar from "../TestAddSideabr/TestAddSideabr";
 
 const TestAdd = () => {
   const { id } = useParams()
@@ -229,6 +231,13 @@ const TestAdd = () => {
   const [selectedTest, setSelectedTest] = useState("");
   const [modalHeading, setModalHeading] = useState("");
 
+  const [isMobileOpen,setIsMobileOpen] = useState(false);
+
+  
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
+  };
+
 
   const [tags, setTags] = useState([
     // Example initial state (can come from API)
@@ -255,6 +264,37 @@ const TestAdd = () => {
       )
     );
   };
+
+    // Add refs at the top of your component
+    const sidebarRef = useRef(null);
+    const toggleRef = useRef(null);
+
+    // Close dropdown when clicking outside
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          // Only handle clicks when sidebar is open
+          if (!isMobileOpen) return;
+    
+          const sidebar = sidebarRef.current;
+          const toggle = toggleRef.current;
+    
+          // If we don't have refs, don't do anything
+          if (!sidebar || !toggle) return;
+    
+          // Check if click is outside both sidebar and toggle button
+          const isOutsideSidebar = !sidebar.contains(e.target);
+          const isOutsideToggle = !toggle.contains(e.target);
+    
+          if (isOutsideSidebar && isOutsideToggle) {
+            console.log('Closing sidebar - click was outside');
+            setIsMobileOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, [isMobileOpen]);
+
 
   const openPublishModal = (test) => {
     setSelectedTest(test || "Test 1");
@@ -629,9 +669,45 @@ const TestAdd = () => {
       </Helmet>
 
       <div className="testadd-index-wrapper">
+        
+        <div className="test-index-header-moblie">
+          <h3 className="breadcrumb">Test {id} Questions</h3>
+          <VscTriangleDown className="TriagbleDown" ref={toggleRef} onClick={toggleMobileSidebar}/>
+
+          <div className="test-header-icons">
+            <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
+              <FaPaperPlane />
+              <span className="tooltip-text">Publish</span>
+            </button>
+
+            <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+              <FaEdit />
+              <span className="tooltip-text">Edit</span>
+            </button>
+
+            <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+              <FaFilePdf />
+              <span className="tooltip-text">Download PDF</span>
+            </button>
+
+            <button className="test-action-button share" onClick={() => openShareModal(selectedTest)}>
+              <FaShare />
+              <span className="tooltip-text">Share</span>
+            </button>
+          </div>
+        </div>
+        
+        <div ref={sidebarRef}>
+          <TestAddSidebar
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="testadd-index-container">
+          
           <div className="test-index-header">
-            <h3 className="breadcrumb">Test {id} Questions</h3>
+            <h3 className="breadcrumb responsive-header">Test {id} Questions</h3>
 
             <div className="test-header-icons">
               <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
@@ -727,6 +803,8 @@ const TestAdd = () => {
             )}
           </Modal>
         </div>
+
+
       </div>
       {showPaginationButtons && (
         <PaginationButtons

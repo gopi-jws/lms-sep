@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect,} from "react";
 import "./TestAddSideabr.css";
 import { FaPaperPlane, FaCopy, FaFilePdf, FaShare, FaArchive, FaTrashAlt, FaEdit, FaTag } from "react-icons/fa"
 import { BiSolidRename } from "react-icons/bi"
@@ -37,7 +37,7 @@ import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal"
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal"
 
 import TestIndex from "../TestIndex/TestIndex";
-const TestAddSidebar = () => {
+const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
 
   const initialData = [
     { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -62,7 +62,9 @@ const TestAddSidebar = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [emails, setEmails] = useState([])
 
-
+  const testlocation = useLocation();
+  const pathParts = testlocation.pathname.split("/"); // ["", "lms-sep2", "test", "12", "movetest"]
+  const pathName = pathParts[3];
 
 
   const { id } = useParams(); // id is a string from URL
@@ -75,7 +77,7 @@ const TestAddSidebar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
   const handleNewQuestionClick = () => {
@@ -224,12 +226,13 @@ const TestAddSidebar = () => {
     switch (action) {
 
       case "desc":
-        setActiveDropdown((prev) => (prev === "desc" ? null : "desc"));
+        setShowDescDropdown(true);
         setMode('desc');
         break;
 
       case "instr":
-        setActiveDropdown((prev) => (prev === "instr" ? null : "instr"));
+        // setActiveDropdown((prev) => (prev === "instr" ? null : "instr"));
+        setShowDescDropdown(true);
         setMode('instr');
         break;
 
@@ -324,10 +327,8 @@ const TestAddSidebar = () => {
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
       {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)}></div>}
-
-
       {/* Sidebar Container */}
-      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Test Navigation">
+      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${pathName === "movetest" ? "AddTest-Top" : ""}`} aria-label="Test Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
@@ -435,53 +436,34 @@ const TestAddSidebar = () => {
                   <span className="sidebar-letters">Duration : (10)</span>
                 </Link>
               </li>
+
               <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") || activeDropdown === "desc" ? "active" : ""}`}>
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "desc" ? "active" : ""}`} onClick={() => handleActionClick("desc")}>
                   <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
-                    <div className="d-flex align-items-center gap-2">
+                    <div className="d-flex align-items-center gap-2" >
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Description</span>
                     </div>
-                    <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={() => handleActionClick("desc")}>
-                        <MoreVertical size={16} />
-                      </button>
-                    </div>
                   </div>
                 </div>
-
-                {activeDropdown === "desc" && (
-                  <TagActionsDropdown
-                    isOpen={true}
-                    mode="desc"
-                    onEdit={() => {
-                      console.log("Edit function called");
-                      setShowDescDropdown(true);
-                      setMode("desc");
-                    }}
-                    onRemove={() => console.log("Remove Description")}
-                    onClose={() => setActiveDropdown(null)} // ✅ REQUIRED
-                  />
-                )}
-
               </li>
 
               <li className="dropdown-container">
-                <div className={`sidebar-contents ${isActive("") || activeDropdown === "instr" ? "active" : ""}`}>
+                <div className={`sidebar-contents ${isActive("") || activeDropdown === "instr" ? "active" : ""}`} onClick={() => handleActionClick("instr")}>
                   <div className="d-flex align-items-center gap-2 w-100 justify-content-between">
                     <div className="d-flex align-items-center gap-2">
                       <BookOpen className="icon" size={20} />
                       <span className="sidebar-letters">Instruction</span>
                     </div>
-                    <div className="dropdown-icon-container">
-                      <button className="dropdown-toggle3" onClick={() => handleActionClick("instr")}>
+                    {/* <div className="dropdown-icon-container">
+                      <button className="dropdown-toggle3" >
                         <MoreVertical size={16} />
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
-                {activeDropdown === "instr" && (
+                {/* {activeDropdown === "instr" && (
                   <TagActionsDropdown
                     isOpen={true}
                     mode="instr"
@@ -489,7 +471,8 @@ const TestAddSidebar = () => {
                     onRemove={() => console.log("Remove Description")}
                     onClose={() => setActiveDropdown(null)}
                   />
-                )}
+                )} */}
+
               </li>
 
             </ul>
@@ -593,13 +576,13 @@ const TestAddSidebar = () => {
       </nav>
 
       {/* Mobile Toggle Button */}
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
 
 
       <AddFolderModal

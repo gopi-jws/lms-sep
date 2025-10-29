@@ -20,7 +20,7 @@ import TeachersModuleRoutes from './Routes/TeachersModuleRoutes.jsx';
 
 function App() {
   return (
-    <Router basename="/lms-sep2/">
+    <Router basename="/lms-oct/">
       <Routes>
 
         {/* Define routes for institute Dashboard components */}s

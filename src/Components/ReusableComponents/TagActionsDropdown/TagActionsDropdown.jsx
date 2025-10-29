@@ -18,8 +18,6 @@ const TagActionsDropdown = ({
 }) => {
     const dropdownRef = useRef(null);
 
-    console.log(mode);
-    
      
     useEffect(() => {
         const handleClickOutside = (event) => {

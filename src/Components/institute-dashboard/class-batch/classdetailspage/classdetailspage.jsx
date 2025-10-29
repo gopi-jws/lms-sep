@@ -1,5 +1,5 @@
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { useParams } from "react-router-dom";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
@@ -10,6 +10,9 @@ import { FaArchive, FaTrashAlt, FaEllipsisH } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { VscTriangleDown } from "react-icons/vsc";
+import ClassDetailPageSideMenu from "./ClassDetailPageSidemenu/classdetailpagesidemenu";
+
 
 const ClassDetailsPage = () => {
   const { id } = useParams();
@@ -31,6 +34,43 @@ const ClassDetailsPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [currentView, setCurrentView] = useState("all");
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // Add refs at the top of your component
+    const sidebarRef = useRef(null);
+    const toggleRef = useRef(null);
+  
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        // Only handle clicks when sidebar is open
+        if (!isMobileOpen) return;
+  
+        const sidebar = sidebarRef.current;
+        const toggle = toggleRef.current;
+  
+        // If we don't have refs, don't do anything
+        if (!sidebar || !toggle) return;
+  
+        // Check if click is outside both sidebar and toggle button
+        const isOutsideSidebar = !sidebar.contains(e.target);
+        const isOutsideToggle = !toggle.contains(e.target);
+  
+        if (isOutsideSidebar && isOutsideToggle) {
+          console.log('Closing sidebar - click was outside');
+          setIsMobileOpen(false);
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isMobileOpen]);
+  
+  
+    // Mobile toggle function
+    const toggleMobileSidebar = () => {
+      setIsMobileOpen(!isMobileOpen)
+    }
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -200,8 +240,9 @@ const ClassDetailsPage = () => {
               )}
             </div>
           ) : (
-            <div className="desktop-actions">
-                <button className="test-action-button ">
+              // className = .desktop - actions
+            <div className="">
+              <button className="test-action-button ">
                   <ToggleSwitch
                     isActive={row.status === "active"}
                     onToggle={() => toggleStudentStatus(row.id)}
@@ -219,6 +260,7 @@ const ClassDetailsPage = () => {
                 <FaArchive />
                 <span className="tooltip-text">Archive</span>
               </button>
+
               <button
                   className="test-action-button delete"
                 onClick={(e) => {
@@ -247,6 +289,19 @@ const ClassDetailsPage = () => {
       </Helmet>
       
       <div className="test-index-wrapper">
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">Class {id} Students</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <ClassDetailPageSideMenu
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
+
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">Class {id} Students</h1>

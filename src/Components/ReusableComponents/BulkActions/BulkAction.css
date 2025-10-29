@@ -263,6 +263,13 @@ max-width: fit-content;
     right: 0;
     top: 100%;
 }
+
+@media (max-width:768px) {
+    .tag-options {
+        top: 100%;
+    }
+}
+
 .tube-action-button.active{
     background-color: #e2e8f0;
 }

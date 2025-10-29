@@ -11,6 +11,7 @@ import QuestionEditor from "../../Markdown/QuestionEditor";
 
 const SAQModal = ({ open, onClose, initialData }) => {
 
+    if (!open) return null;
     
     const { modalRef, isBouncing } = useBounceModal(open);
     const [questionTitle, setQuestionTitle] = useState(initialData?.question || "");
@@ -22,6 +23,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [solutionText, setSolutionText] = useState(initialData?.solution || "");
     const [solutionImage, setSolutionImage] = useState(initialData?.solutionImage || null);
+
 
     // Text selection state
     const [selectedField, setSelectedField] = useState(null);
@@ -65,15 +67,19 @@ const SAQModal = ({ open, onClose, initialData }) => {
         handleAutoResize(solutionRef.current);
     }, [questionTitle, answers, solutionText]);
 
+
     // Handle initial data when modal opens
     useEffect(() => {
-        if (open && initialData) {
+        // if (!open) return; // If closed, do nothing
+
+        if (initialData) {
+            // Edit mode
+            const initialQuestionImages = Array.isArray(initialData.questionImages)
+                ? initialData.questionImages
+                : initialData.questionImages
+                    ? [initialData.questionImages]
+                    : [];
             setQuestionTitle(initialData.question || "");
-            const initialQuestionImages = initialData.questionImages
-                ? Array.isArray(initialData.questionImages)
-                    ? initialData.questionImages
-                    : [initialData.questionImages]
-                : [];
             setQuestionImages(initialQuestionImages);
             setAnswers(initialData.options || [{ text: "", image: null }]);
             setCorrectAnswers(initialData.correctAnswers || []);
@@ -81,20 +87,8 @@ const SAQModal = ({ open, onClose, initialData }) => {
             setIsLaTeXEnabled(initialData.isLaTeXEnabled ?? false);
             setSolutionText(initialData.solution || "");
             setSolutionImage(initialData.solutionImage || null);
-
-            // Initialize history
-            setHistory({
-                question: [initialData.questionTitle || ""],
-                solution: [initialData.solutionText || ""],
-                answers: initialData.answers ? [initialData.answers] : [[{ text: "", image: null }]]
-            });
-            setHistoryIndex({
-                question: 0,
-                solution: 0,
-                answers: 0
-            });
-        } else if (open) {
-            // Reset for new question
+        } else {
+            // Only reset *once* when creating a new question
             setQuestionTitle("");
             setQuestionImages([]);
             setAnswers([{ text: "", image: null }]);
@@ -103,24 +97,9 @@ const SAQModal = ({ open, onClose, initialData }) => {
             setIsLaTeXEnabled(false);
             setSolutionText("");
             setSolutionImage(null);
-            setSelectedField(null);
-            setSelectedText("");
-            setSelectionStart(0);
-            setSelectionEnd(0);
-
-            // Reset history
-            setHistory({
-                question: [""],
-                solution: [""],
-                answers: [[{ text: "", image: null }]]
-            });
-            setHistoryIndex({
-                question: 0,
-                solution: 0,
-                answers: 0
-            });
         }
-    }, [open, initialData]);
+    }, [initialData]); // ❗ remove "open" from dependencies
+
 
     // Save to history
     const saveToHistory = (field, value) => {
@@ -133,6 +112,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
         });
         setHistoryIndex(prev => ({ ...prev, [field]: prev[field] + 1 }));
     };
+
 
     // Undo functionality
     const handleUndo = (field) => {
@@ -361,8 +341,6 @@ const SAQModal = ({ open, onClose, initialData }) => {
         }
     };
 
-
-
     // Multiple Image Upload for Question
     const handleQuestionImagesUpload = (e) => {
         const files = Array.from(e.target.files);
@@ -384,6 +362,9 @@ const SAQModal = ({ open, onClose, initialData }) => {
             return true;
         });
 
+        console.log("validFiles :" + validFiles[0]);
+        
+
         // Read all files
         const readers = validFiles.map(file => {
             return new Promise((resolve) => {
@@ -401,12 +382,42 @@ const SAQModal = ({ open, onClose, initialData }) => {
 
         // Add all images to state
         Promise.all(readers).then(imageDataArray => {
-            setQuestionImages(prev => [...prev, ...imageDataArray.map(img => img.data)]);
+            setQuestionImages(prev => [...prev, ...imageDataArray.map(img => img.data)])
         });
 
         // Reset file input to allow uploading same files again
         e.target.value = '';
     };
+    //     const files = Array.from(e.target.files);
+    //     if (files.length === 0) return;
+
+    //     // ✅ Check total size (max 5MB)
+    //     const totalSize = files.reduce((total, file) => total + file.size, 0);
+    //     if (totalSize > 5 * 1024 * 1024) {
+    //         alert("Total images size should be less than 5MB in total");
+    //         return;
+    //     }
+
+    //     // ✅ Filter valid files (each < 2MB)
+    //     const validFiles = files.filter(file => {
+    //         if (file.size > 2 * 1024 * 1024) {
+    //             alert(`Image ${file.name} is too large (max 2MB each)`);
+    //             return false;
+    //         }
+    //         return true;
+    //     });
+
+    //     console.log("Valid Files:", validFiles);
+
+    //     // ✅ Create preview URLs for UI display
+    //     const imagePreviews = validFiles.map(file => URL.createObjectURL(file));
+
+    //     // ✅ Update state with image URLs (can show in <img />)
+    //     setQuestionImages(prev => [...prev, ...imagePreviews]);
+
+    //     // ✅ Reset input to allow re-upload of same file
+    //     e.target.value = '';
+    // };
 
     const handleRemoveQuestionImage = (indexToRemove) => {
         setQuestionImages(prev => prev.filter((_, index) => index !== indexToRemove));
@@ -599,10 +610,11 @@ const SAQModal = ({ open, onClose, initialData }) => {
         }
     };
 
-    if (!open) return null;
+    
 
     return (
         <div className="mcq-modal-overlay">
+            
             <div ref={modalRef} className={`mcq-modal-content ${isBouncing ? "bounce" : ""}`}>
                 {/* Main Header */}
                 <div className="mcq-modal-header">
@@ -740,6 +752,8 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                         />
                                     </div>
                                 </div>
+                               
+                                    
                                 <div className="qtn-images-preview">
                                     {questionImages.map((image, imgIndex) => (
                                         <div key={imgIndex} className="qtn-image-item">
@@ -761,63 +775,12 @@ const SAQModal = ({ open, onClose, initialData }) => {
                                         </div>
                                     ))}
                                 </div>
+                               
                                 <hr />
 
                                 {/* Answer Options */}
                                 {answers.map((answer, index) => (
                                     <div className="option" key={index}>
-
-                                        {/* Fixed Editing Options for Answers */}
-                                        {/* <div className="editing-option">
-                                            <label
-                                                style={{ fontWeight: "bold", cursor: "pointer" }}
-                                                onClick={() => applyFormatting('bold', `answer-${index}`)}
-                                                title="Bold"
-                                            >
-                                                B
-                                            </label>
-                                            <label
-                                                style={{ fontStyle: "italic", cursor: "pointer" }}
-                                                onClick={() => applyFormatting('italic', `answer-${index}`)}
-                                                title="Italic"
-                                            >
-                                                I
-                                            </label>
-                                            <label
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() => insertList('answer', 'bullet', index)}
-                                                title="Bullet List"
-                                            >
-                                                <FaListUl />
-                                            </label>
-                                            <label
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() => insertList('answer', 'number', index)}
-                                                title="Numbered List"
-                                            >
-                                                <FaListOl />
-                                            </label>
-                                            <label
-                                                style={{
-                                                    cursor: historyIndex.answers === 0 ? "not-allowed" : "pointer",
-                                                    opacity: historyIndex.answers === 0 ? 0.5 : 1
-                                                }}
-                                                onClick={() => handleUndo('answers')}
-                                                title="Undo"
-                                            >
-                                                <FaUndo />
-                                            </label>
-                                            <label
-                                                style={{
-                                                    cursor: historyIndex.answers === history.answers.length - 1 ? "not-allowed" : "pointer",
-                                                    opacity: historyIndex.answers === history.answers.length - 1 ? 0.5 : 1
-                                                }}
-                                                onClick={() => handleRedo('answers')}
-                                                title="Redo"
-                                            >
-                                                <FaRedo />
-                                            </label>
-                                        </div> */}
 
                                         <div className="answer-header">
                                             <label>Option {index + 1}</label>

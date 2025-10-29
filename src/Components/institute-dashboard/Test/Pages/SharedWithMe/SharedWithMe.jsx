@@ -376,26 +376,16 @@ const SharedWithMe = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
+        <div ref={sidebarRef}>
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="test-index-container">
-          {isMobileOpen && (
-            <div ref={sidebarRef}>
-              <TestSidebar
-                tags={tags}
-                setTags={setTags}
-                isMobileOpen={isMobileOpen}
-                setIsMobileOpen={setIsMobileOpen}
-                // // uncategorizedCount={uncategorizedCount}
-                // onTagClick={handleTagClick}
-                // onUncategorizedClick={handleUncategorizedClick}
-                // activeTag={activeTag}
-                // newTest={handleNewTest}
-                // // onAddTag={handleAddTag}
-                // onCreateTest={handleCreateTest}
-                // archivedCount={data.filter(test => test.archived).length}
-                // trashedCount={data.filter(test => test.trashed).length}
-              />
-            </div>
-          )}
 
           <div className="test-index-header">
             <h1 className="breadcrumb">Shared With Me</h1>
@@ -447,6 +437,7 @@ const SharedWithMe = () => {
           totalItems={data.length}
           isSearching={searchQuery.length > 0}
         />
+
       </div>
     </>
   );

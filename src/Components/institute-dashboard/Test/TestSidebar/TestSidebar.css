@@ -34,7 +34,7 @@
 
 .test-sidebar-header {
   padding: 0 20px 11px; 
- margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .sidebar-letters {
@@ -147,13 +147,14 @@
   }
 
   .test-sidebar-container{
-    margin-top: 0;
+    margin-top: 30px;
     position: absolute;
     transition: transform 0.3s ease;
     box-shadow: 0px 0px 5px rgb(151, 151, 151);
     border-radius: 5px;
     height: fit-content;
     display: none;
+    /* padding-bottom: 70px; */
   }
 
   .test-sidebar-container.mobile-open {

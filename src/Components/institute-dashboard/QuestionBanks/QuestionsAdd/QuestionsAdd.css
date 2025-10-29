@@ -29,14 +29,15 @@ a {
 
 .test-index-header-moblie{
  display: flex;
- gap: 15px;
+ gap: .255em;
  margin-left: 5px;
  display: none;
 }
 
 .TriagbleDown{
-  margin-top: 4px;
-  font-size: 20px;
+  margin-top: 2px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 /* Column Visibility Wrapper */
@@ -460,12 +461,13 @@ a {
 }
 
 
-
-.test-header-icons{
-  margin-top: -3px;
+.test-header-icons .test-action-button{
+  color: #34495E;
+  font-size: 17px;
 }
 
-.test-header-icons .test-action-button{
-  font-size: 18px;
-  color: #34495E;
+
+
+.questionsadd-index-wrapper{
+  position: relative;
 }

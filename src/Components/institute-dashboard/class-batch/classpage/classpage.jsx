@@ -20,6 +20,9 @@ import { Settings, FilePenLine, Archive, Trash2 } from 'lucide-react';
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { VscTriangleDown } from "react-icons/vsc";
+import Sidebar from "/src/Components/institute-dashboard/QuestionBanks/Sidebar/Sidebar";
+import ClassSideMenu from "../classsidemenu/classsidemenu";
 
 const ClassPage = () => {
   const data = [
@@ -38,7 +41,7 @@ const ClassPage = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showNewClass, setShowNewClass] = useState(false); // Renamed for clarity
-
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
   // Filter data based on search
   const getFilteredData = () => {
     return data.filter((cls) => {
@@ -53,6 +56,42 @@ const ClassPage = () => {
   };
 
   const filteredData = getFilteredData();
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+  // Mobile toggle function
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen)
+  }
 
   // Update filtered count when data changes
   useEffect(() => {
@@ -158,19 +197,19 @@ const ClassPage = () => {
       ),
     },
     {
-      name: <div className="cursor-pointer">Strength</div>,
+      name: "Strength",
       selector: "strength",
       sortable: true,
       width: "200px",
     },
     {
-      name: <div className="cursor-pointer">Maximum Allowed</div>,
+      name: "Maximum Allowed",
       selector: "maximumallowed",
       sortable: true,
       width: "200px",
     },
     {
-      name: <div className="cursor-pointer">Expiry Date</div>,
+      name: "Expiry Date",
       selector: "expiryDate",
       sortable: true,
       width: "200px",
@@ -274,16 +313,22 @@ const ClassPage = () => {
         <meta name="description" content="Classes" />
       </Helmet>
       <div className="test-index-wrapper">
+        
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Classes Lists</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <ClassSideMenu
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Classes Lists</h1>
-            {/* Add button to open new class modal
-            <button
-              onClick={() => setShowNewClass(true)}
-              className="btn btn-primary"
-            >
-              Add New Class
-            </button> */}
           </div>
           <div className="my-data-table">
             <DataTable

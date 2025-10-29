@@ -21,6 +21,9 @@ import AddTagModal from "../../../ReusableComponents/AddTagModal/AddTagModal";
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown";
 import "./TestSidebar.css";
 import { getNextId } from "../../../../utils/idGenerator";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewTest } from "../../../../slices/allTestSlice";
+
 
 const TestSidebar = ({
   tags = [],
@@ -34,6 +37,12 @@ const TestSidebar = ({
   newTest,
   onCreateTest
 }) => {
+
+  const dispatch = useDispatch();
+  
+  //Open New Test 
+  const isNewTestModalOpen = useSelector((state) => state.AllTest.openNewtest);
+
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
   // const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(null);
@@ -50,6 +59,8 @@ const TestSidebar = ({
   //   return storedTags ? JSON.parse(storedTags) : [];
   // });
 
+
+
   useEffect(() => {
     localStorage.setItem('tags', JSON.stringify(tags));
   }, [tags]);
@@ -60,9 +71,10 @@ const TestSidebar = ({
   useEffect(() => {
     // Get path like /test/archived → extract the last part
     const currentPath = location.pathname.split("/").pop();
-    setActiveSection(currentPath || "Alltest");
+    console.log(currentPath);
+    
+    setActiveSection(currentPath === "test" ? "Alltest" : currentPath || "Alltest");
   }, [location]);
-
 
 
   const handleSetActive = (section) => {
@@ -104,13 +116,13 @@ const TestSidebar = ({
     setIsNewTagModalOpen(false);
   };
 
- 
+
   // Remove tag function (updates state + localStorage)
   const removeTag = (removeTag) => {
     setTags(prev => prev.filter(tag => tag.id !== removeTag.id)); // ✅ updates parent state
   };
 
-  const handleEditTag = (tag) => {   
+  const handleEditTag = (tag) => {
     setEditingTag(tag);
     setModalHeading("Edit Tag");
     setIsNewTagModalOpen(true);
@@ -131,7 +143,7 @@ const TestSidebar = ({
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={newTest}
+              onClick={() => dispatch(addNewTest(true))}
               className="allbuttons"
               aria-label="Create New Test"
             >
@@ -142,7 +154,6 @@ const TestSidebar = ({
 
         <div className="test-sidebar-scroll">
           <div className="test-sidebar-section">
-
             <ul className="test-sidebar-menu">
               <li>
                 <Link
@@ -252,9 +263,9 @@ const TestSidebar = ({
                         onEdit={() => handleEditTag(tag)}
                         onRemove={() => handleRemoveTag(tag)}
                         onClose={() => setShowMoreOptions(null)}
-                          tagId={tag.id}
-                          tagName={tag.name}
-                          tagColor={tag.color}
+                        tagId={tag.id}
+                        tagName={tag.name}
+                        tagColor={tag.color}
                       />
 
                     </div>
@@ -276,27 +287,7 @@ const TestSidebar = ({
 
       </nav>
 
-      {/* <button
-        className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-        onClick={toggleMobileSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button> */}
-      
 
-       {/* Mobile Toggle Button */}
-        {/* <button
-          className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-          onClick={toggleMobileSidebar}
-          aria-label="Toggle sidebar"
-        >
-          {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button> */}
-
-      {/* Modals */}
-
-      
       <AddTagModal
         isOpen={isNewTagModalOpen}
         onClose={() => {
@@ -308,16 +299,16 @@ const TestSidebar = ({
         selectedSection={editingTag}
       />
 
-      {/* <NewTestModal
+      <NewTestModal
         isOpen={isNewTestModalOpen}
-        onClose={() => setIsNewTestModalOpen(false)}
+        onClose={() => dispatch(addNewTest(false))}
         onSubmit={(testData) => {
           onCreateTest(testData);
-          setIsNewTestModalOpen(false);
+          dispatch(addNewTest(false));
         }}
         mode="create"
-      /> */}
-      
+      />
+
       <NewTestModal
         isOpen={isRemoveModalOpen}
         onClose={() => {

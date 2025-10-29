@@ -22,14 +22,16 @@ import AddClassModal from "../../../ReusableComponents/AddClassModal/AddClassMod
 import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolderModal"
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown"
 import "./classsidemenu.css"
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNewClassModalOpen } from "../../../../slices/allClass"
 
-const ClassSideMenu = ({ archivedCount, trashedCount }) => {
+const ClassSideMenu = ({ archivedCount, trashedCount, isMobileOpen, setIsMobileOpen }) => {
   // const [folders, setFolders] = useState(() => {
   //   const storedFolders = localStorage.getItem("folders")
   //   return storedFolders ? JSON.parse(storedFolders) : []
   // })
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
-  const [isNewClassModalOpen, setIsNewClassModalOpen] = useState(false)
+  //const [isNewClassModalOpen, setIsNewClassModalOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [testName, setTestName] = useState("")
   const [editingFolderId, setEditingFolderId] = useState(null)
@@ -38,17 +40,19 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("questionBank")
   const [showMoreOptions, setShowMoreOptions] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  // const [isMobileOpen, setIsMobileOpen] = useState(false)
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0']
   const [folders, setFolders] = useState(["Folder 1", "Folder 2"]);
   const [modalHeading, setModalHeading] = useState("")
   const [selectedSection, setSelectedSection] = useState("")
   const dropdownRef = useRef(null)
   const location = useLocation();
-  // Mobile toggle function
-  const toggleMobileSidebar = () => {
-    setIsMobileOpen(!isMobileOpen)
-  }
+
+
+  //Redux to get Values
+  const dispatch = useDispatch();
+  // New Class page Open
+  const isNewClassModalOpen = useSelector((state) => state.AllClass.isNewClassModalOpen);
 
   const handleSetActive = (section) => {
     setActiveSection(section)
@@ -115,7 +119,7 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Class Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
-              <button className="allbuttons" aria-label="Create New Class" onClick={()=>setIsNewClassModalOpen(true)}>
+              <button className="allbuttons" aria-label="Create New Class" onClick={()=>dispatch(setIsNewClassModalOpen(true))}>
                 <span className="sidebar-letters">New Class</span>
               </button>
           </div>
@@ -219,22 +223,22 @@ const ClassSideMenu = ({ archivedCount, trashedCount }) => {
       </nav>
 
       {/* Mobile Toggle Button */}
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
 
 
       {isNewClassModalOpen && (
         <AddClassModal
-          omOpen={isNewClassModalOpen}
-          onClose={() => setIsNewClassModalOpen(false)}
+          onOpen={isNewClassModalOpen}
+          onClose={() => dispatch(setIsNewClassModalOpen(false))}
         />
       )}
-      
+        
       
       <AddFolderModal
         isOpen={isFolderModalOpen}
