@@ -230,7 +230,7 @@ const TestSidebar = ({
               <span className="sidebar-letters">New Tag</span>
             </button>
 
-            <ul className="test-sidebar-menu tags">
+            {/* <ul className="test-sidebar-menu tags">
               {tags?.map((tag, index) =>
               (
                 <li key={tag.id} className="tag-item">
@@ -273,7 +273,45 @@ const TestSidebar = ({
                 </li>
               )
               )}
+            </ul> */}
+            <ul className="test-sidebar-menu tags">
+              {tags?.map((tag, index) => (
+                <li key={`${tag.id || tag.name}-${index}`} className="tag-item">
+                  <Link
+                    className={`sidebar-contents ${activeTag === tag.name ? "active" : ""}`}
+                    onClick={() => onTagClick(tag.name)}
+                  >
+                    <Tag className="icon" size={18} style={{ color: tag.color }} />
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                      <span className="sidebar-letters tag-letters-container">
+                        <span className="tag-name-wrapper">
+                          <span className="tag-name-text">{tag.name}</span>
+                        </span>
+                        <span className="tag-count">({tag.questions?.length})</span>
+                      </span>
+                      <button
+                        className="tag-button"
+                        type="button"
+                        onClick={(e) => handleTagClick(e, index)}
+                      >
+                        <span className="tag-dropdown-toggle"> </span>
+                      </button>
+
+                      <TagActionsDropdown
+                        isOpen={showMoreOptions === index}
+                        onEdit={() => handleEditTag(tag)}
+                        onRemove={() => handleRemoveTag(tag)}
+                        onClose={() => setShowMoreOptions(null)}
+                        tagId={tag.id}
+                        tagName={tag.name}
+                        tagColor={tag.color}
+                      />
+                    </div>
+                  </Link>
+                </li>
+              ))}
             </ul>
+
             <p
               className={`sidebar-contents ${activeTag === "uncategorized" ? "active" : ""}`}
               style={{ fontStyle: "italic" }}

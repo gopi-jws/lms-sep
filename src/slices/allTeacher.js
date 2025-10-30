@@ -9,6 +9,8 @@ const initialState = {
     initialState,
      reducers: {
          setIsNewTeacherModalOpen: (state, action) => {
+             console.log("Action" + action.payload);
+            
              state.isNewTeacherModalOpen = action.payload;
          },
     }

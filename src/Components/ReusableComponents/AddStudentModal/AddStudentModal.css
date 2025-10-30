@@ -220,7 +220,7 @@ input[type="file"]::file-selector-button {
 /* Modal Footer */
 .new-student-modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: var(--modal-footer-gap);
     padding: var(--modal-footer-padding);
     border-top: var(--modal-footer-border-top);
@@ -248,4 +248,9 @@ input[type="file"]::file-selector-button {
     }
 
 
+}
+
+.action {
+    display: flex;
+    gap: 10px;
 }

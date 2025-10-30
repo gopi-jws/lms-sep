@@ -21,14 +21,23 @@
     .table-wrapper::-webkit-scrollbar {
       display: none;
       /* Chrome, Safari, Opera */ }
+
+  .custom-data-table thead th,
+  .custom-data-table tbody td {
+    text-align: left;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+  }
+
   .custom-data-table thead th {
     padding: 10px;
     font-weight: 600;
     background-color: transparent;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
-    /* cursor: pointer; */
   }
+
   
   /* .custom-data-table tbody tr:hover {
     background-color: #f3f4f6;
@@ -108,13 +117,7 @@
    .custom-data-table th:last-child .table-header-content {
     justify-content: flex-end;
   } 
-    /* .custom-data-table td:last-child {
-      text-align: right;
-    }
-        .custom-data-table td:last-child .cell-content {
-          justify-content: flex-end;
-          display: flex;
-        } */
+   
   .accordion-table td {
     cursor: pointer;
     padding: 10px;
@@ -647,7 +650,7 @@ padding-top: 40px;
 
 .selete-all{
   display: flex;
-  gap: 10px;
+  gap: 7px;
   align-items: center;
   justify-content: center;
 }

@@ -207,8 +207,8 @@ const TeachersSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       <NewTeacherModal
         isOpen={isNewTeacherModalOpen}
         onClose={() => dispatch(setIsNewTeacherModalOpen(false))}
-        onCreate={handleCreateTeacher}
-        success={popup}
+        //onCreate={handleCreateTeacher}
+        // success={popup}
       />
 
       <AddFolderModal

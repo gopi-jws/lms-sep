@@ -27,6 +27,7 @@ const getTests = () => {
 
 const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish, scheduledTests = [], availableHours, requiredHours, }) => {
 
+    
     const [data, setData] = useState(() => getTests());
     useEffect(() => {
         const handleStorageChange = () => {
@@ -80,7 +81,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     const [availability, setAvailability] = useState(null);
 
     const [examName, setExamName] = useState("Sample Exam");
-    const [participations, setParticipations] = useState(2); // Number of participants
+    const [participations, setParticipations] = useState(0); // Number of participants
     const [examDuration, setExamDuration] = useState(20); // Exam duration in minutes
     const [hoursAvailable, setHoursAvailable] = useState(8); // Available hours
     const [duration, setDuration] = useState("15"); // Default value is 15 mins
@@ -214,7 +215,7 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
             test.id === selectedTestId
                 ? {
                     ...test,
-                    status: "Published",
+                    // status: "Published",
                     lastModified: new Date().toISOString(),
                 }
                 : test
@@ -275,6 +276,13 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
 
     // Handle selecting a class
     const handleSelectClass = (className) => {
+
+        if (className === "Class 2"){
+            setParticipations(50);
+        }else{
+            setParticipations(0);
+        }
+        
         if (!selectedClasses.includes(className)) {
             setSelectedClasses((prev) => [...prev, className]);
         }
@@ -360,12 +368,6 @@ const PublishModal = ({ isOpen, onClose, selectedTest, selectedTestId, onPublish
     };
 
     const handlePublish = () => {
-        console.log(selectedClasses);
-
-        if (selectedClasses[0] === "Class 2"){
-            setParticipations(50);
-        }
-        
         setWarningPopupOpen(true);
     };
 

@@ -301,6 +301,10 @@ a {
     display: none;
   }
 
+  .TriagbleDown{
+   margin-right: 10px;
+  }
+
   .test-index-header-moblie{
     display: flex;
   }

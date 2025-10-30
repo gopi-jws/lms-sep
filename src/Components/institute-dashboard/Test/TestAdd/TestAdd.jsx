@@ -549,7 +549,7 @@ const TestAdd = () => {
       cell: (row) => (
         <div className="test-action-buttons flex">
           <div className="desktop-actions">
-            <img className="mark-image" src="/public/Screenshot 2025-10-17 162907.png" alt="" />
+            {/* <img className="mark-image" src="/public/Screenshot 2025-10-17 162907.png" alt="" /> */}
             <button
               className="test-action-button copy"
               aria-label="Copy"

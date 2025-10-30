@@ -703,13 +703,20 @@ input[type="file"]::file-selector-button {
     position: relative;
 }
 
+.question-images-container,
+.answer-image-container,
+.solution-image-container{
+    text-align: center;
+}
+
 .answer-image ,
 .question-image,
 .solution-image{
-    width: 100%;
+    max-width: 100%;
     height: auto;
     border: 1px solid var(--border);
-    margin-top: 10px;
+    display: flex;
+    margin-bottom: 20px;
 }
 
 .image-error {

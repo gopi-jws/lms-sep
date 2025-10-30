@@ -314,3 +314,9 @@ input[type="file"]::file-selector-button {
     align-items: center;
     margin-left: 150px;
 }
+
+.question-images-container,
+.answer-image-container,
+.solution-image-container {
+    text-align: center;
+}

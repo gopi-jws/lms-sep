@@ -509,7 +509,7 @@ const DataTable = ({
                         <thead className="table-header">
                             <tr>
                                 {selectableRows && (
-                                    <th className="col-checkbox">
+                                    <th className="col-checkbox" style={{width:"50px"}}>
                                         <div className="custom-checkbox-container">
                                             <input
                                                 type="checkbox"
@@ -532,8 +532,8 @@ const DataTable = ({
                                 {columns.map((col, colIndex) => (
                                     <th
                                         key={colIndex}
-                                        className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`}
-                                        style={{ width: col.width || "auto" }}
+                                        className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`} style={{ width: col.width || "", minWidth: col.width || "" }} 
+                                        // style={{ width: col.width || "auto" }} 
                                     >
                                         <div className="table-header-content" style={{ display: "flex", alignItems: "center" }}>
                                             <span
@@ -647,7 +647,7 @@ const DataTable = ({
                                                     >
                                                         <td
                                                             colSpan={columns.length + (selectableRows ? 1 : 0)}
-                                                            className="py-2 row-link ans-item"
+                                                            className="pb-2 row-link ans-item"
                                                         >
                                                             {row.question ? (
                                                                 fullViewMode || expandedQuestions.includes(row.id) ? (
@@ -684,7 +684,7 @@ const DataTable = ({
 
                                                                         {/* ✅ Answer (only show when toggled) */}
                                                                         {showAnswers.includes(row.id) && row.solution && (
-                                                                            <div className="mt-2 p-2 bg-gray-100 rounded">
+                                                                            <div className="mt-2 bg-gray-100 rounded">
                                                                                 <QuestionEditor content={row.solution} />
                                                                             </div>
                                                                         )}
@@ -717,6 +717,7 @@ const DataTable = ({
                                                         ? col.name.toLowerCase().replace(/\s+/g, "-")
                                                         : "default-column"
                                                         }`}
+                                                    style={{ width: col.width || "auto", minWidth: col.width || "auto" }}
                                                 >
                                                     <div className="cell-wrapper">
                                                         <span className="col-cell">
@@ -729,8 +730,9 @@ const DataTable = ({
 
                                         {/* Responsiveness  */}
                                         {!showQuestionRow && screenWidth <= 768 && (
-                                            <td>
-                                                <div className="rows-iteam">
+
+                                            <div className="rows-iteam">
+                                                <td>
                                                     <div className="table-tq-wrapper">
                                                         {/* Non-Actions columns */}
                                                         <div className="table-tq-columns">
@@ -740,8 +742,8 @@ const DataTable = ({
                                                                     <div
                                                                         key={colIndex}
                                                                         className={`col-${typeof col.name === "string"
-                                                                                ? col.name.toLowerCase().replace(/\s+/g, "-")
-                                                                                : "default-column"
+                                                                            ? col.name.toLowerCase().replace(/\s+/g, "-")
+                                                                            : "default-column"
                                                                             }`}
                                                                     >
                                                                         <div>
@@ -773,8 +775,9 @@ const DataTable = ({
                                                                 ))}
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
+                                            </div>
+
                                         )}
 
                                     </tr>

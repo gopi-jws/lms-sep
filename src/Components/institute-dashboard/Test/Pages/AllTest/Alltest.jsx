@@ -7,8 +7,6 @@ import TestIndex from '../../TestIndex/TestIndex';
 const Alltest = () => {
   return (
     <div>
-    
-   
     <TestIndex />
  
     </div>

@@ -46,16 +46,16 @@ const ClassDetailPageSideMenu = ({
   const isAddStudentModalOpen = useSelector((state) => state.AddStudent.isAddStudentModalOpen);
 
   // Mobile responsiveness
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsMobileOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth > 768) {
+  //       setIsMobileOpen(false);
+  //     }
+  //   };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
 
   const handleSetActive = (section) => {
     setActiveSection(section);

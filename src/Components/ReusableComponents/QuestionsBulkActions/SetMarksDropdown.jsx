@@ -5,13 +5,23 @@ import PropTypes from 'prop-types';
 
 const SetMarksDropdown = ({ onMarksChange }) => {
     const [marks, setMarks] = useState("");
+    const [negMarks, setNegMarks] = useState("");
 
     const handleChange = (e) => {
         const value = e.target.value;
-        // Allow only numbers with up to 2 decimals
-        if (/^\d*\.?\d{0,2}$/.test(value)) {
-            setMarks(value);
+        if(e.target.name === "mark"){
+            // Allow only numbers with up to 2 decimals
+            if (/^\d*\.?\d{0,2}$/.test(value)) {
+                setMarks(value);
+            }
         }
+        else{
+            // Allow only numbers with up to 2 decimals
+            if (/^\d*\.?\d{0,2}$/.test(value)) {
+                setNegMarks(value);
+            }
+        }
+        
     };
 
     const handleSetMarks = () => {
@@ -43,6 +53,17 @@ const SetMarksDropdown = ({ onMarksChange }) => {
                     onChange={handleChange}
                     placeholder="Enter marks"
                     className="setMark-input"
+                    name="mark"
+                />
+
+                <input
+                    type="number"
+                    id="marks"
+                    value={negMarks}
+                    onChange={handleChange}
+                    placeholder="Enter Neg marks"
+                    className="setMark-input"
+                    name="negmark"
                 />
 
                 <button className='setMark-btn' onClick={handleSetMarks} disabled={!marks}>Set</button>

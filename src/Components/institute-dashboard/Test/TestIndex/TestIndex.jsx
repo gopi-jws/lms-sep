@@ -775,10 +775,14 @@ const TestIndex = () => {
             </div>
           ) : (
             <div className="flex">
-              <button className="test-action-button dispatch" aria-label="Published" disabled={row.status === 'Published'} onClick={() => openModal(row)} style={{
+              {/* <button className="test-action-button dispatch" aria-label="Published" disabled={row.status === 'Published'} onClick={() => openModal(row)} style={{
                 opacity: row.status === 'Published' ? 0.5 : 1,
                 cursor: row.status === 'Published' ? 'not-allowed' : 'pointer',
-              }}>
+              }}> */}
+                <button className="test-action-button dispatch" aria-label="Published" onClick={() => openModal(row)} style={{
+                  opacity: 1,
+                  cursor: 'pointer',
+                }}>
                 <FaPaperPlane />
                 <span className="tooltip-text">Publish</span>
               </button>
@@ -864,7 +868,7 @@ const TestIndex = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
-        <div  ref={sidebarRef}>
+        <div  ref={sidebarRef} >
           <TestSidebar
             tags={tags}
             setTags={setTags}
