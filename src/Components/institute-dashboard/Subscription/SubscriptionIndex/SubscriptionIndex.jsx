@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiCalendar, FiDollarSign, FiClock, FiCheckCircle, FiX, FiStar } from 'react-icons/fi';
 import Subscriptionform from '../Subscriptionform/Subscriptionform';
+import { VscTriangleDown } from "react-icons/vsc";
+import SubscriptionSidebar from '../SubscriptionSidebar/SubscriptionSidebar';
+
 import './SubscriptionIndex.css';
 import Header from '../../../header/header';
 
@@ -75,6 +78,43 @@ const SubscriptionIndex = () => {
       recommended: false
     }
   ];
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+  // Mobile toggle function
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen)
+  }
+
 
   const handleUpgradeClick = (plan) => {
     setCurrentPlan(plan);
@@ -85,10 +125,19 @@ const SubscriptionIndex = () => {
     <>
    
       <div className="subscription-container">
-        {/* <div className="subscription-header">
-          <h1>Subscription Management</h1>
-          <p>Choose the perfect plan for your institution's needs</p>
-        </div> */}
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">SubscriptionSidebar</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <SubscriptionSidebar
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+            sideBarTop={true}
+          />
+        </div>
+
 
         <div className="current-plan-section">
           <div className="current-plan-card">

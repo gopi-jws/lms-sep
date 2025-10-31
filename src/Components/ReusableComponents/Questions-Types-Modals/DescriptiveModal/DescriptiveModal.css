@@ -367,6 +367,9 @@ input[type="file"]::file-selector-button {
     min-height: 100px;
 }
 
-.descriptive-text-input {
-    width: 330px;
+
+@media (max-width: 768px) {
+    .descriptive-modal-row {
+        flex-direction: column;
+    }
 }

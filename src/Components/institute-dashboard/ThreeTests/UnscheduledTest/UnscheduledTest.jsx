@@ -1,8 +1,11 @@
 // src/Components/institute-dashboard/ThreeTests/UnscheduledTest/UnscheduledTest.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../CurrentRunningTest/CurrentRunningTest.css";
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent";
 import { FileClock } from "lucide-react";
+import { VscTriangleDown } from "react-icons/vsc";
+import SidebarMenu from "../../dashboard/sidebar/sidemenu";
+
 
  const UnscheduledTest = ({ onViewDetails = () => { } }) => {
     const unscheduledTests = [
@@ -39,6 +42,43 @@ import { FileClock } from "lucide-react";
     ];
 
     const [timeLeft, setTimeLeft] = useState({});
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+      // Add refs at the top of your component
+      const sidebarRef = useRef(null);
+      const toggleRef = useRef(null);
+    
+      // Close dropdown when clicking outside
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          // Only handle clicks when sidebar is open
+          if (!isMobileOpen) return;
+    
+          const sidebar = sidebarRef.current;
+          const toggle = toggleRef.current;
+    
+          // If we don't have refs, don't do anything
+          if (!sidebar || !toggle) return;
+    
+          // Check if click is outside both sidebar and toggle button
+          const isOutsideSidebar = !sidebar.contains(e.target);
+          const isOutsideToggle = !toggle.contains(e.target);
+    
+          if (isOutsideSidebar && isOutsideToggle) {
+            console.log('Closing sidebar - click was outside');
+            setIsMobileOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, [isMobileOpen]);
+
+     // Mobile toggle function
+     const toggleMobileSidebar = () => {
+         setIsMobileOpen(!isMobileOpen)
+     }
+
 
     function calculateTimeLeft(test) {
         const difference = test.endTime.getTime() - new Date().getTime();
@@ -112,6 +152,20 @@ import { FileClock } from "lucide-react";
     ];
 
     return (
+
+        <div className="div">
+
+            <div className="test-index-header-moblie">
+                <h1 className="breadcrumb">Unscheduled Tests</h1>
+                <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+            </div>
+
+            <div ref={sidebarRef}>
+                <SidebarMenu
+                    isMobileOpen={isMobileOpen}
+                    setIsMobileOpen={setIsMobileOpen}
+                />
+            </div>
         <div className="current-running-test">
             <div className="status-header">
                 <div className="status-title status-title2">
@@ -128,6 +182,7 @@ import { FileClock } from "lucide-react";
                 showColumnVisibility={false}
                 fullViewMode={false}
             />
+        </div>
         </div>
     );
 };

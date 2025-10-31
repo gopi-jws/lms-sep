@@ -303,26 +303,27 @@
         }
 } */
 
+@media(max-width:866px){
+.logo-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* margin-left: 90px; */
+  }
+    .header-logo-icon {
+      font-size: 35px !important;
+    }
+  
+    .header-logo-text {
+      font-size: 15px;
+    }
+}
+
 @media (max-width: 768px) {
   .logo img {
     width: 110px;
   }
-
-  .logo-left{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* margin-left: 90px; */
-  }
-
-  .header-logo-icon {
-    font-size: 35px !important;
-  }
-
-  .header-logo-text {
-    font-size: 15px;
-  }
-
   .nav-menu {
     /* gap: 2.25rem; */
     margin-left: 0px;
@@ -351,12 +352,12 @@
     padding: 0 0.75rem;
   }
 
-  .logo-left {
-    /* margin-left: 70px; */
-  }
+  /* .logo-left {
+    margin-left: 70px;
+  } */
 
   .header-logo-icon {
-    font-size: 30px !important;
+    font-size: 35px !important;
   }
 
   .logo {
@@ -387,9 +388,9 @@
     padding: 5px !important;
   }
 
-  .logo-left {
-    /* margin-left: 45px; */
-  }
+  /* .logo-left {
+    margin-left: 45px;
+  } */
 }
 
 /* Default nav menu for desktop */

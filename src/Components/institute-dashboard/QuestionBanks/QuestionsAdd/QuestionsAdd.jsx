@@ -863,7 +863,6 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
         })()
       }
 
-
       {/* New Question */}
       <SAQModal open={isSQAModalOpen} onClose={() => { dispatch(setIsSQAModalOpen(false));}} />
       <MCQModal open={isModalOpen} onClose={() => { dispatch(setIsModalOpen(false));}} />

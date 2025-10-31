@@ -320,3 +320,10 @@ input[type="file"]::file-selector-button {
 .solution-image-container {
     text-align: center;
 }
+
+
+@media (max-width: 768px) {
+    .numerical-modal-row {
+        flex-direction: column;
+    }
+}

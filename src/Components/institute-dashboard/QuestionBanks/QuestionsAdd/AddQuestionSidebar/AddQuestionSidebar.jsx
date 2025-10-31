@@ -107,9 +107,6 @@ const AddQuestionSidebar = ({ isMobileOpen, setIsMobileOpen, hideQuestionType })
     };
   }, [isDropdownOpen, openDropdown, dispatch]);
 
-
-
-
   const [testName, setTestName] = useState("")
   const [editingFolderId, setEditingFolderId] = useState(null)
   const [editedFolderName, setEditedFolderName] = useState("")

@@ -34,11 +34,17 @@
   transition: background-color 0.3s ease;
 }
 
-@media (max-width:395px) {
+@media (max-width:431px) {
+    .tube-action-button {
+        padding: 6px 8px;
+    }
+}
+
+/* @media (max-width:395px) {
     .tube-action-button {
         padding: 6px 13px;
     }
-}
+} */
 /* Curve ONLY the left corners of the FIRST button */
 .tube-bulk-button:first-child .tube-action-button {
     border-top-left-radius: 30px;

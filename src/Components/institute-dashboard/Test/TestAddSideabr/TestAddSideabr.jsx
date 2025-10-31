@@ -60,7 +60,8 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-  const [emails, setEmails] = useState([])
+  const [emails, setEmails] = useState([]);
+  
 
   const testlocation = useLocation();
   const pathParts = testlocation.pathname.split("/"); // ["", "lms-sep2", "test", "12", "movetest"]
@@ -249,6 +250,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
           instructions: testItem.instructions
         });
         setIsEditModalOpen(true);
+        setModalHeading("Edit Test")
         break;
 
       case "rename":
@@ -257,16 +259,19 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
           name: testItem.test,
         });
         setIsRenameModalOpen(true);
+        setModalHeading("Rename Test")
         break;
 
       case "pdf":
         setShowDescDropdown(true)
         setMode('pdf');
+        
         break;
 
       case "copy":
         setShowDescDropdown(true)
         setMode('copy');
+        setModalHeading("Copy Test")
         break;
 
       case "share":
@@ -276,11 +281,13 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       case "archive":
         setShowDescDropdown(true)
         setMode('archive');
+        setModalHeading("Archive Test")
         break;
 
       case "delete":
         setShowDescDropdown(true)
         setMode('delete');
+        setModalHeading("Delete Test")
         break;
 
       default:
@@ -604,6 +611,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
         initialDuration={testItem.duration}
         initialDescription={testItem.description}
         initialInstructions={testItem.instructions}
+        heading={modalHeading}
       />
 
       <PublishModal
@@ -638,6 +646,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
             setIsEditModalOpen(false);
             setEditingTest(null);
           }}
+          heading={modalHeading}
           mode="edit"
         />
       )}
@@ -655,6 +664,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
             setIsRenameModalOpen(false);
             setEditingTest(null);
           }}
+          heading={modalHeading}
         />
       )}
     </div>

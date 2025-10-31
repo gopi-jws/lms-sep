@@ -464,7 +464,7 @@
     /* Prevents content from touching the scrollbar */
         background-color: var(--modal-content-bg);
         border-radius: var(--modal-content-border-radius);
-        width: 100%;
+        width: 50%;
         max-height: var(--modal-content-max-height);
         overflow-y: var(--modal-content-overflow-y);
         box-shadow: var(--modal-content-box-shadow);
@@ -475,6 +475,18 @@
         left: var(--modal-content-left);
         transform: var(--modal-content-transform);
         animation: var(--modal-content-animation);
+}
+
+@media(max-width:1024px) {
+    .exam-summary-modal-content {
+        width: 70%;
+    }
+}
+
+@media(max-width:768px){
+    .exam-summary-modal-content{
+       width: 90%;
+    }
 }
 
 .exam-summary-modal-header {

@@ -85,6 +85,13 @@ const DataTable = ({
     const pathName = pathParts[1];
     const pathLateName = pathParts[3];
     const id = pathParts[2]; // index 3 → "12"
+    const trashedQb = pathParts[2];
+
+    console.log(trashedQb);
+    
+
+
+    
 
     const initialData = [
         { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -189,6 +196,13 @@ const DataTable = ({
         {
             key: "newQuestionQB",
             condition: pathLateName === "add",
+            label: "New Question",
+            action: () => dispatch(addNewQuestionQB(!isDropdownOpen)),
+            aria: "Add New Questions in Question Bank",
+        },
+        {
+            key: "newQuestionQB",
+            condition: trashedQb === "Trashed",
             label: "New Question",
             action: () => dispatch(addNewQuestionQB(!isDropdownOpen)),
             aria: "Add New Questions in Question Bank",
@@ -532,8 +546,9 @@ const DataTable = ({
                                 {columns.map((col, colIndex) => (
                                     <th
                                         key={colIndex}
-                                        className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}`} style={{ width: col.width || "", minWidth: col.width || "" }} 
-                                        // style={{ width: col.width || "auto" }} 
+                                        className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}
+      ${col.name === "Actions" ? "" : "no-flex-end"}`}
+                                        style={{ width: col.width || "", minWidth: col.width || "" }}
                                     >
                                         <div className="table-header-content" style={{ display: "flex", alignItems: "center" }}>
                                             <span
@@ -542,22 +557,26 @@ const DataTable = ({
                                             >
                                                 {col.name}
                                             </span>
+
                                             {sortColumn === col.selector && (
-                                                isAscending
-                                                    ? <FaArrowUp
+                                                isAscending ? (
+                                                    <FaArrowUp
                                                         className="ml-2 sorting-arrow"
                                                         style={{ cursor: "pointer" }}
                                                         onClick={() => col.selector && handleSort(col.selector)}
                                                     />
-                                                    : <FaArrowDown
+                                                ) : (
+                                                    <FaArrowDown
                                                         className="ml-2 sorting-arrow"
                                                         style={{ cursor: "pointer" }}
                                                         onClick={() => col.selector && handleSort(col.selector)}
                                                     />
+                                                )
                                             )}
                                         </div>
                                     </th>
                                 ))}
+
                             </tr>
                         </thead>
                     )}

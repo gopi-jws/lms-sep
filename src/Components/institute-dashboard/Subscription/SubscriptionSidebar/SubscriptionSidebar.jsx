@@ -2,11 +2,11 @@ import React from 'react'
 import { Database, Mail, CreditCard, Settings, HelpCircle } from 'lucide-react'
 import './SubscriptionSidebar.css'
 
-const SubscriptionSidebar = () => {
+const SubscriptionSidebar = ({ isMobileOpen, sideBarTop }) => {
   return (
     <div className="sidebar-wrapper">
       {/* Sidebar Container */}
-      <nav className="test-sidebar-container" aria-label="Subscription Navigation">
+      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${sideBarTop ? "dashboard-sidebar" : ""}`} aria-label="Subscription Navigation">
         <div className="test-sidebar-header">
           <span className="sidebar-letters">Subscription Info</span>
         </div>
@@ -66,7 +66,7 @@ const SubscriptionSidebar = () => {
           </ul>
         </div>
 
-        <div className="test-sidebar-section">
+        <div className="test-sidebar-section contact">
           
           <p className="subscription-sidebar-text">
             Manage your subscription and access premium features.

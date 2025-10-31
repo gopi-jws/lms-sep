@@ -4,9 +4,8 @@ import TestStatusBar from '../teststaus/teststatus'
 
 const DashboardIndex = () => {
   return (
-    <div>
-        <DashBoard />
-        <TestStatusBar />
+    <div >
+        <DashBoard />  
     </div>
   )
 }

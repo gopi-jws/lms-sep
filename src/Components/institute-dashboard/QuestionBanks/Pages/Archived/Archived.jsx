@@ -274,9 +274,6 @@ const Archived = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
-        
-        <div className="questionbank-index-container">
-          {isMobileOpen && (
             <div ref={sidebarRef}>
               <Sidebar
                 isMobileOpen={isMobileOpen}
@@ -284,10 +281,11 @@ const Archived = () => {
                 // createNewQuestionBank={handleNewQuestionBank}
               />
             </div>
-          )}
+        
+        <div className="questionbank-index-container">
 
           <div className="test-index-header">
-            <h1 className="breadcrumb">All Question Bank Lists</h1>
+            <h1 className="breadcrumb">Archived</h1>
           </div>
 
   

@@ -309,3 +309,9 @@ input[type="file"]::file-selector-button {
     flex-direction: column;
     align-items: center;
 }
+
+@media (max-width: 768px) {
+    .true-false-modal-row {
+        flex-direction: column;
+    }
+}

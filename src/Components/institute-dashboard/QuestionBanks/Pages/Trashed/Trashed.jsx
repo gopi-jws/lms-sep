@@ -267,9 +267,6 @@ const Trashed = () => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
         </div>
 
-        <div className="questionbank-index-container">
-
-          {isMobileOpen && (
             <div ref={sidebarRef}>
               <Sidebar
                 // foldersIteam={foldersIteam}
@@ -279,10 +276,10 @@ const Trashed = () => {
                 // createNewQuestionBank={handleNewQuestionBank}
               />
             </div>
-          )}
+        <div className="questionbank-index-container">
 
           <div className="test-index-header">
-            <h1 className="breadcrumb">All Question Bank Lists</h1>
+            <h1 className="breadcrumb">Trashed</h1>
           </div>
 
           <div className="my-data-table">
