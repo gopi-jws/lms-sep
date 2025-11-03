@@ -22,7 +22,7 @@ import { addNewQuestionQB } from "../../../slices/addQuestionBank"
 import { setIsNewClassModalOpen } from "../../../slices/allClass";
 import { setIsAddStudentModalOpen } from "../../../slices/addStudent";
 import { setIsNewTeacherModalOpen } from "../../../slices/allTeacher";
-import { setIsSQAModalOpen, setIsDescriptiveModalOpen, setIsModalOpen, setIsNumericalModalOpen, setIsTrueFalseModalOpen } from "../../../slices/addQuestionBank";
+import { setNumberofSelectionQuestion } from "../../../slices/addQuestioninTest"
 
 
 const DataTable = ({
@@ -87,12 +87,6 @@ const DataTable = ({
     const id = pathParts[2]; // index 3 → "12"
     const trashedQb = pathParts[2];
 
-    console.log(trashedQb);
-    
-
-
-    
-
     const initialData = [
         { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
         { id: 2, test: "Test 2", owner: "Jane Smith", status: "Not Published", lastModified: "10 hours ago by You", duration: 45, description: "Sample test 2", instructions: "Read carefully", trashed: false, archived: false },
@@ -120,6 +114,10 @@ const DataTable = ({
     const [showMcqOptions, setShowMcqOptions] = useState({})
     const [expandedQuestions, setExpandedQuestions] = useState([]);
     const [showAnswers, setShowAnswers] = useState([]);
+
+    useEffect(()=>{
+        dispatch(setNumberofSelectionQuestion(selectedRows.length))
+    }, [selectedRows])
 
     const location = useLocation();
     const path = location.pathname;
@@ -243,6 +241,9 @@ const DataTable = ({
     }
 
     const handleSelectAll = (event) => {
+
+        console.log(event);
+        
         if (event.target.checked) {
             setSelectedRows(data.map((row) => row.id))
         } else {

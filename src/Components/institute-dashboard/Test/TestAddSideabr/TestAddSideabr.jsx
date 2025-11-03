@@ -35,6 +35,7 @@ import useOutsideClick from '../../../../hooks/useOutsideClick'; // adjust path
 import NewTestModal from '../../../ReusableComponents/NewTestModal/NewTestModal'
 import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal"
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal"
+import AddQuestionModal from "../../../ReusableComponents/AddQuestionModal/AddQuestionModal";
 
 import TestIndex from "../TestIndex/TestIndex";
 const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
@@ -82,9 +83,11 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const [activeSection, setActiveSection] = useState("");
 
   const handleNewQuestionClick = () => {
-    const id = "1";
-    sessionStorage.setItem("testQuestionData", JSON.stringify({ id }));
-    window.open(`/lms-sep1/test/${id}/movetest/testquestionadd`, "_blank");
+    // const id = "1";
+    // sessionStorage.setItem("testQuestionData", JSON.stringify({ id }));
+    // window.open(`/lms-sep1/test/${id}/movetest/testquestionadd`, "_blank");
+    setIsAddQuestionModal(true)
+
   };
 
   const handleAddFolder = ({ name, color }) => {
@@ -119,6 +122,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isAddQuestionModal, setIsAddQuestionModal] = useState(false);
 
   const [testInfo] = useState({
     marks: 100,
@@ -333,7 +337,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)}></div>}
+      {/* {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)}></div>} */}
       {/* Sidebar Container */}
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${pathName === "movetest" ? "AddTest-Top" : ""}`} aria-label="Test Navigation">
         <div className="test-sidebar-header">
@@ -592,6 +596,13 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       </button> */}
 
 
+      <AddQuestionModal 
+        open={isAddQuestionModal}
+        close={()=> setIsAddQuestionModal(false)}
+        tags={tags} 
+      />
+
+
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}
@@ -601,7 +612,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       />
 
 
-      <NewTestModal
+      {/* <NewTestModal
         isOpen={showDescDropdown}
         mode={mode}
         onSubmit={() => { setShowDescDropdown(false) }}
@@ -612,11 +623,12 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
         initialDescription={testItem.description}
         initialInstructions={testItem.instructions}
         heading={modalHeading}
-      />
+      /> */}
 
       <PublishModal
         isOpen={isModalOpen}
-        tags={tags} onClose={closeModal}
+        tags={tags} 
+        onClose={closeModal}
         selectedTest={selectedTest}
         selectedTestId={selectedTestId}
         onPublish={refreshTests}

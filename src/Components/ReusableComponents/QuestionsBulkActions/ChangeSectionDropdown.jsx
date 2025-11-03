@@ -33,7 +33,7 @@ const ChangeSectionDropdown = ({
     };
 
     return (
-        <div className="change-section-dropdown" ref={dropdownRef}>
+        <div className="change-section-dropdown" >
             <p className="dropdown-heading">Change Section</p>
             <ul className="dropdown-options-list">
                 {allSections.map((section, index) => (

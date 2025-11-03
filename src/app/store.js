@@ -6,11 +6,13 @@ import addQuestionQB from "../slices/addQuestionBank";
 import allClass  from "../slices/allClass.js";
 import addStudent  from "../slices/addStudent.js";
 import addTeacher from "../slices/allTeacher.js"
+import addQuestioninTest  from "../slices/addQuestioninTest.js";
 
 export const store = configureStore({
     reducer: {
         AllTest: allTestReducer, 
         TestAdd: testAddReducer,
+        AddQuestionTest: addQuestioninTest,
         AllQuestionBank: allQuestionBank,
         AddQuestionQB: addQuestionQB,
         AllClass: allClass,
