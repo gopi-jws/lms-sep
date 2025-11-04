@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import "./AddClassModal.css";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./newclasspage.css";
 import { FaCopy } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import useBounceModal from "../useBounceModal/useBounceModal";
 
-const AddClassModal = ({ onOpen, onClose }) => {
-    
+const AddClassModal = ({ onClose, isOpen }) => {
+
     const navigate = useNavigate();
-
     const [className, setClassName] = useState("");
-    const [studentsType, setStudentsType] = useState("both");
+    const [studentsType, setStudentsType] = useState("admin");
     const [maxStrength, setMaxStrength] = useState(30);
     const [optMaxStrength, setOptMaxStrength] = useState("unlimited");
     const [permission, setPermission] = useState("auto");
@@ -50,12 +50,14 @@ const AddClassModal = ({ onOpen, onClose }) => {
 
 
     const handleClose = () => {
-        if (typeof onClose === "function") {
-            onClose();
-        } else {
-            console.error("onClose is not a function");
-            console.log(onOpen);
-        }
+       onClose();
+        // if (typeof onClose === "function") {
+        //     onClose();
+        // } else {
+        //     console.error("onClose is not a function");
+        //     console.log(onOpen);
+            
+        // }
     };
 
 
@@ -75,13 +77,12 @@ const AddClassModal = ({ onOpen, onClose }) => {
 
     //     handleAddClass(newClass);
     // };
-
-
+    if (!isOpen) return null;
 
     return (
         <>
-
-            <div className="add-class-modal-overlay">
+        
+            <div className="newqb-modal-overlay">
                 <div className="add-class-container">
                     <Form className="add-class-form">
                         <h5 className="addnewclass-title">Add New Class</h5>
@@ -103,29 +104,22 @@ const AddClassModal = ({ onOpen, onClose }) => {
                                 </div>
 
                                 {/* Students Type (Radio buttons) */}
-                                <div className="mb-3 flex">
-                                    <label className="form-label">Add Students</label>
-                                    <div className="radio-buttons">
-                                        <div className="input-item">
-                                            <input id="admin" type="radio" value="admin" checked={studentsType === "admin"} onChange={(e) => setStudentsType(e.target.value)} />
-                                            <label htmlFor="admin">Only By Teacher</label>
-                                        </div>
-
-                                        <div className="input-item">
-                                            <input id="student" type="radio" value="student" checked={studentsType === "student"} onChange={(e) => setStudentsType(e.target.value)} />
-                                            <label htmlFor="student">By Them Self (Students)</label>
-                                        </div>
-
-                                        <div className="input-item">
-                                            <input id="both" type="radio" value="both" checked={studentsType === "both"} onChange={(e) => setStudentsType(e.target.value)} />
-                                            <label htmlFor="both">By Both Ways (Hybrid)</label>
-                                        </div>
-
-                                    </div>
-
+                                <div className="mb-3 flex flex-col">
+                                    <label className="form-label mb-1">Add Students</label>
+                                    <select
+                                        className="form-select border rounded p-2"
+                                        value={studentsType}
+                                        onChange={(e) => setStudentsType(e.target.value)}
+                                    >
+                                        <option className="option-hover" value="admin">Only By Teacher</option>
+                                        <option value="student">By Them Self (Students)</option>
+                                        <option value="both">By Both Ways (Hybrid)</option>
+                                    </select>
                                 </div>
 
+
                                 {/* Max Strength*/}
+                                {studentsType !== "admin" && (
                                     <div className="mb-3">
                                         <label className="form-label">Max Strength</label>
                                         <div className="radio-buttons">
@@ -140,10 +134,11 @@ const AddClassModal = ({ onOpen, onClose }) => {
                                                 className="form-control"
                                             />
                                         )}
-                                        
+
                                         {errors.maxStrength && <small className="text-danger">{errors.maxStrength}</small>}
                                     </div>
-                                
+                                )}
+
 
 
                                 {/* Permission (Radio buttons) */}
@@ -156,7 +151,7 @@ const AddClassModal = ({ onOpen, onClose }) => {
                                         </div>
                                     </div>
                                 )}
-            
+
 
                                 {/* Expiry Date and Time (only when studentsType is NOT admin) */}
                                 {studentsType !== "admin" && (
@@ -188,7 +183,7 @@ const AddClassModal = ({ onOpen, onClose }) => {
                                     </div>
                                 )}
 
-                            
+
                                 {/* Expiry Date and Time */}
                                 <div className="mb-3">
                                     <label className="form-label">Expiry Date and Time</label>
@@ -273,7 +268,6 @@ const AddClassModal = ({ onOpen, onClose }) => {
 
                                 <button className="btn create-btn" type="button" disabled={!className || !expiryDate || !expiryTime} onClick={(e) => {
                                     e.preventDefault(); // Prevents page reload
-                                    handleClose();
                                 }}>
                                     Add Class
                                 </button>
@@ -283,7 +277,7 @@ const AddClassModal = ({ onOpen, onClose }) => {
                     </Form>
                 </div>
             </div>
-
+       
         </>
     );
 };

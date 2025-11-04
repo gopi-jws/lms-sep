@@ -618,7 +618,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
             <div ref={modalRef} className={`mcq-modal-content ${isBouncing ? "bounce" : ""}`}>
                 {/* Main Header */}
                 <div className="mcq-modal-header">
-                    <h5>{initialData ? "Edit SAQ Question" : "Add SAQ Question"}</h5>
+                    <h5 className="modal-header">{initialData ? "Edit SAQ Question" : "Add SAQ Question"}</h5>
                     <button className="close-btn" onClick={onClose}>&times;</button>
                 </div>
 
@@ -1144,7 +1144,7 @@ const SAQModal = ({ open, onClose, initialData }) => {
                         Cancel
                     </button>
                     <button
-                        className="btn btn-save"
+                        className="btn create-btn"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                     >

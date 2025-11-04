@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
 import Header from "../../../header/header";
-import AddClass from "../newclasspage/newclasspage";
+
 import {
   FaPaperPlane,
   FaCopy,

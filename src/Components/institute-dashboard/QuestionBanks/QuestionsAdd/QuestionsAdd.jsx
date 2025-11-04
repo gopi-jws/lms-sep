@@ -676,12 +676,12 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
 
           <div className="test-header-icons">
-            <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+            <button className="test-action-button header-icon-hover edit" onClick={() => openEditModal(selectedTest)}>
               <FaEdit />
               <span className="tooltip-text">Edit</span>
             </button>
 
-            <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+            <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
               <FaFilePdf />
               <span className="tooltip-text">Download PDF</span>
             </button>
@@ -703,12 +703,12 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
 
             <div className="test-header-icons">
 
-              <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover  edit" onClick={() => openEditModal(selectedTest)}>
                 <FaEdit />
                 <span className="tooltip-text">Edit</span>
               </button>
 
-              <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>

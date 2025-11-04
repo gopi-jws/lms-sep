@@ -14,16 +14,16 @@ import {
   X,
   Menu,
   BookOpen,
-  Users ,
+  Users,
   FolderSync
 } from "lucide-react"
 import AddTagsComponent from "../../../ReusableComponents/AddTagsComponent/AddTagsComponent"
-import AddClassModal from "../../../ReusableComponents/AddClassModal/AddClassModal"
+import AddClassModal from "../../../ReusableComponents/newclasspage/newclasspage"
 import AddFolderModal from "../../../ReusableComponents/AddFolderModal/AddFolderModal"
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown"
 import "./classsidemenu.css"
 import { useDispatch, useSelector } from "react-redux";
-import { setIsNewClassModalOpen } from "../../../../slices/allClass"
+import { setIsNewClassModalOpen } from "../../../../slices/allClassSlice"
 
 const ClassSideMenu = ({ archivedCount, trashedCount, isMobileOpen, setIsMobileOpen }) => {
   // const [folders, setFolders] = useState(() => {
@@ -31,7 +31,6 @@ const ClassSideMenu = ({ archivedCount, trashedCount, isMobileOpen, setIsMobileO
   //   return storedFolders ? JSON.parse(storedFolders) : []
   // })
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
-  //const [isNewClassModalOpen, setIsNewClassModalOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [testName, setTestName] = useState("")
   const [editingFolderId, setEditingFolderId] = useState(null)
@@ -52,7 +51,8 @@ const ClassSideMenu = ({ archivedCount, trashedCount, isMobileOpen, setIsMobileO
   //Redux to get Values
   const dispatch = useDispatch();
   // New Class page Open
-  const isNewClassModalOpen = useSelector((state) => state.AllClass.isNewClassModalOpen);
+ const isNewClassModalOpen = useSelector((state) => state.AllClass.isNewClassModalOpen);
+ 
 
   const handleSetActive = (section) => {
     setActiveSection(section)
@@ -113,133 +113,120 @@ const ClassSideMenu = ({ archivedCount, trashedCount, isMobileOpen, setIsMobileO
   return (
     <div className="sidebar-wrapper">
       {/* Mobile Overlay */}
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+      {/* {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />} */}
 
       {/* Sidebar Container */}
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Class Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
-              <button className="allbuttons" aria-label="Create New Class" onClick={()=>dispatch(setIsNewClassModalOpen(true))}>
-                <span className="sidebar-letters">New Class</span>
-              </button>
+            <button className="allbuttons" aria-label="Create New Class" onClick={() => dispatch(setIsNewClassModalOpen(true))}>
+              <span className="sidebar-letters">New Class</span>
+            </button>
           </div>
         </div>
 
         <div className="test-sidebar-scroll">
-           <div className="test-sidebar-section">
-          <ul className="test-sidebar-menu">
-   
-            <li>
-              <Link
-                to="/class"
-                className={`sidebar-contents ${isActive("/class") ? "active" : ""}`}
-                aria-label="All Classes"
-                onClick={() => handleSetActive("allClasses")}
-              >
-                <FileText className="icon" size={20} />
-                <span className="sidebar-letters">All Classes</span>
-              </Link>
-            </li>
+          <div className="test-sidebar-section">
+            <ul className="test-sidebar-menu">
 
-            <li>
-              <Link
-                to="/class/archivepage"
-                className={`sidebar-contents ${isActive("/class/archivepage") ? "active" : ""}`}
-                onClick={() => handleSetActive("archived")}
-              >
-                <Archive className="icon" size={20} />
-                <span className="sidebar-letters">Archived</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="/class/trashPage"
-                className={`sidebar-contents ${isActive("/class/trashPage") ? "active" : ""}`}
-                onClick={() => handleSetActive("trashed")}
-              >
-                <Trash2 className="icon" size={20} />
-                <span className="sidebar-letters">Trashed</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <hr/>
-        <div className="test-sidebar-section">
-          <li className="sidebar-section-title">Folders</li>
-          <button
-            className="newtag"
-            aria-label="Create New Folder"
-            onClick={() => {
-              setIsFolderModalOpen(true);
-              setModalHeading("New Folder");
-            }}
-          >
-            <Plus className="icon" size={18} />
-            <span className="sidebar-letters">New Folder</span>
-          </button>
-
-          <ul className="test-sidebar-menu tags">
-            {folders.map((folder, index) => (
-              <li key={index} className="tag-item">
+              <li>
                 <Link
-                  className="sidebar-contents"
-                  aria-label={`Folder: ${folder}`}
+                  to="/class"
+                  className={`sidebar-contents ${isActive("/class") ? "active" : ""}`}
+                  aria-label="All Classes"
+                  onClick={() => handleSetActive("allClasses")}
                 >
-                  <FolderSync
-                    className="icon"
-                    size={18}
-                    style={{
-                      color: iconColors[index % iconColors.length],
-                    }}
-                  />
-                  <div className="w-100 d-flex justify-content-between align-items-center">
-                    <span className="sidebar-letters">{folder}</span>
-
-                    <button className="tag-button">
-                      <span className="tag-dropdown-toggle" onClick={() => handleFolderClick(index)}></span>
-                    </button>
-
-                    <TagActionsDropdown
-                      isOpen={showMoreOptions === index}
-                      onEdit={() => {
-                        setIsFolderModalOpen(true);
-                        setShowMoreOptions(null);
-                        setModalHeading("Edit ");
-                        setSelectedSection(folders[index]);
-                      }}
-                      onRemove={() => setShowMoreOptions(null)}
-                      onClose={() => setShowMoreOptions(null)}
-                    />
-                  </div>
+                  <FileText className="icon" size={20} />
+                  <span className="sidebar-letters">All Classes</span>
                 </Link>
               </li>
-            ))}
-          </ul>
 
-          <p className="sidebar-contents" style={{ fontStyle: "italic" }}> Uncategorized<span className="number">(5)</span></p>
-        </div>
+              <li>
+                <Link
+                  to="/class/archivepage"
+                  className={`sidebar-contents ${isActive("/class/archivepage") ? "active" : ""}`}
+                  onClick={() => handleSetActive("archived")}
+                >
+                  <Archive className="icon" size={20} />
+                  <span className="sidebar-letters">Archived</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/class/trashPage"
+                  className={`sidebar-contents ${isActive("/class/trashPage") ? "active" : ""}`}
+                  onClick={() => handleSetActive("trashed")}
+                >
+                  <Trash2 className="icon" size={20} />
+                  <span className="sidebar-letters">Trashed</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <hr />
+          <div className="test-sidebar-section">
+            <li className="sidebar-section-title">Folders</li>
+            <button
+              className="newtag"
+              aria-label="Create New Folder"
+              onClick={() => {
+                setIsFolderModalOpen(true);
+                setModalHeading("New Folder");
+              }}
+            >
+              <Plus className="icon" size={18} />
+              <span className="sidebar-letters">New Folder</span>
+            </button>
+
+            <ul className="test-sidebar-menu tags">
+              {folders.map((folder, index) => (
+                <li key={index} className="tag-item">
+                  <Link
+                    className="sidebar-contents"
+                    aria-label={`Folder: ${folder}`}
+                  >
+                    <FolderSync
+                      className="icon"
+                      size={18}
+                      style={{
+                        color: iconColors[index % iconColors.length],
+                      }}
+                    />
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                      <span className="sidebar-letters">{folder}</span>
+
+                      <button className="tag-button">
+                        <span className="tag-dropdown-toggle" onClick={() => handleFolderClick(index)}></span>
+                      </button>
+
+                      <TagActionsDropdown
+                        isOpen={showMoreOptions === index}
+                        onEdit={() => {
+                          setIsFolderModalOpen(true);
+                          setShowMoreOptions(null);
+                          setModalHeading("Edit ");
+                          setSelectedSection(folders[index]);
+                        }}
+                        onRemove={() => setShowMoreOptions(null)}
+                        onClose={() => setShowMoreOptions(null)}
+                      />
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <p className="sidebar-contents" style={{ fontStyle: "italic" }}> Uncategorized<span className="number">(5)</span></p>
+          </div>
         </div>
       </nav>
 
-      {/* Mobile Toggle Button */}
-      {/* <button
-        className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-        onClick={toggleMobileSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button> */}
+      <AddClassModal
+        isOpen={isNewClassModalOpen}
+        onClose={() => dispatch(setIsNewClassModalOpen(false))}
+      />
 
-
-      {isNewClassModalOpen && (
-        <AddClassModal
-          onOpen={isNewClassModalOpen}
-          onClose={() => dispatch(setIsNewClassModalOpen(false))}
-        />
-      )}
-        
-      
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}

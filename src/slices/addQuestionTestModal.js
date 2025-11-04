@@ -4,7 +4,7 @@ const initialState = {
     numberOfSelectionQuestion:0
 }
 
-export const addQuestioninTest = createSlice({
+export const addQuestionTestModal = createSlice({
       name:"AddQuestioninTest",
       initialState,
       reducers:{
@@ -14,6 +14,6 @@ export const addQuestioninTest = createSlice({
       }
 });
 
-export const { setNumberofSelectionQuestion } = addQuestioninTest.actions;
+export const { setNumberofSelectionQuestion } = addQuestionTestModal.actions;
 
-export default addQuestioninTest.reducer;
+export default addQuestionTestModal.reducer;

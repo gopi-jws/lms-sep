@@ -20,6 +20,7 @@ import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal"
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal";
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal";
 import TestAddSidebar from "../TestAddSideabr/TestAddSideabr";
+import SAQModal from "../../../ReusableComponents/Questions-Types-Modals/SAQModal/SAQModal";
 
 const TestAdd = () => {
   const { id } = useParams()
@@ -30,25 +31,24 @@ const TestAdd = () => {
   const data = [
     {
       id: 1,
-      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:
-    <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
+      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:`,
+      questionImages: [`https://insightsedu.in/new/3.png`, "https://insightsedu.in/new/4.png"],
       solution: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
-      type: "Single Answer ",
+      solutionImage: `https://insightsedu.in/new/3.png`,
+      type: "Single Answer",
       marks: 3,
       owner: "Admin",
       section: "Trigonometry",
       created: "15/03/2025",
       modified: "3 weeks ago",
       options: [
-        `<img src="https://insightsedu.in/new/4.png" alt="Option A"> Sine Wave`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option B"> Straight Line`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option C"> Parabola`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option D"> Exponential Curve`
+        { text: "Option A", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option C", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` },
       ],
       correctAnswer: 0,
-      isLaTeXEnabled: true,
       hasImages: true,
-      mode: "both",
     },
     {
       id: 2,
@@ -57,21 +57,19 @@ const TestAdd = () => {
             Which of the following represents the arc length $$S$$?`,
       solution: `The correct solution is option D:
             $$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
-      type: "Single Answer ",
+      type: "Single Answer",
       marks: 10,
       owner: "Admin",
       section: "Advanced Mathematics",
       created: "15/03/2025",
       modified: "1 day ago",
       options: [
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\tan^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$", image: `` },
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
       ],
       correctAnswer: 3,
-      isLaTeXEnabled: true,
-      mode: "both",
     },
     {
       id: 3,
@@ -675,22 +673,22 @@ const TestAdd = () => {
           <VscTriangleDown className="TriagbleDown" ref={toggleRef} onClick={toggleMobileSidebar}/>
 
           <div className="test-header-icons">
-            <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
+            <button className="test-action-button  header-icon-hover dispatch" onClick={() => openPublishModal(selectedTest)}>
               <FaPaperPlane />
               <span className="tooltip-text">Publish</span>
             </button>
 
-            <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+            <button className="test-action-button header-icon-hover edit" onClick={() => openEditModal(selectedTest)}>
               <FaEdit />
               <span className="tooltip-text">Edit</span>
             </button>
 
-            <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+            <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
               <FaFilePdf />
               <span className="tooltip-text">Download PDF</span>
             </button>
 
-            <button className="test-action-button share" onClick={() => openShareModal(selectedTest)}>
+            <button className="test-action-button header-icon-hover share" onClick={() => openShareModal(selectedTest)}>
               <FaShare />
               <span className="tooltip-text">Share</span>
             </button>
@@ -710,22 +708,22 @@ const TestAdd = () => {
             <h3 className="breadcrumb responsive-header">Test {id} Questions</h3>
 
             <div className="test-header-icons">
-              <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover dispatch" onClick={() => openPublishModal(selectedTest)}>
                 <FaPaperPlane />
                 <span className="tooltip-text">Publish</span>
               </button>
 
-              <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover edit" onClick={() => openEditModal(selectedTest)}>
                 <FaEdit />
-                <span className="tooltip-text">Edit</span>
+                <span className="tooltip-text ">Edit</span>
               </button>
 
-              <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>
 
-              <button className="test-action-button share" onClick={() => openShareModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover share" onClick={() => openShareModal(selectedTest)}>
                 <FaShare />
                 <span className="tooltip-text">Share</span>
               </button>
@@ -767,7 +765,7 @@ const TestAdd = () => {
             />
           </div>
 
-          <Modal
+          {/* <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
             className="modal-content"
@@ -801,7 +799,7 @@ const TestAdd = () => {
                 </div>
               </div>
             )}
-          </Modal>
+          </Modal> */}
         </div>
 
 
@@ -846,6 +844,9 @@ const TestAdd = () => {
         onClose={closeAllModals}
         testData={selectedTest}
       />
+
+      <SAQModal open={modalIsOpen} onClose={() => { setModalIsOpen(false) }} initialData={selectedQuestion} />
+
 
       {/* <DownloadModal
         isOpen={showDownloadModal}

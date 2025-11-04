@@ -607,7 +607,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
             <div ref={modalRef} className={`mcq-modal-content ${isBouncing ? "bounce" : ""}`}>
                 {/* Main Header */}
                 <div className="mcq-modal-header">
-                    <h5>{initialData ? "Edit MAQ Question" : "Add MAQ Question"}</h5>
+                    <h5 className="modal-header">{initialData ? "Edit MAQ Question" : "Add MAQ Question"}</h5>
                     <button className="close-btn" onClick={onClose}>&times;</button>
                 </div>
 
@@ -1025,7 +1025,7 @@ const MCQModal = ({ open, onClose, initialData, }) => {
                         Cancel
                     </button>
                     <button
-                        className="btn btn-save"
+                        className="btn create-btn"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                     >

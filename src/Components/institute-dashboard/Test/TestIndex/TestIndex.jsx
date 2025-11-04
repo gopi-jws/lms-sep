@@ -667,7 +667,7 @@ const TestIndex = () => {
       name: "Test Names",
       selector: "test",
       sortable: true,
-      width: "170px", // Set fixed width
+      width: "220px", // Set fixed width
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
@@ -704,7 +704,7 @@ const TestIndex = () => {
       name: "Owner",
       selector: "owner",
       sortable: true,
-      width: "150px",
+       width: "200px",
     },
     // {
     //   name: "Status",
@@ -716,14 +716,14 @@ const TestIndex = () => {
       name: "Last Modified",
       selector: "lastModified",
       sortable: true,
-      width: "190px",
+       width: "200px",
       cell: (row) => <div>{row.lastModified}</div>  // <-- render static string directly
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "300px",
+      width: "200px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (

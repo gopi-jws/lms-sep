@@ -61,6 +61,8 @@
     color: #0066cc;
 }
 
+
+
 @media(max-width:769px){
     .questiontypes-dropdown-menu {
            top: 55px;

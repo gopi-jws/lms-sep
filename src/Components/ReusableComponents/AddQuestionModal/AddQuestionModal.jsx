@@ -252,9 +252,10 @@ for x in fruits:
         const value = e.target.value;
         if (e.target.name === "mark") {
             // Allow only numbers with up to 2 decimals
-            if (/^\d*\.?\d{0,2}$/.test(value)) {
+            if (value === "" || (/^\d*\.?\d{0,2}$/.test(value) && parseFloat(value) > 0)) {
                 setMarks(value);
             }
+
         }
         else {
             // Allow only numbers with up to 2 decimals
@@ -265,7 +266,7 @@ for x in fruits:
 
     };
 
-    const numSeletionQuestion = useSelector((state) => state.AddQuestionTest.numberOfSelectionQuestion)
+    const numSeletionQuestion = useSelector((state) => state.AddQuestionTestModal.numberOfSelectionQuestion)
     
     const qbListRef = useRef(null);
     const filterRef = useRef(null);
@@ -399,9 +400,9 @@ for x in fruits:
                         <div className="dropdrow-option qb-list" ref={qbListRef}>
                             {QBdata.map((qb) => (
                                 <div key={qb.id} className="questions-item" onClick={() => handleSelectedQB(qb.name)}>
-                                    <label htmlFor={`qb-${qb.id}`} className="questionBank-name">
+                                    <labeles htmlFor={`qb-${qb.id}`} className="questionBank-name">
                                         {qb.name}
-                                    </label>
+                                    </labeles>
                                 </div>
                             ))}
                         </div>
@@ -415,7 +416,7 @@ for x in fruits:
                                 onClick={() => setQuestionTypeOpen(!questionTypeOpen)}
                                 ref={questionTypeRef}
                             >
-                                <label className="questionBank-name">Question Types</label>
+                                <labeles className="questionBank-name">Question Types</labeles>
                                 <IoIosArrowDown
                                     style={{
                                         transform: questionTypeOpen ? "rotate(180deg)" : "rotate(0deg)",
@@ -430,16 +431,16 @@ for x in fruits:
                                     {questiontype.map((q) => (
                                         <div key={q.id} className="questions-item">
                                             <input type="checkbox" id={`qb-${q.id}`} />
-                                            <label htmlFor={`qb-${q.id}`} className="questionBank-name">
+                                            <labeles htmlFor={`qb-${q.id}`} className="questionBank-name">
                                                 {q.name}
-                                            </label>
+                                            </labeles>
                                         </div>
                                     ))}
                                 </div>
                             )}
 
                             <div className="questions-item">
-                                <label className="questionBank-name">Add to Section</label>
+                                <labeles className="questionBank-name">Add to Section</labeles>
                                 <IoIosArrowDown />
                             </div>
                         </div>
@@ -462,7 +463,7 @@ for x in fruits:
                         <input 
                         type="number" 
                         className="input-mark" 
-                        placeholder="Enter Pos"
+                        placeholder="Positive Mark"
                        
                         value={marks}
                         onChange={handleChange}
@@ -471,7 +472,7 @@ for x in fruits:
                         <input 
                         type="number" 
                         className="input-mark" 
-                        placeholder="Enter Neg" 
+                        placeholder="Negative Mark" 
                         value={negMarks}
                         onChange={handleChange}
                         name="negmark"/>
@@ -488,12 +489,13 @@ for x in fruits:
                     )}
 
 
-                    <button className="btn btn-cancel"  onClick={()=> handleSubmit()}>
+                    <button className="btn create-btn"  onClick={()=> handleSubmit()}>
                         {tags.length > 0 ? "Add to Section" : "Add to Test"}
                     </button>
 
                 </div>
             </div>
+            
         </div>
     );
 };

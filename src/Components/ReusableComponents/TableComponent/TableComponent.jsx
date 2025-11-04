@@ -19,10 +19,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewTest } from "../../../slices/allTestSlice";
 import { addNewQB } from "../../../slices/allQuestionBank";
 import { addNewQuestionQB } from "../../../slices/addQuestionBank"
-import { setIsNewClassModalOpen } from "../../../slices/allClass";
+import { setIsNewClassModalOpen } from "../../../slices/allClassSlice";
 import { setIsAddStudentModalOpen } from "../../../slices/addStudent";
 import { setIsNewTeacherModalOpen } from "../../../slices/allTeacher";
-import { setNumberofSelectionQuestion } from "../../../slices/addQuestioninTest"
+import { setNumberofSelectionQuestion } from "../../../slices/addQuestionTestModal"
+import { SetOpenAddQuestionTest } from "../../../slices/testAddSlice";
+
 
 
 const DataTable = ({
@@ -115,7 +117,7 @@ const DataTable = ({
     const [expandedQuestions, setExpandedQuestions] = useState([]);
     const [showAnswers, setShowAnswers] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setNumberofSelectionQuestion(selectedRows.length))
     }, [selectedRows])
 
@@ -188,7 +190,7 @@ const DataTable = ({
             key: "addQuestionTest",
             condition: pathLateName === "movetest",
             label: "Add Question",
-            action: newQuestioBank,
+            action: () => dispatch(SetOpenAddQuestionTest(true)),
             aria: "Add Question in Test",
         },
         {
@@ -243,7 +245,7 @@ const DataTable = ({
     const handleSelectAll = (event) => {
 
         console.log(event);
-        
+
         if (event.target.checked) {
             setSelectedRows(data.map((row) => row.id))
         } else {
@@ -285,7 +287,6 @@ const DataTable = ({
             : bValue.toString().localeCompare(aValue.toString())
     })
 
-
     const toggleRowExpansion = (rowId, e) => {
         e?.stopPropagation();
         if (setExpandedRows) {
@@ -326,10 +327,10 @@ const DataTable = ({
         <div className={fullViewMode ? "full-view" : ""}>
 
             <div className="test-index-actions">
-                
+
 
                 <div className="mobile-responsive">
-                    
+
                     <div className="test-sidebar-header-res">
                         <div className="w-100 d-flex justify-content-center flex-wrap gap-2">
                             {buttonConfigs
@@ -524,7 +525,7 @@ const DataTable = ({
                         <thead className="table-header">
                             <tr>
                                 {selectableRows && (
-                                    <th className="col-checkbox" style={{width:"50px"}}>
+                                    <th className="col-checkbox" style={{ width: "50px" }}>
                                         <div className="custom-checkbox-container">
                                             <input
                                                 type="checkbox"
@@ -591,7 +592,7 @@ const DataTable = ({
                             </tr>
                         ) : (
                             sortedData.map((row, index) => (
-                                <React.Fragment key={row.id}>
+                                <React.Fragment key={`${row.id}-${index}`}>
                                     {/* Main row */}
                                     <tr
                                         onClick={(e) => handleRowClick(row, e)}

@@ -334,7 +334,7 @@ const Questionindex = () => {
       name: "Questions" ,
       selector: "questions",
       sortable: true,
-      width: "150px", 
+      width: "200px", 
     },
     {
       name: <div className="cursor-pointer">Last Modified</div>,
@@ -346,6 +346,7 @@ const Questionindex = () => {
       name: "Actions",
       selector: "actions",
       sortable: false,
+      width: "200px", 
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (

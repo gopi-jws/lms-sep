@@ -12,7 +12,7 @@
     overflow-y: var(--modal-overlay-overflow-y);
     padding-top: var(--modal-overlay-padding-top);
     z-index: 999;
-    color: black !important;
+    
 }
 
 .Addquestion-modal-header{
@@ -45,7 +45,7 @@
     cursor: pointer;
     justify-content: space-between;
     background-color: white !important;
-    color: #1685e0 !important;
+    color: #34495E !important;
 }
 
 /* .filterQB-btn:hover{
@@ -53,14 +53,14 @@
 } */
 
 .btn-header{
-    color: #1685e0;
+    color: #34495E;
 }
 
 
 
 .addQb-dropdown{
-    color: #1685e0 !important;
-    border-color: #1685e0 !important;
+    color: #34495E !important;
+    border-color: #34495E !important;
 }
 
 .dropdrow-option{
@@ -150,7 +150,10 @@
 
 .input-mark{
     border: 1px solid;
-    border-radius: 5px;
-    padding: 0px 5px;
+    border-radius: 15px;
+    padding: 1px 10px;
     margin-left: 5px;
+    width: 130px;
+    font-size: 15px;
 }
+

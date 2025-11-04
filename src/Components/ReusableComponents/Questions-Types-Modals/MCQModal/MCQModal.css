@@ -3,6 +3,11 @@
 .mcq-modal-overlay * {
     color: black !important;
 }
+
+.modal-header {
+    color: var(--modal-header-title-color) !important;
+}
+
 /* Modal overlay */
 .mcq-modal-overlay {
     position: fixed;
@@ -79,7 +84,7 @@
     border: var(--modal-close-btn-border);
     font-size: var(--modal-close-btn-font-size);
     cursor: var(--modal-close-btn-cursor);
-    color: var(--modal-close-btn-color);
+    color: var(--modal-close-btn-color) !important;
     padding: var(--modal-close-btn-padding);
     line-height: var(--modal-close-btn-line-height);
 }
@@ -283,7 +288,7 @@
     background-color: var(--btn-bg);
     border: var(--btn-border);
     border-radius: var(--btn-border-radius);
-    color: var(--btn-text-color);
+    color: var(--btn-text-color) !important;
     display: flex;
     font-size: var(--btn-font-size);
     font-weight: var(--btn-font-weight);
@@ -412,7 +417,7 @@ input[type="file"]::file-selector-button {
 /* Active Create Button Styling */
 .create-btn:not(:disabled) {
     background-color: var(--create-btn-bg);
-    color: var(--create-btn-color);
+    color: var(--create-btn-color) !important;
     border: var(--create-btn-border);
 }
 

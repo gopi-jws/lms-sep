@@ -24,7 +24,7 @@ a {
   /* justify-content: space-between;
   align-items: center; */
   padding: 10px;
-  gap: 10px;
+  gap: 16px;
 }
 
 /* Column Visibility Wrapper */
@@ -561,4 +561,8 @@ a {
   .test-header-icons .test-action-button{
     font-size: 15px !important;
   }
+}
+
+.header-icon-hover:hover{
+  background-color: rgba(231, 233, 238, 1) !important;
 }

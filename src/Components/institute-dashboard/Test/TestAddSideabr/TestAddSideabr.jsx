@@ -36,6 +36,8 @@ import NewTestModal from '../../../ReusableComponents/NewTestModal/NewTestModal'
 import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal"
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal"
 import AddQuestionModal from "../../../ReusableComponents/AddQuestionModal/AddQuestionModal";
+import { useSelector, useDispatch } from "react-redux";
+import { SetOpenAddQuestionTest } from "../../../../slices/testAddSlice";
 
 import TestIndex from "../TestIndex/TestIndex";
 const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
@@ -74,7 +76,12 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
 
   const testItem = initialData.find(item => item.id === Number(id)); // convert id to number
 
+//get Redux value
+const dispatch = useDispatch();
+  const isAddQuestionModal = useSelector((state) => state.AddQuestionTest.openAddQuestionTest);
 
+  console.log(isAddQuestionModal);
+  
 
 
   const navigate = useNavigate();
@@ -82,13 +89,9 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   // const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
-  const handleNewQuestionClick = () => {
-    // const id = "1";
-    // sessionStorage.setItem("testQuestionData", JSON.stringify({ id }));
-    // window.open(`/lms-sep1/test/${id}/movetest/testquestionadd`, "_blank");
-    setIsAddQuestionModal(true)
-
-  };
+  // const handleNewQuestionClick = () => {
+  //   setIsAddQuestionModal(true)
+  // };
 
   const handleAddFolder = ({ name, color }) => {
     console.log("New Folder Created:", { name, color });
@@ -122,7 +125,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isAddQuestionModal, setIsAddQuestionModal] = useState(false);
+ // const [isAddQuestionModal, setIsAddQuestionModal] = useState(false);
 
   const [testInfo] = useState({
     marks: 100,
@@ -343,7 +346,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={handleNewQuestionClick}
+              onClick={() => { dispatch(SetOpenAddQuestionTest(true))}}
               className="allbuttons"
               aria-label="Add New Question"
             >
@@ -598,7 +601,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
 
       <AddQuestionModal 
         open={isAddQuestionModal}
-        close={()=> setIsAddQuestionModal(false)}
+        close={() => dispatch(SetOpenAddQuestionTest(false))}
         tags={tags} 
       />
 
@@ -611,8 +614,8 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
         selectedSection={selectedSection}
       />
 
-
-      {/* <NewTestModal
+       {/* Describation and Instraction */}
+      <NewTestModal
         isOpen={showDescDropdown}
         mode={mode}
         onSubmit={() => { setShowDescDropdown(false) }}
@@ -623,7 +626,7 @@ const TestAddSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
         initialDescription={testItem.description}
         initialInstructions={testItem.instructions}
         heading={modalHeading}
-      /> */}
+      />
 
       <PublishModal
         isOpen={isModalOpen}

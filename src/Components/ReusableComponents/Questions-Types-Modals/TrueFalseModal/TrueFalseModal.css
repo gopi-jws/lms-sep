@@ -79,7 +79,7 @@ color: black !important;
     border: var(--modal-close-btn-border);
     font-size: var(--modal-close-btn-font-size);
     cursor: var(--modal-close-btn-cursor);
-    color: var(--modal-close-btn-color);
+    color: var(--modal-close-btn-color) !important;
     padding: var(--modal-close-btn-padding);
     line-height: var(--modal-close-btn-line-height);
 }
@@ -314,4 +314,8 @@ input[type="file"]::file-selector-button {
     .true-false-modal-row {
         flex-direction: column;
     }
+}
+
+.modal-header {
+    color: var(--modal-header-title-color) !important;
 }

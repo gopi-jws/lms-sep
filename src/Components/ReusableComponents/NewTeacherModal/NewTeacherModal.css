@@ -159,7 +159,7 @@
     background-color: var(--btn-bg);
     border: var(--btn-border);
     border-radius: var(--btn-border-radius);
-    color: var(--btn-text-color);
+    color: var(--btn-text-color) !important;
     display: flex;
     font-size: var(--btn-font-size);
     font-weight: var(--btn-font-weight);

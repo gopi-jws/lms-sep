@@ -401,7 +401,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
         <div className="descriptive-modal-overlay">
             <div ref={modalRef} className={`descriptive-modal-content ${isBouncing ? "bounce" : ""}`}>
                 <div className="descriptive-modal-header">
-                    <h5>{initialData ? "Edit Descriptive Question" : "Add Descriptive Question"}</h5>
+                    <h5 className="modal-header">{initialData ? "Edit Descriptive Question" : "Add Descriptive Question"}</h5>
                     <button className="close-btn" onClick={() => { onClose()}}>&times;</button>
                 </div>
 
@@ -593,7 +593,7 @@ const DescriptiveModal = ({ open, onClose, initialData }) => {
                         Cancel
                     </button>
                     <button
-                        className="btn btn-save"
+                        className="btn create-btn"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                     >

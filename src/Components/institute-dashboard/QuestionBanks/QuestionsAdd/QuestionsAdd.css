@@ -471,7 +471,10 @@ a {
 }
 
 
-
 .questionsadd-index-wrapper{
   position: relative;
+}
+
+.header-icon-hover:hover {
+  background-color: rgba(231, 233, 238, 1) !important;
 }

@@ -426,7 +426,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
         <div className="numerical-modal-overlay">
             <div ref={modalRef} className={`numerical-modal-content ${isBouncing ? "bounce" : ""}`}>
                 <div className="numerical-modal-header">
-                    <h5>{initialData ? "Edit Numerical Question" : "Add Numerical Question"}</h5>
+                    <h5 className="modal-header">{initialData ? "Edit Numerical Question" : "Add Numerical Question"}</h5>
                     <button className="close-btn" onClick={() => { onClose() }}>&times;</button>
                 </div>
 
@@ -654,7 +654,7 @@ const NumericalModal = ({ open, onClose, initialData }) => {
                         Cancel
                     </button>
                     <button
-                        className="btn btn-save"
+                        className="btn create-btn"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                     >

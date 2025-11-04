@@ -11,7 +11,7 @@ const SetMarksDropdown = ({ onMarksChange }) => {
         const value = e.target.value;
         if(e.target.name === "mark"){
             // Allow only numbers with up to 2 decimals
-            if (/^\d*\.?\d{0,2}$/.test(value)) {
+            if (value === "" || (/^\d*\.?\d{0,2}$/.test(value) && parseFloat(value) > 0)) {
                 setMarks(value);
             }
         }

@@ -12,8 +12,6 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
     const [emails, setEmails] = useState([]);
     const [nameInputValue, setNameInputValue] = useState("");
     const [emailInputValue, setEmailInputValue] = useState("");
-    const [isNameFocused, setIsNameFocused] = useState(false);
-    const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -21,10 +19,9 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
 
     const fileInputRef = useRef(null);
 
-    // Fix 1: Move the early return after hooks
+
     useEffect(() => {
         if (isOpen) {
-            // Reset form when modal opens
             setNameInputValue("");
             setEmailInputValue("");
             setNameError("");
@@ -34,19 +31,16 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
         }
     }, [isOpen]);
 
-    // Fix 2: Improved file upload with better error handling
+    // ✅ Excel Upload
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        e.target.value = "";
 
-        // Reset file input
-        e.target.value = '';
-
-        // Validate file type
-        const validExtensions = ['.xlsx', '.xls'];
-        const fileExtension = file.name.split('.').pop().toLowerCase();
-        if (!validExtensions.includes('.' + fileExtension)) {
-            toast.error('Please upload a valid Excel file (.xlsx or .xls)');
+        const validExtensions = [".xlsx", ".xls"];
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (!validExtensions.includes("." + fileExtension)) {
+            toast.error("Please upload a valid Excel file (.xlsx or .xls)");
             return;
         }
 
@@ -58,127 +52,110 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
             try {
                 const bstr = evt.target.result;
                 const workbook = XLSX.read(bstr, { type: "binary" });
-                const sheetName = workbook.SheetNames[0];
-                const sheet = workbook.Sheets[sheetName];
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
 
-                // Extract names and emails with multiple possible header names
-                const extractedNames = jsonData.map(
-                    (item) =>
-                        item.name ||
-                        item.Name ||
-                        item["Full Name"] ||
-                        item["Teacher Name"] ||
-                        item["Names"] ||
-                        item["fullname"] ||
-                        item["teachername"] ||
-                        ""
-                ).map(name => name.toString().trim()).filter(Boolean);
+                const extractedNames = jsonData
+                    .map(
+                        (item) =>
+                            item.name ||
+                            item.Name ||
+                            item["Full Name"] ||
+                            item["Student Name"] ||
+                            item["Names"] ||
+                            item["fullname"] ||
+                            item["studentname"] ||
+                            ""
+                    )
+                    .map((name) => name.toString().trim())
+                    .filter(Boolean);
 
-                const extractedEmails = jsonData.map(
-                    (item) =>
-                        item.email ||
-                        item.Email ||
-                        item["Mail ID"] ||
-                        item["Email Address"] ||
-                        item["Emails"] ||
-                        item["mail"] ||
-                        item["emailaddress"] ||
-                        ""
-                ).map(email => email.toString().trim()).filter(Boolean);
+                const extractedEmails = jsonData
+                    .map(
+                        (item) =>
+                            item.email ||
+                            item.Email ||
+                            item["Mail ID"] ||
+                            item["Email Address"] ||
+                            item["Emails"] ||
+                            item["mail"] ||
+                            item["emailaddress"] ||
+                            ""
+                    )
+                    .map((email) => email.toString().trim())
+                    .filter(Boolean);
 
                 if (extractedNames.length === 0 && extractedEmails.length === 0) {
-                    toast.error("No valid data found. Please check your Excel file format.");
+                    toast.error("No valid data found. Please check Excel format.");
                     setLoading(false);
                     setIsExcelImporting(false);
                     return;
                 }
 
                 if (extractedNames.length !== extractedEmails.length) {
-                    toast.error(`Excel data mismatch: Found ${extractedNames.length} names and ${extractedEmails.length} emails. They must be equal.`);
+                    toast.error(
+                        `Mismatch: Found ${extractedNames.length} names and ${extractedEmails.length} emails.`
+                    );
                     setLoading(false);
                     setIsExcelImporting(false);
                     return;
                 }
 
-                // Validate names and emails
                 const validPairs = [];
-                const validationErrors = [];
-
                 extractedNames.forEach((name, index) => {
                     const email = extractedEmails[index];
                     const isNameValid = /^[a-zA-Z0-9\s]+$/.test(name);
                     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-                    if (!isNameValid) {
-                        validationErrors.push(`Invalid name: ${name}`);
-                    }
-                    if (!isEmailValid) {
-                        validationErrors.push(`Invalid email: ${email}`);
-                    }
-                    if (isNameValid && isEmailValid) {
-                        validPairs.push({ name, email });
-                    }
+                    if (isNameValid && isEmailValid) validPairs.push({ name, email });
                 });
 
-                if (validationErrors.length > 0) {
-                    toast.error(`Validation errors: ${validationErrors.slice(0, 3).join(', ')}${validationErrors.length > 3 ? '...' : ''}`);
-                }
-
                 if (validPairs.length === 0) {
-                    toast.error("No valid teacher data found after validation.");
+                    toast.error("No valid student data found.");
                     setLoading(false);
                     setIsExcelImporting(false);
                     return;
                 }
 
-                // Remove duplicates based on email
-                const uniquePairs = validPairs.reduce((acc, current) => {
-                    const exists = acc.find(item => item.email === current.email);
-                    if (!exists) {
-                        acc.push(current);
+                // ✅ Merge Excel + Manual Entries
+                const currentPairs = names.map((n, i) => ({
+                    name: n,
+                    email: emails[i] || "",
+                }));
+
+                const allPairs = [...currentPairs, ...validPairs];
+                const uniquePairs = [];
+                const seenEmails = new Set();
+
+                for (const pair of allPairs) {
+                    const emailKey = pair.email.toLowerCase();
+                    if (!seenEmails.has(emailKey)) {
+                        seenEmails.add(emailKey);
+                        uniquePairs.push(pair);
                     }
-                    return acc;
-                }, []);
+                }
 
-                const uniqueNames = uniquePairs.map(pair => pair.name);
-                const uniqueEmails = uniquePairs.map(pair => pair.email);
+                setNames(uniquePairs.map((p) => p.name));
+                setEmails(uniquePairs.map((p) => p.email));
 
-                setNames(uniqueNames);
-                setEmails(uniqueEmails);
-
-                toast.success(`Imported ${uniqueNames.length} valid teachers from Excel`);
-
+                toast.success(
+                    `Imported ${validPairs.length} Teachers. Total unique: ${uniquePairs.length}`
+                );
             } catch (error) {
-                console.error('Error processing Excel file:', error);
-                toast.error('Error processing Excel file. Please make sure it\'s a valid Excel file.');
+                console.error("Excel Error:", error);
+                toast.error("Error processing Excel file.");
             } finally {
                 setLoading(false);
                 setIsExcelImporting(false);
             }
         };
-
-        reader.onerror = () => {
-            toast.error('Error reading file');
-            setLoading(false);
-            setIsExcelImporting(false);
-        };
-
         reader.readAsBinaryString(file);
     };
 
-    // Fix 3: Enhanced validation functions
-    const validateEmail = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    };
+    // ✅ Validation
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const validateName = (name) => /^[a-zA-Z0-9\s]+$/.test(name);
 
-    const validateName = (name) => {
-        const regex = /^[a-zA-Z0-9\s]+$/;
-        return regex.test(name);
-    };
-
-    // Fix 4: Improved input handlers with better validation
+    // ✅ Manual Input Handlers
     const handleNameInputChange = (e) => {
         setNameInputValue(e.target.value);
         setNameError("");
@@ -189,117 +166,72 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
         setEmailError("");
     };
 
-    // Fix 5: Better keydown handlers with paste support
-    const handleNameInputKeyDown = (e) => {
-        if (["Enter", "Tab", ","].includes(e.key)) {
-            e.preventDefault();
-            addNameFromInput();
-        }
-    };
-
-    const handleEmailInputKeyDown = (e) => {
-        if (["Enter", "Tab", ","].includes(e.key)) {
-            e.preventDefault();
-            addEmailFromInput();
-        }
-    };
-
     const addNameFromInput = () => {
         const name = nameInputValue.trim();
-        if (name) {
-            if (validateName(name)) {
-                if (!names.includes(name)) {
-                    setNames([...names, name]);
-                    setNameInputValue("");
-                } else {
-                    setNameError("Name already added.");
-                }
-            } else {
-                setNameError("Please enter a valid name (letters and spaces only).");
-            }
+        if (name && validateName(name)) {
+            if (!names.includes(name)) setNames([...names, name]);
+            else setNameError("Name already added.");
+        } else if (name) {
+            setNameError("Invalid name format.");
         }
+        setNameInputValue("");
     };
 
     const addEmailFromInput = () => {
         const email = emailInputValue.trim();
-        if (email) {
-            if (validateEmail(email)) {
-                if (!emails.includes(email)) {
-                    setEmails([...emails, email]);
-                    setEmailInputValue("");
-                } else {
-                    setEmailError("Email already added.");
-                }
-            } else {
-                setEmailError("Please enter a valid email address.");
-            }
+        if (email && validateEmail(email)) {
+            if (!emails.includes(email)) setEmails([...emails, email]);
+            else setEmailError("Email already added.");
+        } else if (email) {
+            setEmailError("Invalid email format.");
         }
+        setEmailInputValue("");
     };
 
-    // Fix 6: Handle blur events to add values
-    const handleNameInputBlur = () => {
-        setIsNameFocused(false);
-        addNameFromInput();
-    };
+    const handleNameInputBlur = () => addNameFromInput();
+    const handleEmailInputBlur = () => addEmailFromInput();
 
-    const handleEmailInputBlur = () => {
-        setIsEmailFocused(false);
-        addEmailFromInput();
-    };
-
-    // Fix 7: Remove functions
     const removeName = (nameToRemove) => {
-        setNames(names.filter((name) => name !== nameToRemove));
+        const index = names.indexOf(nameToRemove);
+        const newNames = names.filter((n) => n !== nameToRemove);
+        const newEmails = emails.filter((_, i) => i !== index);
+        setNames(newNames);
+        setEmails(newEmails);
     };
 
     const removeEmail = (emailToRemove) => {
-        setEmails(emails.filter((email) => email !== emailToRemove));
+        const index = emails.indexOf(emailToRemove);
+        const newEmails = emails.filter((e) => e !== emailToRemove);
+        const newNames = names.filter((_, i) => i !== index);
+        setEmails(newEmails);
+        setNames(newNames);
     };
 
-    // Fix 8: Improved create handler
     const handleCreate = () => {
-        // Clear previous errors
         setNameError("");
         setEmailError("");
 
-        // Validate input
         if (names.length === 0 || emails.length === 0) {
-            setNameError("Please enter at least one name.");
-            setEmailError("Please enter at least one email.");
+            setNameError("Please enter at least one name and email.");
             return;
         }
 
         if (names.length !== emails.length) {
-            setEmailError("Number of names and emails must match.");
+            setEmailError("Names and emails count must match.");
             return;
         }
 
-        // Create teachers array
-        const teachers = names.map((name, index) => ({
-            name,
-            email: emails[index],
-        }));
-
-        console.log("Creating teachers:", teachers);
-
-        // Call the onCreate prop
-        if (onCreate) {
-            onCreate(teachers);
-        }
-
-        // Don't clear state here - let the parent component handle success
-        // The useEffect will handle resetting when modal reopens
+        const students = names.map((name, i) => ({ name, email: emails[i] }));
+        if (onSave) onSave(students);
     };
 
-    // Fix 9: Handle success from parent
     useEffect(() => {
         if (success) {
-            toast.success("Teachers created successfully!");
+            toast.success("Teachers imported successfully!");
             onClose();
         }
     }, [success, onClose]);
 
-    // Fix 10: Early return must be after all hooks
     if (!isOpen) return null;
 
     return (
@@ -325,24 +257,26 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                         {/* Names Input */}
                         <div className="newteacher-form-group">
                             <label>Teacher Names</label>
-                            <div className={`email-tags ${isNameFocused ? "focused" : ""}`}>
+                            <div className={`email-tags`}>
                                     {names.map((name, index) => (
                                         <span key={`${name}-${index}`} className="email-tag">
-                                            {index + 1}. {name}
+                                            {name}
                                             <button onClick={() => removeName(name)}>&times;</button>
                                         </span>
                                     ))}
-                                <input
-                                    type="text"
-                                    value={nameInputValue}
-                                    onChange={handleNameInputChange}
-                                    onKeyDown={handleNameInputKeyDown}
-                                    onFocus={() => setIsNameFocused(true)}
-                                    onBlur={handleNameInputBlur}
-                                    placeholder="Enter name and press comma or enter"
-                                    className="email-input"
-                                    disabled={loading}
-                                />
+                                    {names.length === 0 && (
+                                        <input
+                                            type="text"
+                                            value={nameInputValue}
+                                            onChange={handleNameInputChange}
+                                            // onKeyDown={handleNameInputKeyDown}
+                                            // onFocus={() => setIsNameFocused(true)}
+                                            onBlur={handleNameInputBlur}
+                                            placeholder="Enter name"
+                                            className="email-input"
+                                            disabled={loading}
+                                        />
+                                    )}
                             </div>
                             {nameError && <p className="error-message-email">{nameError}</p>}
                         </div>
@@ -350,30 +284,31 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                         {/* Emails Input */}
                         <div className="newteacher-form-group">
                             <label>Email Addresses</label>
-                            <div className={`email-tags ${isEmailFocused ? "focused" : ""}`}>
+                            <div className={`email-tags`}>
                                     {emails.map((email, index) => (
                                         <span key={`${email}-${index}`} className="email-tag">
-                                            {index + 1}. {email}
+                                             {email}
                                             <button onClick={() => removeEmail(email)}>&times;</button>
                                         </span>
                                     ))}
-                                <input
-                                    type="text"
-                                    value={emailInputValue}
-                                    onChange={handleEmailInputChange}
-                                    onKeyDown={handleEmailInputKeyDown}
-                                    onFocus={() => setIsEmailFocused(true)}
-                                    onBlur={handleEmailInputBlur}
-                                    placeholder="Enter email and press comma or enter"
-                                    className="email-input"
-                                    disabled={loading}
-                                />
+
+                                    {emails.length === 0 && (
+                                        <input
+                                            type="text"
+                                            value={emailInputValue}
+                                            onChange={handleEmailInputChange}
+                                            onBlur={handleEmailInputBlur}
+                                            placeholder="Enter email"
+                                            className="email-input"
+                                            disabled={loading}
+                                        />
+                                    )}
                             </div>
                             {emailError && <p className="error-message-email">{emailError}</p>}
                         </div>
 
                         {/* Summary */}
-                        {(names.length > 0 || emails.length > 0) && (
+                        {/* {(names.length > 0 || emails.length > 0) && (
                             <div className="summary-section">
                                 <p>
                                     Ready to add {Math.min(names.length, emails.length)} teachers.
@@ -382,7 +317,7 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                                     }
                                 </p>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 )}
 
@@ -394,7 +329,7 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                         disabled={loading}
                     >
                         <PiMicrosoftExcelLogoBold className="Excel-icon" />
-                        {isExcelImporting ? "Importing..." : "Import Excel"}
+                        {isExcelImporting ? "Importing..." : "Bulk Teachers"}
                     </button>
                     <input
                         type="file"
@@ -414,11 +349,11 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                             Cancel
                         </button>
                         <button
-                            className="btn add-btn"
+                            className="btn create-btn"
                             onClick={handleCreate}
                             disabled={loading || names.length === 0 || emails.length === 0 || names.length !== emails.length}
                         >
-                            Add {names.length > 0 ? `(${names.length})` : ''}
+                            Add 
                         </button>
                     </div>
                 </div>

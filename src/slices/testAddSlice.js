@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    openAddQuestion : false
+    openAddQuestionTest : false
 }
 
 export const testAddSlice = createSlice({
-    name:"TestAdd",
+    name:"AddQuestionTest",
     initialState,
     reducers:{
-        addNewQuestion:(state,action)=>{
-            state.openAddQuestion = action.payload
+        SetOpenAddQuestionTest:(state,action)=>{
+            state.openAddQuestionTest = action.payload
         }
     }
 });
 
-export const { addNewQuestion } = testAddSlice.actions;
+export const { SetOpenAddQuestionTest } = testAddSlice.actions;
 export default testAddSlice.reducer;
