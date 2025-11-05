@@ -159,7 +159,7 @@
     background-color: var(--btn-bg);
     border: var(--btn-border);
     border-radius: var(--btn-border-radius);
-    color: var(--btn-text-color) !important;
+    color: var(--btn-text-color) ;
     display: flex;
     font-size: var(--btn-font-size);
     font-weight: var(--btn-font-weight);
@@ -168,6 +168,12 @@
     text-align: center;
     transform: none;
 }
+
+.btn-colour{
+    color: var(--button-bg-color) !important;
+    border-color: var(--button-bg-color) !important;
+}
+
 @media (max-width:768px) {
     .btn {
         padding: 5px 10px;
@@ -248,7 +254,7 @@ input[type="file"]::file-selector-button {
     border-top: var(--modal-footer-border-top);
 }
 .Excel-icon{
-    font-size: 16px;
+    font-size: 20px;
     margin-right: 8px;
 }
 .action{
@@ -282,4 +288,15 @@ input[type="file"]::file-selector-button {
     }
 
  
+}
+
+.file-utp-dow{
+    display: flex;
+    gap: 5px;
+}
+
+@media (max-width:517px){
+    .newteacher-modal-footer{
+        flex-direction: column;
+    }
 }

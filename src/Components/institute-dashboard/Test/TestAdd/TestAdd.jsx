@@ -385,15 +385,18 @@ const TestAdd = () => {
   }
 
   const toggleFullView = () => {
+    console.log("fullViewMode :" + fullViewMode);
+    setExpandedRows(filteredData.map(row => row.id));
     if (!fullViewMode) {
       // Entering full view mode
-      setRowsPerPage(filteredData.length);
+      
+     setRowsPerPage(filteredData.length);
       // Auto-expand all rows
       setExpandedRows(filteredData.map(row => row.id));
     } else {
-      // Exiting full view mode
-      setRowsPerPage(INITIAL_ROWS_PER_PAGE);
-      setExpandedRows([]); // Collapse all rows
+      // Exiting full view modez
+       setRowsPerPage(INITIAL_ROWS_PER_PAGE);
+       setExpandedRows([]); // Collapse all rows
     }
     setFullViewMode((prev) => !prev);
   };
@@ -814,6 +817,18 @@ const TestAdd = () => {
           fullViewMode={fullViewMode}
         />
       )}
+
+
+
+      {/* <PaginationButtons
+        filteredQuestions={filteredData}
+        showPaginationButtons={showPaginationButtons}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        loadMore={loadMore}
+        fullView={toggleFullView}
+        fullViewMode={fullViewMode}
+      /> */}
 
       <PaginationInfo
         filteredQuestions={filteredData}

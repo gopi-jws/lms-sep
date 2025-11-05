@@ -76,6 +76,7 @@ const DataTable = ({
     setEditingTest,
     setEditingQB,
     modalType,
+    button,
 }) => {
 
     const dispatch = useDispatch();
@@ -116,6 +117,7 @@ const DataTable = ({
     const [showMcqOptions, setShowMcqOptions] = useState({})
     const [expandedQuestions, setExpandedQuestions] = useState([]);
     const [showAnswers, setShowAnswers] = useState([]);
+    const [buttonShow, SetButtonShow] = useState(button === false ? false : true);
 
     useEffect(() => {
         dispatch(setNumberofSelectionQuestion(selectedRows.length))
@@ -330,33 +332,34 @@ const DataTable = ({
 
 
                 <div className="mobile-responsive">
+                    {buttonShow && (
+                        <div className="test-sidebar-header-res">
+                            <div className="w-100 d-flex justify-content-center flex-wrap gap-2">
+                                {buttonConfigs
+                                    .filter((btn) => btn.condition)
+                                    .map((btn) => (
+                                        <button
+                                            key={btn.key}
+                                            onClick={btn.action}
+                                            className="allbuttons"
+                                            aria-label={btn.aria}
+                                        >
+                                            <span className="sidebar-letters">{btn.label}</span>
+                                        </button>
+                                    ))}
 
-                    <div className="test-sidebar-header-res">
-                        <div className="w-100 d-flex justify-content-center flex-wrap gap-2">
-                            {buttonConfigs
-                                .filter((btn) => btn.condition)
-                                .map((btn) => (
-                                    <button
-                                        key={btn.key}
-                                        onClick={btn.action}
-                                        className="allbuttons"
-                                        aria-label={btn.aria}
-                                    >
-                                        <span className="sidebar-letters">{btn.label}</span>
-                                    </button>
-                                ))}
-
-                            {/* ✅ ListOfQuestionsType dropdown */}
-                            {isDropdownOpen && (
-                                <div className="list-of-questions-type">
-                                    <ListOfQuestionsType
-                                        isOpen={isDropdownOpen}
-                                        onClose={() => dispatch(addNewQuestionQB(false))}
-                                    />
-                                </div>
-                            )}
+                                {/* ✅ ListOfQuestionsType dropdown */}
+                                {isDropdownOpen && (
+                                    <div className="list-of-questions-type">
+                                        <ListOfQuestionsType
+                                            isOpen={isDropdownOpen}
+                                            onClose={() => dispatch(addNewQuestionQB(false))}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <div className="test-search-container mb-1 d-flex justify-content-between align-items-center">
                         <div className="search-input-wrapper">

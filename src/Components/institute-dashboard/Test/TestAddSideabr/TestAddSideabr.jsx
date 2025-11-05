@@ -120,7 +120,7 @@ const dispatch = useDispatch();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [tags, setTags] = useState(["Section 1", "Section 2"]);
+  const [tags, setTags] = useState(testItem.id === 12 ? [] : ["Section 1", "Section 2"]);
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0'];
   const [modalHeading, setModalHeading] = useState("");
   const [selectedSection, setSelectedSection] = useState("");

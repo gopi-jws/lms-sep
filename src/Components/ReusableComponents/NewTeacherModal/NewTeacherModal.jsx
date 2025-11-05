@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import * as XLSX from "xlsx";
 import './NewTeacherModal.css'
 import { toast } from "react-toastify";
-import { PiMicrosoftExcelLogoBold } from "react-icons/pi";
-
+import { MdCloudUpload, MdCloudDownload } from "react-icons/md";
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal";
 
 const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
@@ -18,7 +17,6 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
     const [isExcelImporting, setIsExcelImporting] = useState(false);
 
     const fileInputRef = useRef(null);
-
 
     useEffect(() => {
         if (isOpen) {
@@ -61,10 +59,10 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                             item.name ||
                             item.Name ||
                             item["Full Name"] ||
-                            item["Student Name"] ||
+                            item["Teacher Name"] ||
                             item["Names"] ||
                             item["fullname"] ||
-                            item["studentname"] ||
+                            item["teachername"] ||
                             ""
                     )
                     .map((name) => name.toString().trim())
@@ -110,7 +108,7 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                 });
 
                 if (validPairs.length === 0) {
-                    toast.error("No valid student data found.");
+                    toast.error("No valid teacher data found.");
                     setLoading(false);
                     setIsExcelImporting(false);
                     return;
@@ -221,8 +219,69 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
             return;
         }
 
-        const students = names.map((name, i) => ({ name, email: emails[i] }));
-        if (onSave) onSave(students);
+        const teachers = names.map((name, i) => ({ name, email: emails[i] }));
+        if (onCreate) onCreate(teachers);
+    };
+
+    // ✅ Fixed Download Function
+    const handleDownload = async () => {
+        const fileUrl = "public\Book1.xlsx";
+        const fileName = "Teachers_Template.xlsx";
+
+        try {
+            // Check if file exists
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                throw new Error('File not found');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            toast.success("Template downloaded successfully!");
+        } catch (error) {
+            console.error("Download error:", error);
+            toast.error("Template file not found. Using dynamic generation...");
+
+            // Fallback to dynamic generation
+            createDynamicTemplate();
+        }
+    };
+
+    const createDynamicTemplate = () => {
+        const sampleData = [
+            { name: "John Smith", email: "john.smith@school.com" },
+            { name: "Sarah Johnson", email: "sarah.johnson@school.com" },
+            { name: "Michael Brown", email: "michael.brown@school.com" }
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(sampleData);
+
+        // Add column headers explicitly
+        XLSX.utils.sheet_add_aoa(worksheet, [["name", "email"]], { origin: "A1" });
+        XLSX.utils.sheet_add_json(worksheet, sampleData, { origin: "A2", skipHeader: true });
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Teachers_Template.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     };
 
     useEffect(() => {
@@ -242,9 +301,7 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                     <h5>Add New Teachers</h5>
                     <button
                         className="close-btn"
-                        onClick={() => {
-                            onClose();
-                        }}
+                        onClick={onClose}
                     >
                         &times;
                     </button>
@@ -257,26 +314,24 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                         {/* Names Input */}
                         <div className="newteacher-form-group">
                             <label>Teacher Names</label>
-                            <div className={`email-tags`}>
-                                    {names.map((name, index) => (
-                                        <span key={`${name}-${index}`} className="email-tag">
-                                            {name}
-                                            <button onClick={() => removeName(name)}>&times;</button>
-                                        </span>
-                                    ))}
-                                    {names.length === 0 && (
-                                        <input
-                                            type="text"
-                                            value={nameInputValue}
-                                            onChange={handleNameInputChange}
-                                            // onKeyDown={handleNameInputKeyDown}
-                                            // onFocus={() => setIsNameFocused(true)}
-                                            onBlur={handleNameInputBlur}
-                                            placeholder="Enter name"
-                                            className="email-input"
-                                            disabled={loading}
-                                        />
-                                    )}
+                            <div className="email-tags">
+                                {names.map((name, index) => (
+                                    <span key={`${name}-${index}`} className="email-tag">
+                                        {name}
+                                        <button onClick={() => removeName(name)}>&times;</button>
+                                    </span>
+                                ))}
+                                {names.length === 0 && (
+                                    <input
+                                        type="text"
+                                        value={nameInputValue}
+                                        onChange={handleNameInputChange}
+                                        onBlur={handleNameInputBlur}
+                                        placeholder="Enter name"
+                                        className="email-input"
+                                        disabled={loading}
+                                    />
+                                )}
                             </div>
                             {nameError && <p className="error-message-email">{nameError}</p>}
                         </div>
@@ -284,61 +339,59 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                         {/* Emails Input */}
                         <div className="newteacher-form-group">
                             <label>Email Addresses</label>
-                            <div className={`email-tags`}>
-                                    {emails.map((email, index) => (
-                                        <span key={`${email}-${index}`} className="email-tag">
-                                             {email}
-                                            <button onClick={() => removeEmail(email)}>&times;</button>
-                                        </span>
-                                    ))}
-
-                                    {emails.length === 0 && (
-                                        <input
-                                            type="text"
-                                            value={emailInputValue}
-                                            onChange={handleEmailInputChange}
-                                            onBlur={handleEmailInputBlur}
-                                            placeholder="Enter email"
-                                            className="email-input"
-                                            disabled={loading}
-                                        />
-                                    )}
+                            <div className="email-tags">
+                                {emails.map((email, index) => (
+                                    <span key={`${email}-${index}`} className="email-tag">
+                                        {email}
+                                        <button onClick={() => removeEmail(email)}>&times;</button>
+                                    </span>
+                                ))}
+                                {emails.length === 0 && (
+                                    <input
+                                        type="text"
+                                        value={emailInputValue}
+                                        onChange={handleEmailInputChange}
+                                        onBlur={handleEmailInputBlur}
+                                        placeholder="Enter email"
+                                        className="email-input"
+                                        disabled={loading}
+                                    />
+                                )}
                             </div>
                             {emailError && <p className="error-message-email">{emailError}</p>}
                         </div>
-
-                        {/* Summary */}
-                        {/* {(names.length > 0 || emails.length > 0) && (
-                            <div className="summary-section">
-                                <p>
-                                    Ready to add {Math.min(names.length, emails.length)} teachers.
-                                    {names.length !== emails.length &&
-                                        ` (Warning: ${Math.abs(names.length - emails.length)} mismatch)`
-                                    }
-                                </p>
-                            </div>
-                        )} */}
                     </div>
                 )}
 
                 {/* Modal Footer */}
                 <div className="newteacher-modal-footer">
-                    <button
-                        className="btn excel-btn"
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={loading}
-                    >
-                        <PiMicrosoftExcelLogoBold className="Excel-icon" />
-                        {isExcelImporting ? "Importing..." : "Bulk Teachers"}
-                    </button>
-                    <input
-                        type="file"
-                        accept=".xlsx,.xls"
-                        className="add-teacher"
-                        style={{ display: "none" }}
-                        onChange={handleFileUpload}
-                        ref={fileInputRef}
-                    />
+                    <div className="file-utp-dow">
+                        <button
+                            className="btn btn-colour excel-btn"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={loading}
+                        >
+                            <MdCloudUpload className="Excel-icon" />
+                            {isExcelImporting ? "Importing..." : "Bulk Upload"}
+                        </button>
+                        <input
+                            type="file"
+                            accept=".xlsx,.xls"
+                            className="add-teacher"
+                            style={{ display: "none" }}
+                            onChange={handleFileUpload}
+                            ref={fileInputRef}
+                        />
+
+                        <button
+                            className="btn btn-colour excel-btn"
+                            onClick={handleDownload}
+                            disabled={loading}
+                        >
+                            <MdCloudDownload className="Excel-icon" />
+                            Sample Sheet
+                        </button>
+                    </div>
 
                     <div className="action">
                         <button
@@ -353,7 +406,7 @@ const NewTeacherModal = ({ isOpen, onClose, onCreate, success }) => {
                             onClick={handleCreate}
                             disabled={loading || names.length === 0 || emails.length === 0 || names.length !== emails.length}
                         >
-                            Add 
+                            Add
                         </button>
                     </div>
                 </div>

@@ -45,14 +45,15 @@ a {
   margin-left: auto;
 }
 
+/* 05-11-2025 */
 /* Truncate Styling */
-.truncate {
+/* .truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 970px;
   display: inline-block;
-}
+} */
 
 .ans-item {
   width: 975px;

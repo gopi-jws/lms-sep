@@ -272,6 +272,7 @@ for x in fruits:
     const filterRef = useRef(null);
     const questionTypeRef = useRef(null);
     const sectionOptRef = useRef(null);
+    const addTo = useRef(null)
 
     const questiontype = [
         { id: 1, name: "SAQ" },
@@ -283,33 +284,55 @@ for x in fruits:
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            // ✅ Close QB List dropdown
-            if (isOpenQBList && qbListRef.current && !qbListRef.current.contains(e.target)) {
+            // --- SECTION DROPDOWN ---
+            if (
+                isSectionOpen &&
+                sectionOptRef.current &&
+                !sectionOptRef.current.contains(e.target) &&
+                addTo.current &&
+                !addTo.current.contains(e.target)
+            ) {
+                setIsSectionOpen(false);
+            }
+
+            // --- QB LIST DROPDOWN ---
+            if (
+                isOpenQBList &&
+                qbListRef.current &&
+                !qbListRef.current.contains(e.target) &&
+                !e.target.closest(".filterQB-btn") // ensure not clicking the open button
+            ) {
                 setIsOpenQbList(false);
             }
 
-            // ✅ Close Filter dropdown (and nested QuestionType dropdown)
-            if (isFilterOpen && filterRef.current && !filterRef.current.contains(e.target)) {
+            // --- FILTER DROPDOWN ---
+            if (
+                isFilterOpen &&
+                filterRef.current &&
+                !filterRef.current.contains(e.target) &&
+                !e.target.closest(".filterQB-btn")
+            ) {
                 setIsFilterOpen(false);
                 setQuestionTypeOpen(false);
             }
 
-            // ✅ Close Question Type dropdown if click outside filter area
-            if (questionTypeOpen && questionTypeRef.current && !questionTypeRef.current.contains(e.target)) {
-                if (filterRef.current && !filterRef.current.contains(e.target)) {
-                    setQuestionTypeOpen(false);
-                }
-            }
-
-            // ✅ NEW — Close Section dropdown when clicking outside
-            if (isSectionOpen && sectionOptRef.current && !sectionOptRef.current.contains(e.target)) {
-                setIsSectionOpen(false);
+            // --- QUESTION TYPE DROPDOWN ---
+            if (
+                questionTypeOpen &&
+                questionTypeRef.current &&
+                !questionTypeRef.current.contains(e.target) &&
+                filterRef.current &&
+                !filterRef.current.contains(e.target)
+            ) {
+                setQuestionTypeOpen(false);
             }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpenQBList, isFilterOpen, questionTypeOpen, isSectionOpen]);
+    }, [isSectionOpen, isOpenQBList, isFilterOpen, questionTypeOpen]);
+
+
 
 
     const handleSelectedQB = (qtn) =>{
@@ -324,7 +347,7 @@ for x in fruits:
 
     const handleSubmit = () =>{
         if(tags.length > 0 ){
-            setIsSectionOpen(true)
+            setIsSectionOpen(!isSectionOpen)
         }
     }
 
@@ -353,8 +376,62 @@ for x in fruits:
                             <span className="tag-dropdown-toggle addQb-dropdown"></span>
                         </div>
 
+                        {/* Question Bank List */}
+                        {isOpenQBList && (
+                            <div className="dropdrow-option qb-list" ref={qbListRef}>
+                                {QBdata.map((qb) => (
+                                    <div key={qb.id} className="questions-item" onClick={() => handleSelectedQB(qb.name)}>
+                                        <labeles htmlFor={`qb-${qb.id}`} className="questionBank-name">
+                                            {qb.name}
+                                        </labeles>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+
+                        <div
+                            ref={filterRef}
+                            className="filterQB-btn"
+                            onClick={() => {
+                                setIsFilterOpen(!isFilterOpen);
+                                setIsOpenQbList(false);
+                                setQuestionTypeOpen(false);
+                            }}
+                        >
+                            <span className="btn-header">Filter by</span>
+                            <span className="tag-dropdown-toggle addQb-dropdown"></span>
+                        </div>
+
+                        {/* Filter Section */}
+                        {isFilterOpen && (
+                            <div className="dropdrow-option filter-op" ref={filterRef}>
+                                <div
+                                    className="questionsType-header"
+                                    onClick={() => setQuestionTypeOpen(!questionTypeOpen)}
+                                    ref={questionTypeRef}
+                                >
+                                    <labeles className="questionBank-name">Question Types</labeles>
+                                </div>
+
+                                <div className="question-type-item">
+                                    {questiontype.map((q) => (
+                                        <div key={q.id} className="questions-item">
+                                            <input type="checkbox" id={`qb-${q.id}`} />
+                                            <labeles htmlFor={`qb-${q.id}`} className="questionBank-name">
+                                                {q.name}
+                                            </labeles>
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+                        )}
+                    </div>
+
+                    {selectedQB.length > 0 && (
                         <div className="selected-qtn">
-                            <div className="question-tags">
+                            <div className="questionQB-tags">
                                 {selectedQB.map((qtn) => (
                                     <div key={qtn.id} className="question-tag-container">
                                         <div className="question-tag questions-page-question-tag">
@@ -379,72 +456,8 @@ for x in fruits:
                                 ))}
                             </div>
                         </div>
-
-
-                        <div
-                            ref={filterRef}
-                            className="filterQB-btn"
-                            onClick={() => {
-                                setIsFilterOpen(!isFilterOpen);
-                                setIsOpenQbList(false);
-                                setQuestionTypeOpen(false);
-                            }}
-                        >
-                            <span className="btn-header">Filter</span>
-                            <span className="tag-dropdown-toggle addQb-dropdown"></span>
-                        </div>
-                    </div>
-
-                    {/* Question Bank List */}
-                    {isOpenQBList && (
-                        <div className="dropdrow-option qb-list" ref={qbListRef}>
-                            {QBdata.map((qb) => (
-                                <div key={qb.id} className="questions-item" onClick={() => handleSelectedQB(qb.name)}>
-                                    <labeles htmlFor={`qb-${qb.id}`} className="questionBank-name">
-                                        {qb.name}
-                                    </labeles>
-                                </div>
-                            ))}
-                        </div>
                     )}
 
-                    {/* Filter Section */}
-                    {isFilterOpen && (
-                        <div className="dropdrow-option filter-op" ref={filterRef}>
-                            <div
-                                className="questions-item"
-                                onClick={() => setQuestionTypeOpen(!questionTypeOpen)}
-                                ref={questionTypeRef}
-                            >
-                                <labeles className="questionBank-name">Question Types</labeles>
-                                <IoIosArrowDown
-                                    style={{
-                                        transform: questionTypeOpen ? "rotate(180deg)" : "rotate(0deg)",
-                                        transition: "transform 0.3s ease"
-                                    }}
-                                />
-
-                            </div>
-
-                            {questionTypeOpen && (
-                                <div className="question-type-item">
-                                    {questiontype.map((q) => (
-                                        <div key={q.id} className="questions-item">
-                                            <input type="checkbox" id={`qb-${q.id}`} />
-                                            <labeles htmlFor={`qb-${q.id}`} className="questionBank-name">
-                                                {q.name}
-                                            </labeles>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <div className="questions-item">
-                                <labeles className="questionBank-name">Add to Section</labeles>
-                                <IoIosArrowDown />
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Body */}
@@ -452,46 +465,66 @@ for x in fruits:
                     <DataTable 
                     columns={columns}
                     data={data}
-                    showQuestionRow={true}  />
+                    showQuestionRow={true}  
+                    button={false}/>
                 </div>
 
                 {/* Footer */}
                 <div className="Addquestion-modal-footer">
-                    <span>Selected Question : {numSeletionQuestion}</span>
-                    <div className="SetMark">
-                        <span>Set Mark :</span>
-                        <input 
-                        type="number" 
-                        className="input-mark" 
-                        placeholder="Positive Mark"
-                       
-                        value={marks}
-                        onChange={handleChange}
-                        name="mark" />
+                    <div className="respons-footer">
+                        <span>Sel.Qns. : {numSeletionQuestion}</span>
+                        <div className="SetMark">
+                            <span>Set Mark :</span>
+                            <input
+                                type="number"
+                                className="input-mark"
+                                placeholder="Positive Mark"
 
-                        <input 
-                        type="number" 
-                        className="input-mark" 
-                        placeholder="Negative Mark" 
-                        value={negMarks}
-                        onChange={handleChange}
-                        name="negmark"/>
+                                value={marks}
+                                onChange={handleChange}
+                                name="mark" />
+
+                            <input
+                                type="number"
+                                className="input-mark"
+                                placeholder="Negative Mark"
+                                value={negMarks}
+                                onChange={handleChange}
+                                name="negmark" />
+                        </div>
                     </div>
 
-                    {isSectionOpen && (
-                        <div className="dropdrow-option section" ref={sectionOptRef}>
-                        <ul onClick={close}>
-                            {tags.map((tag, index) => (
-                                <li className="questions-item" key={index}>{tag}</li>
-                            ))}
-                        </ul>
+
+                    <div className="action">
+                        {/* <button className="btn" onClick={close}>
+                            Close
+                        </button> */}
+
+                        <button className="btn create-btn" ref={addTo} onClick={() => handleSubmit()}>
+                            {tags.length > 0 ? "Add to Section" : "Add to Test"}
+
+                            {tags.length > 0 && (
+                                <IoIosArrowDown
+                                    size={18}
+                                    style={{
+                                        transform: isSectionOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                        transition: "transform 0.3s ease"
+                                        , marginLeft: ".5rem"
+                                    }}
+                                />
+                            )}
+                        </button>
+
+                        {isSectionOpen && (
+                            <div className="dropdrow-option section" ref={sectionOptRef}>
+                                <ul onClick={close}>
+                                    {tags.map((tag, index) => (
+                                        <li className="questions-item" key={index}>{tag}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
-                    )}
-
-
-                    <button className="btn create-btn"  onClick={()=> handleSubmit()}>
-                        {tags.length > 0 ? "Add to Section" : "Add to Test"}
-                    </button>
 
                 </div>
             </div>

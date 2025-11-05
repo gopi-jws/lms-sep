@@ -629,10 +629,14 @@ padding-top: 40px;
   padding: 0;
 }
 
+
+/* 05-11-2025 */
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 25px;
+
+  /* white-space: nowrap; */
 }
 
 .truncate p{

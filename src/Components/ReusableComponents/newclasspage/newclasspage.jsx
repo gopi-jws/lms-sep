@@ -111,7 +111,7 @@ const AddClassModal = ({ onClose, isOpen }) => {
                                         value={studentsType}
                                         onChange={(e) => setStudentsType(e.target.value)}
                                     >
-                                        <option className="option-hover" value="admin">Only By Teacher</option>
+                                        <option value="admin">Only By Teacher</option>
                                         <option value="student">By Them Self (Students)</option>
                                         <option value="both">By Both Ways (Hybrid)</option>
                                     </select>

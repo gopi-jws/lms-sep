@@ -15,7 +15,7 @@ const QuestionBankLayout = () => {
     <div className="layout-container">
       <Header />
       <div className="layout-main">
-        {isQuestionsAdd ? <AddQuestionSidebar /> : <Sidebar />}
+        {/* {isQuestionsAdd ? <AddQuestionSidebar /> : <Sidebar />} */}
         <main className="layout-content">
           <Outlet />
         </main>

@@ -17,7 +17,7 @@ const SubscriptionLayout = () => {
       {/* Main Content Area with Sidebar */}
       <div className="layout-main">
         {/* Sidebar */}
-       <SubscriptionSidebar />
+       {/* <SubscriptionSidebar /> */}
 
 
         {/* Page Content */}

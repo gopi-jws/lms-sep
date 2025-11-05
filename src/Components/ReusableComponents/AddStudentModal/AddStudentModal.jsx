@@ -3,8 +3,9 @@ import "./AddStudentModal.css";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import useBounceModal from "../../ReusableComponents/useBounceModal/useBounceModal";
-import { PiMicrosoftExcelLogoBold } from "react-icons/pi";
+import { MdCloudUpload, MdCloudDownload } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+
 
 const AddStudentModal = ({ isOpen, onClose, onSave, success }) => {
   const { modalRef, isBouncing } = useBounceModal(isOpen);
@@ -226,6 +227,67 @@ const AddStudentModal = ({ isOpen, onClose, onSave, success }) => {
     if (onSave) onSave(students);
   };
 
+  // ✅ Fixed Download Function
+  const handleDownload = async () => {
+    const fileUrl = "public\Book1.xlsx";
+    const fileName = "Teachers_Template.xlsx";
+
+    try {
+      // Check if file exists
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error('File not found');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Template downloaded successfully!");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("Template file not found. Using dynamic generation...");
+
+      // Fallback to dynamic generation
+      createDynamicTemplate();
+    }
+  };
+
+  const createDynamicTemplate = () => {
+        const sampleData = [
+            { name: "John Smith", email: "john.smith@school.com" },
+            { name: "Sarah Johnson", email: "sarah.johnson@school.com" },
+            { name: "Michael Brown", email: "michael.brown@school.com" }
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(sampleData);
+
+        // Add column headers explicitly
+        XLSX.utils.sheet_add_aoa(worksheet, [["name", "email"]], { origin: "A1" });
+        XLSX.utils.sheet_add_json(worksheet, sampleData, { origin: "A2", skipHeader: true });
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Teachers_Template.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
   useEffect(() => {
     if (success) {
       toast.success("Students imported successfully!");
@@ -310,15 +372,30 @@ const AddStudentModal = ({ isOpen, onClose, onSave, success }) => {
 
         {/* Footer */}
         <div className={`new-student-modal-footer ${ClassId === "1" ? "showExcelButton" : ""}`}>
+          
           {ClassId === "1" && (
-            <button
-              className="btn excel-btn"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={loading}
-            >
-              <PiMicrosoftExcelLogoBold className="Excel-icon" />
-              {isExcelImporting ? "Importing..." : "Bulk Students"}
-            </button>
+            <div className="file-utp-dow">
+
+              <button
+                className="btn btn-colour excel-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={loading}
+              >
+                <MdCloudUpload className="Excel-icon" />
+                {isExcelImporting ? "Importing..." : "Bulk Upload"}
+              </button>
+
+              <button
+                className="btn btn-colour excel-btn"
+                onClick={handleDownload}
+                disabled={loading}
+              >
+                <MdCloudDownload className="Excel-icon" />
+                Sample Sheet
+              </button>
+
+
+            </div>
           )}
           <input
             type="file"
@@ -327,6 +404,7 @@ const AddStudentModal = ({ isOpen, onClose, onSave, success }) => {
             ref={fileInputRef}
             onChange={handleFileUpload}
           />
+
           <div className="action">
             <button className="btn" onClick={onClose}>
               Close
