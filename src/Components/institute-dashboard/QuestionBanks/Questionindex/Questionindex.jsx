@@ -306,6 +306,9 @@ const Questionindex = () => {
     return now.getTime();
   };
 
+  console.log("getTimeFromString" + getTimeFromString);
+  
+
 
   const sortedFilteredData = [...filteredData].sort((a, b) =>
     getTimeFromString(b?.lastModified) - getTimeFromString(a?.lastModified)

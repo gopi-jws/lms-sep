@@ -379,7 +379,7 @@ const TestIndex = () => {
             duration: updatedFields.duration || test.duration,
             description: updatedFields.description || test.description,
             instructions: updatedFields.instructions || test.instructions,
-            // lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString()
           }
           : test
       )
@@ -446,7 +446,7 @@ const TestIndex = () => {
       test: testData.name,
       owner: "You",
       status: "Not Published",
-      // lastModified: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
       duration: testData.duration,
       description: testData.description,
       instructions: testData.instructions
