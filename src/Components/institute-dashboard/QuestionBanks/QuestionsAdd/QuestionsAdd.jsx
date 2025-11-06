@@ -290,9 +290,9 @@ for x in fruits:
 
   // Get current page data
   const getCurrentPageData = () => {
-    if (fullViewMode) {
-      return filteredData
-    }
+    // if (fullViewMode) {
+    //   return filteredData
+    // }
     const startIndex = (currentPage - 1) * rowsPerPage
     return filteredData.slice(startIndex, startIndex + rowsPerPage)
   }
@@ -331,17 +331,17 @@ for x in fruits:
 
   // Toggle full view mode
   const toggleFullView = () => {
-    if (!fullViewMode) {
-      // Enter Full View mode
-      setRowsPerPage(filteredData.length)
-      setAllRowsExpanded(true)
-      setExpandedRows(filteredData.map((q) => q.id))
-    } else {
-      // Exit Full View mode
-      setRowsPerPage(INITIAL_ROWS_PER_PAGE)
-      setAllRowsExpanded(false)
-      setExpandedRows([])
-    }
+    // if (!fullViewMode) {
+    //   // Enter Full View mode
+    //   setRowsPerPage(filteredData.length)
+    //   setAllRowsExpanded(true)
+    //   setExpandedRows(filteredData.map((q) => q.id))
+    // } else {
+    //   // Exit Full View mode
+    //   setRowsPerPage(INITIAL_ROWS_PER_PAGE)
+    //   setAllRowsExpanded(false)
+    //   setExpandedRows([])
+    // }
     setFullViewMode(!fullViewMode)
   }
  
@@ -785,7 +785,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
         heading={modalHeading}
       />
 
-      {showPaginationButtons && (
+      {/* {showPaginationButtons && (
         <PaginationButtons
           filteredQuestions={filteredData}
           rowsPerPage={rowsPerPage}
@@ -794,7 +794,16 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
           fullView={toggleFullView}
           fullViewMode={fullViewMode}
         />
-      )}
+      )} */}
+
+      <PaginationButtons
+        filteredQuestions={filteredData}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        loadMore={() => setRowsPerPage((prev) => Math.min(prev + 10, filteredData.length))}
+        fullView={toggleFullView}
+        fullViewMode={fullViewMode}
+      />
 
       <PaginationInfo
         filteredQuestions={filteredData}

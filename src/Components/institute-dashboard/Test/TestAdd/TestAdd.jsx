@@ -350,14 +350,20 @@ const TestAdd = () => {
   }, [filteredData.length])
 
   const getCurrentPageData = () => {
-    if (fullViewMode) {
-      return filteredData
-    }
+    // if (fullViewMode) {
+    //   return filteredData
+    // }
     const startIndex = (currentPage - 1) * rowsPerPage
     return filteredData.slice(startIndex, startIndex + rowsPerPage)
   }
 
-  const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
+  // const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
+  const showPaginationButtons = rowsPerPage < filteredData.length
+
+  console.log("filteredData" + filteredData);
+  console.log("rowsPerPage" + rowsPerPage);
+  
+  
 
   const handleSearchChange = (value) => {
     setSearchQuery(value)
@@ -386,18 +392,18 @@ const TestAdd = () => {
 
   const toggleFullView = () => {
     console.log("fullViewMode :" + fullViewMode);
-    setExpandedRows(filteredData.map(row => row.id));
-    if (!fullViewMode) {
-      // Entering full view mode
+   // setExpandedRows(filteredData.map(row => row.id));
+    // if (!fullViewMode) {
+    //   // Entering full view mode
       
-     setRowsPerPage(filteredData.length);
-      // Auto-expand all rows
-      setExpandedRows(filteredData.map(row => row.id));
-    } else {
-      // Exiting full view modez
-       setRowsPerPage(INITIAL_ROWS_PER_PAGE);
-       setExpandedRows([]); // Collapse all rows
-    }
+    //  setRowsPerPage(filteredData.length);
+    //   // Auto-expand all rows
+    //   setExpandedRows(filteredData.map(row => row.id));
+    // } else {
+    //   // Exiting full view modez
+    //    setRowsPerPage(INITIAL_ROWS_PER_PAGE);
+    //    setExpandedRows([]); // Collapse all rows
+    // }
     setFullViewMode((prev) => !prev);
   };
 
@@ -807,7 +813,8 @@ const TestAdd = () => {
 
 
       </div>
-      {showPaginationButtons && (
+
+      {/* {showPaginationButtons && (
         <PaginationButtons
           filteredQuestions={filteredData}
           rowsPerPage={rowsPerPage}
@@ -816,11 +823,11 @@ const TestAdd = () => {
           fullView={toggleFullView}
           fullViewMode={fullViewMode}
         />
-      )}
+      )} */}
 
 
 
-      {/* <PaginationButtons
+      <PaginationButtons
         filteredQuestions={filteredData}
         showPaginationButtons={showPaginationButtons}
         rowsPerPage={rowsPerPage}
@@ -828,7 +835,7 @@ const TestAdd = () => {
         loadMore={loadMore}
         fullView={toggleFullView}
         fullViewMode={fullViewMode}
-      /> */}
+      />
 
       <PaginationInfo
         filteredQuestions={filteredData}

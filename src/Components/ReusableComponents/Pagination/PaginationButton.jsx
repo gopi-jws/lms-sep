@@ -32,17 +32,17 @@ const PaginationButtons = ({
 
   return (
     <div className="pagination-buttons mt-4 d-flex justify-content-center gap-3">
-      {hasMoreData && !fullViewMode && (
-        <button className="load-more-button2" onClick={loadMore}>
-          Load More
-        </button>
-      )}
-
-      {/* {hasMoreData &&  (
+      {/* {hasMoreData && !fullViewMode && (
         <button className="load-more-button2" onClick={loadMore}>
           Load More
         </button>
       )} */}
+
+      {hasMoreData &&  (
+        <button className="load-more-button2" onClick={loadMore}>
+          Load More
+        </button>
+      )}
 
       {showFullViewButton && (
         <button

@@ -79,6 +79,11 @@ const DataTable = ({
     button,
 }) => {
 
+
+    console.log("fullViewMode:" + fullViewMode);
+    console.log(data);
+    
+    
     const dispatch = useDispatch();
     // Open New Add Question 
     const isDropdownOpen = useSelector((state) => state.AddQuestionQB.openAddQuestionQB);
