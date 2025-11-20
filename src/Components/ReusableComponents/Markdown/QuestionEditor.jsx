@@ -12,8 +12,12 @@ const QuestionEditor = ({
     content,
     codeMode = true,
     latexMode = true,
-    className = ""
+    className = "",
+    singleline,
 }) => {
+
+    console.log(singleline);
+    
     // Custom code style based on vscDarkPlus
     const customCodeStyle = {
         ...codeStyle,
@@ -133,11 +137,15 @@ const QuestionEditor = ({
         // Paragraph rendering
         p({ node, children, ...props }) {
             return (
-                <p className="markdown-p" style={{
-                    marginBottom: '1em',
-                    lineHeight: '1.6',
-                    whiteSpace: 'pre-wrap'
-                }} {...props}>
+                <p
+                    className={`markdown-p ${!singleline ? "truncate-multi" : ""}`}
+                    // style={{
+                    //     marginBottom: "1em",
+                    //     lineHeight: "1.6",
+                    //     whiteSpace: "pre-wrap",
+                    // }}
+                    {...props}
+                >
                     {children}
                 </p>
             );

@@ -166,6 +166,7 @@ const ClassDetailsPage = () => {
     {
       name: "Student Names",
       selector: "name",
+      width: "120px",
       cell: (row) => (
         <Link to={`/class/${row.id}/classdetailpage`} className="row-link">
           {row.name}
@@ -175,14 +176,17 @@ const ClassDetailsPage = () => {
     {
       name: "Student Emails",
       selector: "email",
+      width: "100px",
     },
     {
       name: "Date Of Joining",
       selector: "joinDate",
+      width: "70px",
     },
     {
       name: "Status",
       selector: "status",
+      width: "70px",
       cell: (row) => (
         <span className={`table-status-text ${row.status === "active" ? "active" : "inactive"}`}>
           {row.status.charAt(0).toUpperCase() + row.status.slice(1)}
@@ -192,6 +196,7 @@ const ClassDetailsPage = () => {
     {
       name: "Actions",
       selector: "actions",
+      width: "50px",
       cell: (row) => (
         <div className="actions-container">
           {isMobile ? (

@@ -41,7 +41,28 @@ const ClassPage = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showNewClass, setShowNewClass] = useState(false); // Renamed for clarity
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+   // Screen Size
+  
+      const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  
+      useEffect(() => {
+          const handleResize = () => {
+              setScreenWidth(window.innerWidth);
+          };
+  
+          // ✅ Add listener
+          window.addEventListener("resize", handleResize);
+  
+          // ✅ Call once on mount
+          handleResize();
+  
+          // ✅ Clean up on unmount
+          return () => window.removeEventListener("resize", handleResize);
+      }, []);
+
+
   // Filter data based on search
   const getFilteredData = () => {
     return data.filter((cls) => {
@@ -179,6 +200,10 @@ const ClassPage = () => {
     }
   };
 
+   const nameColumnValue = screenWidth <= 984 ? "100px" : "250px";
+   const maxiumColumnValue = screenWidth <= 984 ? "70px" : "120px";
+
+
   const columns = [
     {
       name: (
@@ -187,7 +212,7 @@ const ClassPage = () => {
         </div>
       ),
       selector: "name",
-      width: "200px",
+      width: nameColumnValue,
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/class/${row.id}/classdetailpage`} state={{ className: row.name, classId: row.id }}>
@@ -200,26 +225,26 @@ const ClassPage = () => {
       name: "Strength",
       selector: "strength",
       sortable: true,
-      width: "200px",
+      width: "70px",
     },
     {
       name: "Maximum Allowed",
       selector: "maximumallowed",
       sortable: true,
-      width: "200px",
+      width: maxiumColumnValue,
     },
     {
       name: "Expiry Date",
       selector: "expiryDate",
       sortable: true,
-      width: "200px",
+      width: "70px",
       cell: (row) => <span>{row.expiryDate.toLocaleDateString()}</span>,
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px",
+      width: "50px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (

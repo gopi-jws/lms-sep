@@ -163,13 +163,14 @@ const QuestionsAdd = () => {
     {
       id: 9,
       question: `In Python, what will be the output of the following code? 
+      
       ~~~python
         fruits = ["apple", "banana", "cherry"]
         for x in fruits:
             print(x)
             if x == "banana":
                 break
-        ~~~`,
+        ~~~ `,
       solution: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
@@ -184,19 +185,19 @@ for x in fruits:
 ~~~`,
       
     },
-    {
-      id: 9,
-      question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
-            Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
-      solution: `The prime numbers in the list are 2, 7, and 13.`,
-      type: "Multiple Answer ",
-      marks: 3,
-      owner: "Admin",
-      section: "Mathematics",
-      created: "18/03/2025",
-      modified: "1 day ago",
-      correctAnswers: [0, 2, 4], // Indices of correct options
-    }
+    // {
+    //   id: 9,
+    //   question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
+    //         Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
+    //   solution: `The prime numbers in the list are 2, 7, and 13.`,
+    //   type: "Multiple Answer ",
+    //   marks: 3,
+    //   owner: "Admin",
+    //   section: "Mathematics",
+    //   created: "18/03/2025",
+    //   modified: "1 day ago",
+    //   correctAnswers: [0, 2, 4], // Indices of correct options
+    // }
   ];
 
 

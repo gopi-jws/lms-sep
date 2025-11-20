@@ -239,6 +239,11 @@ const AddQuestionSidebar = ({ isMobileOpen, setIsMobileOpen, hideQuestionType })
               >
               <span className="sidebar-letters">New Question</span>
               </button>
+
+            <ListOfQuestionsType
+              isOpen={isDropdownOpen}
+              onClose={() => dispatch(addNewQuestionQB(false))}
+            />
           </div>
         </div>
 
@@ -471,15 +476,17 @@ const AddQuestionSidebar = ({ isMobileOpen, setIsMobileOpen, hideQuestionType })
           <ListOfQuestionsType onClose={() => dispatch(addNewQuestionQB(false))} />
         </div>
       )} */}
+
       
-      {!hideQuestionType && screenWidth >= 769 && (
+      
+      {/* {!hideQuestionType && screenWidth >= 769 && (
         <div ref={questionTypeRef} className="list-of-questions-type">
           <ListOfQuestionsType
             isOpen={isDropdownOpen}
             onClose={() => dispatch(addNewQuestionQB(false))}
           />
         </div>
-      )}
+      )} */}
 
       <AddTagsComponent
         isOpen={isTagModalOpen}

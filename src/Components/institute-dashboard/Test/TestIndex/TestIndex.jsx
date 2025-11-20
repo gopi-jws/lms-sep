@@ -436,17 +436,34 @@ const TestIndex = () => {
     }
   };
 
+  const getTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) return "Just now";
+    if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+    if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  };
+
+
 
   const handleCreateTest = (testData) => {
 
-    console.log(testData);
+    console.log(testData.lastModified);
     
     const newTest = {
       id: Date.now(),
       test: testData.name,
       owner: "You",
       status: "Not Published",
-      lastModified: new Date().toISOString(),
+      lastModified: getTimeAgo(testData.lastModified),
       duration: testData.duration,
       description: testData.description,
       instructions: testData.instructions
@@ -667,7 +684,7 @@ const TestIndex = () => {
       name: "Test Names",
       selector: "test",
       sortable: true,
-      width: "220px", // Set fixed width
+      width: "150px", // Set fixed width
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
@@ -704,7 +721,7 @@ const TestIndex = () => {
       name: "Owner",
       selector: "owner",
       sortable: true,
-       width: "200px",
+       width: "70px",
     },
     // {
     //   name: "Status",
@@ -716,14 +733,14 @@ const TestIndex = () => {
       name: "Last Modified",
       selector: "lastModified",
       sortable: true,
-       width: "200px",
+       width: "70px",
       cell: (row) => <div>{row.lastModified}</div>  // <-- render static string directly
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px",
+      width: "120px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (

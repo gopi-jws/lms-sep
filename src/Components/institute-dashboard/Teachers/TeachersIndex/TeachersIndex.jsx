@@ -189,11 +189,32 @@ const TeachersIndex = () => {
   const inactiveCount = data.filter((teacher) => teacher.status === "inactive").length;
   const totalCount = data.length;
 
+  // Screen Size
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    // ✅ Add listener
+    window.addEventListener("resize", handleResize);
+
+    // ✅ Call once on mount
+    handleResize();
+
+    // ✅ Clean up on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const teacherColumnValue = screenWidth <=880 ? "100px" : "250px" ;
+
   const columns = [
     {
       name: "Teacher Names",
       selector: "name",
-      width: "200px", 
+      width: teacherColumnValue, 
       sortable: true,
       cell: (row) => (
         <Link to={`/teacher/${row.id}`} className="row-link">
@@ -204,19 +225,19 @@ const TeachersIndex = () => {
     {
       name: "Teachers Emails",
       selector: "email",
-      width: "250px", 
+      width: "120px", 
       sortable: true,
     },
     {
       name: "Added Date",
       selector: "date",
-      width: "150px", 
+      width: "70px", 
       sortable: true,
     },
     {
       name: "Status",
       selector: "status",
-      width: "150px", 
+      width: "70px", 
       sortable: true,
       cell: (row) => (
         <span className={`table-status-text ${row.status === "active" ? "active" : "inactive"}`}>
@@ -228,7 +249,7 @@ const TeachersIndex = () => {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px",
+      width: "95px",
       className: "last-column-actions",
       cell: (row) => (
         <div className="">

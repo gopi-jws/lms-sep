@@ -324,7 +324,7 @@ const Questionindex = () => {
         </div>
       ),
       selector: "name",
-      width: "200px", 
+      width: "150px", 
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/QuestionBank/${row.id}/add`}>
@@ -337,19 +337,19 @@ const Questionindex = () => {
       name: "Questions" ,
       selector: "questions",
       sortable: true,
-      width: "200px", 
+      width: "70px", 
     },
     {
       name: <div className="cursor-pointer">Last Modified</div>,
       selector: "lastModified",
       sortable: true,
-      width: "200px", 
+      width: "70px", 
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px", 
+      width: "70px", 
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (

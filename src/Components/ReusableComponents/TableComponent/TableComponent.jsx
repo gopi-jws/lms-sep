@@ -627,7 +627,7 @@ const DataTable = ({
                                                 <td>
                                                     <div className="table-tq-wrapper">
                                                         {/* Non-Actions columns */}
-                                                        <div className="table-tq-columns">
+                                                        <div className={`table-tq-columns `}>
                                                             {columns
                                                                 .filter(col => col.name !== "Actions")
                                                                 .map((col, colIndex) => (
@@ -722,9 +722,14 @@ const DataTable = ({
                                                                 ) : (
                                                                     // ✅ Collapsed Preview (normal mode only)
                                                                     <span className="truncate block w-full">
-                                                                        {row.question.split(" ").length > 50
+                                                                        {/* {row.question.split(" ").length > 50
                                                                             ? row.question.split(" ").slice(0, 80).join(" ") + "..."
-                                                                            : row.question}
+                                                                            : row.question} */}
+                                                                            <QuestionEditor content={
+                                                                                row.question.length > 150
+                                                                                    ? row.question.substring(0, 150) + "..."
+                                                                                    : row.question
+                                                                            } mode={row.mode} singleline={true}/>
                                                                     </span>
                                                                 )
                                                             ) : (
