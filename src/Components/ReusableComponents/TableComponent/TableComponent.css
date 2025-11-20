@@ -714,18 +714,10 @@ padding-top: 40px;
 
 @media (max-width:768px){
   .table-tq-columns {
-      /* align-items: start;
-      flex-direction: column; */
-      gap: 5px;
-    }
-}
-
-@media (max-width:425px) {
-  .table-tq-columns {
-    align-items: start;
+      align-items: start;
       flex-direction: column;
-    gap: 0px;
-  }
+      gap: 0px;
+    }
 }
 
 

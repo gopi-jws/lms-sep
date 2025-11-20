@@ -9,6 +9,7 @@ import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInf
 import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
 import Sidebar from "/src/Components/institute-dashboard/QuestionBanks/Sidebar/Sidebar";
 
+
 import {
   FaPaperPlane,
   FaCopy,
@@ -26,31 +27,32 @@ import { Helmet } from "react-helmet";
 
 
 const Questionindex = () => {
-  // Static rows for the table with IDs
+  // Static rows for the table with IDs (now with tags array)
   const data = [
-    { id: 1, name: "QB 1", questions: 10, lastModified: "2 days ago by You" },
-    { id: 2, name: "QB 2", questions: 10, lastModified: "2 days ago by You" },
-    { id: 3, name: "QB 3", questions: 15, lastModified: "2 days ago by You" },
-    { id: 4, name: "QB 4", questions: 15, lastModified: "1 day ago by You" },
-    { id: 5, name: "QB 5", questions: 15, lastModified: "1 day ago by You" },
-    { id: 6, name: "QB 6", questions: 15, lastModified: "1 day ago by You" },
-    { id: 7, name: "QB 7", questions: 15, lastModified: "1 day ago by You" },
-    { id: 8, name: "QB 8", questions: 15, lastModified: "1 day ago by You" },
-    { id: 9, name: "QB 9", questions: 15, lastModified: "1 day ago by You" },
-    { id: 10, name: "QB 10", questions: 15, lastModified: "1 day ago by You" },
-    { id: 11, name: "QB 11", questions: 15, lastModified: "1 day ago by You" },
-    { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You" },
+    { id: 1, name: "QB 1", questions: 10, lastModified: "2 days ago by You", tags: ["math","easy"] },
+    { id: 2, name: "QB 2", questions: 10, lastModified: "2 days ago by You", tags: [] },
+    { id: 3, name: "QB 3", questions: 15, lastModified: "2 days ago by You", tags: ["physics"] },
+    { id: 4, name: "QB 4", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 5, name: "QB 5", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 6, name: "QB 6", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 7, name: "QB 7", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 8, name: "QB 8", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 9, name: "QB 9", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 10, name: "QB 10", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 11, name: "QB 11", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You", tags: [] },
   ]
   const [foldersIteam, setFoldersIteam] = useState([
     {id:1, name: "Folder 1", color: "#9c27b0" ,QB:[]}, 
     {id:2, name: "Folder 2", color: "#2196f3" ,QB:[]}])
   const [qbs, setQBs] = useState([]);
   const [modalHeading, setModalHeading] = useState("");
-  const [editingQB,setEditingQB] = useState([]);
+  const [editingQB,setEditingQB] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // dataItem will contain tags now
   const [dataItem,setDataItem] = useState(data);
   const [ispinning, setIsSpinning] = useState(null);
   //new Question Bank Add
@@ -74,13 +76,15 @@ const Questionindex = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null)
   const [isMobile, setIsMobile] = useState(false);
 
-  // Filter data based on search
+  // Filter data based on search (now also searches tags)
   const getFilteredData = () => {
     return dataItem.filter((qb) => {
       const matchesSearch = searchQuery === "" ||
         qb.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         qb.questions.toString().includes(searchQuery) ||
-        qb.lastModified.toLowerCase().includes(searchQuery.toLowerCase())
+        qb.lastModified.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        // search in tags
+        (qb.tags && qb.tags.join(" ").toLowerCase().includes(searchQuery.toLowerCase()))
       return matchesSearch
     })
   }
@@ -184,14 +188,20 @@ const Questionindex = () => {
   }
 
   const handleNewQuestionBank = () =>{
+    // open modal in create mode
+    setModalHeading("Create New QB")
+    setEditingQB(null)
     setIsQbModalOpen(true)    
   }
 
 
   // Function to create a new QB
+  // qbData should include { id, name, questions, lastModified, tags }
   const handleCreateQB = (qbData) => {
     console.log("New QB created:", qbData);
-    setDataItem((prev) => [...prev, qbData]);
+    // ensure tags field exists (array)
+    const normalized = { ...qbData, tags: qbData.tags ? qbData.tags : [] }
+    setDataItem((prev) => [...prev, normalized]);
     setIsQbModalOpen(false);
   };
 
@@ -201,7 +211,7 @@ const Questionindex = () => {
     setDataItem(prevData =>
       prevData.map(qb =>
         qb.id === QBId
-          ? { ...qb, name: updatedFields.name}
+          ? { ...qb, ...updatedFields} // updatedFields may include tags now
           : qb
       )
     );
@@ -246,6 +256,42 @@ const Questionindex = () => {
       ]);
   };
 
+  const handleAddToFolder = (folderName, questionIds) => {
+
+    console.log(folderName,questionIds);
+    
+  setFoldersIteam(prevFolders =>
+    prevFolders.map(folder => {
+      if (folder.name === folderName) {
+        const qbSet = new Set(folder.QB);
+        questionIds.forEach(id => qbSet.add(id));
+        return {
+          ...folder,
+          QB: Array.from(qbSet)
+        };
+      }
+      return folder;
+    })
+  );
+};
+
+const handleRemoveQuestionFromFolder = (folderName, questionId) => {
+  setFoldersIteam(prev =>
+    prev.map(folder => {
+      if (folder.name === folderName) {
+        return {
+          ...folder,
+          QB: folder.QB.filter(id => id !== questionId)
+        };
+      }
+      return folder;
+    })
+  );
+};
+
+
+
+
   const handleActionClick = (action, row) => {
     // Close dropdown first
     setOpenDropdownId(null)
@@ -266,9 +312,13 @@ const Questionindex = () => {
         setIsRenameModalOpen(true);
         break;
       case "edit":
+        // open modal in edit mode and pass initial tags
         setEditingQB({
           id: row.id,
           name: row.name,
+          questions: row.questions,
+          lastModified: row.lastModified,
+          tags: row.tags || []
         });
         setModalHeading("Edit QB")
         setIsEditModalOpen(true);
@@ -306,13 +356,14 @@ const Questionindex = () => {
     return now.getTime();
   };
 
-  console.log("getTimeFromString" + getTimeFromString);
+  //console.log("getTimeFromString" + getTimeFromString);
   
 
 
   const sortedFilteredData = [...filteredData].sort((a, b) =>
     getTimeFromString(b?.lastModified) - getTimeFromString(a?.lastModified)
   );
+
 
 
 
@@ -326,10 +377,37 @@ const Questionindex = () => {
       selector: "name",
       width: "150px", 
       cell: (row) => (
-        <div className="flex items-center">
+        <div className="flex items-center qb-name-cell">
           <Link to={`/QuestionBank/${row.id}/add`}>
             <span className="row-link">{row.name}</span>
           </Link>
+
+          {/* TAGS: display small chips beside name */}
+         <div className="question-tags">
+  {foldersIteam
+    .filter(folder => folder.QB?.includes(row.id))
+    .map(folder => (
+      <div key={folder.id} className="question-tag-container">
+        <div className="question-tag">
+          <span
+            className="tag-color-dot"
+            style={{ backgroundColor: folder.color }}
+          ></span>
+          <span className="index-tag-name">{folder.name}</span>
+        </div>
+        <span
+          className="tag-remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveQuestionFromFolder(folder.name, row.id);
+          }}
+        >
+          &times;
+        </span>
+      </div>
+    ))}
+</div>
+
         </div>
       ),
     },
@@ -500,6 +578,7 @@ const Questionindex = () => {
               onSearchChange={handleSearchChange}
               allQuestions={data}
               modalType="QB"
+              onAddQBToFolder={handleAddToFolder}
               setIsQbModalOpen={setIsQbModalOpen}
               setIsRenameModalOpen={setIsRenameModalOpen}
               setEditingQB={setEditingQB}
@@ -530,30 +609,59 @@ const Questionindex = () => {
           isSearching={searchQuery.length > 0}
         />
 
-         {/* <NewQBModal
-          isOpen={isQbModalOpen}
-          heading="Create New QB"
-          onClose={() => setIsQbModalOpen(false)}
-          onSubmit={handleCreateQB}
-          mode = "create"
-        /> */}
-
-        {isEditModalOpen && (
+         {/* Create Modal (open via handleNewQuestionBank) */}
+        {isQbModalOpen && (
           <NewQBModal
-            heading={modalHeading}
+            heading={modalHeading || "Create New QB"}
+            isOpen={isQbModalOpen}
+            onClose={() => setIsQbModalOpen(false)}
+            // For create mode, send empty initial values and an empty tags array
+            initialName={""}
+            initialQuestions={0}
+            initialTags={[]} // <-- IMPORTANT: modal should accept this prop to prefill tags
+            onSubmit={(qbData) => {
+              // Expect qbData to contain name, questions, lastModified(optional), tags (array)
+              // Normalize id and lastModified if not provided
+              const newId = Math.max(0, ...dataItem.map(d => d.id)) + 1;
+              const normalized = {
+                id: newId,
+                name: qbData.name || `QB ${newId}`,
+                questions: qbData.questions ?? 0,
+                lastModified: qbData.lastModified || "just now",
+                tags: qbData.tags ? qbData.tags : []
+              };
+              handleCreateQB(normalized);
+            }}
+            mode="create"
+          />
+        )}
+
+        {isEditModalOpen && editingQB && (
+          <NewQBModal
+            heading={modalHeading || "Edit QB"}
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
               setEditingQB(null);
             }}
-            initialName={editingQB?.name || ""}
+            // Prefill the modal with existing QB fields including tags
+            initialName={editingQB.name || ""}
+            initialQuestions={editingQB.questions || 0}
+            initialTags={editingQB.tags || []} // <-- modal should accept this
             onSubmit={(updatedFields) => {
-              handleUpdateQB(editingQB.id, updatedFields);
+              // updatedFields should include tags array if changed
+              handleUpdateQB(editingQB.id, {
+                name: updatedFields.name,
+                questions: updatedFields.questions,
+                lastModified: updatedFields.lastModified || editingQB.lastModified,
+                tags: updatedFields.tags ? updatedFields.tags : editingQB.tags || []
+              });
               setIsEditModalOpen(false);
               setEditingQB(null);
             }}
             mode="edit"
-          />)}
+          />
+        )}
 
         {isArchivedModalOpen && (
           <NewQBModal

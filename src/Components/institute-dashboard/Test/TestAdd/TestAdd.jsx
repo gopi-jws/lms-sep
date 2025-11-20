@@ -531,7 +531,7 @@ const TestAdd = () => {
                     className="tag-color-dot questions-page-color-dot"
                     style={{ backgroundColor: tag.color }}
                   ></span>
-                  <span className="index-tag-name questions-page-tag-name">{tag.name}</span>
+                  <span className="questions-page-tag-name">{tag.name}</span>
                 </div>
                 <span
                   className="tag-remove questionpage-tag-remove"
