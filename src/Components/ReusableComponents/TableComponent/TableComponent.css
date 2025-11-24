@@ -715,8 +715,8 @@ padding-top: 40px;
 @media (max-width:768px){
   .table-tq-columns {
       align-items: start;
-      flex-direction: column;
-      gap: 0px;
+      /* flex-direction: column; */
+      gap: 10px;
     }
 }
 

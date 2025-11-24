@@ -45,7 +45,9 @@ const BulkActions = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recentlyFolder, setRecentlyFolder] = useState({});
 
-
+   
+  console.log(availableActions + "availableActions");
+  
   
 
   useEffect(() => {
@@ -158,6 +160,9 @@ const handleAddToFolder = (folderName) => {
 
 
   const renderActionButton = (action, index, isLastVisible) => {
+
+    console.log("action" + action);
+    
     const baseClass = `tube-action-button ${isLastVisible ? "last-visible" : ""}`;
     const handleActionClick = (e) => {
       e.stopPropagation();
@@ -419,11 +424,14 @@ const handleAddToFolder = (folderName) => {
   });
   const lastVisibleAction = visibleActions[visibleActions.length - 1];
 
+  const canShowMore = availableActions.includes("more");
+  const canEnableMore = selectedRows.length === 1;
+
   return (
     <div className="tube-bulk-actions-container" ref={dropdownRef}>
       <div className="tube-bulk-actions">
         {availableActions
-          .filter(action => ["delete", "archive", "download"].includes(action))
+          .filter(action => ["delete", "archive", "download",].includes(action))
           .map((action, index, filteredActions) => {
             
             const isLastVisible = action === lastVisibleAction;
@@ -449,11 +457,25 @@ const handleAddToFolder = (folderName) => {
       )}
 
       {/* More in its own container */}
-      {availableActions.includes("more") && selectedRows.length === 1 && (
-        <div className="tube-bulk-actions more-actions">
-          {renderActionButton("more", 0, false)}
+      {/* MORE BUTTON */}
+      {/* {canShowMore && (
+        <div
+          className={`tube-bulk-actions more-actions ${!canEnableMore ? "disabled" : ""}`}
+        >
+          <button
+            className={`tube-action-button dropdown-toggle2 moreoption ${activeDropdown === "more" ? "active" : ""
+              }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!canEnableMore) return;
+              setActiveDropdown(activeDropdown === "more" ? null : "more");
+            }}
+          >
+            More
+          </button>
         </div>
-      )}
+      )} */}
+
 
       {/* Restore in its own container */}
       {availableActions.includes("restore") && (
@@ -595,7 +617,7 @@ const handleAddToFolder = (folderName) => {
 
 
       {/* More Options Dropdown */}
-      {activeDropdown === "more" && (
+      {/* {activeDropdown === "more" && canEnableMore &&(
         <div className="more-options">
           <ul>
             <li
@@ -665,7 +687,7 @@ const handleAddToFolder = (folderName) => {
             
           </ul>
         </div>
-      )}
+      )} */}
 
 
       {/*Create tag and folder Modal */}

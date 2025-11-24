@@ -36,8 +36,8 @@ const SubscriptionIndex = () => {
 
   const plans = [
     {
-      name: "Basic",
-      price: "₹1,850",
+      name: "Free",
+      price: "₹0",
       duration: "1 Month",
       features: [
         "25 Classes",

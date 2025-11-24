@@ -724,6 +724,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
               columns={visibleColumns}
               data={getCurrentPageData()}
               enableToggle={true}
+              availableActions={["delete", "archive", "download", "tag", "more"]}
               fullViewMode={fullViewMode}
               allRowsExpanded={allRowsExpanded}
               expandedRows={expandedRows}

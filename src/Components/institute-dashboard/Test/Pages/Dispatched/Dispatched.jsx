@@ -441,7 +441,7 @@ const Dispatched = () => {
               columns={columns}
               setTags={setTags}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag"]}
+              availableActions={["delete", "download"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}

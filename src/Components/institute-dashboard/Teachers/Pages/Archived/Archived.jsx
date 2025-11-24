@@ -320,6 +320,7 @@ const Archived = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
+              availableActions={["delete", "archive", "download"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}

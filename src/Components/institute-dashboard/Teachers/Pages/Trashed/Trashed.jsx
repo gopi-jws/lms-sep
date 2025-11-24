@@ -320,6 +320,7 @@ const Trashed = () => {
           <div className="my-data-table">
             <DataTable
               columns={columns}
+              availableActions={["delete", "restore", ]}
               data={getCurrentPageData()}
               searchoption={true}
               searchQuery={searchQuery}

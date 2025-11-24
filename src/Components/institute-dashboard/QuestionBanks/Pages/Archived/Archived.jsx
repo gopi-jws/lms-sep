@@ -293,7 +293,7 @@ const Archived = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-              availableActions={["delete", "archive", "download", "tag", "more"]}
+              availableActions={["delete", "archive", "download", "more"]}
               enableToggle={false}
               searchoption={true}
               searchQuery={searchQuery}

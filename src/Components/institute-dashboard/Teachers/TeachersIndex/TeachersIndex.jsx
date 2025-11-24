@@ -355,6 +355,7 @@ const TeachersIndex = () => {
           <div className="my-data-table">
             <DataTable
               columns={columns}
+              availableActions={["delete", "archive", "download","tag", "more"]}
               data={getCurrentPageData()}
               searchoption={true}
               searchQuery={searchQuery}

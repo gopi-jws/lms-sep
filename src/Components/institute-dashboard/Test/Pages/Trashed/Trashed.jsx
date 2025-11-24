@@ -500,7 +500,7 @@ const Trashed = () => {
                   canLeave: true,            // ✅ Leave button will show
                 }
               ]}
-              availableActions={["delete", "download", "tag", "restore"]}
+              availableActions={["delete", "download", "restore"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}

@@ -31,15 +31,17 @@ import {
 import { VscTriangleDown } from "react-icons/vsc";
 import TestSidebar from "../../TestSidebar/TestSidebar";
 const getArchivedData = () => {
-  const archived = JSON.parse(localStorage.getItem("archivetags"));
-  // localStorage.removeItem('archivetags')
-  const sortedList = archived.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
-  try {
-    return sortedList ? sortedList : [];
-  } catch {
-    return [];
-  }
+  const archived = JSON.parse(localStorage.getItem("archivetags")) || [];
+
+  if (!Array.isArray(archived)) return [];
+
+  const sortedList = archived.sort(
+    (a, b) => new Date(b.lastModified) - new Date(a.lastModified)
+  );
+
+  return sortedList;
 };
+
 const mockScheduledTests = [
   { date: "2025-01-05", time: "10:30 AM" },
   { date: "2025-01-06", time: "2:00 PM" },
@@ -461,7 +463,7 @@ const Archived = () => {
               columns={columns}
               setTags={setTags}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag"]}
+              availableActions={["delete", "download"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}

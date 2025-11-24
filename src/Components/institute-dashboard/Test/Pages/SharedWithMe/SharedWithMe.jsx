@@ -396,7 +396,7 @@ const SharedWithMe = () => {
             <DataTable
               columns={columns}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag",]}
+              availableActions={["delete", "download",]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
