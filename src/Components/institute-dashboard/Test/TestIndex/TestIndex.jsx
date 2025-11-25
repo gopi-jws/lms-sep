@@ -80,6 +80,9 @@ const TestIndex = () => {
   const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
   const [ispinning, setIsSpinning] = useState(null)
   // const getSortedTests = () => {
   //   const tests = JSON.parse(localStorage.getItem("tests")) || [];
@@ -812,7 +815,6 @@ const TestIndex = () => {
             trashedCount={data.filter(test => test.trashed).length}
           />
 
-
         </div>
 
         <NotificationShared
@@ -836,7 +838,6 @@ const TestIndex = () => {
 
               {showMobileSidebar && (
                 <div className="mobile-sidebar-dropdown">
-                  <div className="test-sidebar-container">
                     <TestSidebar
                       className="d-block d-md-none"
                       tags={tags}
@@ -849,7 +850,6 @@ const TestIndex = () => {
                       archivedCount={data.filter((test) => test.archived).length}
                       trashedCount={data.filter((test) => test.trashed).length}
                     />
-                  </div>
                 </div>
               )}
             </div>
