@@ -23,3 +23,14 @@
     position: relative !important;
     margin: 4px 0 !important;
 }
+
+
+.code-language-label{
+    text-align: end;
+}
+
+.truncate-multi{
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}

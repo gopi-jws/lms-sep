@@ -7,8 +7,7 @@ const TeachersSidebar = () => {
         <nav className="test-sidebar-container">
             <div className="test-sidebar-header">
                 <div className="w-100 d-flex justify-content-center">
-                    <button
-                      
+                    <button 
                         className=" allbuttons"
                         aria-label="Create New Test"
                     >

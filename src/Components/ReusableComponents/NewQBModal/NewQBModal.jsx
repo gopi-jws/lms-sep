@@ -34,7 +34,7 @@ const NewQBModal = ({
         }
 
         if(mode === "create"){
-            onSubmit({});
+            onSubmit({ name: qbName.trim() });
             setError("");
             onClose();
             return

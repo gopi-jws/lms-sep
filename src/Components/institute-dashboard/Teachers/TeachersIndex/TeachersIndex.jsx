@@ -1,10 +1,12 @@
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MdOutlineArchive } from "react-icons/md";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
 import Header from "../../../header/header";
+import { VscTriangleDown } from "react-icons/vsc";
+
 import {
   FaPaperPlane,
   FaCopy,
@@ -32,6 +34,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import ToggleSwitch from "../../../ReusableComponents/ToggleSwitch/ToggleSwitch";
+import TeachersSidebar from "../TeachersSideabr/TeachersSidebar";
 
 const TeachersIndex = () => {
   const initialData = [
@@ -52,6 +55,43 @@ const TeachersIndex = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [currentView, setCurrentView] = useState("all"); // 'all', 'active', 'inactive'
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    // Add refs at the top of your component
+      const sidebarRef = useRef(null);
+      const toggleRef = useRef(null);
+    
+      // Close dropdown when clicking outside
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          // Only handle clicks when sidebar is open
+          if (!isMobileOpen) return;
+    
+          const sidebar = sidebarRef.current;
+          const toggle = toggleRef.current;
+    
+          // If we don't have refs, don't do anything
+          if (!sidebar || !toggle) return;
+    
+          // Check if click is outside both sidebar and toggle button
+          const isOutsideSidebar = !sidebar.contains(e.target);
+          const isOutsideToggle = !toggle.contains(e.target);
+    
+          if (isOutsideSidebar && isOutsideToggle) {
+            console.log('Closing sidebar - click was outside');
+            setIsMobileOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, [isMobileOpen]);
+    
+    
+      // Mobile toggle function
+      const toggleMobileSidebar = () => {
+        setIsMobileOpen(!isMobileOpen)
+      }
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -149,11 +189,32 @@ const TeachersIndex = () => {
   const inactiveCount = data.filter((teacher) => teacher.status === "inactive").length;
   const totalCount = data.length;
 
+  // Screen Size
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    // ✅ Add listener
+    window.addEventListener("resize", handleResize);
+
+    // ✅ Call once on mount
+    handleResize();
+
+    // ✅ Clean up on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const teacherColumnValue = screenWidth <=880 ? "100px" : "250px" ;
+
   const columns = [
     {
       name: "Teacher Names",
       selector: "name",
-      width: "200px", 
+      width: teacherColumnValue, 
       sortable: true,
       cell: (row) => (
         <Link to={`/teacher/${row.id}`} className="row-link">
@@ -164,19 +225,19 @@ const TeachersIndex = () => {
     {
       name: "Teachers Emails",
       selector: "email",
-      width: "250px", 
+      width: "120px", 
       sortable: true,
     },
     {
       name: "Added Date",
       selector: "date",
-      width: "150px", 
+      width: "70px", 
       sortable: true,
     },
     {
       name: "Status",
       selector: "status",
-      width: "150px", 
+      width: "70px", 
       sortable: true,
       cell: (row) => (
         <span className={`table-status-text ${row.status === "active" ? "active" : "inactive"}`}>
@@ -188,7 +249,7 @@ const TeachersIndex = () => {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px",
+      width: "95px",
       className: "last-column-actions",
       cell: (row) => (
         <div className="">
@@ -273,17 +334,28 @@ const TeachersIndex = () => {
       </Helmet>
       
       <div className="test-index-wrapper">
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Teachers Lists</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <TeachersSidebar
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="test-index-container">
           <div className="test-index-header">
-            <h1 className="breadcrumb">All Teachers Lists</h1>
-
-            
-           
+            <h1 className="breadcrumb">All Teachers Lists</h1>      
           </div>
 
           <div className="my-data-table">
             <DataTable
               columns={columns}
+              availableActions={["delete", "archive", "download","tag", "more"]}
               data={getCurrentPageData()}
               searchoption={true}
               searchQuery={searchQuery}

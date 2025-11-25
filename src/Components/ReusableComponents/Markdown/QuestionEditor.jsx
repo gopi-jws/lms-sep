@@ -10,10 +10,14 @@ import './QuestionEditor.css';
 
 const QuestionEditor = ({
     content,
-    codeMode,
-    latexMode,
-    className = ""
+    codeMode = true,
+    latexMode = true,
+    className = "",
+    singleline,
 }) => {
+
+    console.log(singleline);
+    
     // Custom code style based on vscDarkPlus
     const customCodeStyle = {
         ...codeStyle,
@@ -41,16 +45,22 @@ const QuestionEditor = ({
             const match = /language-(\w+)/.exec(className || '');
 
             if (!inline && match && codeMode) {
+                const language = match[1].toUpperCase();
                 return (
-                    <SyntaxHighlighter
-                        style={customCodeStyle}
-                        language={match[1]}
-                        PreTag="div"
-                        className="code-block"
-                        showLineNumbers={false}
-                    >
-                        {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
+                    <div className="code-block-container">
+                        {/* 👇 Language label */}
+                        <div className="code-language-label">{language}</div>
+
+                        <SyntaxHighlighter
+                            style={customCodeStyle}
+                            language={match[1]}
+                            PreTag="div"
+                            className="code-block"
+                            showLineNumbers={false}
+                        >
+                            {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                    </div>
                 );
             }
 
@@ -68,7 +78,7 @@ const QuestionEditor = ({
                     src={props.src}
                     alt={props.alt || 'Image'}
                     className="markdown-image"
-                    style={{ maxWidth: '15%', height: 'auto', display: 'block', margin: '10px 0' }}
+                    style={{ maxWidth: '50%', height: 'auto', display: 'block', margin: '10px 0' }}
                 />
             );},
 
@@ -127,7 +137,15 @@ const QuestionEditor = ({
         // Paragraph rendering
         p({ node, children, ...props }) {
             return (
-                <p className="markdown-p" {...props}>
+                <p
+                    className={`markdown-p ${!singleline ? "truncate-multi" : ""}`}
+                    // style={{
+                    //     marginBottom: "1em",
+                    //     lineHeight: "1.6",
+                    //     whiteSpace: "pre-wrap",
+                    // }}
+                    {...props}
+                >
                     {children}
                 </p>
             );

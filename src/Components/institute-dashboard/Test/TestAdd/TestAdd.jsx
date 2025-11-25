@@ -1,6 +1,9 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef} from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faMemoCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FaEdit, FaCopy, FaTrashAlt, FaArrowRight } from "react-icons/fa"
+import { VscTriangleDown } from "react-icons/vsc";
 import { AiFillCarryOut } from "react-icons/ai";
 import Modal from "react-modal"
 import "./TestAdd.css"
@@ -16,6 +19,8 @@ import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/
 import PublishModal from "../../../ReusableComponents/PublishModal/PublishModal";
 import ShareModal from "../../../ReusableComponents/TestShareModal/ShareModal";
 import NewTestModal from "../../../ReusableComponents/NewTestModal/NewTestModal";
+import TestAddSidebar from "../TestAddSideabr/TestAddSideabr";
+import SAQModal from "../../../ReusableComponents/Questions-Types-Modals/SAQModal/SAQModal";
 
 const TestAdd = () => {
   const { id } = useParams()
@@ -26,48 +31,45 @@ const TestAdd = () => {
   const data = [
     {
       id: 1,
-      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:
-    <img src="https://insightsedu.in/new/3.png" alt="Sine function graph">`,
-      answer: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
-      type: "Single Answer ",
+      question: `Identify the graph of the function $$y = \\sin(x)$$ from the options below:`,
+      questionImages: [`https://insightsedu.in/new/3.png`, "https://insightsedu.in/new/4.png"],
+      solution: `The correct answer is option a) Sine Wave. The sine function produces a wave that oscillates between -1 and 1.`,
+      solutionImage: `https://insightsedu.in/new/3.png`,
+      type: "Single Answer",
       marks: 3,
       owner: "Admin",
       section: "Trigonometry",
       created: "15/03/2025",
       modified: "3 weeks ago",
       options: [
-        `<img src="https://insightsedu.in/new/4.png" alt="Option A"> Sine Wave`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option B"> Straight Line`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option C"> Parabola`,
-        `<img src="https://insightsedu.in/new/4.png" alt="Option D"> Exponential Curve`
+        { text: "Option A", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option C", image: `https://insightsedu.in/new/4.png` },
+        { text: "Option B", image: `https://insightsedu.in/new/4.png` },
       ],
       correctAnswer: 0,
-      isLaTeXEnabled: true,
       hasImages: true,
-      mode: "both",
     },
     {
       id: 2,
       question: `A particle moves along a path defined by:
             $$x(t) = R \\cos(\\omega t), \\quad y(t) = R \\sin(\\omega t), \\quad z(t) = kt^2$$
             Which of the following represents the arc length $$S$$?`,
-      answer: `The correct solution is option D:
+      solution: `The correct solution is option D:
             $$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
-      type: "Single Answer ",
+      type: "Single Answer",
       marks: 10,
       owner: "Admin",
       section: "Advanced Mathematics",
       created: "15/03/2025",
       modified: "1 day ago",
       options: [
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$`,
-        `$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\tan^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$`,
-        `$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$`,
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\sinh^{-1}\\left(\\frac{2kT}{R\\omega}\\right)$$", image: `` },
+        { text: "$$S = \\frac{T}{2} \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + \\frac{R ^ 2 \\omega^2}{4k} \\ln\\left|2kT + \\sqrt{R ^ 2\\omega^2 + 4k^2 T^2}\\right|$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
+        { text: "$$S = \\frac{1}{4k} \\left[ 2kT \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2} + R^2 \\omega^2 \\ln\\left(\\frac{2kT + \\sqrt{R ^ 2 \\omega^2 + 4k^2 T^2}}{R\\omega}\\right) \\right]$$", image: `` },
       ],
       correctAnswer: 3,
-      isLaTeXEnabled: true,
-      mode: "both",
     },
     {
       id: 3,
@@ -76,7 +78,7 @@ const TestAdd = () => {
             0         1.00
             10        0.82
             Determine the reaction order and rate constant.`,
-      answer: `The correct solution is option D : 0`,
+      solution: `The correct solution is option D : 0`,
       type: "Descriptive ",
       isLaTeXEnabled: false,
       section: "Table",
@@ -97,7 +99,7 @@ const TestAdd = () => {
       id: 4,
       question: `Calculate the root mean square speed of oxygen molecules (O₂) at 300 K.
             Molar mass = 32 g/mol, R = 8.314 J/(mol·K).`,
-      answer: `The root mean square speed is calculated using:
+      solution: `The root mean square speed is calculated using:
             $$v_{rms} = \\sqrt{\\frac{3RT}{M}}$$
             Result: 483.56 m/s`,
       type: "Numerical Answer ",
@@ -115,7 +117,7 @@ const TestAdd = () => {
     {
       id: 5,
       question: `The Pythagorean theorem states $$c^2 = a^2 + b^2$$ for right triangles. true false`,
-      answer: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
+      solution: `True. The Pythagorean theorem correctly relates the sides of a right-angled triangle.`,
       type: "True or False",
       marks: 2,
       owner: "Admin",
@@ -130,7 +132,7 @@ const TestAdd = () => {
       question: `एक आयाम में ऊष्मा समीकरण पर विचार करें:
             $$\\frac{\\partial u(x,t)}{\\partial t} = \\alpha \\frac{\\partial^2 u(x,t)}{\\partial x^2}$$
             सामान्य समाधान है:`,
-      answer: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
+      solution: `विकल्प a और b दोनों सही हैं। समाधान $$u(x,t) = \\sum_{n = 1}^{\\infty} A_n \\sin\\left(\\frac{n \\pi x}{L}\\right) e^{-\\alpha \\left(\\frac{n \\pi}{L}\\right)^2 t}$$ है`,
       type: "Single Answer ",
       marks: 7,
       owner: "Admin",
@@ -150,7 +152,7 @@ const TestAdd = () => {
     {
       id: 7,
       question: `సత్యనారాయణ వ్యవసాయం లో ఏ మూడు భాగాలు ఉంటాయి?`,
-      answer: `రబి, ఖరీఫ్, బోనాల`,
+      solution: `రబి, ఖరీఫ్, బోనాల`,
       type: "Single Answer ",
       marks: 2,
       owner: "Admin",
@@ -165,7 +167,7 @@ const TestAdd = () => {
     {
       id: 8,
       question: `In Python, what will be the output of the following code?`,
-      answer: `The correct solution is option A:`,
+      solution: `The correct solution is option A:`,
       type: "Descriptive ",
       options: ["120", "24", "60", "Runtime Error"],
       correctAnswer: 0,
@@ -185,7 +187,7 @@ const TestAdd = () => {
     {
       id: 9,
       question: `Which of the following are prime numbers? (Select all that apply)`,
-      answer: `The prime numbers in the list are 2, 7, and 13.`,
+      solution: `The prime numbers in the list are 2, 7, and 13.`,
       type: "Multiple Answer ",
       marks: 3,
       owner: "Admin",
@@ -227,6 +229,13 @@ const TestAdd = () => {
   const [selectedTest, setSelectedTest] = useState("");
   const [modalHeading, setModalHeading] = useState("");
 
+  const [isMobileOpen,setIsMobileOpen] = useState(false);
+
+  
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
+  };
+
 
   const [tags, setTags] = useState([
     // Example initial state (can come from API)
@@ -253,6 +262,37 @@ const TestAdd = () => {
       )
     );
   };
+
+    // Add refs at the top of your component
+    const sidebarRef = useRef(null);
+    const toggleRef = useRef(null);
+
+    // Close dropdown when clicking outside
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          // Only handle clicks when sidebar is open
+          if (!isMobileOpen) return;
+    
+          const sidebar = sidebarRef.current;
+          const toggle = toggleRef.current;
+    
+          // If we don't have refs, don't do anything
+          if (!sidebar || !toggle) return;
+    
+          // Check if click is outside both sidebar and toggle button
+          const isOutsideSidebar = !sidebar.contains(e.target);
+          const isOutsideToggle = !toggle.contains(e.target);
+    
+          if (isOutsideSidebar && isOutsideToggle) {
+            console.log('Closing sidebar - click was outside');
+            setIsMobileOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, [isMobileOpen]);
+
 
   const openPublishModal = (test) => {
     setSelectedTest(test || "Test 1");
@@ -310,14 +350,20 @@ const TestAdd = () => {
   }, [filteredData.length])
 
   const getCurrentPageData = () => {
-    if (fullViewMode) {
-      return filteredData
-    }
+    // if (fullViewMode) {
+    //   return filteredData
+    // }
     const startIndex = (currentPage - 1) * rowsPerPage
     return filteredData.slice(startIndex, startIndex + rowsPerPage)
   }
 
-  const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
+  // const showPaginationButtons = !fullViewMode && rowsPerPage < filteredData.length
+  const showPaginationButtons = rowsPerPage < filteredData.length
+
+  console.log("filteredData" + filteredData);
+  console.log("rowsPerPage" + rowsPerPage);
+  
+  
 
   const handleSearchChange = (value) => {
     setSearchQuery(value)
@@ -345,16 +391,19 @@ const TestAdd = () => {
   }
 
   const toggleFullView = () => {
-    if (!fullViewMode) {
-      // Entering full view mode
-      setRowsPerPage(filteredData.length);
-      // Auto-expand all rows
-      setExpandedRows(filteredData.map(row => row.id));
-    } else {
-      // Exiting full view mode
-      setRowsPerPage(INITIAL_ROWS_PER_PAGE);
-      setExpandedRows([]); // Collapse all rows
-    }
+    console.log("fullViewMode :" + fullViewMode);
+   // setExpandedRows(filteredData.map(row => row.id));
+    // if (!fullViewMode) {
+    //   // Entering full view mode
+      
+    //  setRowsPerPage(filteredData.length);
+    //   // Auto-expand all rows
+    //   setExpandedRows(filteredData.map(row => row.id));
+    // } else {
+    //   // Exiting full view modez
+    //    setRowsPerPage(INITIAL_ROWS_PER_PAGE);
+    //    setExpandedRows([]); // Collapse all rows
+    // }
     setFullViewMode((prev) => !prev);
   };
 
@@ -468,7 +517,7 @@ const TestAdd = () => {
     },
 
     {
-      name: "Section",
+      name: "",
       selector: "section",
       sortable: true,
       cell: (row) => (
@@ -482,7 +531,7 @@ const TestAdd = () => {
                     className="tag-color-dot questions-page-color-dot"
                     style={{ backgroundColor: tag.color }}
                   ></span>
-                  <span className="index-tag-name questions-page-tag-name">{tag.name}</span>
+                  <span className="questions-page-tag-name">{tag.name}</span>
                 </div>
                 <span
                   className="tag-remove questionpage-tag-remove"
@@ -507,6 +556,7 @@ const TestAdd = () => {
       cell: (row) => (
         <div className="test-action-buttons flex">
           <div className="desktop-actions">
+            {/* <img className="mark-image" src="/public/Screenshot 2025-10-17 162907.png" alt="" /> */}
             <button
               className="test-action-button copy"
               aria-label="Copy"
@@ -559,7 +609,10 @@ const TestAdd = () => {
                 handleSetMarks(row.id);
               }}
             >
-              <span className="mark-symbol">M</span>
+              {/* <FontAwesomeIcon icon={faMemoCircleCheck} /> */}
+              <span className="mark-symbol">
+                M
+              </span>
               <span className="tooltip-text">Set Mark</span>
             </button>
           </div>
@@ -623,27 +676,63 @@ const TestAdd = () => {
       </Helmet>
 
       <div className="testadd-index-wrapper">
+        
+        <div className="test-index-header-moblie">
+          <h3 className="breadcrumb">Test {id} Questions</h3>
+          <VscTriangleDown className="TriagbleDown" ref={toggleRef} onClick={toggleMobileSidebar}/>
+
+          <div className="test-header-icons">
+            <button className="test-action-button  header-icon-hover dispatch" onClick={() => openPublishModal(selectedTest)}>
+              <FaPaperPlane />
+              <span className="tooltip-text">Publish</span>
+            </button>
+
+            <button className="test-action-button header-icon-hover edit" onClick={() => openEditModal(selectedTest)}>
+              <FaEdit />
+              <span className="tooltip-text">Edit</span>
+            </button>
+
+            <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
+              <FaFilePdf />
+              <span className="tooltip-text">Download PDF</span>
+            </button>
+
+            <button className="test-action-button header-icon-hover share" onClick={() => openShareModal(selectedTest)}>
+              <FaShare />
+              <span className="tooltip-text">Share</span>
+            </button>
+          </div>
+        </div>
+        
+        <div ref={sidebarRef}>
+          <TestAddSidebar
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="testadd-index-container">
+          
           <div className="test-index-header">
-            <h3 className="breadcrumb">Test {id} Questions</h3>
+            <h3 className="breadcrumb responsive-header">Test {id} Questions</h3>
 
             <div className="test-header-icons">
-              <button className="test-action-button dispatch" onClick={() => openPublishModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover dispatch" onClick={() => openPublishModal(selectedTest)}>
                 <FaPaperPlane />
                 <span className="tooltip-text">Publish</span>
               </button>
 
-              <button className="test-action-button edit" onClick={() => openEditModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover edit" onClick={() => openEditModal(selectedTest)}>
                 <FaEdit />
-                <span className="tooltip-text">Edit</span>
+                <span className="tooltip-text ">Edit</span>
               </button>
 
-              <button className="test-action-button pdf" onClick={() => openDownloadModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover pdf" onClick={() => openDownloadModal(selectedTest)}>
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>
 
-              <button className="test-action-button share" onClick={() => openShareModal(selectedTest)}>
+              <button className="test-action-button header-icon-hover share" onClick={() => openShareModal(selectedTest)}>
                 <FaShare />
                 <span className="tooltip-text">Share</span>
               </button>
@@ -685,7 +774,7 @@ const TestAdd = () => {
             />
           </div>
 
-          <Modal
+          {/* <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
             className="modal-content"
@@ -719,10 +808,13 @@ const TestAdd = () => {
                 </div>
               </div>
             )}
-          </Modal>
+          </Modal> */}
         </div>
+
+
       </div>
-      {showPaginationButtons && (
+
+      {/* {showPaginationButtons && (
         <PaginationButtons
           filteredQuestions={filteredData}
           rowsPerPage={rowsPerPage}
@@ -731,7 +823,19 @@ const TestAdd = () => {
           fullView={toggleFullView}
           fullViewMode={fullViewMode}
         />
-      )}
+      )} */}
+
+
+
+      <PaginationButtons
+        filteredQuestions={filteredData}
+        showPaginationButtons={showPaginationButtons}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        loadMore={loadMore}
+        fullView={toggleFullView}
+        fullViewMode={fullViewMode}
+      />
 
       <PaginationInfo
         filteredQuestions={filteredData}
@@ -762,6 +866,9 @@ const TestAdd = () => {
         onClose={closeAllModals}
         testData={selectedTest}
       />
+
+      <SAQModal open={modalIsOpen} onClose={() => { setModalIsOpen(false) }} initialData={selectedQuestion} />
+
 
       {/* <DownloadModal
         isOpen={showDownloadModal}

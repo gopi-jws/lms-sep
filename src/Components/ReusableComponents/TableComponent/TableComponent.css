@@ -16,18 +16,28 @@
       /* Firefox */
       -ms-overflow-style: none;
       /* IE 10+ */
+      border-radius: 50px;
   }
     .table-wrapper::-webkit-scrollbar {
       display: none;
       /* Chrome, Safari, Opera */ }
+
+  .custom-data-table thead th,
+  .custom-data-table tbody td {
+    text-align: left;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+  }
+
   .custom-data-table thead th {
-    padding: 10px;
+    /* padding: 10px; */
     font-weight: 600;
     background-color: transparent;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
-    /* cursor: pointer; */
   }
+
   
   /* .custom-data-table tbody tr:hover {
     background-color: #f3f4f6;
@@ -79,7 +89,7 @@
     width: 20%
   }
   .col-actions {
-    width: 20%;
+    width: 30%;
     text-align: right !important;
   }
 
@@ -104,16 +114,10 @@
     font-size: 14px;
     margin-left: 5px;
   }
-   .custom-data-table th:last-child .table-header-content {
-    justify-content: flex-end;
-  } 
-    /* .custom-data-table td:last-child {
-      text-align: right;
+    .custom-data-table th:last-child:not(.no-flex-end) .table-header-content {
+      justify-content: flex-end;
     }
-        .custom-data-table td:last-child .cell-content {
-          justify-content: flex-end;
-          display: flex;
-        } */
+   
   .accordion-table td {
     cursor: pointer;
     padding: 10px;
@@ -403,8 +407,19 @@ tr:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.test-sidebar-header-res{
+  margin-left: 10px;
+  display: none;
+}
+
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
+
+  .test-sidebar-header-res{
+    display: block;
+    width: 130px;
+  }
+
   .expanded-content {
     padding: 16px;
   }
@@ -528,10 +543,11 @@ tr:hover {
   transform: scale(1.1);
 }
 
-/* .test-search-container{
-  height: 46px;
-} */
- 
+
+.search-input-wrapper{
+  position: relative;
+}
+
 .custom-data-table tbody td:last-child {
   /* width: 270px;
   min-width: 220px;
@@ -595,16 +611,26 @@ padding-top: 40px;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* @media (max-width:1020px){
+  .table-tq-wrapper{
+    flex-direction: column;
+  }
+} */
+
+@media (max-width:1140px){
+  .table-tq-columns{
+    flex-wrap: wrap;
+    align-items: start;
+  }
 }
 
 .table-tq-columns {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
-}
-
-.table-tq-actions {
-  
 }
 
 .rows-iteam{
@@ -616,11 +642,14 @@ padding-top: 40px;
   padding: 0;
 }
 
+
+/* 05-11-2025 */
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 25px;
 
+  /* white-space: nowrap; */
 }
 
 .truncate p{
@@ -630,3 +659,97 @@ padding-top: 40px;
 .question-row .row-link{
   color: var(--sidebar-text-color)
 }
+
+.test-index-actions{
+  align-items: center;
+  gap: 10px;
+}
+
+.selete-all{
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media (max-width:769px){
+  .mobile-responsive {
+      display: flex; 
+      justify-content: space-between;
+      gap: 10px;
+    }
+}
+
+/* @media(max-width:407px){
+  .test-index-actions {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-AllSelected {
+      margin: 0px 0px 0px 0px !important;
+    }
+} */
+
+/* .table-header {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-header th {
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+  padding: 8px 12px;
+} */
+
+@media (max-width:768px){
+.table-header{
+  display: none;
+}}
+
+
+
+
+@media (max-width:768px){
+  .table-tq-columns {
+      align-items: start;
+      /* flex-direction: column; */
+      gap: 10px;
+    }
+}
+
+
+@media (max-width:376px){
+  .rows-iteam {
+     width: 280px;
+    }
+  
+   
+}
+
+@media (max-width:349px) {
+  .rows-iteam {
+    width: 240px;
+  }
+}
+
+.question-Images{
+  display: flex;
+  gap: 10px;
+}
+
+.test-information{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+  
+}
+
+.test-AllSelected{
+  margin: 10px 0px 10px 7.9px;
+  display: flex;
+  justify-content: space-between;
+}
+

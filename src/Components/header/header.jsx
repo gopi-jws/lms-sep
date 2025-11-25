@@ -85,7 +85,6 @@ const Header = () => {
           <span className="header-logo-text">LMS Admin</span>
         </div>
 
-
         {/* Navigation Menu */}
         <nav
           ref={navRef}

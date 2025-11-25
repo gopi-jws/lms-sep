@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import DispatchModal from "../../DispatchModal/DispatchModal";
+import PublishModal from "../../../../ReusableComponents/PublishModal/PublishModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VscTriangleDown } from "react-icons/vsc";
+import TestSidebar from "../../TestSidebar/TestSidebar";
+import Modal from "react-modal"
 import {
   FaPaperPlane,
   FaCopy,
@@ -36,6 +40,8 @@ const initital = [
   // { id: 5, test: "Test 5", owner: "Mark Johnson", status: "Published", lastModified: "2 month ago by You" },
   // { id: 6, test: "Test 6", owner: "Mark Johnson", status: "Published", lastModified: "1 day ago by You" },
 ];
+
+
 
 const mockScheduledTests = [
   { date: "2025-01-05", time: "10:30 AM" },
@@ -73,6 +79,9 @@ const Dispatched = () => {
     };
   }, []);
 
+  //mobile View side bar
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
+
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -102,7 +111,11 @@ const Dispatched = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showButtons, setShowButtons] = useState(true);
   const [emails, setEmails] = useState([]);
-  const [selectedTest, setSelectedTest] = useState("");
+  const [selectedTest, setSelectedTest] = useState();
+  const [selectedTestId, setSelectedTestID] = useState("")
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  
+  
   const tagOptionsRef = useRef(null);
   const moreOptionsRef = useRef(null);
 
@@ -174,19 +187,73 @@ const Dispatched = () => {
   }, []);
 
   const openModal = (testName) => {
+    console.log(testName.id);
+    
     setSelectedTest(testName);
+    setSelectedTestID(testName.id)
     setIsModalOpen(true);
     setOpenDropdownId(null); // Close dropdown when action is taken
+  };
+
+  const handleViewDetails = (testName) => {
+    
+    const test = data.find((test) => test.test === testName);
+    
+    console.log(test);
+    
+    setSelectedTest(test);
+    setModalIsOpen(true)
+  }
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
   };
 
   const toggleDropdown = (rowId) => {
     setOpenDropdownId(openDropdownId === rowId ? null : rowId);
   };
   const openShareModal = (testName) => {
+
     setSelectedTest(testName);
     setIsShareModalOpen(true);
     setOpenDropdownId(null); // Close dropdown when action is taken
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   const handleActionClick = (action, row) => {
     // Close dropdown first
@@ -194,7 +261,7 @@ const Dispatched = () => {
 
     // Then execute the action
     switch (action) {
-      case 'dispatch':
+      case 'publish':
         openModal(row.test);
         break;
       case 'share':
@@ -212,6 +279,9 @@ const Dispatched = () => {
       case 'delete':
         console.log('Delete action for', row.test);
         break;
+      case 'details':
+        handleViewDetails(row.test);
+        break;
       default:
         break;
     }
@@ -225,9 +295,10 @@ const Dispatched = () => {
       width: "250px",
       cell: (row) => (
         <div className="flex items-center">
-          <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
+          {/* <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
             <span className="row-link">{row.test}</span>
-          </Link>
+          </Link> */}
+          <span className="row-link" onClick={() => { handleActionClick("details",row) }}>{row.test}</span>
           <div className="question-tags">
             {tags.filter(tag => tag.questions?.includes(row.id))
               .map(tag => (
@@ -260,7 +331,7 @@ const Dispatched = () => {
       sortable: false,
     },
     {
-      name: <div>Last Modified</div>,
+      name: <div>First Published</div>,
       selector: "lastModified",
       sortable: true,
       cell: (row) => <div>{getTimeAgo(row.lastModified)}</div>
@@ -285,11 +356,11 @@ const Dispatched = () => {
               {openDropdownId === row.id && (
                 <div className="mobile-actions-menu">
                   <button
-                    className="mobile-action-item dispatch"
-                    onClick={() => handleActionClick('dispatch', row)}
+                    className="mobile-action-item publish"
+                    onClick={() => handleActionClick('publish', row)}
                   >
-                    <FaEdit />
-                    <span>Edit</span>
+                    <FaPaperPlane />
+                    <span>Publish</span>
                   </button>
                   <button
                     className="mobile-action-item copy"
@@ -306,20 +377,6 @@ const Dispatched = () => {
                     <span>Download PDF</span>
                   </button>
                   <button
-                    className="mobile-action-item share"
-                    onClick={() => handleActionClick('share', row)}
-                  >
-                    <FaShare />
-                    <span>Share</span>
-                  </button>
-                  <button
-                    className="mobile-action-item archive"
-                    onClick={() => handleActionClick('archive', row)}
-                  >
-                    <FaArchive />
-                    <span>Archive</span>
-                  </button>
-                  <button
                     className="mobile-action-item delete"
                     onClick={() => handleActionClick('delete', row)}
                   >
@@ -331,13 +388,9 @@ const Dispatched = () => {
             </div>
           ) : (
             <div className="flex gap-2">
-              <button
-                className="test-action-button dispatch"
-                aria-label="Dispatch"
-
-              >
-                <FaEdit />
-                <span className="tooltip-text">Edit</span>
+              <button className="test-action-button publish" aria-label="Publish" onClick={() => handleActionClick('publish', row)}>
+                <FaPaperPlane />
+                <span className="tooltip-text">Publish</span>
               </button>
               <button className="test-action-button copy" aria-label="Copy">
                 <FaCopy />
@@ -347,17 +400,9 @@ const Dispatched = () => {
                 <FaFilePdf />
                 <span className="tooltip-text">Download PDF</span>
               </button>
-              <button
-                className="test-action-button share"
-                aria-label="Share"
-                onClick={() => openShareModal(row.test)}
-              >
-                <FaShare />
-                <span className="tooltip-text">Share</span>
-              </button>
-              <button className="test-action-button archive" aria-label="Archive">
-                <FaArchive />
-                <span className="tooltip-text">Archive</span>
+              <button className="test-action-button delete" aria-label="delete">
+                <FaTrashAlt />
+                <span className="tooltip-text">Delete</span>
               </button>
 
             </div>
@@ -371,7 +416,22 @@ const Dispatched = () => {
   return (
     <>
       <div className="test-index-wrapper">
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">Published</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="test-index-container">
+        
           <div className="test-index-header">
             <h1 className="breadcrumb">Published</h1>
           </div>
@@ -381,7 +441,7 @@ const Dispatched = () => {
               columns={columns}
               setTags={setTags}
               data={getCurrentPageData()}
-              availableActions={["delete", "download", "tag"]}
+              availableActions={["delete", "download"]}
               searchoption={true}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -397,11 +457,59 @@ const Dispatched = () => {
             setEmails={setEmails}
           />
 
-          <DispatchModal
+          {/* <DispatchModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             scheduledTests={mockScheduledTests}
-          />
+          /> */}
+
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            className="modal-content"
+            overlayClassName="modal-overlay"
+            appElement={document.getElementById('root')}
+          >
+            {selectedTest && (
+              <div
+                className="test-detail-modal"
+                style={{
+                  lineHeight: "1.6",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {selectedTest.test}
+                </h3>
+
+                <hr style={{ marginBottom: "15px" }} />
+
+                <div style={{ color: "#555", fontSize: "15px" }}>
+                  <p>
+                    <strong>Owner:</strong> {selectedTest.owner}
+                  </p>
+                  <p>
+                    <strong>Total Mark:</strong> 80
+                  </p>
+                  <p>
+                    <strong>Duration:</strong> {selectedTest.duration}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {selectedTest.description}
+                  </p>
+                  <p>
+                    <strong>Instructions:</strong> {selectedTest.instructions}
+                  </p>
+                </div>
+              </div>
+            )}
+
+          </Modal>
+          <PublishModal isOpen={isModalOpen} tags={tags} onClose={closeModal} selectedTest={selectedTest} selectedTestId={selectedTestId} />
         </div>
 
         {showButtons && filteredData.length > 10 && (

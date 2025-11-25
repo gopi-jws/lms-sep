@@ -14,12 +14,18 @@
     margin-bottom: 32px;
 }
 .dashboardheading{
-  
         color: #037DE2;
         font-size: 24px;
         font-weight: 600;
         margin-bottom: 20px;
+        display: flex;
 }
+
+.dashboard-TriangleDown{
+    cursor: pointer;
+    margin-top: 2px;
+}
+
 .dashboard-title-container {
     display: flex;
     align-items: center;
@@ -145,3 +151,11 @@ border: 1px solid #e7e9ee;
         font-size: 20px;
     }
 }
+
+ .dashboard-content{
+    position: relative;
+ }
+
+ .header-moblile-sideBar{
+ z-index: 99999;
+ }

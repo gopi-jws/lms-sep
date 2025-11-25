@@ -21,20 +21,32 @@ import AddTagModal from "../../../ReusableComponents/AddTagModal/AddTagModal";
 import TagActionsDropdown from "../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown";
 import "./TestSidebar.css";
 import { getNextId } from "../../../../utils/idGenerator";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewTest } from "../../../../slices/allTestSlice";
+
 
 const TestSidebar = ({
   tags = [],
   uncategorizedCount,
+  isMobileOpen,
+  setIsMobileOpen,
   onTagClick,
   onUncategorizedClick,
   activeTag,
   setTags,
+  newTest,
   onCreateTest
 }) => {
+
+  const dispatch = useDispatch();
+  
+  //Open New Test 
+  const isNewTestModalOpen = useSelector((state) => state.AllTest.openNewtest);
+
   const [isNewTagModalOpen, setIsNewTagModalOpen] = useState(false);
-  const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
+  // const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(null);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Alltest");
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [selectedTagId, setSelectedTagId] = useState(null);
@@ -47,9 +59,23 @@ const TestSidebar = ({
   //   return storedTags ? JSON.parse(storedTags) : [];
   // });
 
+
+
   useEffect(() => {
     localStorage.setItem('tags', JSON.stringify(tags));
   }, [tags]);
+
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Get path like /test/archived → extract the last part
+    const currentPath = location.pathname.split("/").pop();
+    console.log(currentPath);
+    
+    setActiveSection(currentPath === "test" ? "Alltest" : currentPath || "Alltest");
+  }, [location]);
+
 
   const handleSetActive = (section) => {
     setActiveSection(section);
@@ -90,12 +116,13 @@ const TestSidebar = ({
     setIsNewTagModalOpen(false);
   };
 
+ 
   // Remove tag function (updates state + localStorage)
   const removeTag = (removeTag) => {
     setTags(prev => prev.filter(tag => tag.id !== removeTag.id)); // ✅ updates parent state
   };
 
-  const handleEditTag = (tag) => {   
+  const handleEditTag = (tag) => {
     setEditingTag(tag);
     setModalHeading("Edit Tag");
     setIsNewTagModalOpen(true);
@@ -110,13 +137,13 @@ const TestSidebar = ({
 
   return (
     <div className="sidebar-wrapper">
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+      {/* {isMobileOpen && <div className="mobile-overlay-test" onClick={() => setIsMobileOpen(false)} />} */}
 
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Main Navigation">
         <div className="test-sidebar-header">
           <div className="w-100 d-flex justify-content-center">
             <button
-              onClick={() => setIsNewTestModalOpen(true)}
+              onClick={() => dispatch(addNewTest(true))}
               className="allbuttons"
               aria-label="Create New Test"
             >
@@ -127,7 +154,6 @@ const TestSidebar = ({
 
         <div className="test-sidebar-scroll">
           <div className="test-sidebar-section">
-
             <ul className="test-sidebar-menu">
               <li>
                 <Link
@@ -204,7 +230,7 @@ const TestSidebar = ({
               <span className="sidebar-letters">New Tag</span>
             </button>
 
-            <ul className="test-sidebar-menu tags">
+            {/* <ul className="test-sidebar-menu tags">
               {tags?.map((tag, index) =>
               (
                 <li key={tag.id} className="tag-item">
@@ -237,9 +263,9 @@ const TestSidebar = ({
                         onEdit={() => handleEditTag(tag)}
                         onRemove={() => handleRemoveTag(tag)}
                         onClose={() => setShowMoreOptions(null)}
-                          tagId={tag.id}
-                          tagName={tag.name}
-                          tagColor={tag.color}
+                        tagId={tag.id}
+                        tagName={tag.name}
+                        tagColor={tag.color}
                       />
 
                     </div>
@@ -247,7 +273,45 @@ const TestSidebar = ({
                 </li>
               )
               )}
+            </ul> */}
+            <ul className="test-sidebar-menu tags">
+              {tags?.map((tag, index) => (
+                <li key={`${tag.id || tag.name}-${index}`} className="tag-item">
+                  <Link
+                    className={`sidebar-contents ${activeTag === tag.name ? "active" : ""}`}
+                    onClick={() => onTagClick(tag.name)}
+                  >
+                    <Tag className="icon" size={18} style={{ color: tag.color }} />
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                      <span className="sidebar-letters tag-letters-container">
+                        <span className="tag-name-wrapper">
+                          <span className="tag-name-text">{tag.name}</span>
+                        </span>
+                        <span className="tag-count">({tag.questions?.length})</span>
+                      </span>
+                      <button
+                        className="tag-button"
+                        type="button"
+                        onClick={(e) => handleTagClick(e, index)}
+                      >
+                        <span className="tag-dropdown-toggle"> </span>
+                      </button>
+
+                      <TagActionsDropdown
+                        isOpen={showMoreOptions === index}
+                        onEdit={() => handleEditTag(tag)}
+                        onRemove={() => handleRemoveTag(tag)}
+                        onClose={() => setShowMoreOptions(null)}
+                        tagId={tag.id}
+                        tagName={tag.name}
+                        tagColor={tag.color}
+                      />
+                    </div>
+                  </Link>
+                </li>
+              ))}
             </ul>
+
             <p
               className={`sidebar-contents ${activeTag === "uncategorized" ? "active" : ""}`}
               style={{ fontStyle: "italic" }}
@@ -261,27 +325,7 @@ const TestSidebar = ({
 
       </nav>
 
-      {/* <button
-        className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-        onClick={toggleMobileSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button> */}
-      
 
-       {/* Mobile Toggle Button */}
-        {/* <button
-          className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-          onClick={toggleMobileSidebar}
-          aria-label="Toggle sidebar"
-        >
-          {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button> */}
-
-      {/* Modals */}
-
-      
       <AddTagModal
         isOpen={isNewTagModalOpen}
         onClose={() => {
@@ -295,14 +339,14 @@ const TestSidebar = ({
 
       <NewTestModal
         isOpen={isNewTestModalOpen}
-        onClose={() => setIsNewTestModalOpen(false)}
+        onClose={() => dispatch(addNewTest(false))}
         onSubmit={(testData) => {
           onCreateTest(testData);
-          setIsNewTestModalOpen(false);
+          dispatch(addNewTest(false));
         }}
         mode="create"
       />
-      
+
       <NewTestModal
         isOpen={isRemoveModalOpen}
         onClose={() => {

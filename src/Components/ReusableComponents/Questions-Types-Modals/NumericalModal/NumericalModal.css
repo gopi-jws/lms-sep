@@ -1,5 +1,8 @@
 /* MCQ Modal Styles */
-
+.numerical-modal-overlay,
+.numerical-modal-overlay * {
+    color: black !important;
+}
 
 /* Modal overlay */
 .numerical-modal-overlay {
@@ -76,7 +79,7 @@
     border: var(--modal-close-btn-border);
     font-size: var(--modal-close-btn-font-size);
     cursor: var(--modal-close-btn-cursor);
-    color: var(--modal-close-btn-color);
+    color: var(--modal-close-btn-color) !important;
     padding: var(--modal-close-btn-padding);
     line-height: var(--modal-close-btn-line-height);
 }
@@ -101,10 +104,12 @@
 
 /* Row and Column Layout */
 .numerical-modal-row {
-  
-            display: flex;
-            width: 100%;
-            height: 100%;   }
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 15px;
+    padding-bottom: 30px;
+}
 
 
 
@@ -308,4 +313,21 @@ input[type="file"]::file-selector-button {
     flex-direction: column;
     align-items: center;
     margin-left: 150px;
+}
+
+.question-images-container,
+.answer-image-container,
+.solution-image-container {
+    text-align: center;
+}
+
+
+@media (max-width: 768px) {
+    .numerical-modal-row {
+        flex-direction: column;
+    }
+}
+
+.modal-header {
+    color: var(--modal-header-title-color) !important;
 }

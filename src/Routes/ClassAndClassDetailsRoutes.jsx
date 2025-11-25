@@ -14,7 +14,7 @@ import ClassDetailsTrash from '../Components/institute-dashboard/class-batch/cla
 import ActiveStudents from "../Components/institute-dashboard/class-batch/classdetailspage/ActiveStudents/ActiveStudents";
 import InactiveStudents from "../Components/institute-dashboard/class-batch/classdetailspage/InactiveStudents/InactiveStudents";
 import ClassAndClassDetailsLayout from "../layouts/ClassAndClassDetailsLayout";
-import AddClass from "../Components/institute-dashboard/class-batch/newclasspage/newclasspage";
+import AddClassModal from "../Components/ReusableComponents/newclasspage/newclasspage";
 
 const ClassAndClassDetailsRoutes = () => {
   return (
@@ -22,7 +22,7 @@ const ClassAndClassDetailsRoutes = () => {
       <Route path="/" element={  <ClassAndClassDetailsLayout />}>
   
         <Route index element={<ClassPage />} />
-        <Route path="AddClass" element={ <AddClass />} />
+        <Route path="AddClass" element={<AddClassModal />} />
        
         <Route path="ArchivePage" element={<ArchivePage />} />
         <Route path="TrashPage" element={<TrashPage />} />

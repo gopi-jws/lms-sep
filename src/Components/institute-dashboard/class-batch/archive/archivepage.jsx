@@ -4,6 +4,9 @@ import { MdOutlineArchive } from "react-icons/md";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
+import { VscTriangleDown } from "react-icons/vsc";
+import ClassSideMenu from "../classsidemenu/classsidemenu";
+
 import {
   FaPaperPlane,
   FaCopy,
@@ -32,6 +35,7 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
    const [fullViewMode, setFullViewMode] = useState(false);
    const [openDropdownId, setOpenDropdownId] = useState(null);
    const [isMobile, setIsMobile] = useState(false);
+   const [isMobileOpen, setIsMobileOpen] = useState(false)
  
    // Filter data based on search
    const getFilteredData = () => {
@@ -45,6 +49,42 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
        return matchesSearch;
      });
    };
+
+    // Add refs at the top of your component
+     const sidebarRef = useRef(null);
+     const toggleRef = useRef(null);
+   
+     // Close dropdown when clicking outside
+     useEffect(() => {
+       const handleClickOutside = (e) => {
+         // Only handle clicks when sidebar is open
+         if (!isMobileOpen) return;
+   
+         const sidebar = sidebarRef.current;
+         const toggle = toggleRef.current;
+   
+         // If we don't have refs, don't do anything
+         if (!sidebar || !toggle) return;
+   
+         // Check if click is outside both sidebar and toggle button
+         const isOutsideSidebar = !sidebar.contains(e.target);
+         const isOutsideToggle = !toggle.contains(e.target);
+   
+         if (isOutsideSidebar && isOutsideToggle) {
+           console.log('Closing sidebar - click was outside');
+           setIsMobileOpen(false);
+         }
+       };
+   
+       document.addEventListener("mousedown", handleClickOutside);
+       return () => document.removeEventListener("mousedown", handleClickOutside);
+     }, [isMobileOpen]);
+   
+   
+     // Mobile toggle function
+     const toggleMobileSidebar = () => {
+       setIsMobileOpen(!isMobileOpen)
+     }
  
    const filteredData = getFilteredData();
  
@@ -238,6 +278,19 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
    return (
      <>
        <div className="test-index-wrapper">
+
+         <div className="test-index-header-moblie">
+           <h1 className="breadcrumb">Classes Archived Lists</h1>
+           <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+         </div>
+
+         <div ref={sidebarRef}>
+           <ClassSideMenu
+             isMobileOpen={isMobileOpen}
+             setIsMobileOpen={setIsMobileOpen}
+           />
+         </div>
+
          <div className="test-index-container">
            <div className="test-index-header">
              <h1 className="breadcrumb"> Classes Archived Lists</h1>
@@ -247,7 +300,7 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
              <DataTable
                columns={columns}
                data={getCurrentPageData()}
-               availableActions={["delete", "archive", "download", "tag", "more"]}
+               availableActions={["delete", "archive", "download", "more"]}
                enableToggle={false}
                searchoption={true}
                searchQuery={searchQuery}

@@ -43,6 +43,11 @@ const BulkActions = ({
   const [previousName, setPreviousName] = useState('');
   const [recentlyTagged, setRecentlyTagged] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recentlyFolder, setRecentlyFolder] = useState({});
+
+   
+  console.log(availableActions + "availableActions");
+  
   
 
   useEffect(() => {
@@ -92,11 +97,11 @@ const BulkActions = ({
         console.log("QQQQQQQQQQQQQQ-----------------------------------------------------");
         onAddQuestionsToTag(tagName, newQuestions);
       }
-      else if ((newQuestions.length > 0) && (tags.some(tag => 'QB' in tag))) {
-        console.log("QBBBBB-----------------------------------------------------");
-        console.log("tagName", tagName, 'newQuestions', newQuestions);
-        onAddQBToFolder(tagName, newQuestions);
-      }
+      // else if ((newQuestions.length > 0) && (tags.some(tag => 'QB' in tag))) {
+      //   console.log("QBBBBB-----------------------------------------------------");
+      //   console.log("tagName", tagName, 'newQuestions', newQuestions);
+      //   onAddQBToFolder(tagName, newQuestions);
+      // }
       else {
         toast.info("All selected questions already exist in this tag");
       } setActiveDropdown(null);
@@ -108,39 +113,56 @@ const BulkActions = ({
   };
 
 
-  const handleAddToFolder = (folderName) => {
+const handleAddToFolder = (folderName) => {
+  try {
+    const selectedFolder = folder.find(f => f.name === folderName);
 
-    try{
-      console.log(folderName);
-      
-      const folder = folder.find(f => f.name === folderName);
-
-      console.log(folder);
-      
-      if (!folder) {
-        toast.error("Folder not found");
-        return;
-      }
-
-      const newQuestions = selectedRows.filter(id => !folder.QB.includes(id));
-      
-      console.log("NewQuestions"+newQuestions);
-      
-
-      if (newQuestions.length > 0) {
-        onAddQBToFolder(folderName, newQuestions);
-        toast.success("Added to folder!");
-      } else {
-        toast.info("All selected questions already exist in this folder");
-      }
-
-    }catch(error){
-      toast.error("Failed to add QB to Folder");
-      console.error("Error in handleAddToFolder:", error);
+    if (!selectedFolder) {
+      toast.error("Folder not found");
+      return;
     }
-  };
+
+    // --- EXACT SAME LOGIC AS TAG ---
+    const newQuestions = selectedRows.filter(id => {
+      return !selectedFolder.QB.includes(id);
+    });
+
+    setRecentlyFolder(prev => ({
+      ...prev,
+      [folderName]: Date.now()
+    }));
+
+    setTimeout(() => {
+      setRecentlyFolder(prev => {
+        const newState = { ...prev };
+        delete newState[folderName];
+        return newState;
+      });
+    }, 2000);
+
+    console.log("FOLDER:", folderName, "NEW:", newQuestions);
+
+    // --- SAME TAG LOGIC BUT FOR FOLDER ---
+    if (newQuestions.length > 0) {
+      onAddQBToFolder(folderName, newQuestions);
+    } else {
+      toast.info("All selected questions already exist in this folder");
+    }
+
+    setActiveDropdown(null);
+
+  } catch (error) {
+    toast.error("Failed to add questions to folder");
+    console.error("Error in handleAddToFolder:", error);
+  }
+};
+
+
 
   const renderActionButton = (action, index, isLastVisible) => {
+
+    console.log("action" + action);
+    
     const baseClass = `tube-action-button ${isLastVisible ? "last-visible" : ""}`;
     const handleActionClick = (e) => {
       e.stopPropagation();
@@ -402,11 +424,14 @@ const BulkActions = ({
   });
   const lastVisibleAction = visibleActions[visibleActions.length - 1];
 
+  const canShowMore = availableActions.includes("more");
+  const canEnableMore = selectedRows.length === 1;
+
   return (
     <div className="tube-bulk-actions-container" ref={dropdownRef}>
       <div className="tube-bulk-actions">
         {availableActions
-          .filter(action => ["delete", "archive", "download"].includes(action))
+          .filter(action => ["delete", "archive", "download",].includes(action))
           .map((action, index, filteredActions) => {
             
             const isLastVisible = action === lastVisibleAction;
@@ -432,11 +457,25 @@ const BulkActions = ({
       )}
 
       {/* More in its own container */}
-      {availableActions.includes("more") && selectedRows.length === 1 && (
-        <div className="tube-bulk-actions more-actions">
-          {renderActionButton("more", 0, false)}
+      {/* MORE BUTTON */}
+      {/* {canShowMore && (
+        <div
+          className={`tube-bulk-actions more-actions ${!canEnableMore ? "disabled" : ""}`}
+        >
+          <button
+            className={`tube-action-button dropdown-toggle2 moreoption ${activeDropdown === "more" ? "active" : ""
+              }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!canEnableMore) return;
+              setActiveDropdown(activeDropdown === "more" ? null : "more");
+            }}
+          >
+            More
+          </button>
         </div>
-      )}
+      )} */}
+
 
       {/* Restore in its own container */}
       {availableActions.includes("restore") && (
@@ -520,9 +559,9 @@ const BulkActions = ({
                     folder.QB.includes(id)
                   ).length;
 
-                  const isRecentlyTagged =
-                    recentlyTagged[folder.name] &&
-                    Date.now() - recentlyTagged[folder.name] < 2000;
+                  const isRecentlyFolder =
+                    recentlyFolder[folder.name] &&
+                    Date.now() - recentlyFolder[folder.name] < 2000;
 
                   const willAddNew = selectedRows.some(id =>
                     !folder.QB.includes(id)
@@ -541,11 +580,11 @@ const BulkActions = ({
                         <span className="dot-name-wrapper">
                           <span
                             className="tag-dot"
-                            style={{ backgroundColor: folder.color || "#000" }}
+                            style={{ backgroundColor: folder.color || "#090808ff" }}
                           ></span>
                           <span className="tag-name">{folder.name}</span>
                         </span>
-                        {isRecentlyTagged && (
+                        {isRecentlyFolder && (
                           <span className="tag-checkmark">
                             <Check size={16} />
                             {willAddNew ? (
@@ -578,7 +617,7 @@ const BulkActions = ({
 
 
       {/* More Options Dropdown */}
-      {activeDropdown === "more" && (
+      {/* {activeDropdown === "more" && canEnableMore &&(
         <div className="more-options">
           <ul>
             <li
@@ -648,7 +687,7 @@ const BulkActions = ({
             
           </ul>
         </div>
-      )}
+      )} */}
 
 
       {/*Create tag and folder Modal */}

@@ -17,6 +17,7 @@ const TagActionsDropdown = ({
     mode,
 }) => {
     const dropdownRef = useRef(null);
+
      
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -32,6 +33,7 @@ const TagActionsDropdown = ({
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isOpen, onClose]);
+
 
     const handleEditClick = (e) => {
 
@@ -70,14 +72,14 @@ const TagActionsDropdown = ({
 
 
     return (
-        <div className={`${mode == "desc" || mode == "instr" ? "des-options" : "tag-rename-options"}`} ref={dropdownRef}>
+    <div className={`${mode == "desc" || mode == "instr" ? "des-options" : "tag-rename-options"}`} ref={dropdownRef }>
             {mode == "desc" || mode == "instr" ? (
                 <ul className="tag-list-dropdown">
                     <li
                         className="testquestionadd-dropdown-item testquestionadd-dropdown-item2"
                         onClick={handleDescAndInstr}
                     >
-                        Edit {folderId}
+                        Edit
                     </li>
                 </ul >
             ) : (

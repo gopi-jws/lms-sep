@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
 import Header from "../../../header/header";
+
 import {
   FaPaperPlane,
   FaCopy,
@@ -15,10 +16,14 @@ import {
   FaEdit,
   FaEllipsisH
 } from "react-icons/fa";
-import { Settings, FilePenLine, Archive,Trash2  } from 'lucide-react';
+import { Settings, FilePenLine, Archive, Trash2 } from 'lucide-react';
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { VscTriangleDown } from "react-icons/vsc";
+import Sidebar from "/src/Components/institute-dashboard/QuestionBanks/Sidebar/Sidebar";
+import ClassSideMenu from "../classsidemenu/classsidemenu";
+
 const ClassPage = () => {
   const data = [
     { id: "1", name: "Class 1", strength: 30, maximumallowed: 50, expiryDate: new Date(2024, 5, 30) },
@@ -35,6 +40,28 @@ const ClassPage = () => {
   const [fullViewMode, setFullViewMode] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [showNewClass, setShowNewClass] = useState(false); // Renamed for clarity
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+   // Screen Size
+  
+      const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  
+      useEffect(() => {
+          const handleResize = () => {
+              setScreenWidth(window.innerWidth);
+          };
+  
+          // ✅ Add listener
+          window.addEventListener("resize", handleResize);
+  
+          // ✅ Call once on mount
+          handleResize();
+  
+          // ✅ Clean up on unmount
+          return () => window.removeEventListener("resize", handleResize);
+      }, []);
+
 
   // Filter data based on search
   const getFilteredData = () => {
@@ -50,6 +77,42 @@ const ClassPage = () => {
   };
 
   const filteredData = getFilteredData();
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+  // Mobile toggle function
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen)
+  }
 
   // Update filtered count when data changes
   useEffect(() => {
@@ -137,6 +200,10 @@ const ClassPage = () => {
     }
   };
 
+   const nameColumnValue = screenWidth <= 984 ? "100px" : "250px";
+   const maxiumColumnValue = screenWidth <= 984 ? "70px" : "120px";
+
+
   const columns = [
     {
       name: (
@@ -145,7 +212,7 @@ const ClassPage = () => {
         </div>
       ),
       selector: "name",
-      width: "200px", 
+      width: nameColumnValue,
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/class/${row.id}/classdetailpage`} state={{ className: row.name, classId: row.id }}>
@@ -155,29 +222,29 @@ const ClassPage = () => {
       ),
     },
     {
-      name: <div className="cursor-pointer">Strength</div>,
+      name: "Strength",
       selector: "strength",
       sortable: true,
-      width: "200px", 
+      width: "70px",
     },
     {
-      name: <div className="cursor-pointer">Maximum Allowed</div>,
+      name: "Maximum Allowed",
       selector: "maximumallowed",
       sortable: true,
-      width: "200px", 
+      width: maxiumColumnValue,
     },
     {
-      name: <div className="cursor-pointer">Expiry Date</div>,
+      name: "Expiry Date",
       selector: "expiryDate",
       sortable: true,
-      width: "200px", 
+      width: "70px",
       cell: (row) => <span>{row.expiryDate.toLocaleDateString()}</span>,
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "200px", 
+      width: "50px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (
@@ -230,7 +297,7 @@ const ClassPage = () => {
                 aria-label="Settings"
                 onClick={() => handleActionClick("settings", row)}
               >
-                  <FaCog  />
+                <FaCog />
                 <span className="tooltip-text">Settings</span>
               </button>
               <button
@@ -238,7 +305,7 @@ const ClassPage = () => {
                 aria-label="Rename"
                 onClick={() => handleActionClick("rename", row)}
               >
-                  <FaEdit  />
+                <FaEdit />
                 <span className="tooltip-text">Rename</span>
               </button>
               <button
@@ -246,7 +313,7 @@ const ClassPage = () => {
                 aria-label="Archive"
                 onClick={() => handleActionClick("archive", row)}
               >
-                  <FaArchive  />
+                <FaArchive />
                 <span className="tooltip-text">Archive</span>
               </button>
               <button
@@ -254,7 +321,7 @@ const ClassPage = () => {
                 aria-label="Delete"
                 onClick={() => handleActionClick("delete", row)}
               >
-                  <FaTrashAlt  />
+                <FaTrashAlt />
                 <span className="tooltip-text">Delete</span>
               </button>
             </div>
@@ -271,11 +338,23 @@ const ClassPage = () => {
         <meta name="description" content="Classes" />
       </Helmet>
       <div className="test-index-wrapper">
+        
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Classes Lists</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <ClassSideMenu
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+
         <div className="test-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">All Classes Lists</h1>
           </div>
-
           <div className="my-data-table">
             <DataTable
               columns={columns}
@@ -308,6 +387,8 @@ const ClassPage = () => {
           totalItems={data.length}
           isSearching={searchQuery.length > 0}
         />
+
+
       </div>
     </>
   );

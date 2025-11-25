@@ -41,45 +41,71 @@ import AddFolderModal from "../../../../ReusableComponents/AddFolderModal/AddFol
 import TagActionsDropdown from "../../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown"
 import ListOfQuestionsType from '../../../../ReusableComponents/ListOfQuestionsType/ListOfQuestionsType'
 import "./AddQuestionSidebar.css"
+import { useSelector, useDispatch } from "react-redux"
+import { addNewQuestionQB } from "../../../../../slices/addQuestionBank"
 
-const AddQuestionSidebar = () => {
+const AddQuestionSidebar = ({ isMobileOpen, setIsMobileOpen, hideQuestionType }) => {
+
+  console.log(isMobileOpen);
+  
   const { id } = useParams()
   const [folders, setFolders] = useState(() => {
     const storedFolders = localStorage.getItem("folders")
     return storedFolders ? JSON.parse(storedFolders) : []
   })
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
-  const [isShortAnswerModalOpen, setIsShortAnswerModalOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isNumericalModalOpen, setIsNumericalModalOpen] = useState(false)
-  const [isTrueFalseModalOpen, setIsTrueFalseModalOpen] = useState(false)
-  const [isDescriptiveModalOpen, setIsDescriptiveModalOpen] = useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+ // const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null);
-  const dropdownRef = useRef(null)
 
-  const opendropdownRef = useRef(null)
-
+  // Add this near the top of your component
+  const dropdownRef = useRef(null);
+  
+  //Get the value for Redux
+  const dispatch = useDispatch();
+  const isDropdownOpen = useSelector((state) => state.AddQuestionQB.openAddQuestionQB);
+  
   const toggleDropdown = () => {
     setIsDropdownOpen(prev => !prev)
   }
-
+  
   const handleCloseDropdown = () => {
     setIsDropdownOpen(false)
   }
-
+  
+  const questionTypeRef = useRef(null);
+  const settingsRef = useRef(null); // <-- missing earlier
+  // For both dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false)
+      const clickedInsideQuestionButton =
+        dropdownRef.current && dropdownRef.current.contains(event.target);
+
+      // ✅ handles even if modal is rendered via portal
+      const clickedInsideQuestionList =
+        event.target.closest(".list-of-questions-type");
+
+      const clickedInsideSettingsButton =
+        settingsRef.current && settingsRef.current.contains(event.target);
+
+      // ✅ Close both only if clicked outside everything
+      if (
+        !clickedInsideQuestionButton &&
+        !clickedInsideQuestionList &&
+        !clickedInsideSettingsButton
+      ) {
+        dispatch(addNewQuestionQB(false));
+        setOpenDropdown(false);
       }
+    };
+
+    if (isDropdownOpen || openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen, openDropdown, dispatch]);
 
   const [testName, setTestName] = useState("")
   const [editingFolderId, setEditingFolderId] = useState(null)
@@ -91,7 +117,24 @@ const AddQuestionSidebar = () => {
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0']
   const [tags, setTags] = useState(["Folder 1 (10)", "Folder 2 (20)"])
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+ 
+     useEffect(() => {
+         const handleResize = () => {
+             setScreenWidth(window.innerWidth);
+         };
+ 
+         // ✅ Add listener
+         window.addEventListener("resize", handleResize);
+ 
+         // ✅ Call once on mount
+         handleResize();
+ 
+         // ✅ Clean up on unmount
+         return () => window.removeEventListener("resize", handleResize);
+     }, []);
+
+ // const [isMobileOpen, setIsMobileOpen] = useState(false)
   const handleTagClick = (index) => {
     setShowMoreOptions(showMoreOptions === index ? null : index)
   }
@@ -184,26 +227,23 @@ const AddQuestionSidebar = () => {
 
   return (
     <div className="sidebar-wrapper">
-      {/* Mobile Overlay */}
-      {isMobileOpen && <div className="mobile-overlay" onClick={() => setIsMobileOpen(false)} />}
+
       <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Main Navigation">
         <div className="test-sidebar-header">
-          <div className="w-100 d-flex justify-content-center">
-            <div className="dropdown-container" ref={dropdownRef}>
+          
+          <div className="w-100 d-flex justify-content-center" ref={dropdownRef}>
               <button
                 className="allbuttons"
                 aria-label="Create New Question"
-                onClick={toggleDropdown}
+                onClick={() => dispatch(addNewQuestionQB(!isDropdownOpen))}
               >
-                <span className="sidebar-letters">New Question</span>
+              <span className="sidebar-letters">New Question</span>
               </button>
 
-              {isDropdownOpen && (
-                <div>
-                  <ListOfQuestionsType onClose={() => setIsDropdownOpen(false)} setIsShortAnswerModalOpen={setIsShortAnswerModalOpen} />
-                </div>
-              )}
-            </div>
+            <ListOfQuestionsType
+              isOpen={isDropdownOpen}
+              onClose={() => dispatch(addNewQuestionQB(false))}
+            />
           </div>
         </div>
 
@@ -211,7 +251,6 @@ const AddQuestionSidebar = () => {
           <div className="test-sidebar-section">
             <ul className="test-sidebar-menu">
               <li className="sidebar-section-title">Questions</li>
-
               <li>
                 <Link
                   to={`/QuestionBank/Trashed/${id}/add`}
@@ -347,8 +386,8 @@ const AddQuestionSidebar = () => {
 
           <hr></hr>
           <div className="test-sidebar-section">
-            <h3 className="sidebar-section-title">Actions</h3>
-            <div className="settings-dropdown-container" ref={opendropdownRef}>
+            {/* <h3 className="sidebar-section-title">Actions</h3> */}
+            <div className="settings-dropdown-container" ref={settingsRef}>
 
               <button
                 className="settings-trigger-btn sidebar-contents"
@@ -418,7 +457,6 @@ const AddQuestionSidebar = () => {
                 </div>
               )}
             </div>
-
           </div>
 
         </div>
@@ -426,33 +464,34 @@ const AddQuestionSidebar = () => {
 
       </nav>
       {/* Mobile Toggle Button */}
-      <button
-        className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-        onClick={toggleMobileSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-
-      </button>
-      <MCQModal open={isModalOpen} onClose={() => setIsModalOpen(false)} ShortAnswerModalOpen={isShortAnswerModalOpen} />
-      <NumericalModal open={isNumericalModalOpen} onClose={() => setIsNumericalModalOpen(false)} />
-      <TrueFalseModal open={isTrueFalseModalOpen} onClose={() => setIsTrueFalseModalOpen(false)} />
-      <DescriptiveModal
-        open={isDescriptiveModalOpen}
-        onClose={() => setIsDescriptiveModalOpen(false)}
-      />
-
+     
       <AddFolderModal
         isOpen={isFolderModalOpen}
         onClose={() => setIsFolderModalOpen(false)}
         heading="Create New Category"   // ✅ pass heading here
-      />
+        />
 
+      {/* {(isDropdownOpen && !isMobileOpen) && (
+        <div ref={questionTypeRef} className="list-of-questions-type">
+          <ListOfQuestionsType onClose={() => dispatch(addNewQuestionQB(false))} />
+        </div>
+      )} */}
+
+      
+      
+      {/* {!hideQuestionType && screenWidth >= 769 && (
+        <div ref={questionTypeRef} className="list-of-questions-type">
+          <ListOfQuestionsType
+            isOpen={isDropdownOpen}
+            onClose={() => dispatch(addNewQuestionQB(false))}
+          />
+        </div>
+      )} */}
 
       <AddTagsComponent
         isOpen={isTagModalOpen}
         onClose={() => setIsTagModalOpen(false)}
-      />
+      />  
 
     </div>
   )

@@ -20,6 +20,8 @@ import { getTimeAgo } from "../../../../utils/time-utils"
 import { getNextId } from "../../../../utils/idGenerator"
 import NotificationShared from "../../../ReusableComponents/notificationShared/notficationShared"
 import TestAddSidebar from "../TestAddSideabr/TestAddSideabr";
+import { VscTriangleDown } from "react-icons/vsc";
+
 
 const initialData = [
   { id: 1, test: "Test 1", owner: "John Doe", status: "Not Published", lastModified: "2 days ago by You", duration: 60, description: "Sample test 1", instructions: "Follow the guidelines", trashed: false, archived: false },
@@ -69,6 +71,7 @@ const TestIndex = () => {
   const [fullViewMode, setFullViewMode] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -242,6 +245,42 @@ const TestIndex = () => {
     setIsModalOpen(false)
   }
 
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
+
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
+  };
+
   const handleOpenModal = (testName) => {
     setSelectedTest(testName)
     setIsModalOpen(true)
@@ -343,7 +382,7 @@ const TestIndex = () => {
             duration: updatedFields.duration || test.duration,
             description: updatedFields.description || test.description,
             instructions: updatedFields.instructions || test.instructions,
-            // lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString()
           }
           : test
       )
@@ -400,14 +439,34 @@ const TestIndex = () => {
     }
   };
 
+  const getTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) return "Just now";
+    if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+    if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  };
+
+
 
   const handleCreateTest = (testData) => {
+
+    console.log(testData.lastModified);
+    
     const newTest = {
       id: Date.now(),
       test: testData.name,
       owner: "You",
       status: "Not Published",
-      // lastModified: new Date().toISOString(),
+      lastModified: getTimeAgo(testData.lastModified),
       duration: testData.duration,
       description: testData.description,
       instructions: testData.instructions
@@ -526,6 +585,10 @@ const TestIndex = () => {
 
   const getTimeFromString = (text) => {
     const now = new Date();
+
+    // Prevent error if text is null, undefined, or not a string
+    if (!text || typeof text !== "string") return now.getTime();
+
     const match = text.match(/(\d+)\s+(hour|hours|day|days)/i);
     if (!match) return now.getTime();
 
@@ -539,8 +602,17 @@ const TestIndex = () => {
   };
 
   const sortedFilteredData = [...filteredData].sort(
-    (a, b) => getTimeFromString(b.lastModified) - getTimeFromString(a.lastModified)
+    (a, b) => getTimeFromString(b?.lastModified) - getTimeFromString(a?.lastModified)
   );
+
+
+  //creat new test 
+  const handleNewTest = () =>{
+    console.log("sdeftertg");
+    
+    setIsNewTestModalOpen(true);  
+  }
+
 
 
   const handleActionClick = (action, row) => {
@@ -615,7 +687,7 @@ const TestIndex = () => {
       name: "Test Names",
       selector: "test",
       sortable: true,
-      width: "170px", // Set fixed width
+      width: "150px", // Set fixed width
       cell: (row) => (
         <div className="flex items-center">
           <Link to={`/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
@@ -652,26 +724,26 @@ const TestIndex = () => {
       name: "Owner",
       selector: "owner",
       sortable: true,
-      width: "150px",
+       width: "70px",
     },
-    {
-      name: "Status",
-      selector: "status",
-      sortable: true,
-      width: "150px",
-    },
+    // {
+    //   name: "Status",
+    //   selector: "status",
+    //   sortable: true,
+    //   width: "150px",
+    // },
     {
       name: "Last Modified",
       selector: "lastModified",
       sortable: true,
-      width: "190px",
+       width: "70px",
       cell: (row) => <div>{row.lastModified}</div>  // <-- render static string directly
     },
     {
-      name: <div className="table-actions">Actions</div>,
+      name: "Actions",
       selector: "actions",
       sortable: false,
-      width: "300px",
+      width: "120px",
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (
@@ -723,10 +795,14 @@ const TestIndex = () => {
             </div>
           ) : (
             <div className="flex">
-              <button className="test-action-button dispatch" aria-label="Published" disabled={row.status === 'Published'} onClick={() => openModal(row)} style={{
+              {/* <button className="test-action-button dispatch" aria-label="Published" disabled={row.status === 'Published'} onClick={() => openModal(row)} style={{
                 opacity: row.status === 'Published' ? 0.5 : 1,
                 cursor: row.status === 'Published' ? 'not-allowed' : 'pointer',
-              }}>
+              }}> */}
+                <button className="test-action-button dispatch" aria-label="Published" onClick={() => openModal(row)} style={{
+                  opacity: 1,
+                  cursor: 'pointer',
+                }}>
                 <FaPaperPlane />
                 <span className="tooltip-text">Publish</span>
               </button>
@@ -801,27 +877,34 @@ const TestIndex = () => {
       </Helmet>
 
       <div className="test-index-wrapper">
-        <div className="d-none d-md-block">
-          <TestSidebar
-            tags={tags}
-            setTags={setTags}
-            uncategorizedCount={uncategorizedCount}
-            onTagClick={handleTagClick}
-            onUncategorizedClick={handleUncategorizedClick}
-            activeTag={activeTag}
-            // onAddTag={handleAddTag}
-            onCreateTest={handleCreateTest}
-            archivedCount={data.filter(test => test.archived).length}
-            trashedCount={data.filter(test => test.trashed).length}
-          />
-
-        </div>
-
         <NotificationShared
           sender="Akash"
           projectName="Numerical Analysis Assignment-I"
           testId={1}
         />
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Tests</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div  ref={sidebarRef} >
+          <TestSidebar
+            tags={tags}
+            setTags={setTags}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+            uncategorizedCount={uncategorizedCount}
+            onTagClick={handleTagClick}
+            onUncategorizedClick={handleUncategorizedClick}
+            activeTag={activeTag}
+            // newTest={handleNewTest}
+            // onAddTag={handleAddTag}
+            onCreateTest={handleCreateTest}
+            archivedCount={data.filter(test => test.archived).length}
+            trashedCount={data.filter(test => test.trashed).length}
+          />
+        </div>
 
         <div className="test-index-container">
           <div className="test-index-header">
@@ -838,6 +921,7 @@ const TestIndex = () => {
 
               {showMobileSidebar && (
                 <div className="mobile-sidebar-dropdown">
+                  <div className="test-sidebar-container">
                     <TestSidebar
                       className="d-block d-md-none"
                       tags={tags}
@@ -850,6 +934,7 @@ const TestIndex = () => {
                       archivedCount={data.filter((test) => test.archived).length}
                       trashedCount={data.filter((test) => test.trashed).length}
                     />
+                  </div>
                 </div>
               )}
             </div>
@@ -950,7 +1035,7 @@ const TestIndex = () => {
           />
         )}
 
-        {isNewTestModalOpen && (
+        {/* {isNewTestModalOpen && (
           <NewTestModal
             heading="Create New Test"
             isOpen={isNewTestModalOpen}
@@ -958,7 +1043,7 @@ const TestIndex = () => {
             onSubmit={handleCreateTest}
             mode="create"
           />
-        )}
+        )} */}
 
         {isDeleteModalOpen && (
           <NewTestModal

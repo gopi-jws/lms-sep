@@ -410,7 +410,7 @@
 
 /* warning popup */
 .exam-summary-modal-overlay {
-    position: fixed;
+    /* position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -419,14 +419,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1000; */
+
+    position: fixed;
+        top: 0;
+        right: 0;
+        bottom: var(--modal-overlay-bottom);
+        left: var(--modal-overlay-left);
+        display: var(--modal-overlay-display);
+        align-items: var(--align-items);
+        justify-content: var(--modal-overlay-justify-content);
+        background: var(--modal-overlay-background);
+        overflow-y: var(--modal-overlay-overflow-y);
+        padding-top: var(--modal-overlay-padding-top);
+        z-index: 999;
 }
 
 .exam-summary-modal {
     position: relative;
     max-width: 800px;
     height: 550px;
-    /* Set a fixed height */
+  
     background: #fff;
     border-radius: 8px;
 
@@ -436,18 +449,44 @@
     font-weight: var(--font-weight);
     display: flex;
     flex-direction: column;
-    /* Ensures the modal content stacks properly */
+   
 }
 
 
 
+
 .exam-summary-modal-content {
-    flex: 1;
+    /* flex: 1; */
     /* Makes the content area take up remaining space */
-    overflow-y: auto;
+    /* overflow-y: auto; */
     /* Enables vertical scrolling when needed */
 
     /* Prevents content from touching the scrollbar */
+        background-color: var(--modal-content-bg);
+        border-radius: var(--modal-content-border-radius);
+        width: 50%;
+        max-height: var(--modal-content-max-height);
+        overflow-y: var(--modal-content-overflow-y);
+        box-shadow: var(--modal-content-box-shadow);
+        display: var(--modal-content-display);
+        flex-direction: var(--modal-content-flex-direction);
+        position: var(--modal-content-position);
+        top: var(--modal-content-top);
+        left: var(--modal-content-left);
+        transform: var(--modal-content-transform);
+        animation: var(--modal-content-animation);
+}
+
+@media(max-width:1024px) {
+    .exam-summary-modal-content {
+        width: 70%;
+    }
+}
+
+@media(max-width:768px){
+    .exam-summary-modal-content{
+       width: 90%;
+    }
 }
 
 .exam-summary-modal-header {
@@ -953,7 +992,7 @@ input {
     justify-content: var(--modal-overlay-justify-content);
     background: var(--modal-overlay-background);
     overflow-y: var(--modal-overlay-overflow-y);
-    padding-top: var(--modal-overlay-padding-top);
+    /* padding-top: var(--modal-overlay-padding-top); */
     z-index: 999;
 }
 

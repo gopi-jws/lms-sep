@@ -23,10 +23,13 @@ import {
 } from "lucide-react"
 import "./sidemenu.css"
 
-const SidebarMenu = () => {
+const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
+
+  console.log(isMobileOpen);
+  
   const location = useLocation()
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  // const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const currentPath = location.pathname
 
@@ -63,8 +66,6 @@ const SidebarMenu = () => {
   }
 
 
-
-
   const toggleManageHomeVisibility = () => {
     setManageHomeVisible(!isManageHomeVisible)
   }
@@ -81,7 +82,7 @@ const SidebarMenu = () => {
     <div className="sidebar-wrapper">
       {isMobileOpen && <div className="mobile-overlay" onClick={handleCloseMobile} />}
 
-      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""}`} aria-label="Main Navigation">
+      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${sideBarTop ? "dashboard-sidebar": ""}`} aria-label="Main Navigation">
         <div className="test-sidebar-header">
           <span className="sidebar-letters">LMS Institute</span>
         </div>
@@ -244,13 +245,13 @@ const SidebarMenu = () => {
 
       </nav>
 
-      <button
+      {/* <button
         className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
         onClick={toggleMobileSidebar}
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      </button> */}
     </div>
   )
 }

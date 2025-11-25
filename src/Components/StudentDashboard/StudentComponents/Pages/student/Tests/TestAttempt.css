@@ -491,6 +491,7 @@ html {
 .btn-text {
     flex-grow: 1;
     text-align: center;
+    color: white;
 }
 
 .action-btn:hover .btn-icon {
@@ -1195,7 +1196,7 @@ html {
 
 .code-block {
     background: #2d2d2d;
-    color: #f8f8f2;
+    color: #181814;
     padding: 15px;
     border-radius: 4px;
     overflow-x: auto;

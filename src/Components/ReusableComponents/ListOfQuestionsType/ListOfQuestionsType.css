@@ -7,6 +7,8 @@
     overflow: hidden;
     z-index: 1000;
     animation: fadeIn 0.2s ease-in-out;
+    top:60px;
+    left: 30px;
 }
 
 @keyframes fadeIn {
@@ -58,3 +60,13 @@
     background-color: #f5f8ff;
     color: #0066cc;
 }
+
+
+
+@media(max-width:769px){
+    .questiontypes-dropdown-menu {
+           top: 55px;
+           left: 10px;
+        }
+}
+

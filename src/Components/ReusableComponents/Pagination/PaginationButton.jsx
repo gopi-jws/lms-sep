@@ -8,11 +8,22 @@ const PaginationButtons = ({
   currentPage,
   loadMore,
   fullView,
-  fullViewMode
+  fullViewMode,
+  showPaginationButtons
 }) => {
   const location = useLocation()
   const totalItems = filteredQuestions?.length || 0
-  const hasMoreData = rowsPerPage < totalItems
+  const hasMoreData = rowsPerPage < totalItems;
+  
+  // console.log("filteredQuestions :" + filteredQuestions);
+  // console.log("rowsPerPage :" + rowsPerPage);
+  // console.log("loadMore :" + loadMore);
+  // console.log("fullView :" + fullView);
+  // console.log("fullViewMode :" + fullViewMode);
+  // console.log("showPaginationButtons :" + showPaginationButtons);
+  // console.log("hasMoreData :" + hasMoreData);
+
+
 
   if (totalItems === 0) return null
 
@@ -21,7 +32,13 @@ const PaginationButtons = ({
 
   return (
     <div className="pagination-buttons mt-4 d-flex justify-content-center gap-3">
-      {hasMoreData && !fullViewMode && (
+      {/* {hasMoreData && !fullViewMode && (
+        <button className="load-more-button2" onClick={loadMore}>
+          Load More
+        </button>
+      )} */}
+
+      {hasMoreData &&  (
         <button className="load-more-button2" onClick={loadMore}>
           Load More
         </button>

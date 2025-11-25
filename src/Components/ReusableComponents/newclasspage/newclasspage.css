@@ -1,3 +1,8 @@
+.newqb-modal-overlay::-webkit-scrollbar {
+  display: none;
+ 
+}
+
 /* Main container styling */
 .add-class-container {
   /* padding: 3rem 0; */
@@ -201,3 +206,22 @@ color: #34495E;
   opacity: 1;
   transition: opacity var(--copy-message-fade-time) ease-in-out;
 }
+
+.input-item {
+  display: flex;
+  gap: 10px;
+}
+
+/* .form-select {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.form-select:hover {
+  background-color: #e8f0ff;
+
+  border-color: #3b82f6;
+ 
+} */

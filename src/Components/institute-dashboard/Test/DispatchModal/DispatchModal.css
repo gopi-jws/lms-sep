@@ -1,4 +1,4 @@
-/* Apply styles to the body, modal, labels, and input fields */
+Apply styles to the body, modal, labels, and input fields
 body,
 .custom-modal,
 .custom-modal label,
@@ -359,7 +359,7 @@ label {
 }
 
 /* warning popup */
-.exam-summary-modal-overlay {
+/* .exam-summary-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -370,13 +370,13 @@ label {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-}
+} */
 
-.exam-summary-modal {
+/* .exam-summary-modal {
   position: relative;
   max-width: 800px;
   height: 550px;
-  /* Set a fixed height */
+
   background: #fff;
   border-radius: 8px;
 
@@ -386,28 +386,21 @@ label {
   font-weight: var(--font-weight);
   display: flex;
   flex-direction: column;
-  /* Ensures the modal content stacks properly */
-}
+ 
+} */
 
 
 
-.exam-summary-modal-content {
+/* .exam-summary-modal-content {
   flex: 1;
-  /* Makes the content area take up remaining space */
-  overflow-y: auto;
-  /* Enables vertical scrolling when needed */
-
-  /* Prevents content from touching the scrollbar */
-}
+  overflow-y: auto; 
+} */
 
 .exam-summary-modal-header {
  
   justify-content: space-between;
   align-items: center;
-
- 
   position: relative;
-  /* Ensures close button is positioned relative to header */
 }
 
 .close-button {

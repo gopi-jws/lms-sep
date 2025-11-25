@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "../../../../ReusableComponents/TableComponent/TableComponent";
 import { FaCopy, FaEdit, FaTrashAlt, FaArrowRight, FaFolderPlus } from "react-icons/fa";
+import { VscTriangleDown } from "react-icons/vsc"
 import PaginationButtons from "../../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../../ReusableComponents/Pagination/PaginationInfo";
 import ColumnVisibilityDropdown from "../../../../ReusableComponents/ColumnVisibilityDropdown/ColumnVisibilityDropdown";
-
+import AddQuestionSidebar from "../AddQuestionSidebar/AddQuestionSidebar";
+import { useSelector,useDispatch } from "react-redux"
+import { addNewQuestionQB,setIsSQAModalOpen,setIsModalOpen,setIsNumericalModalOpen,setIsTrueFalseModalOpen,setIsDescriptiveModalOpen } from "../../../../../slices/addQuestionBank"
+import SAQModal from "../../../../ReusableComponents/Questions-Types-Modals/SAQModal/SAQModal";
+import MCQModal from "../../../../ReusableComponents/Questions-Types-Modals/MCQModal/MCQModal";
+import NumericalModal from "../../../../ReusableComponents/Questions-Types-Modals/NumericalModal/NumericalModal";
+import TrueFalseModal from "../../../../ReusableComponents/Questions-Types-Modals/TrueFalseModal/TrueFalseModal";
+import DescriptiveModal from "../../../../ReusableComponents/Questions-Types-Modals/DescriptiveModal/DescriptiveModal";
 
 const AddQuestionTrash = () => {
       const data = [
@@ -48,6 +56,7 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filterSection, setFilterSection] = useState("");
   const [filteredCount, setFilteredCount] = useState(data.length);
   const [fullViewMode, setFullViewMode] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // Filter data based on search and filters
   const getFilteredData = () => {
@@ -64,6 +73,50 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
       return matchesSearch && matchesType && matchesSection;
     });
   };
+
+  // Get the value for Redux
+  const dispatch = useDispatch();
+  const isSQAModalOpen = useSelector((state) => state.AddQuestionQB.isSQAModalOpen);
+  const isModalOpen = useSelector((state) => state.AddQuestionQB.isModalOpen);
+  const isNumericalModalOpen = useSelector((state) => state.AddQuestionQB.isNumericalModalOpen);
+  const isTrueFalseModalOpen = useSelector((state) => state.AddQuestionQB.isTrueFalseModalOpen);
+  const isDescriptiveModalOpen = useSelector((state) => state.AddQuestionQB.isDescriptiveModalOpen);
+
+
+
+  // Add refs at the top of your component
+      const sidebarRef = useRef(null);
+      const toggleRef = useRef(null);
+    
+      // Close dropdown when clicking outside
+      useEffect(() => {
+        const handleClickOutside = (e) => {
+          // Only handle clicks when sidebar is open
+          if (!isMobileOpen) return;
+    
+          const sidebar = sidebarRef.current;
+          const toggle = toggleRef.current;
+    
+          // If we don't have refs, don't do anything
+          if (!sidebar || !toggle) return;
+    
+          // Check if click is outside both sidebar and toggle button
+          const isOutsideSidebar = !sidebar.contains(e.target);
+          const isOutsideToggle = !toggle.contains(e.target);
+    
+          if (isOutsideSidebar && isOutsideToggle) {
+            setIsMobileOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, [isMobileOpen])
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen)
+  }
 
   const filteredData = getFilteredData();
 
@@ -214,6 +267,20 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
   return (
     <>
       <div className="questionsadd-index-wrapper">
+
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">QB 1 Questions</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+
+        <div ref={sidebarRef}>
+          <AddQuestionSidebar
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+            hideQuestionType={true}
+          />
+        </div>
+
         <div className="questionsadd-index-container">
           <div className="test-index-header">
             <h1 className="breadcrumb">QB 1 Questions</h1>
@@ -262,6 +329,12 @@ const [rowsPerPage, setRowsPerPage] = useState(5);
           />
         </div>
       </div>
+      {/* New Question */}
+      <SAQModal open={isSQAModalOpen} onClose={() => { dispatch(setIsSQAModalOpen(false)); }} />
+      <MCQModal open={isModalOpen} onClose={() => { dispatch(setIsModalOpen(false)); }} />
+      <NumericalModal open={isNumericalModalOpen} onClose={() => { dispatch(setIsNumericalModalOpen(false)); }} />
+      <TrueFalseModal open={isTrueFalseModalOpen} onClose={() => { dispatch(setIsTrueFalseModalOpen(false)); }} />
+      <DescriptiveModal open={isDescriptiveModalOpen} onClose={() => { dispatch(setIsDescriptiveModalOpen(false)); }} />
     </>
   );
 };

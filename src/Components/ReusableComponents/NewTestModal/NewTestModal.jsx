@@ -156,7 +156,8 @@ const NewTestModal = ({
             name: testName.trim(),
             duration: Number(duration),
             description: description.trim(),
-            instructions: instructions.trim()
+            instructions: instructions.trim(),
+            lastModified: new Date().toISOString(),
         });
         onClose();
     };

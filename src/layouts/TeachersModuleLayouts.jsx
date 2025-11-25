@@ -16,7 +16,7 @@ const TeachersModuleLayouts = () => {
       {/* Main Content Area with Sidebar */}
       <div className="layout-main">
         {/* Sidebar */}
-        <TeachersSidebar setTeachersEmails={setTeachersEmails}/>{/* Pass setter */}
+        {/* <TeachersSidebar setTeachersEmails={setTeachersEmails}/>Pass setter */}
 
         {/* Page Content */}
         <main className="layout-content">

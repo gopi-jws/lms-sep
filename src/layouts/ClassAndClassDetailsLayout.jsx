@@ -13,11 +13,11 @@ const ClassAndClassDetailsLayout = () => {
     <div className="layout-container">
       <Header />
       <div className="layout-main">
-        {isClassDetailPage ? (
+        {/* {isClassDetailPage ? (
           <ClassDetailPageSideMenu className="class-detail-sidebar" />
         ) : (
           <ClassSideMenu className="class-sidebar" />
-        )}
+        )} */}
         <main className="layout-content">
           <Outlet />
         </main>

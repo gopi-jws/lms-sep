@@ -274,16 +274,18 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
     );
     setMemberToRemove(null);
     setIsRemoveModelOpen(false);
+    setOpen(null)
   }
 
   const cancelRemove = () => {
     setMemberToRemove(null);
-    setIsRemoveModelOpen(false);;
+    setIsRemoveModelOpen(false);
+    setOpen(null);
   };
 
   const updateMemberStatus = (email, newStatus) => {
     if (newStatus === "Remove") {
-      setIsRemoveModelOpen(true);
+      setIsRemoveModelOpen(!isRemoveModelOpen);
       // // const confirmRemove = window.confirm(
       // //   "Are you sure you want to remove this member?"
       // // ); 
@@ -300,6 +302,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
         member.email === email ? { ...member, role: newStatus } : member
       );
       setSharedMembers(updatedMembers);
+      setOpen(null);
     }
   };
 
@@ -311,6 +314,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(null); // close dropdown if clicked outside
         setPermissionOpen(false)
+        setIsRemoveModelOpen(false)
       }
     };
 
@@ -318,7 +322,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [setOpen, setPermissionOpen]);
+  }, [setOpen, setPermissionOpen, setIsRemoveModelOpen]);
 
   const handleInputFocus = () => setIsFocused(true);
   const handleInputBlur = () => setIsFocused(false);
@@ -370,14 +374,6 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
 
           <div className="email-invite-action-buttons">
             <div className="permission-dropdown">
-              {/* <select
-                value={permission}
-                onChange={handlePermissionChange}
-                className={permissionError ? "error-border testshare-form-control" : ""}
-              >
-                <option value="can-view">Viewer</option>
-                <option value="can-edit">Editor</option>
-              </select> */}
               <div className="permission" onClick={() => { setPermissionOpen(true) }}>
                 <div>{permission}</div>
                 <MdOutlineKeyboardArrowDown />
@@ -407,6 +403,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
               </button>
             </div>
           </div>
+
           <div className="collaborator">
             <h3 className="sub-title">
               Collaborated{" "}
@@ -414,7 +411,11 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                 ({filteredCount})
               </span>
             </h3>
+
+
             <div className="members-container">
+
+
               {/* Display the owner first */}
               {sharedMembers
                 .filter((member) => member.role === "Owner")
@@ -430,6 +431,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                   </div>
                 ))}
 
+
               {/* Display paginated members */}
               {getCurrentPageData().map((member, index) => (
                 <div className="member-item" key={index}>
@@ -437,20 +439,8 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                     <FaUser className="user-icon" />
                     <span className="member-email">{member.email}</span>
                   </div>
+
                   <div className="member-right">
-                    {/* <select
-                      value={member.role}
-                      onChange={(e) =>
-                        updateMemberStatus(member.email, e.target.value)
-                      }
-                      className="status-dropdown"
-                    >
-                      <div className="optionMenu">
-                        <option value="can-view">Viewer</option>
-                        <option value="can-edit">Editor</option>
-                        <option value="Remove">Remove</option>
-                      </div>
-                    </select> */}
                     <div className="dropdown-container" style={{ position: "relative" }}>
                       <div
                         className="dropdown-selected"
@@ -473,11 +463,19 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                                 key={opt.value}
                                 onClick={() => {
                                   updateMemberStatus(member.email, opt.value);
-                                  setOpen(null);
                                 }}
                               >
 
-                                <div className={`${opt.label == "Remove" ? 'red' : ''}`}>{opt.label}</div>
+                                <div className={`${opt.label == "Remove" ? 'red' : ''}`}>
+                                  {opt.label}
+
+                                  {(isRemoveModelOpen && opt.label === "Remove") &&(
+                                    <div className="remove-btn">
+                                      <button onClick={() => { confirmRemove() }}>Yes</button>
+                                      <button onClick={() => { cancelRemove() }}>No</button>
+                                    </div>
+                                  )}  
+                                </div>
 
 
                                 {(member.role === "can-view" && opt.label === "Viewer") ||
@@ -486,6 +484,7 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
                                 ) : null}
 
                               </li>
+
                             ))}
                           </ul>
                         )}
@@ -522,16 +521,6 @@ const ShareModal = ({ isOpen, onClose, testName }) => {
           <button className="btn" onClick={onClose}>
             Close
           </button>
-        </div>
-      </div>
-
-      <div className="testshare-modal-overlay" onClick={handleOverlayClick} style={isRemoveModelOpen ? { display: 'flex' } : { display: 'none' }}>
-        <div className={`remove-pop ${isBouncing ? "bounce" : ""}`} style={isRemoveModelOpen ? { display: 'flex' } : { display: 'none' }} >
-          <h6>Are you sure you want to remove this member?</h6>
-          <div className="remove-btn">
-            <button className="btn" onClick={() => { cancelRemove() }} >Close</button>
-            <button className="newtest-modal-button create" onClick={() => { confirmRemove() }}>Ok</button>
-          </div>
         </div>
       </div>
 

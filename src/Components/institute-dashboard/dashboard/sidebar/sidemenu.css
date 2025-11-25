@@ -196,3 +196,13 @@ li::marker {
   flex-direction: column;
   gap: -10px;
 }
+
+.dashboard-sidebar{
+  margin-top: 60px !important;
+}
+
+@media (max-width:576px){
+  .dashboard-sidebar {
+      margin-top: 50px !important;
+    }
+}

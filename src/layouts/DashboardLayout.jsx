@@ -14,7 +14,7 @@ const DashboardLayout = () => {
     {/* Main Content Area */}
     <div className="layout-main">
       {/* Sidebar */}
-      <SidebarMenu />
+      {/* <SidebarMenu /> */}
 
       {/* Page Content */}
       <main className="layout-content">

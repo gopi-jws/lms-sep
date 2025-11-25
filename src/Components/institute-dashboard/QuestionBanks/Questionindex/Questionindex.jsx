@@ -2,11 +2,13 @@
 
 import "./Questionindex.css"
 import DataTable from "../../../ReusableComponents/TableComponent/TableComponent"
-import React, { useState, useEffect } from "react"
+import { VscTriangleDown } from "react-icons/vsc";
+import React, { useState, useEffect ,useRef} from "react"
 import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton"
 import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo"
 import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
 import Sidebar from "/src/Components/institute-dashboard/QuestionBanks/Sidebar/Sidebar";
+
 
 import {
   FaPaperPlane,
@@ -23,34 +25,41 @@ import { Link } from "react-router-dom"
 import { HiDotsVertical } from "react-icons/hi";
 import { Helmet } from "react-helmet";
 
+
 const Questionindex = () => {
-  // Static rows for the table with IDs
+  // Static rows for the table with IDs (now with tags array)
   const data = [
-    { id: 1, name: "QB 1", questions: 10, lastModified: "2 days ago by You" },
-    { id: 2, name: "QB 2", questions: 10, lastModified: "2 days ago by You" },
-    { id: 3, name: "QB 3", questions: 15, lastModified: "2 days ago by You" },
-    { id: 4, name: "QB 4", questions: 15, lastModified: "1 day ago by You" },
-    { id: 5, name: "QB 5", questions: 15, lastModified: "1 day ago by You" },
-    { id: 6, name: "QB 6", questions: 15, lastModified: "1 day ago by You" },
-    { id: 7, name: "QB 7", questions: 15, lastModified: "1 day ago by You" },
-    { id: 8, name: "QB 8", questions: 15, lastModified: "1 day ago by You" },
-    { id: 9, name: "QB 9", questions: 15, lastModified: "1 day ago by You" },
-    { id: 10, name: "QB 10", questions: 15, lastModified: "1 day ago by You" },
-    { id: 11, name: "QB 11", questions: 15, lastModified: "1 day ago by You" },
-    { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You" },
+    { id: 1, name: "QB 1", questions: 10, lastModified: "2 days ago by You", tags: ["math","easy"] },
+    { id: 2, name: "QB 2", questions: 10, lastModified: "2 days ago by You", tags: [] },
+    { id: 3, name: "QB 3", questions: 15, lastModified: "2 days ago by You", tags: ["physics"] },
+    { id: 4, name: "QB 4", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 5, name: "QB 5", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 6, name: "QB 6", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 7, name: "QB 7", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 8, name: "QB 8", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 9, name: "QB 9", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 10, name: "QB 10", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 11, name: "QB 11", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 12, name: "QB 12", questions: 15, lastModified: "1 day ago by You", tags: [] },
   ]
   const [foldersIteam, setFoldersIteam] = useState([
     {id:1, name: "Folder 1", color: "#9c27b0" ,QB:[]}, 
     {id:2, name: "Folder 2", color: "#2196f3" ,QB:[]}])
+  const [qbs, setQBs] = useState([]);
   const [modalHeading, setModalHeading] = useState("");
-  const [editingQB,setEditingQB] = useState([]);
+  const [editingQB,setEditingQB] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isArchivedModalOpen, setIsArchivedModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // dataItem will contain tags now
   const [dataItem,setDataItem] = useState(data);
-  const [ispinning, setIsSpinning] = useState(null)
-    
+  const [ispinning, setIsSpinning] = useState(null);
+  //new Question Bank Add
+  const [isQbModalOpen, setIsQbModalOpen] = useState(false);
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+ 
 
   // Pagination state
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -65,15 +74,17 @@ const Questionindex = () => {
 
   // Mobile dropdown state
   const [openDropdownId, setOpenDropdownId] = useState(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Filter data based on search
+  // Filter data based on search (now also searches tags)
   const getFilteredData = () => {
     return dataItem.filter((qb) => {
       const matchesSearch = searchQuery === "" ||
         qb.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         qb.questions.toString().includes(searchQuery) ||
-        qb.lastModified.toLowerCase().includes(searchQuery.toLowerCase())
+        qb.lastModified.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        // search in tags
+        (qb.tags && qb.tags.join(" ").toLowerCase().includes(searchQuery.toLowerCase()))
       return matchesSearch
     })
   }
@@ -118,17 +129,42 @@ const Questionindex = () => {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
+
+  // Add refs at the top of your component
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".mobile-actions-dropdown")) {
-        setOpenDropdownId(null)
-      }
-    }
+    const handleClickOutside = (e) => {
+      // Only handle clicks when sidebar is open
+      if (!isMobileOpen) return;
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+      const sidebar = sidebarRef.current;
+      const toggle = toggleRef.current;
+
+      // If we don't have refs, don't do anything
+      if (!sidebar || !toggle) return;
+
+      // Check if click is outside both sidebar and toggle button
+      const isOutsideSidebar = !sidebar.contains(e.target);
+      const isOutsideToggle = !toggle.contains(e.target);
+
+      if (isOutsideSidebar && isOutsideToggle) {
+        console.log('Closing sidebar - click was outside');
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
+
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);  
+  };
 
   // Pagination functions
   const loadMore = () => {
@@ -151,6 +187,23 @@ const Questionindex = () => {
     setOpenDropdownId(openDropdownId === rowId ? null : rowId)
   }
 
+  const handleNewQuestionBank = () =>{
+    // open modal in create mode
+    setModalHeading("Create New QB")
+    setEditingQB(null)
+    setIsQbModalOpen(true)    
+  }
+
+
+  // Function to create a new QB
+  // qbData should include { id, name, questions, lastModified, tags }
+  const handleCreateQB = (qbData) => {
+    console.log("New QB created:", qbData);
+    // ensure tags field exists (array)
+    const normalized = { ...qbData, tags: qbData.tags ? qbData.tags : [] }
+    setDataItem((prev) => [...prev, normalized]);
+    setIsQbModalOpen(false);
+  };
 
 
 //Question Bank Name Edit
@@ -158,12 +211,11 @@ const Questionindex = () => {
     setDataItem(prevData =>
       prevData.map(qb =>
         qb.id === QBId
-          ? { ...qb, name: updatedFields.name}
+          ? { ...qb, ...updatedFields} // updatedFields may include tags now
           : qb
       )
     );
   };
-
 
   //Question Bank handleArchiveQB   
   const handleArchiveQB = (QBId) =>{
@@ -204,6 +256,42 @@ const Questionindex = () => {
       ]);
   };
 
+  const handleAddToFolder = (folderName, questionIds) => {
+
+    console.log(folderName,questionIds);
+    
+  setFoldersIteam(prevFolders =>
+    prevFolders.map(folder => {
+      if (folder.name === folderName) {
+        const qbSet = new Set(folder.QB);
+        questionIds.forEach(id => qbSet.add(id));
+        return {
+          ...folder,
+          QB: Array.from(qbSet)
+        };
+      }
+      return folder;
+    })
+  );
+};
+
+const handleRemoveQuestionFromFolder = (folderName, questionId) => {
+  setFoldersIteam(prev =>
+    prev.map(folder => {
+      if (folder.name === folderName) {
+        return {
+          ...folder,
+          QB: folder.QB.filter(id => id !== questionId)
+        };
+      }
+      return folder;
+    })
+  );
+};
+
+
+
+
   const handleActionClick = (action, row) => {
     // Close dropdown first
     setOpenDropdownId(null)
@@ -224,9 +312,13 @@ const Questionindex = () => {
         setIsRenameModalOpen(true);
         break;
       case "edit":
+        // open modal in edit mode and pass initial tags
         setEditingQB({
           id: row.id,
           name: row.name,
+          questions: row.questions,
+          lastModified: row.lastModified,
+          tags: row.tags || []
         });
         setModalHeading("Edit QB")
         setIsEditModalOpen(true);
@@ -248,6 +340,10 @@ const Questionindex = () => {
 
   const getTimeFromString = (text) => {
     const now = new Date();
+
+    // 🧩 Prevent crash if text is missing or not a string
+    if (!text || typeof text !== "string") return now.getTime();
+
     const match = text.match(/(\d+)\s+(hour|hours|day|days)/i);
     if (!match) return now.getTime();
 
@@ -260,9 +356,15 @@ const Questionindex = () => {
     return now.getTime();
   };
 
-  const sortedFilteredData = [...filteredData].sort(
-    (a, b) => getTimeFromString(b.lastModified) - getTimeFromString(a.lastModified)
+  //console.log("getTimeFromString" + getTimeFromString);
+  
+
+
+  const sortedFilteredData = [...filteredData].sort((a, b) =>
+    getTimeFromString(b?.lastModified) - getTimeFromString(a?.lastModified)
   );
+
+
 
 
   const columns = [
@@ -273,31 +375,59 @@ const Questionindex = () => {
         </div>
       ),
       selector: "name",
-      width: "200px", 
+      width: "150px", 
       cell: (row) => (
-        <div className="flex items-center">
+        <div className="flex items-center qb-name-cell">
           <Link to={`/QuestionBank/${row.id}/add`}>
             <span className="row-link">{row.name}</span>
           </Link>
+
+          {/* TAGS: display small chips beside name */}
+         <div className="question-tags">
+  {foldersIteam
+    .filter(folder => folder.QB?.includes(row.id))
+    .map(folder => (
+      <div key={folder.id} className="question-tag-container">
+        <div className="question-tag">
+          <span
+            className="tag-color-dot"
+            style={{ backgroundColor: folder.color }}
+          ></span>
+          <span className="index-tag-name">{folder.name}</span>
+        </div>
+        <span
+          className="tag-remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveQuestionFromFolder(folder.name, row.id);
+          }}
+        >
+          &times;
+        </span>
+      </div>
+    ))}
+</div>
+
         </div>
       ),
     },
     {
-      name: <div className="cursor-pointer">Questions</div>,
+      name: "Questions" ,
       selector: "questions",
       sortable: true,
-      width: "150px", 
+      width: "70px", 
     },
     {
       name: <div className="cursor-pointer">Last Modified</div>,
       selector: "lastModified",
       sortable: true,
-      width: "200px", 
+      width: "70px", 
     },
     {
       name: "Actions",
       selector: "actions",
       sortable: false,
+      width: "70px", 
       cell: (row) => (
         <div className="test-action-buttons">
           {isMobile ? (
@@ -395,16 +525,45 @@ const Questionindex = () => {
         <title>QuestionBanks</title>
         <meta name="description" content="Question Banks List" />
       </Helmet>
+      
       <div className="questionbank-index-wrapper">
-        <Sidebar
-          foldersIteam={foldersIteam}
-          setFoldersIteam={setFoldersIteam}
-        />
+        
+        <div className="test-index-header-moblie">
+          <h1 className="breadcrumb">All Question Bank Lists</h1>
+          <VscTriangleDown onClick={toggleMobileSidebar} ref={toggleRef} className="TriagbleDown" />
+        </div>
+         
+        <div ref={sidebarRef}>
+          <Sidebar
+            foldersIteam={foldersIteam}
+            setFoldersIteam={setFoldersIteam}
+            createNewQuestionBank={handleNewQuestionBank}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+       
         <div className="questionbank-index-container">
+
+       
+          {/* {isMobileOpen && (
+            <div ref={sidebarRef}>
+              <Sidebar
+                foldersIteam={foldersIteam}
+                setFoldersIteam={setFoldersIteam}
+                isMobileOpen={isMobileOpen}
+                setIsMobileOpen={setIsMobileOpen}
+                createNewQuestionBank={handleNewQuestionBank}
+              />
+            </div>
+          )} */}
+          
+        
           <div className="test-index-header">
             <h1 className="breadcrumb">All Question Bank Lists</h1>
           </div>
 
+         
           <div className="my-data-table">
             <DataTable
               columns={columns}
@@ -419,10 +578,13 @@ const Questionindex = () => {
               onSearchChange={handleSearchChange}
               allQuestions={data}
               modalType="QB"
+              onAddQBToFolder={handleAddToFolder}
+              setIsQbModalOpen={setIsQbModalOpen}
               setIsRenameModalOpen={setIsRenameModalOpen}
               setEditingQB={setEditingQB}
               setIsDeleteModalOpen={setIsDeleteModalOpen}
               setIsArchivedModalOpen={setIsArchivedModalOpen}
+              newQuestioBank ={handleNewQuestionBank}
             />
           </div>
         </div>
@@ -447,23 +609,59 @@ const Questionindex = () => {
           isSearching={searchQuery.length > 0}
         />
 
-        {isEditModalOpen && (
+         {/* Create Modal (open via handleNewQuestionBank) */}
+        {isQbModalOpen && (
           <NewQBModal
-            heading={modalHeading}
+            heading={modalHeading || "Create New QB"}
+            isOpen={isQbModalOpen}
+            onClose={() => setIsQbModalOpen(false)}
+            // For create mode, send empty initial values and an empty tags array
+            initialName={""}
+            initialQuestions={0}
+            initialTags={[]} // <-- IMPORTANT: modal should accept this prop to prefill tags
+            onSubmit={(qbData) => {
+              // Expect qbData to contain name, questions, lastModified(optional), tags (array)
+              // Normalize id and lastModified if not provided
+              const newId = Math.max(0, ...dataItem.map(d => d.id)) + 1;
+              const normalized = {
+                id: newId,
+                name: qbData.name || `QB ${newId}`,
+                questions: qbData.questions ?? 0,
+                lastModified: qbData.lastModified || "just now",
+                tags: qbData.tags ? qbData.tags : []
+              };
+              handleCreateQB(normalized);
+            }}
+            mode="create"
+          />
+        )}
+
+        {isEditModalOpen && editingQB && (
+          <NewQBModal
+            heading={modalHeading || "Edit QB"}
             isOpen={isEditModalOpen}
             onClose={() => {
               setIsEditModalOpen(false);
               setEditingQB(null);
             }}
-            initialName={editingQB?.name || ""}
+            // Prefill the modal with existing QB fields including tags
+            initialName={editingQB.name || ""}
+            initialQuestions={editingQB.questions || 0}
+            initialTags={editingQB.tags || []} // <-- modal should accept this
             onSubmit={(updatedFields) => {
-              handleUpdateQB(editingQB.id, updatedFields);
+              // updatedFields should include tags array if changed
+              handleUpdateQB(editingQB.id, {
+                name: updatedFields.name,
+                questions: updatedFields.questions,
+                lastModified: updatedFields.lastModified || editingQB.lastModified,
+                tags: updatedFields.tags ? updatedFields.tags : editingQB.tags || []
+              });
               setIsEditModalOpen(false);
               setEditingQB(null);
             }}
             mode="edit"
-          />)}
-
+          />
+        )}
 
         {isArchivedModalOpen && (
           <NewQBModal
@@ -510,6 +708,7 @@ const Questionindex = () => {
             mode="rename"
           />
           )}
+
       </div>
     </>
   )
