@@ -15,13 +15,14 @@ const TeachersSidebar = ({ isMobileOpen, onClose }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/teachers-dashboard" },
-    { icon: GraduationCap, label: "My Classes", path: "/teachers/classes" },
-    { icon: FileText, label: "My Tests", path: "/teachers/tests" },
-    { icon: BookOpen, label: "Question Banks", path: "/teachers/question-banks" },
-    { icon: HelpCircle, label: "Help Center", path: "/teachers/help" },
-  ];
+ const menuItems = [
+  { icon: LayoutDashboard, label: "Dashboard", path: "/teachers-dashboard" },
+  { icon: GraduationCap, label: "My Classes", path: "/teachers-dashboard/classes" },
+  { icon: FileText, label: "My Tests", path: "/teachers-dashboard/tests" },
+  { icon: BookOpen, label: "Question Banks", path: "/teachers-dashboard/question-banks" },
+  // { icon: HelpCircle, label: "Help Center", path: "/teachers-dashboard/help" },
+];
+
 
   const isActive = (path) => currentPath.startsWith(path);
 

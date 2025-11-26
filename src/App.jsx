@@ -35,6 +35,7 @@ function App() {
 
         {/* Teachers Dashboard Routes */}
         <Route path="/teachers-dashboard/*" element={<TeachersRoutes />} />
+        
         {/* student */}
         <Route path="/student/*" element={<StudentRoutes />} />
         <Route path="*" element={<PathLostPage />} />
