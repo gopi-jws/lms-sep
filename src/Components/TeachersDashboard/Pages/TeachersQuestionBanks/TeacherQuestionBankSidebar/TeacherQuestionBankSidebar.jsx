@@ -186,7 +186,7 @@ const TeacherQuestionBankSidebar = ({ foldersIteam = [], setFoldersIteam, isMobi
                   onClick={() => handleSetActive("all")}
                 >
                   <FileText className="icon" size={20} />
-                  <span className="sidebar-letters">My QB</span>
+                  <span className="sidebar-letters">All QB</span>
                 </Link>
               </li>
 

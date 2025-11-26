@@ -27,18 +27,16 @@ import NewQBModal from "../../../ReusableComponents/NewQBModal/NewQBModal";
 const TeachersQuestionBanks = () => {
   // Static rows for the table with IDs (now with tags array)
   const data = [
-    { id: 1, name: "Math Quiz Questions", questions: 10, lastModified: "2 days ago by You", tags: ["math","easy"] },
-    { id: 2, name: "Science Test Bank", questions: 10, lastModified: "2 days ago by You", tags: [] },
-    { id: 3, name: "Physics Problems", questions: 15, lastModified: "2 days ago by You", tags: ["physics"] },
-    { id: 4, name: "Chemistry Questions", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 5, name: "Biology Quiz", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 6, name: "History Exam", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 7, name: "Geography Test", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 8, name: "English Grammar", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 9, name: "Algebra Practice", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 10, name: "Calculus Problems", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 11, name: "Statistics Quiz", questions: 15, lastModified: "1 day ago by You", tags: [] },
-    { id: 12, name: "Literature Analysis", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 1, name: "QB1", questions: 10, lastModified: "2 days ago by You", tags: ["math","easy"] },
+    { id: 2, name: "QB2", questions: 10, lastModified: "2 days ago by You", tags: [] },
+    { id: 3, name: "QB3", questions: 15, lastModified: "2 days ago by You", tags: ["physics"] },
+    { id: 4, name: "QB4", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 5, name: "QB5", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 6, name: "QB6", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 7, name: "QB7", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 8, name: "QB8", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 9, name: "QB9", questions: 15, lastModified: "1 day ago by You", tags: [] },
+    { id: 10, name: "QB10", questions: 15, lastModified: "1 day ago by You", tags: [] },
   ]
   const [foldersIteam, setFoldersIteam] = useState([
     {id:1, name: "Math Folder", color: "#9c27b0" ,QB:[]}, 
@@ -376,7 +374,7 @@ const handleRemoveQuestionFromFolder = (folderName, questionId) => {
       width: "150px", 
       cell: (row) => (
         <div className="flex items-center qb-name-cell">
-          <Link to={`/teacher/QuestionBank/${row.id}/add`}>
+          <Link to={`questions`}>
             <span className="row-link">{row.name}</span>
           </Link>
 
