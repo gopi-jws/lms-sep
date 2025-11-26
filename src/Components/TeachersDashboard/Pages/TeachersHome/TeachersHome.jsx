@@ -89,19 +89,13 @@ const TeachersHome = () => {
                 <div className="dashboard-stats-grid mb-4">
                     {statsData.map((stat, index) => (
                         <div className="dashboard-stat-card" key={index}>
-                            <div
-                                className="dashboard-stat-icon"
-                                style={{
-                                    backgroundColor: `${stat.color}20`,
-                                    color: stat.color
-                                }}
-                            >
+                            <div className="dashboard-stat-icon" style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
                                 {stat.icon}
                             </div>
-
                             <div className="stat-content">
                                 <p className="stat-title">{stat.title}</p>
                                 <h3 className="dashboard-stat-value">{stat.value} {stat.label}</h3>
+                                {/* <span className="dashboard-stat-label"></span> */}
                             </div>
                         </div>
                     ))}

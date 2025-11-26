@@ -2,12 +2,12 @@
 .dashboard-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0.5rem 1.2rem;
-    height: 100vh;
+    padding: 0.5rem 0rem;
+    /* height: 100vh; */
     /* Makes it full viewport height */
-    overflow-y: auto;
+    /* overflow-y: auto; */
     /* Enables vertical scrolling */
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     /* Hides horizontal scrolling */
 }
 
@@ -92,16 +92,16 @@
 }
 
 .test-name-link {
-    color: #3b82f6;
+    color: var(--primary-main-color);
     font-weight: 500;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
-.test-name-link:hover {
+/* .test-name-link:hover {
     color: #2563eb;
     text-decoration: underline;
-}
+} */
 
 /* Status Badge */
 .status-badge {

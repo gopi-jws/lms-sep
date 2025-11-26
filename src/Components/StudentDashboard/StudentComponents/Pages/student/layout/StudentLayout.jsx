@@ -1,19 +1,26 @@
 import React from 'react';
-import StudentSidebar from '../../../sidebar/StudentSidebar';
+// import StudentSidebar from '../../../../StudentSidebar/StudentSidebar';
 import { Outlet, useLocation } from 'react-router-dom';
 import './StudentLayout.css';
+import StudentHeader from '../../../StudentHeader/StudentHeader';
 
 const StudentLayout = () => {
     const location = useLocation();
     const hideSidebar = location.pathname.includes('/tests/') && location.pathname.includes('/attempt');
 
     return (
-        <div className="student-layout">
-            {!hideSidebar && <StudentSidebar />}
-            <div className={`student-content ${hideSidebar ? 'full-width' : ''}`}>
-                <Outlet />
+
+        <>
+            <StudentHeader />
+
+            <div className="layout-container">
+                <div className="layout-main">
+                    <main className="layout-content">
+                        <Outlet />
+                    </main>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
