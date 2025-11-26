@@ -71,7 +71,6 @@ const TestIndex = () => {
   const [fullViewMode, setFullViewMode] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -82,6 +81,8 @@ const TestIndex = () => {
   const [isNewTestModalOpen, setIsNewTestModalOpen] = useState(false)
   const [isTagRemoveModelOpen, setIsTagRemoveModelOpen] = useState(false)
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const [ispinning, setIsSpinning] = useState(null)
   // const getSortedTests = () => {
@@ -904,30 +905,37 @@ const TestIndex = () => {
         </div>
 
         <div className="test-index-container">
-      
-          {/* {isMobileOpen && (
-            <div ref={sidebarRef}>
-              <TestSidebar
-                tags={tags}
-                setTags={setTags}
-                isMobileOpen={isMobileOpen}
-                setIsMobileOpen={setIsMobileOpen}
-                uncategorizedCount={uncategorizedCount}
-                onTagClick={handleTagClick}
-                onUncategorizedClick={handleUncategorizedClick}
-                activeTag={activeTag}
-                // newTest={handleNewTest}
-                // onAddTag={handleAddTag}
-                onCreateTest={handleCreateTest}
-                archivedCount={data.filter(test => test.archived).length}
-                trashedCount={data.filter(test => test.trashed).length}
-              />
-            </div>
-          )}
-           */}
-           
           <div className="test-index-header">
             <h1 className="breadcrumb desktop-title">All Tests</h1>
+
+            {/* Mobile dropdown button */}
+            <div className="mobile-title">
+              <button
+                className="mobile-dropdown-btn"
+                onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+              >
+                {activeTag || "All Tests"} ▼
+              </button>
+
+              {showMobileSidebar && (
+                <div className="mobile-sidebar-dropdown">
+                  <div className="test-sidebar-container">
+                    <TestSidebar
+                      className="d-block d-md-none"
+                      tags={tags}
+                      setTags={setTags}
+                      uncategorizedCount={uncategorizedCount}
+                      onTagClick={handleTagClick}
+                      onUncategorizedClick={handleUncategorizedClick}
+                      activeTag={activeTag}
+                      onCreateTest={handleCreateTest}
+                      archivedCount={data.filter((test) => test.archived).length}
+                      trashedCount={data.filter((test) => test.trashed).length}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
 
             {activeTag && (
               <div className="active-tag-indicator">

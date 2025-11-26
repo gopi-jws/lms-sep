@@ -4,10 +4,12 @@
     font-family: "Noto Sans", serif;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     min-height: 100vh;
-    overflow: hidden; /* Prevent browser scroll */
+    overflow: hidden;
+    /* Prevent browser scroll */
 }
 
 /* global.css */
@@ -42,9 +44,9 @@ html, body {
 
 
     /* Button Colors */
-    --primary-main-color:#037DE2;
-    --primary-light-color:#f0f7ff;
-    --primary-error-color:#f87171;
+    --primary-main-color: #037DE2;
+    --primary-light-color: #f0f7ff;
+    --primary-error-color: #f87171;
     --button-bg-color: #037DE2;
     --button-bg-color: #037DE2;
     --button-text-color: #ffffff;
@@ -78,16 +80,16 @@ html, body {
         sans-serif;
     --font-family-paragraph: 'Noto Sans',
         sans-serif;
-     --font-family:'Noto Sans',
+    --font-family: 'Noto Sans',
         sans-serif;
-     --font-weight:400;
+    --font-weight: 400;
     font-family: 'Noto Sans', sans-serif;
     /* Other Global Styles */
     --text-color: #4a4a4a;
     --heading-color: #2c3e50;
     /* Colors */
     --primary-color: #3498db;
-    --primary2-color:#34495E;
+    --primary2-color: #34495E;
     --secondary-color: #2ecc71;
     --danger-color: #e74c3c;
     --text-color: #4a4a4a;
@@ -103,7 +105,7 @@ html, body {
     --padding-small: 8px;
     --padding-regular: 16px;
     --padding-large: 24px;
---allindex-margin-top:1rem;
+    --allindex-margin-top: 1rem;
     --margin-small: 8px;
     --margin-regular: 16px;
     --margin-large: 24px;
@@ -217,17 +219,18 @@ html, body {
     --load-more-text-align: center;
 
     /* fullview button styles */
-/* table answer toggle styles */
---answer-font-size:16px;
---answer-padding-left:25px;
---answer-color:#777;
---answer-font-weight:400
+    /* table answer toggle styles */
+    --answer-font-size: 16px;
+    --answer-padding-left: 25px;
+    --answer-color: #777;
+    --answer-font-weight: 400
 }
 
-button{
+button {
     transform: none !important;
 }
-button:active{
+
+button:active {
     transform: none !important;
 }
 
@@ -244,21 +247,23 @@ body {
 } */
 /* buttons styles */
 ul,
-li
- {
+li {
     margin: 0;
-    padding: 0 ;
+    padding: 0;
     list-style: none;
-   
+
 }
+
 ol,
 ul {
     padding: 0 !important;
 }
-a{
+
+a {
     text-decoration: none;
-        color: inherit;
+    color: inherit;
 }
+
 .allbuttons {
     /* width: calc(100% - 40px); */
     width: var(--button-width);
@@ -296,21 +301,23 @@ a{
     background-color: white;
     transform: none;
 }
-.load-more-button :active{
+
+.load-more-button :active {
     transform: none;
 }
+
 .newtest-modal-button.create:disabled {
     background-color: #ddd;
     cursor: not-allowed;
     border: none;
 }
 
- .newtest-modal-button.create:not(:disabled):hover {
-     background-color: var(--primary-main-color);
-     color: white;
-     cursor: pointer;
-     border: none;
- }
+.newtest-modal-button.create:not(:disabled):hover {
+    background-color: var(--primary-main-color);
+    color: white;
+    cursor: pointer;
+    border: none;
+}
 
 .newtest-modal-button.create {
     background-color: var(--button-active);
@@ -354,25 +361,25 @@ a{
 }
 
 .sidebar-contents {
-  position: relative;
+    position: relative;
 }
 
 .sidebar-contents:hover {
-  background-color: #f4f5f6;
-  color: #037de2;
+    background-color: #f4f5f6;
+    color: #037de2;
 }
 
 .sidebar-contents.active {
-  background-color: #f2f9ff;
-  color: #037de2;
-  font-size: var(--font-size-regular);
-  font-weight: var(--font-weight-active);
+    background-color: #f2f9ff;
+    color: #037de2;
+    font-size: var(--font-size-regular);
+    font-weight: var(--font-weight-active);
 }
 
 .newtest-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* .sidebar-contents :hover {
@@ -380,33 +387,33 @@ a{
 } */
 
 .sidebar-contents:hover a {
-  color: #037de2;
+    color: #037de2;
 }
 
 .sidebar-contents::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 3px;
-  background-color: #037de2;
-  transform: scaleY(0);
-  transition: transform 0.3s ease;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: #037de2;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
 }
 
 .sidebar-contents::after {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0 !important;
-  transition: all 0.3s ease;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0 !important;
+    transition: all 0.3s ease;
 }
 
 .sidebar-contents:hover::after {
-  opacity: 1 !important;
-  transform: translate(5px, -50%);
+    opacity: 1 !important;
+    transform: translate(5px, -50%);
 }
 
 /* .sidebar-contents.active,
@@ -414,13 +421,14 @@ a{
 
 .sidebar-contents.active a,
 .sidebar-contents.active:hover a {
-  color: #037de2;
+    color: #037de2;
 }
 
 .sidebar-contents.active::after {
-  opacity: 1 !important;
-  transform: translate(5px, -50%);
+    opacity: 1 !important;
+    transform: translate(5px, -50%);
 }
+
 /* dropdown test styles */
 .dropdown-letters {
 
@@ -450,7 +458,7 @@ a{
     min-height: auto;
     height: auto;
     /* min-height: 158px; */
-    padding : 5px;
+    padding: 5px;
     width: 180px;
 }
 
@@ -694,13 +702,14 @@ a{
 
 
 }
-.close-icon{
+
+.close-icon {
     color: #34495E !important;
     position: absolute;
     right: 1.7rem;
     font-size: 1.3rem !important;
     cursor: pointer;
-  }
+}
 
 /* .bulk-actions:hover{
 background-color: #e0e0e0 !important;
@@ -812,6 +821,7 @@ background-color: #e0e0e0 !important;
     color: var(--primary-main-color);
     /* Red color for delete button */
 }
+
 /* Add this to your TableComponent.css */
 /* Replace your existing checkbox styles with: */
 .col-checkbox {
@@ -834,7 +844,7 @@ background-color: #e0e0e0 !important;
     position: relative;
     display: inline-block;
     padding-top: 4px;
-    
+
 }
 
 .checkbox-icon {
@@ -858,7 +868,9 @@ background-color: #e0e0e0 !important;
 
 /* Hide the default icons when using custom ones */
 .col-checkbox input[type="checkbox"]::before {
-    display: none; }
+    display: none;
+}
+
 .dropdown-button {
     background-color: var(--button-bg-color);
     color: var(--button-text-color);
@@ -876,7 +888,7 @@ background-color: #e0e0e0 !important;
     background-color: var(--button-hover-bg-color);
 }
 
-.dropdown-button:after{
+.dropdown-button:after {
     display: inline-block;
     margin: auto 0;
     margin-left: .255em;
@@ -897,16 +909,17 @@ background-color: #e0e0e0 !important;
     font-family: "Noto Sans", serif;
     width: 300px;
 }
+
 @media (max-width:768px) {
-.test-search-input{
-    width: 100%;
-}
+    .test-search-input {
+        width: 100%;
+    }
 }
 
-@media (max-width:425px){
+@media (max-width:425px) {
 
-    .test-search-input{
-       padding: 8px 5px 8px 30px;
+    .test-search-input {
+        padding: 8px 5px 8px 30px;
     }
 }
 
@@ -1002,13 +1015,15 @@ background-color: #e0e0e0 !important;
     align-items: center;
     border-radius: 85px;
     float: right;
-   }
-.sidebar-contents-header{
+}
+
+.sidebar-contents-header {
     font-size: 15px;
     font-weight: 600;
     padding-left: 11px;
     text-transform: uppercase;
 }
+
 .empty-state {
     text-align: center;
     padding: 2rem;
@@ -1016,10 +1031,10 @@ background-color: #e0e0e0 !important;
     background-color: #f8f9fa;
     margin: 1rem;
     border-radius: 8px;
-  }
-  
+}
 
-  /* root all modals styles */
+
+/* root all modals styles */
 /* modal overlay */
 
 :root {
@@ -1033,22 +1048,22 @@ background-color: #e0e0e0 !important;
     --modal-overlay-padding-top: 20px;
 
     /* Modal Content Variables */
-        --modal-content-bg: white;
-        --modal-content-border-radius: 4px;
-        --modal-content-width: 90%;
-        --modal-content-max-width: 900px;
-        --modal-content-max-height: 90vh;
-        --modal-content-overflow-y: auto;
-        --modal-content-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        --modal-content-display: flex;
-        --modal-content-flex-direction: column;
-        --modal-content-position: fixed;
-        --modal-content-top: 20px;
-        --modal-content-left: 50%;
-        --modal-content-transform: translateX(-50%);
-        --modal-content-animation: none;
+    --modal-content-bg: white;
+    --modal-content-border-radius: 4px;
+    --modal-content-width: 90%;
+    --modal-content-max-width: 900px;
+    --modal-content-max-height: 90vh;
+    --modal-content-overflow-y: auto;
+    --modal-content-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --modal-content-display: flex;
+    --modal-content-flex-direction: column;
+    --modal-content-position: fixed;
+    --modal-content-top: 20px;
+    --modal-content-left: 50%;
+    --modal-content-transform: translateX(-50%);
+    --modal-content-animation: none;
 
-/* Modal Header Variables */
+    /* Modal Header Variables */
     --modal-header-display: flex;
     --modal-header-justify-content: space-between;
     --modal-header-align-items: center;
@@ -1070,7 +1085,7 @@ background-color: #e0e0e0 !important;
     --modal-close-btn-padding: 0;
     --modal-close-btn-line-height: 1;
 
-/* Close Button Hover */
+    /* Close Button Hover */
     --modal-close-btn-hover-color: #333;
 
     /* Modal Body */
@@ -1111,53 +1126,53 @@ background-color: #e0e0e0 !important;
 
 
     /* Margin */
-        --margin-top-sm: 8px;
-    
-        /* Switch Container */
-        --switch-container-display: flex;
-        --switch-container-gap: 20px;
-        --switch-container-align: center;
-    
-        /* Switch Wrapper */
-        --switch-wrapper-display: flex;
-        --switch-wrapper-align: center;
-        --switch-wrapper-gap: 10px;
-    
-        /* Switch */
-        --switch-width: 40px;
-        --switch-height: 20px;
-        --switch-slider-bg: #ccc;
-        --switch-slider-transition: 0.4s;
-        --switch-slider-radius: 20px;
-    
-        /* Slider Button */
-        --switch-slider-btn-size: 14px;
-        --switch-slider-btn-left: 3px;
-        --switch-slider-btn-bottom: 3px;
-        --switch-slider-btn-bg: white;
-        --switch-slider-btn-radius: 50%;
-    
-        /* Checked State */
-        --switch-checked-bg: var(--button-bg-color);
-        --switch-checked-translate: 20px;
-    
-        /* Button */
-        --btn-bg: #fff;
-        --btn-border: 1px solid;
-        --btn-border-radius: 30px;
-        --btn-text-color: #495365;
-        --btn-font-size: 15px;
-        --btn-font-weight: 700;
-        --btn-padding: 5px 20px;
-        --btn-hover-bg: #f2f9ff;
-        --btn-hover-border: 1px solid #555;
-    
-        /* Primary Button */
-        --btn-primary-bg: #4a90e2;
-        --btn-primary-text: white;
+    --margin-top-sm: 8px;
+
+    /* Switch Container */
+    --switch-container-display: flex;
+    --switch-container-gap: 20px;
+    --switch-container-align: center;
+
+    /* Switch Wrapper */
+    --switch-wrapper-display: flex;
+    --switch-wrapper-align: center;
+    --switch-wrapper-gap: 10px;
+
+    /* Switch */
+    --switch-width: 40px;
+    --switch-height: 20px;
+    --switch-slider-bg: #ccc;
+    --switch-slider-transition: 0.4s;
+    --switch-slider-radius: 20px;
+
+    /* Slider Button */
+    --switch-slider-btn-size: 14px;
+    --switch-slider-btn-left: 3px;
+    --switch-slider-btn-bottom: 3px;
+    --switch-slider-btn-bg: white;
+    --switch-slider-btn-radius: 50%;
+
+    /* Checked State */
+    --switch-checked-bg: var(--button-bg-color);
+    --switch-checked-translate: 20px;
+
+    /* Button */
+    --btn-bg: #fff;
+    --btn-border: 1px solid;
+    --btn-border-radius: 30px;
+    --btn-text-color: #495365;
+    --btn-font-size: 15px;
+    --btn-font-weight: 700;
+    --btn-padding: 5px 20px;
+    --btn-hover-bg: #f2f9ff;
+    --btn-hover-border: 1px solid #555;
+
+    /* Primary Button */
+    --btn-primary-bg: #4a90e2;
+    --btn-primary-text: white;
 
 
-/* Button Add Answer */
+    /* Button Add Answer */
     --btn-add-bg: #f0f7ff;
     --btn-add-color: var(--primary-main-color);
     --btn-add-border: 1px dashed var(--primary-main-color)#4a90e2;
@@ -1212,59 +1227,59 @@ background-color: #e0e0e0 !important;
 
     /* Create Button */
     --create-btn-bg: var(--primary-main-color);
-    --create-btn-hover:#1672bf;
+    --create-btn-hover: #1672bf;
     --create-btn-color: #fff;
     --create-btn-border: 1px solid var(--primary-main-color);
     --create-btn-disabled-opacity: 0.6;
 
     /* Bounce Animation */
-        --bounce-perspective: perspective(1000px);
-        --bounce-translateX: translateX(-50%);
-        --bounce-translateZ-start: translateZ(0);
-        --bounce-translateZ-mid: translateZ(20px);
-        --bounce-duration: 0.3s;
-        --bounce-timing: ease-in-out;
+    --bounce-perspective: perspective(1000px);
+    --bounce-translateX: translateX(-50%);
+    --bounce-translateZ-start: translateZ(0);
+    --bounce-translateZ-mid: translateZ(20px);
+    --bounce-duration: 0.3s;
+    --bounce-timing: ease-in-out;
 
-/* tag input form field style */
+    /* tag input form field style */
 
-        --tag-bg-color: #e9ecef;
-            --tag-text-color: #333;
-            --border-radius: 4px;
-            --font-size: 14px;
-            --remove-color: #888;
-            --remove-hover-color: #ff4d4f;
-            --padding-small: 4px;
-            --padding-medium: 4px 8px;
-            --input-min-width: 120px;
-            --icon-size: 16px;
-            --line-height: 1;
+    --tag-bg-color: #e9ecef;
+    --tag-text-color: #333;
+    --border-radius: 4px;
+    --font-size: 14px;
+    --remove-color: #888;
+    --remove-hover-color: #ff4d4f;
+    --padding-small: 4px;
+    --padding-medium: 4px 8px;
+    --input-min-width: 120px;
+    --icon-size: 16px;
+    --line-height: 1;
 
 
 
-            /* publish modal settings show and hide styles  */
-            --icon-default-color: var(--primary-main-color);
-                --icon-active-color: gray;
-                --font-weight-bold: 600;
-/* 
+    /* publish modal settings show and hide styles  */
+    --icon-default-color: var(--primary-main-color);
+    --icon-active-color: gray;
+    --font-weight-bold: 600;
+    /* 
                 new class page form link copied style */
-                
---copy-message-bg: #f0f0f0;
+
+    --copy-message-bg: #f0f0f0;
     --copy-message-text: #333;
     --copy-message-padding: 6px 10px;
     --copy-message-radius: 4px;
     --copy-message-fade-time: 2s;
 
     /* Color Option Styles */
-        --color-option-size: 28px;
-        --color-option-border-radius: 6px;
-        --color-option-border: 2px solid transparent;
-        --color-option-border-selected: #333;
-        --tick-icon-color: white;
-        --tick-icon-size: 16px;
+    --color-option-size: 28px;
+    --color-option-border-radius: 6px;
+    --color-option-border: 2px solid transparent;
+    --color-option-border-selected: #333;
+    --tick-icon-color: white;
+    --tick-icon-size: 16px;
 
 
-/* Custom Color Picker */
---custom-color-picker-opacity: 0;
+    /* Custom Color Picker */
+    --custom-color-picker-opacity: 0;
     --custom-color-picker-position: absolute;
     --custom-color-picker-width: 100%;
     --custom-color-picker-height: 100%;
@@ -1280,25 +1295,25 @@ background-color: #e0e0e0 !important;
 
     /* column visibility styles (view) */
     --columnvisibility-bg: white;
-        --columnvisibility-border: 1px solid #ddd;
-        --columnvisibility-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        --columnvisibility-radius: 4px;
-        --columnvisibility-padding: 8px;
-        --columnvisibility-min-width: 150px;
-        --columnvisibility-z-index: 1000;
-        --columnvisibility-transition: opacity 0.2s ease-in-out,
-            visibility 0.2s ease-in-out,
-            transform 0.2s ease-in-out;
-        --columnvisibility-hover-bg: #f0f0f0;
+    --columnvisibility-border: 1px solid #ddd;
+    --columnvisibility-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    --columnvisibility-radius: 4px;
+    --columnvisibility-padding: 8px;
+    --columnvisibility-min-width: 150px;
+    --columnvisibility-z-index: 1000;
+    --columnvisibility-transition: opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        transform 0.2s ease-in-out;
+    --columnvisibility-hover-bg: #f0f0f0;
 
-/* ----------------------------------
+    /* ----------------------------------
  all index page table page styles  
  Index Container Styles 
 ------------------------------------------ */
     --index-container-bg: #FFFFFF;
     --index-container-text: #495365;
     --index-container-text: #495365;
-    --index-container-border-radius: 4px;   
+    --index-container-border-radius: 4px;
     /* --index-container-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     --index-container-padding: 1rem;
 
@@ -1309,148 +1324,147 @@ background-color: #e0e0e0 !important;
     --index-container-transition: 0.3s ease-in-out;
 
 
-        /* List Styles */
-        --list-padding: 0;
-        --list-margin: 0;
-        --list-margin-bottom: 3px;
+    /* List Styles */
+    --list-padding: 0;
+    --list-margin: 0;
+    --list-margin-bottom: 3px;
 
-        /* Hover Effects */
-        --hover-bg: #f5f7fa;
+    /* Hover Effects */
+    --hover-bg: #f5f7fa;
 
-        /* Tag Options */
-        --tag-padding: 0.25rem 0;
+    /* Tag Options */
+    --tag-padding: 0.25rem 0;
 
-        /* Input Styles */
-        --input-margin-top: 0.5rem;
-        --input-padding: 0.25rem;
-        --input-width: 100%;
+    /* Input Styles */
+    --input-margin-top: 0.5rem;
+    --input-padding: 0.25rem;
+    --input-width: 100%;
 
-        /* Button Styles */
-        --button-padding: 0.25rem;
-        --button-font-size: 1rem;
-        --button-color: #34495E;
-        --button-transition: color 0.3s ease;
+    /* Button Styles */
+    --button-padding: 0.25rem;
+    --button-font-size: 1rem;
+    --button-color: #34495E;
+    --button-transition: color 0.3s ease;
 
-        /* Link Styles */
-        --link-color: var(--primary-main-color);
+    /* Link Styles */
+    --link-color: var(--primary-main-color);
 
-        /* Icon Styles */
-        --icon-font-size: 15px;
+    /* Icon Styles */
+    --icon-font-size: 15px;
 
-        /* Tooltip Styles */
-        --tooltip-bg: #000;
-        --tooltip-color: #fff;
-        --tooltip-padding: 5px 8px;
-        --tooltip-font-size: 12px;
-        --tooltip-border-radius: 5px;
-        --tooltip-opacity: 0;
-        --tooltip-transition: opacity 0.3s;
-    
-       
-                /* Tooltip Styles */
-                --tooltip-visible: visible;
-                --tooltip-opacity: 1;
-                --tooltip-scale: translateX(-50%) scale(1);
-        
-                /* Button Styles */
-                --button-padding: 5px;
-                --button-font-size: var(--icon-size);
-                --button-hover-bg: #d9d9d9;
-                --button-hover-shadow: 0 0 10px rgba(0, 102, 204, 0.3);
-                --button-hover-border: 1px solid #555;
-                --button-hover-light-bg: #F2F9FF;
-        
-                /* Modal Styles */
-                --modal-bg: white;
-                --modal-border-radius: 8px;
-                --modal-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                --modal-width: 650px;
-                --modal-max-width: 90%;
-                --modal-scale: scale(0.95);
-                --modal-opacity: 0;
-                --modal-animation: zoomEffect 1s ease-in-out infinite;
-        
-                /* Modal Backdrop */
-                --modal-backdrop-bg: rgba(0, 0, 0, 0.5);
-                --modal-z-index: 999;
-                --modal-padding-top: 20px;
-        
-                /* Tag Dot */
-                --tag-dot-size: 5px;
-                --tag-dot-margin-right: 8px;
-        
-                /* Tag Modal */
-                --tag-modal-gap: 10px;
-                --tag-modal-padding: 12px 16px;
-                --tag-modal-font-size: 14px;
-                --tag-modal-font-weight: 500;
-                --tag-modal-color: #34495E;
-        
-                /* Input Styles */
-                --input-padding: 8px;
-                --input-border: 1px solid #ddd;
-                --input-border-radius: 4px;
+    /* Tooltip Styles */
+    --tooltip-bg: #000;
+    --tooltip-color: #fff;
+    --tooltip-padding: 5px 8px;
+    --tooltip-font-size: 12px;
+    --tooltip-border-radius: 5px;
+    --tooltip-opacity: 0;
+    --tooltip-transition: opacity 0.3s;
 
 
-        /* Color Box */
-        --color-box-size: 30px;
-        --color-box-border-radius: 4px;
+    /* Tooltip Styles */
+    --tooltip-visible: visible;
+    --tooltip-opacity: 1;
+    --tooltip-scale: translateX(-50%) scale(1);
 
-        /* Tooltip */
-        --tooltip-bg: #000;
-        --tooltip-color: #fff;
-        --tooltip-font-size: 12px;
-        --tooltip-padding: 5px 8px;
-        --tooltip-border-radius: 5px;
-        --tooltip-opacity: 0;
-        --tooltip-transition: opacity 0.3s;
+    /* Button Styles */
+    --button-padding: 5px;
+    --button-font-size: var(--icon-size);
+    --button-hover-bg: #d9d9d9;
+    --button-hover-shadow: 0 0 10px rgba(0, 102, 204, 0.3);
+    --button-hover-border: 1px solid #555;
+    --button-hover-light-bg: #F2F9FF;
 
-        /* Checkmark */
-        --checkmark-position: absolute;
-        --checkmark-top: 5px;
-        --checkmark-left: 5px;
-        --checkmark-color: white;
-        --checkmark-font-size: 16px;
+    /* Modal Styles */
+    --modal-bg: white;
+    --modal-border-radius: 8px;
+    --modal-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --modal-width: 650px;
+    --modal-max-width: 90%;
+    --modal-scale: scale(0.95);
+    --modal-opacity: 0;
+    --modal-animation: zoomEffect 1s ease-in-out infinite;
 
-        /* Button */
-        --button-done-bg: #4CAF50;
-        --button-done-color: white;
-        --button-done-padding: 8px 16px;
-        --button-done-font-size: 14px;
-        --button-done-border-radius: 4px;
+    /* Modal Backdrop */
+    --modal-backdrop-bg: rgba(0, 0, 0, 0.5);
+    --modal-z-index: 999;
+    --modal-padding-top: 20px;
 
-        /* Tag Modal Footer */
-        --tag-modal-footer-gap: 10px;
-        --tag-modal-footer-padding: 12px 16px;
-        --tag-modal-footer-border: 1px solid #ddd;
+    /* Tag Dot */
+    --tag-dot-size: 5px;
+    --tag-dot-margin-right: 8px;
 
-        /* Create Tag Button */
-        --create-tag-btn-padding: 10px 25px;
-        --create-tag-btn-border: 1px solid #495365;
-        --create-tag-btn-color: #495365;
-        --create-tag-btn-border-radius: 20px;
-        --create-tag-btn-width: 110px;
-        --create-tag-btn-height: 37px;
-        --create-tag-btn-transition: background-color 0.3s ease;
-    
-        
-                    /* Tooltip */
-                    --tooltip-opacity-hover: 1;
-            
-                    /* Sort Icon */
-                    --custom-sort-icon-size: 15px;
-            
-                    /* Add Tag Button */
-                    --add-tag-btn-font-size: 14px;
-                    --add-tag-btn-color: #34495E;
-                    --add-tag-btn-bg-hover: #F4F5F6;
-                    --add-tag-btn-padding-top: 5px;
-            
-                    /* Horizontal Rule */
-                    --hr-tag-margin: 0;
+    /* Tag Modal */
+    --tag-modal-gap: 10px;
+    --tag-modal-padding: 12px 16px;
+    --tag-modal-font-size: 14px;
+    --tag-modal-font-weight: 500;
+    --tag-modal-color: #34495E;
+
+    /* Input Styles */
+    --input-padding: 8px;
+    --input-border: 1px solid #ddd;
+    --input-border-radius: 4px;
 
 
-                    /* Action icon */
-                
+    /* Color Box */
+    --color-box-size: 30px;
+    --color-box-border-radius: 4px;
+
+    /* Tooltip */
+    --tooltip-bg: #000;
+    --tooltip-color: #fff;
+    --tooltip-font-size: 12px;
+    --tooltip-padding: 5px 8px;
+    --tooltip-border-radius: 5px;
+    --tooltip-opacity: 0;
+    --tooltip-transition: opacity 0.3s;
+
+    /* Checkmark */
+    --checkmark-position: absolute;
+    --checkmark-top: 5px;
+    --checkmark-left: 5px;
+    --checkmark-color: white;
+    --checkmark-font-size: 16px;
+
+    /* Button */
+    --button-done-bg: #4CAF50;
+    --button-done-color: white;
+    --button-done-padding: 8px 16px;
+    --button-done-font-size: 14px;
+    --button-done-border-radius: 4px;
+
+    /* Tag Modal Footer */
+    --tag-modal-footer-gap: 10px;
+    --tag-modal-footer-padding: 12px 16px;
+    --tag-modal-footer-border: 1px solid #ddd;
+
+    /* Create Tag Button */
+    --create-tag-btn-padding: 10px 25px;
+    --create-tag-btn-border: 1px solid #495365;
+    --create-tag-btn-color: #495365;
+    --create-tag-btn-border-radius: 20px;
+    --create-tag-btn-width: 110px;
+    --create-tag-btn-height: 37px;
+    --create-tag-btn-transition: background-color 0.3s ease;
+
+
+    /* Tooltip */
+    --tooltip-opacity-hover: 1;
+
+    /* Sort Icon */
+    --custom-sort-icon-size: 15px;
+
+    /* Add Tag Button */
+    --add-tag-btn-font-size: 14px;
+    --add-tag-btn-color: #34495E;
+    --add-tag-btn-bg-hover: #F4F5F6;
+    --add-tag-btn-padding-top: 5px;
+
+    /* Horizontal Rule */
+    --hr-tag-margin: 0;
+
+
+    /* Action icon */
+
 }
-

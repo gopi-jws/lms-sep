@@ -352,9 +352,9 @@
     padding: 0 0.75rem;
   }
 
-  /* .logo-left {
+  .logo-left {
     margin-left: 70px;
-  } */
+  }
 
   .header-logo-icon {
     font-size: 35px !important;
@@ -388,9 +388,9 @@
     padding: 5px !important;
   }
 
-  /* .logo-left {
+  .logo-left {
     margin-left: 45px;
-  } */
+  }
 }
 
 /* Default nav menu for desktop */
