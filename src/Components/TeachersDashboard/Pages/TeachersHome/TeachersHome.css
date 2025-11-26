@@ -1,0 +1,126 @@
+/* ------------------------------
+   GENERAL LAYOUT
+--------------------------------*/
+
+
+
+/* ------------------------------
+   EXTRA CARDS (MATCH INSTITUTE)
+--------------------------------*/
+
+
+.teacher-dashboard-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.teacher-dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+}
+
+.teacher-dashboard-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.teacher-dashboard-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+}
+
+.teacher-dashboard-card-link {
+  background: none;
+  border: none;
+  color: #3B82F6;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ------------------------------
+   RECENT ACTIVITIES SECTION
+--------------------------------*/
+.teacher-dashboard-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.teacher-dashboard-activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #ececec;
+  transition: 0.2s ease;
+}
+
+.teacher-dashboard-activity-item:hover {
+  background: #f1f5ff;
+  border-color: #d0e2ff;
+}
+
+.teacher-dashboard-activity-course {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+
+.teacher-dashboard-activity-action {
+  font-size: 13px;
+  color: #555;
+}
+
+.teacher-dashboard-activity-time {
+  font-size: 12px;
+  color: #777;
+}
+
+/* ------------------------------
+   QUICK ACTION BUTTONS
+--------------------------------*/
+.teacher-dashboard-actions .teacher-dashboard-action {
+  width: 100%;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.teacher-dashboard-action:hover {
+  background: #e8f0ff;
+  border-color: #bcd4ff;
+  transform: translateY(-2px);
+}
+
+/* ------------------------------
+   MOBILE RESPONSIVE
+--------------------------------*/
+@media (max-width: 768px) {
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .teacher-dashboard-card {
+    margin-top: 18px;
+  }
+
+  .teacher-dashboard-action {
+    justify-content: center !important;
+  }
+}

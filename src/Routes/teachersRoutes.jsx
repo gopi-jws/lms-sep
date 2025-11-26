@@ -10,8 +10,7 @@ const TeachersRoutes = () => {
         <Routes>
             <Route path="/*" element={<TeachersDashboard />}>
                 <Route index element={<TeachersHome />} />  {/* Default Page */}
-                <Route path="question-banks" element={<TeachersQuestionBanks />} />
-                <Route path="tests" element={<TeachersTests />} />
+            
             </Route>
         </Routes>
     );

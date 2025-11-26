@@ -71,7 +71,6 @@ const TestIndex = () => {
   const [fullViewMode, setFullViewMode] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -84,7 +83,6 @@ const TestIndex = () => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const sidebarRef = useRef(null);
 
   const [ispinning, setIsSpinning] = useState(null)
   // const getSortedTests = () => {

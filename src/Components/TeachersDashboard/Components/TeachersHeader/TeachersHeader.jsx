@@ -1,158 +1,132 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import './TeachersHeader.css'
+import { useState, useEffect, useRef } from "react"
+import { Menu, X, Bell, Search, User, ChevronDown, Settings, LogOut } from "lucide-react"
+import { FaGraduationCap } from "react-icons/fa"
+import "./TeachersHeader.css"
 
-const TeachersHeader = () => {
-    const [isNavExpanded, setIsNavExpanded] = useState(false)
-    const [isProfileExpanded, setIsProfileExpanded] = useState(false)
-    const profileDropdownRef = useRef(null)
+const TeacherHeader = ({ userName = "Dr. Sarah Johnson" }) => {
+  const [isMobile, setIsMobile] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
 
-    const toggleNav = () => {
-        setIsNavExpanded(!isNavExpanded)
-        if (isProfileExpanded) setIsProfileExpanded(false)
+  const dropdownRef = useRef(null)
+  const navRef = useRef(null)
+
+  // Detect Mobile
+  useEffect(() => {
+    const detectMobile = () => {
+      const mobile = window.innerWidth <= 768
+      setIsMobile(mobile)
+      if (!mobile) setIsNavOpen(false)
     }
 
-    const toggleProfile = () => {
-        setIsProfileExpanded(!isProfileExpanded)
-        if (isNavExpanded) setIsNavExpanded(false)
+    detectMobile()
+    window.addEventListener("resize", detectMobile)
+    return () => window.removeEventListener("resize", detectMobile)
+  }, [])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsUserDropdownOpen(false)
+      }
+
+      if (navRef.current && !navRef.current.contains(event.target) && isNavOpen) {
+        const toggleBtn = document.querySelector(".navbar-toggler")
+        if (!toggleBtn || !toggleBtn.contains(event.target)) {
+          setIsNavOpen(false)
+        }
+      }
     }
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
-                setIsProfileExpanded(false)
-            }
-        }
+    document.addEventListener("mousedown", handleOutside)
+    return () => document.removeEventListener("mousedown", handleOutside)
+  }, [isNavOpen])
 
-        document.addEventListener("mousedown", handleClickOutside)
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside)
-        }
-    }, [])
+  const toggleNav = () => setIsNavOpen(!isNavOpen)
+  const toggleUserDropdown = () => setIsUserDropdownOpen(!isUserDropdownOpen)
 
-    // Close mobile nav when window resizes to desktop
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 992 && isNavExpanded) {
-                setIsNavExpanded(false)
-            }
-        }
+  return (
+    <header className="top-bar">
+      <div className="top-bar-container">
 
-        window.addEventListener("resize", handleResize)
-        return () => {
-            window.removeEventListener("resize", handleResize)
-        }
-    }, [isNavExpanded])
+        {/* ------------ LEFT SIDE: LOGO + SEARCH + MOBILE TOGGLE ------------ */}
+        <div className="logo-left">
 
-    return (
-        <header className="header-container">
-            <div className="container-fluid header-inner">
-                <div className="header-content">
-                    {/* Logo - Left Side */}
-                    <div className="logo-container">
-                        <a href="/" className="logo-link">
-                            <img src="/placeholder.svg?height=32&width=120" alt="Logo" className="logo-image" />
-                        </a>
-                    </div>
+          {/* Mobile Sidebar Toggle */}
+          <button className="navbar-toggler" onClick={toggleNav} aria-label="Toggle navigation">
+            {isNavOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
 
-                    {/* Center Navigation - Desktop */}
-                    <div className="nav-center d-none d-lg-flex">
-                        <nav className="main-nav">
-                            <a href="/" className="nav-link active" aria-current="page">
-                                Home
-                            </a>
-                            <a href="/question-banks" className="nav-link">
-                                Question Banks
-                            </a>
-                            <a href="/tests" className="nav-link">
-                                Tests
-                            </a>
-                        </nav>
-                    </div>
+          {/* Logo (same as Institute) */}
+          <FaGraduationCap className="header-logo-icon" />
+          <span className="header-logo-text">Teacher Panel</span>
 
-                    {/* Right Side - Profile Management */}
-                    <div className="profile-section">
-                        <div className="profile-dropdown" ref={profileDropdownRef}>
-                            <button className="profile-button" onClick={toggleProfile} aria-expanded={isProfileExpanded}>
-                                <img src="/placeholder.svg?height=40&width=40" alt="Profile" className="profile-img" />
-                                <span className="profile-name d-none d-md-inline-block">John Doe</span>
-                                <i className={`bi bi-chevron-down profile-chevron ${isProfileExpanded ? "rotated" : ""}`}></i>
-                            </button>
 
-                            {/* Profile Dropdown */}
-                            <div className={`dropdown-menu profile-menu ${isProfileExpanded ? "show" : ""}`}>
-                                <div className="dropdown-header profile-header">
-                                    <div className="profile-header-content">
-                                        <img src="/placeholder.svg?height=50&width=50" alt="Profile" className="profile-header-img" />
-                                        <div className="profile-header-info">
-                                            <p className="profile-header-name">John Doe</p>
-                                            <p className="profile-header-email">john.doe@example.com</p>
-                                        </div>
-                                    </div>
-                                </div>
+        </div>
 
-                                <a href="/profile" className="dropdown-item">
-                                    <i className="bi bi-person me-2"></i> My Profile
-                                </a>
-                                <a href="/account" className="dropdown-item">
-                                    <i className="bi bi-gear me-2"></i> Account Settings
-                                </a>
-                                <a href="/dashboard" className="dropdown-item">
-                                    <i className="bi bi-speedometer me-2"></i> Dashboard
-                                </a>
-                                <a href="/courses" className="dropdown-item">
-                                    <i className="bi bi-book me-2"></i> My Courses
-                                </a>
-                                <a href="/grades" className="dropdown-item">
-                                    <i className="bi bi-award me-2"></i> Grades & Certificates
-                                </a>
+        {/* Search Bar */}
+        <div className="teacher-search-bar">
+          <Search size={18} className="teacher-search-icon" />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="teacher-search-input"
+          />
 
-                                <div className="dropdown-divider"></div>
+          {/* Mobile Sliding Nav (kept empty per requirements) */}
+          <nav ref={navRef} className={`nav-menu ${isNavOpen ? "nav-menu-open" : ""}`} />
+        </div>
 
-                                <a href="/help" className="dropdown-item">
-                                    <i className="bi bi-question-circle me-2"></i> Help Center
-                                </a>
-                                <a href="/logout" className="dropdown-item text-danger">
-                                    <i className="bi bi-box-arrow-right me-2"></i> Logout
-                                </a>
-                            </div>
-                        </div>
 
-                        {/* Mobile menu button */}
-                        <button
-                            className="navbar-toggler d-lg-none ms-3"
-                            onClick={toggleNav}
-                            aria-expanded={isNavExpanded}
-                            aria-label="Toggle navigation"
-                        >
-                            <i className="bi bi-list"></i>
-                        </button>
-                    </div>
-                </div>
+
+        {/* ------------ RIGHT SIDE: NOTIFICATIONS + USER DROPDOWN ------------ */}
+        <div className="header-right2" ref={dropdownRef}>
+
+          {/* Notifications */}
+          <button className="teacher-notification-btn">
+            <Bell size={20} />
+            <span className="teacher-notification-badge">3</span>
+          </button>
+
+          {/* User Menu */}
+          <button className="header-settings-button" onClick={toggleUserDropdown}>
+            <div className="teacher-user-avatar">
+              <User size={18} />
             </div>
+            <p className="admin-label">{userName}</p>
+            <ChevronDown
+              size={16}
+              className={`teacher-arrow ${isUserDropdownOpen ? "open" : ""}`}
+            />
+          </button>
 
-            {/* Mobile Navigation Menu */}
-            <div className={`mobile-nav d-lg-none ${isNavExpanded ? "show" : ""}`}>
-                <div className="mobile-nav-items">
-                    <a href="/" className="mobile-nav-link active" aria-current="page">
-                        <i className="bi bi-house-door me-2"></i>
-                        Home
-                    </a>
-                    <a href="/question-banks" className="mobile-nav-link">
-                        <i className="bi bi-collection me-2"></i>
-                        Question Banks
-                    </a>
-                    <a href="/tests" className="mobile-nav-link">
-                        <i className="bi bi-clipboard-check me-2"></i>
-                        Tests
-                    </a>
-                </div>
+          {isUserDropdownOpen && (
+            <div className={`settings-dropdown ${isMobile ? "mobile" : ""}`}>
+
+              <a href="/teacher/profile" className="header-dropdown-item">
+                <User size={16} /> Profile
+              </a>
+
+              <a href="/teacher/settings" className="header-dropdown-item">
+                <Settings size={16} /> Settings
+              </a>
+
+              <div className="divider2"></div>
+
+              <a href="/logout" className="header-dropdown-item logout">
+                <LogOut size={16} /> Logout
+              </a>
+
             </div>
-        </header>
-    )
+          )}
+
+        </div>
+      </div>
+    </header>
+  )
 }
 
-export default TeachersHeader
-
+export default TeacherHeader
