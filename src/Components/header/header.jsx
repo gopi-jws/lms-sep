@@ -82,7 +82,7 @@ const Header = () => {
 
         <div className="logo-left">
           <FaGraduationCap className="header-logo-icon" />
-          <span className="header-logo-text">LMS Admin</span>
+          <span className="header-logo-text">Institute Dashboard</span>
         </div>
 
         {/* Navigation Menu */}
