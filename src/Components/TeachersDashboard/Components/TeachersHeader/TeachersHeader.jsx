@@ -5,8 +5,6 @@ import { NavLink } from "react-router-dom";
 import {
   Menu,
   X,
-  Bell,
-  Search,
   User,
   ChevronDown,
   Settings,
@@ -15,18 +13,16 @@ import {
   GraduationCap,
   FileText,
   BookOpen,
-  HelpCircle,
 } from "lucide-react";
 import { FaGraduationCap } from "react-icons/fa";
 import "./TeachersHeader.css";
 
 // ------------ Teacher Menu Items ------------
-const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/teachers-dashboard" },
-  { icon: GraduationCap, label: "My Classes", path: "/teachers-dashboard/classes" },
-  { icon: FileText, label: "My Tests", path: "/teachers-dashboard/tests" },
-  { icon: BookOpen, label: "Question Banks", path: "/teachers-dashboard/question-banks" },
-  // { icon: HelpCircle, label: "Help Center", path: "/teachers-dashboard/help" },
+const navItems = [
+  { icon: LayoutDashboard, name: "Dashboard", href: "/teachers-dashboard" },
+  { icon: GraduationCap, name: "My Classes", href: "/teachers-dashboard/classes" },
+  { icon: FileText, name: "My Tests", href: "/teachers-dashboard/tests" },
+  { icon: BookOpen, name: "Question Banks", href: "/teachers-dashboard/question-banks" },
 ];
 
 const TeacherHeader = ({ userName = "Dr. Sarah Johnson" }) => {
@@ -50,7 +46,7 @@ const TeacherHeader = ({ userName = "Dr. Sarah Johnson" }) => {
     return () => window.removeEventListener("resize", detectMobile);
   }, []);
 
-  // Close menus on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -87,34 +83,24 @@ const TeacherHeader = ({ userName = "Dr. Sarah Johnson" }) => {
           <span className="header-logo-text">Teacher Dashboard</span>
         </div>
 
-        {/* Search Bar */}
-        {/* <div className="teacher-search-bar">
-          <Search size={18} className="teacher-search-icon" />
-          <input type="text" placeholder="Search..." className="teacher-search-input" />
-        </div> */}
-
-        {/* ------------ Teacher NAV MENU (same structure as Admin) ------------ */}
+        {/* ------------ NAV MENU USING NavLink ------------ */}
         <nav ref={navRef} className={`nav-menu ${isNavOpen ? "nav-menu-open" : ""}`}>
-          {menuItems.map((item) => (
+          {navItems.map((item) => (
             <NavLink
-              key={item.path}
-              to={item.path}
-              className="nav-item"
+              key={item.href}
+              to={item.href}
+              end={item.href === "/teachers-dashboard"} // exact match only for Dashboard
+              className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
               onClick={closeMobileNav}
             >
               <item.icon className="nav-icon" />
-              <span className="nav-text">{item.label}</span>
+              <span className="nav-text">{item.name}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* ------------ Right Side: Notifications + User Dropdown ------------ */}
+        {/* ------------ Right Side: User Dropdown ------------ */}
         <div className="header-right2" ref={dropdownRef}>
-          {/* <button className="teacher-notification-btn">
-            <Bell size={20} />
-            <span className="teacher-notification-badge">3</span>
-          </button> */}
-
           <button className="header-settings-button" onClick={toggleUserDropdown}>
             <div className="teacher-user-avatar">
               <User size={18} />
@@ -140,6 +126,7 @@ const TeacherHeader = ({ userName = "Dr. Sarah Johnson" }) => {
             </div>
           )}
         </div>
+
       </div>
     </header>
   );
