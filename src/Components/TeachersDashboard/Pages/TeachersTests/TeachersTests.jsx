@@ -557,7 +557,10 @@ const TeachersTests = () => {
       width: "150px",
       cell: (row) => (
         <div className="flex items-center">
-          <Link to={`/teacher/test/${row.id}/movetest`} state={{ testName: row.test, testId: row.id }}>
+          <Link
+            to={`/teachers-dashboard/tests/${row.id}/movetest`}
+            state={{ testName: row.test, testId: row.id }}
+          >
             <span className="row-link">{row.test}</span>
           </Link>
           <div className="question-tags">

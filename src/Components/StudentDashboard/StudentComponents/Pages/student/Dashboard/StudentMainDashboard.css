@@ -11,7 +11,7 @@ body {
 .student-dashboard {
     height: 100vh;
         /* Ensures it takes full viewport height */
-        overflow-y: auto;
+        /* overflow-y: auto; */
         /* Allows scrolling */
         margin: 10px;
         display: flex;

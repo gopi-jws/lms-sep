@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './StudentMainDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FiSettings } from "react-icons/fi"; // Import settings icon
+import Sidebar from '../../../Sidebar/Sidebar';
+import { GrCompliance } from "react-icons/gr";
+import { VscTriangleDown } from 'react-icons/vsc';
+import { BookOpen, Layers, BarChart2, Trophy } from "lucide-react";
+
 const StudentDashboard = () => {
     const navigate = useNavigate();
     const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
     const [activeTab, setActiveTab] = useState('past');
+
+    /* ------------------------------------
+       Dummy Test Data
+    ------------------------------------ */
     const [pastTests, setPastTests] = useState([
         {
             id: 'hist303',
@@ -63,15 +71,10 @@ const StudentDashboard = () => {
     ]);
 
     const [selectedTest, setSelectedTest] = useState(null);
-    const [performanceData, setPerformanceData] = useState({
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        scores: [75, 82, 88, 78, 92]
-    });
 
-    const handleViewDetails = (test) => {
-        setSelectedTest(test);
-    };
-
+    /* ----------------------------------------
+       Functions
+    ---------------------------------------- */
     const calculateAverageScore = () => {
         const sum = pastTests.reduce((total, test) => total + test.score, 0);
         return (sum / pastTests.length).toFixed(1);
@@ -84,94 +87,123 @@ const StudentDashboard = () => {
         return 'needs-improvement';
     };
 
+    /* ------------------------------------
+       STATS DATA (Your Required Format)
+    ------------------------------------ */
+    const statsData = [
+        {
+            title: "Tests Completed",
+            value: pastTests.length,
+            icon: <GrCompliance size={24} />,
+            label: "",
+            color: "#3B82F6",
+        },
+        {
+            title: "Average Score",
+            value: `${calculateAverageScore()}%`,
+            icon: <BarChart2 size={24} />,
+            label: "",
+            color: "#3B82F6",
+        },
+        {
+            title: "Best Score",
+            value: `${Math.max(...pastTests.map(test => test.score))}%`,
+            icon: <Trophy size={24} />,
+            label: "",
+            color: "#3B82F6",
+        },
+        {
+            title: "Subjects",
+            value: new Set(pastTests.map(test => test.subject)).size,
+            icon: <BookOpen size={24} />,
+            label: "",
+            color: "#3B82F6",
+        },
+    ];
+
+    /* ------------------------------------
+       Mobile Sidebar Close
+    ------------------------------------ */
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const sidebarRef = useRef(null);
+    const toggleRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!isMobileOpen) return;
+
+            const sidebar = sidebarRef.current;
+            const toggle = toggleRef.current;
+
+            if (!sidebar || !toggle) return;
+
+            const outsideSidebar = !sidebar.contains(e.target);
+            const outsideToggle = !toggle.contains(e.target);
+
+            if (outsideSidebar && outsideToggle) {
+                setIsMobileOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isMobileOpen]);
+
+    const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen);
+
+    /* ------------------------------------
+       Return UI
+    ------------------------------------ */
     return (
-        <div className="student-dashboard">
+        <div className="student-dashboard" style={{ position: "relative" }}>
+
+            <div ref={sidebarRef} className="header-moblile-sideBar" style={{ marginTop: "0px" }}>
+                <Sidebar
+                    isMobileOpen={isMobileOpen}
+                    onClose={() => setIsMobileOpen(false)}
+                />
+            </div>
+
+
             <div className="container-fluid py-4">
-                <div className="row mb-4">
-                    <div className="col-12">
-                        <div className="dashboard-header-container">
-                            {/* Dashboard Header */}
-                            <div className="dashboard-header">
-                                <div className="header-left">
-                                    <h1>Your Test Performance</h1>
-                                    <p>Track your academic progress and identify areas for improvement</p>
-                                </div>
-
-                                {/* Settings Dropdown */}
-                                <div className="header-right">
-                                    <button
-                                        className="settings-button"
-                                        onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
-                                    >
-                                        <FiSettings className="settings-icon" />
-                                    </button>
-
-                                    {isSettingsExpanded && (
-                                        <div className="settings-dropdown">
-                                            <a href="/profile" className="dropdown-item">My Profile</a>
-                                            <a href="/account" className="dropdown-item">Account Settings</a>
-                                            <a href="/dashboard" className="dropdown-item">Dashboard</a>
-                                            <a href="/courses" className="dropdown-item">My Courses</a>
-                                            <a href="/grades" className="dropdown-item">Grades & Certificates</a>
-                                            <div className="divider2"></div>
-                                            <a href="/help" className="dropdown-item">Help Center</a>
-                                            <a href="/logout" className="dropdown-item logout">Logout</a>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div className="row mb-4">
-                    <div className="col-md-3">
-                        <div className="stats-card">
-                            <div className="stats-icon tests-icon">
-                                <i className="bi bi-journal-check"></i>
-                            </div>
-                            <div className="stats-info">
-                                <h3>{pastTests.length}</h3>
-                                <p>Tests Completed</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="stats-card">
-                            <div className="stats-icon average-icon">
-                                <i className="bi bi-graph-up"></i>
-                            </div>
-                            <div className="stats-info">
-                                <h3>{calculateAverageScore()}%</h3>
-                                <p>Average Score</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="stats-card">
-                            <div className="stats-icon best-icon">
-                                <i className="bi bi-trophy"></i>
-                            </div>
-                            <div className="stats-info">
-                                <h3>{Math.max(...pastTests.map(test => test.score))}%</h3>
-                                <p>Best Score</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="stats-card">
-                            <div className="stats-icon subjects-icon">
-                                <i className="bi bi-book"></i>
-                            </div>
-                            <div className="stats-info">
-                                <h3>{new Set(pastTests.map(test => test.subject)).size}</h3>
-                                <p>Subjects</p>
-                            </div>
-                        </div>
+                <div className="dashboardheading">
+                    <h3>Student Dashboard</h3>
+                    <div className="test-index-header-moblie">
+                        <VscTriangleDown
+                            onClick={toggleMobileSidebar}
+                            ref={toggleRef}
+                            className="dashboard-TriangleDown"
+                        />
                     </div>
                 </div>
 
+                {/* ------------------------------------
+                     Stats Cards (New format)
+                ------------------------------------ */}
+                <div className="dashboard-stats-grid mb-4">
+                    {statsData.map((stat, index) => (
+                        <div className="dashboard-stat-card" key={index}>
+                            <div
+                                className="dashboard-stat-icon"
+                                style={{
+                                    backgroundColor: `${stat.color}20`,
+                                    color: stat.color,
+                                }}
+                            >
+                                {stat.icon}
+                            </div>
+
+                            <div className="stat-content">
+                                <p className="stat-title">{stat.title}</p>
+                                <h3 className="dashboard-stat-value">{stat.value}</h3>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* ------------------------------------
+                     TABLE + DETAILS / SUMMARY
+                ------------------------------------ */}
                 <div className="row">
                     <div className="col-md-8">
                         <div className="card shadow-sm mb-4">
@@ -195,7 +227,10 @@ const StudentDashboard = () => {
                                                 <tr key={test.id}>
                                                     <td>
                                                         <div className="d-flex align-items-center">
-                                                            <div className="subject-icon me-2" data-subject={test.subject.toLowerCase()}>
+                                                            <div
+                                                                className="subject-icon me-2"
+                                                                data-subject={test.subject.toLowerCase()}
+                                                            >
                                                                 {test.subject.charAt(0)}
                                                             </div>
                                                             <span>{test.name}</span>
@@ -213,9 +248,9 @@ const StudentDashboard = () => {
                                                     <td>
                                                         <button
                                                             className="btn btn-sm btn-outline-primary"
-                                                            onClick={() => handleViewDetails(test)}
+                                                            onClick={() => setSelectedTest(test)}
                                                         >
-                                                             Details
+                                                            Details
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -225,32 +260,11 @@ const StudentDashboard = () => {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="card shadow-sm">
-                            <div className="card-header bg-white">
-                                <h5 className="card-title mb-0">Performance Trend</h5>
-                            </div>
-                            <div className="card-body">
-                                <div className="performance-chart">
-                                    <div className="chart-bars">
-                                        {performanceData.scores.map((score, index) => (
-                                            <div className="chart-bar-wrapper" key={index}>
-                                                <div
-                                                    className={`chart-bar ${getScoreColor(score)}`}
-                                                    style={{ height: `${score}%` }}
-                                                    title={`${performanceData.labels[index]}: ${score}%`}
-                                                >
-                                                    <span className="score-label">{score}%</span>
-                                                </div>
-                                                <div className="month-label">{performanceData.labels[index]}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
+                    {/* ------------------------------------
+                        RIGHT SIDE SUMMARY / DETAILS
+                    ------------------------------------ */}
                     <div className="col-md-4">
                         {selectedTest ? (
                             <div className="card shadow-sm mb-4">
@@ -270,7 +284,9 @@ const StudentDashboard = () => {
                                         </div>
                                         <div className="test-info">
                                             <h4>{selectedTest.name}</h4>
-                                            <p className="text-muted">{selectedTest.owner} • {selectedTest.date}</p>
+                                            <p className="text-muted">
+                                                {selectedTest.owner} • {selectedTest.date}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -294,7 +310,7 @@ const StudentDashboard = () => {
                                         <h6>Strengths</h6>
                                         <ul className="strength-list">
                                             {selectedTest.strengths.map((strength, index) => (
-                                                <li key={index} className="strength-item">
+                                                <li key={index}>
                                                     <i className="bi bi-check-circle-fill text-success me-2"></i>
                                                     {strength}
                                                 </li>
@@ -306,7 +322,7 @@ const StudentDashboard = () => {
                                         <h6>Areas for Improvement</h6>
                                         <ul className="weakness-list">
                                             {selectedTest.weaknesses.map((weakness, index) => (
-                                                <li key={index} className="weakness-item">
+                                                <li key={index}>
                                                     <i className="bi bi-exclamation-triangle-fill text-warning me-2"></i>
                                                     {weakness}
                                                 </li>
@@ -315,7 +331,9 @@ const StudentDashboard = () => {
                                     </div>
 
                                     <div className="mt-4">
-                                        <button className="btn btn-primary w-100">View Full Report</button>
+                                        <button className="btn btn-primary w-100">
+                                            View Full Report
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -338,69 +356,36 @@ const StudentDashboard = () => {
                                             <div className="subject-bar-item">
                                                 <div className="subject-label">Mathematics</div>
                                                 <div className="progress">
-                                                    <div className="progress-bar bg-primary" style={{ width: '78%' }} role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">78%</div>
+                                                    <div className="progress-bar bg-primary" style={{ width: '78%' }}>78%</div>
                                                 </div>
                                             </div>
+
                                             <div className="subject-bar-item">
                                                 <div className="subject-label">Science</div>
                                                 <div className="progress">
-                                                    <div className="progress-bar bg-success" style={{ width: '88%' }} role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100">88%</div>
+                                                    <div className="progress-bar bg-success" style={{ width: '88%' }}>88%</div>
                                                 </div>
                                             </div>
+
                                             <div className="subject-bar-item">
                                                 <div className="subject-label">English</div>
                                                 <div className="progress">
-                                                    <div className="progress-bar bg-info" style={{ width: '92%' }} role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100">92%</div>
+                                                    <div className="progress-bar bg-info" style={{ width: '92%' }}>92%</div>
                                                 </div>
                                             </div>
+
                                             <div className="subject-bar-item">
                                                 <div className="subject-label">History</div>
                                                 <div className="progress">
-                                                    <div className="progress-bar bg-warning" style={{ width: '85%' }} role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%</div>
+                                                    <div className="progress-bar bg-warning" style={{ width: '85%' }}>85%</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         )}
-
-                        <div className="card shadow-sm">
-                            <div className="card-header bg-white">
-                                <h5 className="card-title mb-0">Recommendations</h5>
-                            </div>
-                            <div className="card-body">
-                                <div className="recommendation-item">
-                                    <div className="recommendation-icon">
-                                        <i className="bi bi-lightbulb-fill"></i>
-                                    </div>
-                                    <div className="recommendation-content">
-                                        <h6>Practice World Wars Topics</h6>
-                                        <p>Based on your History exam performance</p>
-                                    </div>
-                                </div>
-
-                                <div className="recommendation-item">
-                                    <div className="recommendation-icon">
-                                        <i className="bi bi-lightbulb-fill"></i>
-                                    </div>
-                                    <div className="recommendation-content">
-                                        <h6>Review Functions & Matrices</h6>
-                                        <p>Based on your Algebra Midterm results</p>
-                                    </div>
-                                </div>
-
-                                <div className="recommendation-item">
-                                    <div className="recommendation-icon">
-                                        <i className="bi bi-lightbulb-fill"></i>
-                                    </div>
-                                    <div className="recommendation-content">
-                                        <h6>Study Organic Chemistry</h6>
-                                        <p>This was identified as an area for improvement</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

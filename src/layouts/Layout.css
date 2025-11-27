@@ -49,6 +49,14 @@
     border-top-left-radius: 16px;
 }
 
+.test-attempt-layout-content {
+    flex: 1 1 auto;
+    background-color: #f4f5f6;
+    overflow-y: auto; /* Enable vertical scroll */
+    overflow-x: hidden;
+    border-top-left-radius: 16px;
+}
+
 
 /* Media Query for smaller screens */
 @media (max-width: 768px) {

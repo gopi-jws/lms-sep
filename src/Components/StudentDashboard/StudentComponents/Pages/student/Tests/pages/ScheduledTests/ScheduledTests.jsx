@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import DataTable from "../../../../../ReusableComponents/TableComponent/TableComponent"
-import PaginationButtons from "../../../../../ReusableComponents/Pagination/PaginationButton"
-import PaginationInfo from "../../../../../ReusableComponents/Pagination/PaginationInfo"
-import TestSidebar from "../Tests/StudetentTestSidebar/Sidebar"
-import "./TestList.css"
+import DataTable from "../../../../../../../ReusableComponents/TableComponent/TableComponent"
+import PaginationButtons from "../../../../../../../ReusableComponents/Pagination/PaginationButton"
+import PaginationInfo from "../../../../../../../ReusableComponents/Pagination/PaginationInfo"
+import TestSidebar from "../../../Tests/StudetentTestSidebar/Sidebar"
+// import "./TestList.css"
 import { CiPlay1 } from "react-icons/ci"
 import { ClipboardCheck, ChevronRight } from "lucide-react"
+import Scheduled from "../../../../../../../institute-dashboard/dashboard/Pages/Sheduled/Sheduled"
 
 // Sample data
 const testData = [
@@ -112,10 +113,10 @@ const RemainingTimeCounter = ({ endTime }) => {
     return <span className="countdown-timer">{timeRemaining}</span>
 }
 
-const TestList = () => {
+const ScheduledTests = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [currentPage, setCurrentPage] = useState(1)
-    const [activeTab, setActiveTab] = useState("all")
+    const [activeTab, setActiveTab] = useState("scheduled")
     const [showButtons, setShowButtons] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
     const [isMobileOpen, setIsMobileOpen] = useState(false)
@@ -140,7 +141,12 @@ const TestList = () => {
     const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen)
 
     // Filter data based on active tab
-    let filteredData = activeTab === "all" ? testData : testData.filter((test) => test.type === activeTab)
+    let filteredData = testData.filter(test => test.type === activeTab);
+
+    useEffect(() => {
+        setActiveTab("scheduled");
+    }, []);
+
 
     // Apply search filter
     if (searchQuery) {
@@ -261,7 +267,7 @@ const TestList = () => {
             <div className="dashboard-container">
                 <div className="test-index-container">
                     <div className="test-index-header">
-                        <h3>Tests</h3>
+                        <h3>Scheduled Tests</h3>
                     </div>
 
                     <div className="my-data-table">
@@ -300,4 +306,4 @@ const TestList = () => {
     )
 }
 
-export default TestList
+export default ScheduledTests
