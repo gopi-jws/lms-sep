@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo, useRef } from "react"
 import { FaCopy, FaEdit, FaTrashAlt, FaArrowRight, FaFolderPlus } from "react-icons/fa"
 import { FaPaperPlane, FaFilePdf, FaShare, FaArchive, FaTag } from "react-icons/fa"
 
-
 import Modal from "react-modal"
 import "katex/dist/katex.min.css"
 import { Helmet } from "react-helmet"
@@ -15,8 +14,8 @@ import { useSelector,useDispatch } from "react-redux"
 import NewQBModal from '../../../../ReusableComponents/NewQBModal/NewQBModal'
 import PaginationButtons from '../../../../ReusableComponents/Pagination/PaginationButton'
 import PaginationInfo from '../../../../ReusableComponents/Pagination/PaginationInfo'
-import TeacherQuestionBankSidebar from '../TeacherQuestionBankSidebar/TeacherQuestionBankSidebar'
 import DataTable from '../../../../ReusableComponents/TableComponent/TableComponent'
+import TeacherQbQuestionsSidemenu from './TeacheQbQuestionsSidemenu'
 
 const TeacherQbQuestions = () => {
 
@@ -227,8 +226,8 @@ for x in fruits:
 
   const [tags, setTags] = useState([
     // Example initial state (can come from API)
-    { id: 1, name: "Math Questions", color: "#f00", questions: [1, 2,4,7,9] },
-    { id: 2, name: "Science Questions", color: "#0f0", questions: [3,5,6,8] },
+    { id: 1, name: "Folder 1", color: "#f00", questions: [1, 2,4,7,9] },
+    { id: 2, name: "Folder 2", color: "#0f0", questions: [3,5,6,8] },
   ]);
 
   // Check if screen is mobile size
@@ -597,7 +596,7 @@ const handleRemoveQuestionFromTag = (tagName, questionId) => {
         </div>
 
         <div ref={sidebarRef}>
-          <TeacherQuestionBankSidebar
+          <TeacherQbQuestionsSidemenu
             isMobileOpen={isMobileOpen}
             setIsMobileOpen={setIsMobileOpen}
             hideQuestionType={true}

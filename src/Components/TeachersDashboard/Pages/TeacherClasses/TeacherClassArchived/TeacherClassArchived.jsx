@@ -1,11 +1,9 @@
-import DataTable from "../../../ReusableComponents/TableComponent/TableComponent";
+
 import React, { useState, useEffect, useRef } from "react";
 import { MdOutlineArchive } from "react-icons/md";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PaginationButtons from "../../../ReusableComponents/Pagination/PaginationButton";
-import PaginationInfo from "../../../ReusableComponents/Pagination/PaginationInfo";
 import { VscTriangleDown } from "react-icons/vsc";
-import ClassSideMenu from "../classsidemenu/classsidemenu";
+
 
 import {
   FaPaperPlane,
@@ -19,8 +17,12 @@ import {
 } from "react-icons/fa";
 import { ArchiveRestore,Trash2  } from 'lucide-react';
 import { Link } from "react-router-dom";
+import TeacherClassSidebar from "../TeacherClassSidebar/TeacherClassSidebar";
+import DataTable from "../../../../ReusableComponents/TableComponent/TableComponent";
+import PaginationButtons from "../../../../ReusableComponents/Pagination/PaginationButton";
+import PaginationInfo from "../../../../ReusableComponents/Pagination/PaginationInfo";
 
-const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) => {
+const TeacherClassArchived = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) => {
   const data = [
      { id: "1", name: "Class 1", strength: 30, maximumallowed: 50, expiryDate: new Date(2024, 5, 30) },
      { id: "2", name: "Class 2", strength: 25, maximumallowed: 100, expiryDate: new Date(2024, 6, 15) },
@@ -285,7 +287,7 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
          </div>
 
          <div ref={sidebarRef}>
-           <ClassSideMenu
+           <TeacherClassSidebar
              isMobileOpen={isMobileOpen}
              setIsMobileOpen={setIsMobileOpen}
            />
@@ -335,4 +337,4 @@ const ArchivePage = ({ archivedClasses, handleUnarchive, handleArchiveDelete }) 
 
 
 
-export default ArchivePage;
+export default TeacherClassArchived;

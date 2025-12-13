@@ -34,6 +34,9 @@ import {
 } from "lucide-react"
 
 import { useSelector, useDispatch } from "react-redux"
+import TagActionsDropdown from "../../../../ReusableComponents/TagActionsDropdown/TagActionsDropdown"
+import AddFolderModal from "../../../../ReusableComponents/AddFolderModal/AddFolderModal"
+import AddTagsComponent from "../../../../ReusableComponents/AddTagsComponent/AddTagsComponent"
 // import { addNewQuestionQB } from "../../../../../slices/addQuestionBank"
 
 const TeacherQbQuestionsSidemenu = ({ isMobileOpen, setIsMobileOpen, hideQuestionType }) => {
@@ -107,7 +110,7 @@ const TeacherQbQuestionsSidemenu = ({ isMobileOpen, setIsMobileOpen, hideQuestio
   const [activeSection, setActiveSection] = useState("questionBank")
   const [showMoreOptions, setShowMoreOptions] = useState(false)
   const iconColors = ['#f44336', '#2196f3', '#ff9800', '#9c27b0']
-  const [tags, setTags] = useState(["Math Questions (10)", "Science Questions (20)"])
+  const [tags, setTags] = useState(["Folder 1 (10)", "Folder 2 (20)"])
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
  
@@ -130,7 +133,6 @@ const TeacherQbQuestionsSidemenu = ({ isMobileOpen, setIsMobileOpen, hideQuestio
   const handleTagClick = (index) => {
     setShowMoreOptions(showMoreOptions === index ? null : index)
   }
-
 
   const handleOpenModal = () => {
     setIsModalOpen(true)

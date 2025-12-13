@@ -32,6 +32,8 @@ import DataTable from "../../../../ReusableComponents/TableComponent/TableCompon
 import PaginationButtons from "../../../../ReusableComponents/Pagination/PaginationButton";
 import PaginationInfo from "../../../../ReusableComponents/Pagination/PaginationInfo";
 import { getTimeAgo } from "../../../../../utils/time-utils";
+
+
 const getTrashed = () => {
   const archived = JSON.parse(localStorage.getItem("trashedTags"));
   //localStorage.removeItem('trashedTags')

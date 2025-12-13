@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import TeachersSidebar from "./Components/TeachersSidebar/TeachersSidebar";
 import TeachersHeader from "./Components/TeachersHeader/TeachersHeader";
-import './TeachersDashboard.css';
 
 const TeachersDashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);

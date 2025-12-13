@@ -180,8 +180,8 @@ const TeacherQuestionBankSidebar = ({ foldersIteam = [], setFoldersIteam, isMobi
             <ul className="test-sidebar-menu">
               <li>
                 <Link
-                  to="/teacher/questionbank"
-                  className={`sidebar-contents ${isActive("/teacher/questionbank") ? "active" : ""}`}
+                  to="/teachers-dashboard/question-banks"
+                  className={`sidebar-contents ${isActive("/teachers-dashboard/question-banks") ? "active" : ""}`}
                   aria-label="All Question Banks"
                   onClick={() => handleSetActive("all")}
                 >
@@ -192,8 +192,8 @@ const TeacherQuestionBankSidebar = ({ foldersIteam = [], setFoldersIteam, isMobi
 
               <li>
                 <Link
-                  to="/teacher/questionbank/archived"
-                  className={`sidebar-contents ${isActive("/teacher/questionbank/archived") ? "active" : ""}`}
+                  to="/teachers-dashboard/question-banks/archive"
+                  className={`sidebar-contents ${isActive("/teachers-dashboard/question-banks/archive") ? "active" : ""}`}
                   aria-label="Archived"
                   onClick={() => handleSetActive("archived")}
                 >
@@ -204,8 +204,8 @@ const TeacherQuestionBankSidebar = ({ foldersIteam = [], setFoldersIteam, isMobi
 
               <li>
                 <Link
-                  to="/teacher/questionbank/trashed"
-                  className={`sidebar-contents ${isActive("/teacher/questionbank/trashed") ? "active" : ""}`}
+                  to="/teachers-dashboard/question-banks/trash"
+                  className={`sidebar-contents ${isActive("/teachers-dashboard/question-banks/trash") ? "active" : ""}`}
                   aria-label="Trashed"
                   onClick={() => handleSetActive("trashed")}
                 >

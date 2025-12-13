@@ -54,6 +54,8 @@ const TecaherTestSidebar = ({
   const [modalHeading, setModalHeading] = useState("");
   const [editingTag, setEditingTag] = useState(null);
   const [mode, setMode] = useState("")
+
+  
   // const [tags, setTags] = useState(() => {
   //   const storedTags = localStorage.getItem("tags");
   //   return storedTags ? JSON.parse(storedTags) : [];
@@ -61,9 +63,9 @@ const TecaherTestSidebar = ({
 
 
 
-  useEffect(() => {
-    localStorage.setItem('tags', JSON.stringify(tags));
-  }, [tags]);
+  // useEffect(() => {
+  //   localStorage.setItem('tags', JSON.stringify(tags));
+  // }, [tags]);
 
 
   const location = useLocation();
@@ -157,8 +159,8 @@ const TecaherTestSidebar = ({
             <ul className="test-sidebar-menu">
               <li>
                 <Link
-                  to="/test/Alltest"
-                  className={`sidebar-contents ${activeSection === "Alltest" ? "active" : ""}`}
+                  to="/teachers-dashboard/tests/"
+                  className={`sidebar-contents ${activeSection === "/teachers-dashboard/tests/" ? "active" : ""}`}
                   aria-label="All Tests"
                   onClick={() => handleSetActive("Alltest")}
                 >
@@ -168,8 +170,9 @@ const TecaherTestSidebar = ({
               </li>
               <li>
                 <Link
-                  to="/test/shared-with-me"
-                  className={`sidebar-contents ${activeSection === "shared-with-me" ? "active" : ""}`}
+                  to="/teachers-dashboard/tests/share-tests"
+                  className={`sidebar-contents 
+                    ${activeSection === "/teachers-dashboard/tests/share-tests" ? "active" : ""}`}
                   aria-label="Shared with me"
                 //   onClick={() => handleSetActive("shared-with-me")}
                 >
@@ -179,8 +182,9 @@ const TecaherTestSidebar = ({
               </li>
               <li>
                 <Link
-                  to="/test/dispatched"
-                  className={`sidebar-contents ${activeSection === "dispatched" ? "active" : ""}`}
+                  to="/teachers-dashboard/tests/publish"
+                  className={`sidebar-contents 
+                    ${activeSection === "/teachers-dashboard/tests/publish" ? "active" : ""}`}
                   aria-label="Dispatched"
                 //   onClick={() => handleSetActive("dispatched")}
                 >
@@ -190,8 +194,8 @@ const TecaherTestSidebar = ({
               </li>
               <li>
                 <Link
-                  to="/test/archived"
-                  className={`sidebar-contents ${activeSection === "archived" ? "active" : ""}`}
+                  to="/teachers-dashboard/tests/archive"
+                  className={`sidebar-contents ${activeSection === "/teachers-dashboard/tests/archive" ? "active" : ""}`}
                   aria-label="Archived"
                 //   onClick={() => handleSetActive("archived")}
                 >
@@ -201,8 +205,8 @@ const TecaherTestSidebar = ({
               </li>
               <li>
                 <Link
-                  to="/test/trashed"
-                  className={`sidebar-contents ${activeSection === "trashed" ? "active" : ""}`}
+                  to="/teachers-dashboard/tests/trash"
+                  className={`sidebar-contents ${activeSection === "/teachers-dashboard/tests/trash" ? "active" : ""}`}
                   aria-label="Trashed"
                 //   onClick={() => handleSetActive("trashed")}
                 >

@@ -7,6 +7,7 @@ import TeachersTests from "../Components/TeachersDashboard/Pages/TeachersTests/T
 import TeacherQbRoutes from "../Components/TeachersDashboard/Pages/TeachersQuestionBanks/TeacherQbRoutes";
 import TeacherclassesRoute from "../Components/TeachersDashboard/Pages/TeacherClasses/TeacherclassesRoute";
 import TeachersAddTests from "../Components/TeachersDashboard/Pages/TeachersAddTests/TeachersAddTests";
+import TeacherTestsRoute from "../Components/TeachersDashboard/Pages/TeachersTests/TeacherTestsRoute";
 
 const TeachersRoutes = () => {
     return (
@@ -20,8 +21,8 @@ const TeachersRoutes = () => {
                 <Route path="classes/*" element={<TeacherclassesRoute />} />
 
                 {/* Tests */}
-                <Route path="tests" element={<TeachersTests />} />
-                <Route path="tests/:id/movetest" element={<TeachersAddTests />} />
+                <Route path="tests/*" element={<TeacherTestsRoute />} />
+                
 
                 {/* FIXED — must be lowercase and same as nav menu */}
                 <Route path="question-banks/*" element={<TeacherQbRoutes />} />
