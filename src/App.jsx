@@ -17,7 +17,7 @@ import QuestionBankRoutes from './Routes/QuestionBankRoutes.jsx';
 import SubscriptionRoutes from './Routes/SubscriptionRoutes.jsx';
 
 import TeachersModuleRoutes from './Routes/TeachersModuleRoutes.jsx';
-import ManageHomeWebsiteRoute from './Routes/ManageHomeWebsiteRoute.jsx';
+import ManageInstituteWebsiteRoute from './Routes/ManageInstituteWebsiteRoute.jsx';
 
 function App() {  
   return (
@@ -42,7 +42,7 @@ function App() {
         <Route path="*" element={<PathLostPage />} />
 
         {/* Manage institute Website Routes */}
-       <Route path="/home/*" element={<ManageHomeWebsiteRoute />} />
+       <Route path="/home/*" element={<ManageInstituteWebsiteRoute />} />
 
 
 
