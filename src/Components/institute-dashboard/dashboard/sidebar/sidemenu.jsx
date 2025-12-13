@@ -26,7 +26,7 @@ import "./sidemenu.css"
 const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
 
   console.log(isMobileOpen);
-  
+
   const location = useLocation()
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
   const currentPath = location.pathname;
@@ -80,7 +80,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
     <div className="sidebar-wrapper">
       {isMobileOpen && <div className="mobile-overlay" onClick={handleCloseMobile} />}
 
-      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${sideBarTop ? "dashboard-sidebar": ""}`} aria-label="Main Navigation">
+      <nav className={`test-sidebar-container ${isMobileOpen ? "mobile-open" : ""} ${sideBarTop ? "dashboard-sidebar" : ""}`} aria-label="Main Navigation">
         <div className="test-sidebar-header">
           <span className="sidebar-letters">LMS Institute</span>
         </div>
@@ -168,19 +168,19 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                     >
                       <Home className="icon" size={20} />
                       <span className="sidebar-letters">Home</span>
-                     <span className="tag-dropdown-toggle ms-auto"></span>
+                      <span className="tag-dropdown-toggle ms-auto"></span>
                     </div>
                   </li>
                   {isHomeDropdownOpen && (
-                <ul className="test-sidebar-submenu nested">
-                    <li><Link to="/home/sliders" className="sidebar-contents"><span className="sidebar-letters">Sliders</span></Link></li>
-                    <li><Link to="/home/highlights" className="sidebar-contents"><span className="sidebar-letters">Why Choose</span></Link></li>
-                    <li><Link to="/home/discover-features" className="sidebar-contents"><span className="sidebar-letters">Discover Features</span></Link></li>
-                    <li><Link to="/home/explore-courses" className="sidebar-contents"><span className="sidebar-letters">Explore Courses</span></Link></li>
-                    <li><Link to="/home/explore-blog" className="sidebar-contents"><span className="sidebar-letters">Explore Blog</span></Link></li>
-                    <li><Link to="/home/hear-from-students" className="sidebar-contents"><span className="sidebar-letters">Hear From Students</span></Link></li>
-                    <li><Link to="/home/happy-students" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
-                </ul>
+                    <ul className="test-sidebar-submenu nested">
+                      <li><Link to="/home/sliders" className="sidebar-contents"><span className="sidebar-letters">Sliders</span></Link></li>
+                      <li><Link to="/home/highlights" className="sidebar-contents"><span className="sidebar-letters">Why Choose</span></Link></li>
+                      <li><Link to="/home/discover-features" className="sidebar-contents"><span className="sidebar-letters">Discover Features</span></Link></li>
+                      <li><Link to="/home/explore-courses" className="sidebar-contents"><span className="sidebar-letters">Explore Courses</span></Link></li>
+                      <li><Link to="/home/explore-blog" className="sidebar-contents"><span className="sidebar-letters">Explore Blog</span></Link></li>
+                      <li><Link to="/home/hear-from-students" className="sidebar-contents"><span className="sidebar-letters">Hear From Students</span></Link></li>
+                      <li><Link to="/home/happy-students" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
+                    </ul>
 
                   )}
 
@@ -213,56 +213,33 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                     >
                       <BookOpen className="icon" size={20} />
                       <span className="sidebar-letters">Courses</span>
-                   <span className="tag-dropdown-toggle ms-auto"></span>
+                      <span className="tag-dropdown-toggle ms-auto"></span>
                     </div>
                   </li>
                   {isCoursesDropdownOpen && (
                     <ul className="test-sidebar-submenu nested">
                       <li><Link to="/courses/frontend" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
                       <li><Link to="/courses/backend" className="sidebar-contents"><span className="sidebar-letters">Manage Cards</span></Link></li>
-                   
+
                     </ul>
                   )}
 
                   {/* BLOG */}
                   <li>
-                    <div
-                      className="sidebar-contents"
-                      onClick={() => setIsBlogDropdownOpen(!isBlogDropdownOpen)}
-                      style={{ cursor: "pointer" }}
-                    >
+                    <Link to="/home/manage-blog" className="sidebar-contents">
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Blog</span>
-                       <span className="tag-dropdown-toggle ms-auto"></span>
-                    </div>
+                    </Link>
                   </li>
-                  {isBlogDropdownOpen && (
-                    <ul className="test-sidebar-submenu nested">
-                      <li><Link to="/courses/frontend" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
-                      <li><Link to="/courses/backend" className="sidebar-contents"><span className="sidebar-letters">Manage Blogs</span></Link></li>
-                    </ul>
-                  )}
+
 
                   {/* CONTACT */}
                   <li>
-                    <div
-                      className="sidebar-contents"
-                      onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}
-                      style={{ cursor: "pointer" }}
-                    >
+                    <Link to="/home/manage-contact" className="sidebar-contents">
                       <Phone className="icon" size={20} />
                       <span className="sidebar-letters">Contact</span>
-                        <span className="tag-dropdown-toggle ms-auto"></span>
-                    </div>
+                    </Link>
                   </li>
-                  {isContactDropdownOpen && (
-                    <ul className="test-sidebar-submenu nested">
-                      <li><Link to="/contact/form" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
-                      <li><Link to="/contact/address" className="sidebar-contents"><span className="sidebar-letters">Call To Action</span></Link></li>
-                      <li><Link to="/contact/support" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
-                    </ul>
-                  )}
-
                 </ul>
               )}
 
