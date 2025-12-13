@@ -1,5 +1,5 @@
 "use client"
-
+import { Phone } from "lucide-react";
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
@@ -29,17 +29,20 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
   
   const location = useLocation()
   const [isManageHomeVisible, setManageHomeVisible] = useState(true)
-  // const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const currentPath = location.pathname;
 
-  const currentPath = location.pathname
+  // Dropdown states for all 5 items
+  const [isHomeDropdownOpen, setIsHomeDropdownOpen] = useState(false);
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isCoursesDropdownOpen, setIsCoursesDropdownOpen] = useState(false);
+  const [isBlogDropdownOpen, setIsBlogDropdownOpen] = useState(false);
+  const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
 
   const isActive = (section) => {
     const path = currentPath;
-
     switch (section) {
       case "general":
         return path === "/";
-
       case "scheduled":
         return (
           path.startsWith("/maindashboard/scheduled") ||
@@ -47,24 +50,19 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
           path.includes("/upcoming-test-details/") ||
           path.includes("/completed-test-details/")
         );
-
       case "unscheduled":
         return (
           path.startsWith("/maindashboard/unscheduled") ||
           path.includes("/unscheduledtest-details/")
         );
-
       case "subscription":
         return path === "/maindashboard/subscription";
-
       case "teachers":
         return path.includes("/Teachers");
-
       default:
         return path.includes(section);
     }
   }
-
 
   const toggleManageHomeVisibility = () => {
     setManageHomeVisible(!isManageHomeVisible)
@@ -92,128 +90,183 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
             <ul className="test-sidebar-menu">
               <li className="sidebar-section-title">Dashboard</li>
 
-                <li>
-                  <Link
-                    to="/"
-                    className={`sidebar-contents ${isActive("general") ? "active" : ""}`}
-                    aria-label="General"
-                    onClick={handleCloseMobile}
-                  >
-                    <Users className="icon" size={20} />
-                    <span className="sidebar-letters">General</span>
-                  </Link>
-                </li>
+              <li>
+                <Link
+                  to="/"
+                  className={`sidebar-contents ${isActive("general") ? "active" : ""}`}
+                  aria-label="General"
+                  onClick={handleCloseMobile}
+                >
+                  <Users className="icon" size={20} />
+                  <span className="sidebar-letters">General</span>
+                </Link>
+              </li>
 
-                <li>
-                  <Link
-                    to="/maindashboard/scheduled"
+              <li>
+                <Link
+                  to="/maindashboard/scheduled"
+                  className={`sidebar-contents ${isActive("scheduled") ? "active" : ""}`}
+                  aria-label="scheduled"
+                  onClick={handleCloseMobile}
+                >
+                  <UserCheck className="icon" size={20} />
+                  <span className="sidebar-letters">Scheduled</span>
+                </Link>
+              </li>
 
-                    className={`sidebar-contents ${isActive("scheduled") ? "active" : ""}`}
-                    aria-label="scheduled"
-                    onClick={handleCloseMobile}
-                  >
-                    <UserCheck className="icon" size={20} />
-                    <span className="sidebar-letters">Scheduled</span>
-                  </Link>
+              <li>
+                <Link
+                  to="/maindashboard/unscheduled"
+                  className={`sidebar-contents ${isActive("unscheduled") ? "active" : ""}`}
+                  aria-label="UnScheduled"
+                  onClick={handleCloseMobile}
+                >
+                  <ClipboardList className="icon" size={20} />
+                  <span className="sidebar-letters">UnScheduled</span>
+                </Link>
+              </li>
 
-                </li>
+              <li>
+                <Link
+                  to="/Teachers"
+                  className={`sidebar-contents ${currentPath.includes("/Teachers") ? "active" : ""}`}
+                  aria-label="Teachers"
+                  onClick={handleCloseMobile}
+                >
+                  <BookOpenCheck className="icon" size={20} />
+                  <span className="sidebar-letters">Teachers</span>
+                </Link>
+              </li>
 
-                <li>
-                  <Link
-                    to="/maindashboard/unscheduled"
-                    className={`sidebar-contents ${isActive("unscheduled") ? "active" : ""}`}
-                    aria-label="UnScheduled"
-                    onClick={handleCloseMobile}
-                  >
-                    <ClipboardList className="icon" size={20} />
-                    <span className="sidebar-letters">UnScheduled</span>
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="/Teachers"
-                    className={`sidebar-contents ${currentPath.includes("/Teachers") ? "active" : ""}`}
-                    aria-label="Teachers"
-                    onClick={handleCloseMobile}
-                  >
-                    <BookOpenCheck className="icon" size={20} />
-                    <span className="sidebar-letters">Teachers</span>
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="/subscription"
-                    className={`sidebar-contents ${currentPath === "/subscription" ? "active" : ""}`}
-                    aria-label="Subscription"
-                    onClick={handleCloseMobile}
-                  >
-                    <CircleDollarSign className="icon" size={20} />
-                    <span className="sidebar-letters">Subscription</span>
-                  </Link>
-                </li>
-            
+              <li>
+                <Link
+                  to="/subscription"
+                  className={`sidebar-contents ${currentPath === "/subscription" ? "active" : ""}`}
+                  aria-label="Subscription"
+                  onClick={handleCloseMobile}
+                >
+                  <CircleDollarSign className="icon" size={20} />
+                  <span className="sidebar-letters">Subscription</span>
+                </Link>
+              </li>
 
               <hr />
 
               <li className="sidebar-section-title" onClick={toggleManageHomeVisibility}>
-                Manage Home
+                Manage Home Website
               </li>
 
               {isManageHomeVisible && (
                 <ul className="test-sidebar-submenu">
+
+                  {/* HOME */}
                   <li>
-                    <Link
-                      to="/home"
-                      className={`sidebar-contents ${currentPath === "/home" ? "active" : ""}`}
-                      aria-label="Home"
-                      onClick={handleCloseMobile}
+                    <div
+                      className="sidebar-contents"
+                      onClick={() => setIsHomeDropdownOpen(!isHomeDropdownOpen)}
+                      style={{ cursor: "pointer" }}
                     >
                       <Home className="icon" size={20} />
                       <span className="sidebar-letters">Home</span>
-                    </Link>
+                     <span className="tag-dropdown-toggle ms-auto"></span>
+                    </div>
                   </li>
+                  {isHomeDropdownOpen && (
+                <ul className="test-sidebar-submenu nested">
+                    <li><Link to="/home/sliders" className="sidebar-contents"><span className="sidebar-letters">Sliders</span></Link></li>
+                    <li><Link to="/home/highlights" className="sidebar-contents"><span className="sidebar-letters">Why Choose</span></Link></li>
+                    <li><Link to="/home/discover-features" className="sidebar-contents"><span className="sidebar-letters">Discover Features</span></Link></li>
+                    <li><Link to="/home/explore-courses" className="sidebar-contents"><span className="sidebar-letters">Explore Courses</span></Link></li>
+                    <li><Link to="/home/explore-blog" className="sidebar-contents"><span className="sidebar-letters">Explore Blog</span></Link></li>
+                    <li><Link to="/home/hear-from-students" className="sidebar-contents"><span className="sidebar-letters">Hear From Students</span></Link></li>
+                    <li><Link to="/home/happy-students" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
+                </ul>
 
+                  )}
+
+                  {/* ABOUT */}
                   <li>
-                    <Link
-                      to="/about"
-                      className={`sidebar-contents ${currentPath === "/about" ? "active" : ""}`}
-                      aria-label="About"
-                      onClick={handleCloseMobile}
+                    <div
+                      className="sidebar-contents"
+                      onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
+                      style={{ cursor: "pointer" }}
                     >
                       <Info className="icon" size={20} />
                       <span className="sidebar-letters">About</span>
-                    </Link>
+                      <span className="tag-dropdown-toggle ms-auto"></span>
+                    </div>
                   </li>
+                  {isAboutDropdownOpen && (
+                    <ul className="test-sidebar-submenu nested">
+                      <li><Link to="/about/company" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
+                      <li><Link to="/about/team" className="sidebar-contents"><span className="sidebar-letters">Professionalism</span></Link></li>
+                      <li><Link to="/about/vision" className="sidebar-contents"><span className="sidebar-letters">Work With Us</span></Link></li>
+                    </ul>
+                  )}
 
+                  {/* COURSES */}
                   <li>
-                    <Link
-                      to="/courses"
-                      className={`sidebar-contents ${currentPath === "/courses" ? "active" : ""}`}
-                      aria-label="Courses"
-                      onClick={handleCloseMobile}
+                    <div
+                      className="sidebar-contents"
+                      onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
+                      style={{ cursor: "pointer" }}
                     >
                       <BookOpen className="icon" size={20} />
                       <span className="sidebar-letters">Courses</span>
-                    </Link>
+                   <span className="tag-dropdown-toggle ms-auto"></span>
+                    </div>
                   </li>
+                  {isCoursesDropdownOpen && (
+                    <ul className="test-sidebar-submenu nested">
+                      <li><Link to="/courses/frontend" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
+                      <li><Link to="/courses/backend" className="sidebar-contents"><span className="sidebar-letters">Manage Cards</span></Link></li>
+                   
+                    </ul>
+                  )}
 
+                  {/* BLOG */}
                   <li>
-                    <Link
-                      to="/blog-manage"
-                      className={`sidebar-contents ${currentPath === "/blog-manage" ? "active" : ""}`}
-                      aria-label="Blog"
-                      onClick={handleCloseMobile}
+                    <div
+                      className="sidebar-contents"
+                      onClick={() => setIsBlogDropdownOpen(!isBlogDropdownOpen)}
+                      style={{ cursor: "pointer" }}
                     >
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Blog</span>
-                    </Link>
+                       <span className="tag-dropdown-toggle ms-auto"></span>
+                    </div>
                   </li>
+                  {isBlogDropdownOpen && (
+                    <ul className="test-sidebar-submenu nested">
+                      <li><Link to="/courses/frontend" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
+                      <li><Link to="/courses/backend" className="sidebar-contents"><span className="sidebar-letters">Manage Blogs</span></Link></li>
+                    </ul>
+                  )}
+
+                  {/* CONTACT */}
+                  <li>
+                    <div
+                      className="sidebar-contents"
+                      onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Phone className="icon" size={20} />
+                      <span className="sidebar-letters">Contact</span>
+                        <span className="tag-dropdown-toggle ms-auto"></span>
+                    </div>
+                  </li>
+                  {isContactDropdownOpen && (
+                    <ul className="test-sidebar-submenu nested">
+                      <li><Link to="/contact/form" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
+                      <li><Link to="/contact/address" className="sidebar-contents"><span className="sidebar-letters">Call To Action</span></Link></li>
+                      <li><Link to="/contact/support" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
+                    </ul>
+                  )}
+
                 </ul>
               )}
 
-<hr />
+              <hr />
               <li className="sidebar-section-title">Profile Info</li>
 
               <li>
@@ -239,19 +292,12 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                   <span className="sidebar-letters">Logout</span>
                 </Link>
               </li>
+
             </ul>
           </div>
         </div>
 
       </nav>
-
-      {/* <button
-        className={`mobile-toggle-btn ${isMobileOpen ? "sidebar-open" : ""}`}
-        onClick={toggleMobileSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button> */}
     </div>
   )
 }

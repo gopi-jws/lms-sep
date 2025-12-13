@@ -1,0 +1,196 @@
+.manage-slider {
+  padding: 20px;
+  background: #f7f9fc;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}
+
+/* TABLE */
+.table-box {
+  background: white;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.thumb {
+  width: 80px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.actions button {
+  margin-right: 6px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+/* STATUS */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-card {
+  background: white;
+  width: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-footer {
+  border-top: 1px solid #eee;
+  border-bottom: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.modal-body input,
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.close-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel {
+  background: #f3f4f6;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.save {
+  background: #2563eb;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+}
+.status-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-btn.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-btn.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+
+.order-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-col button {
+  background: #f3f4f6;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.icon-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-actions button {
+  background: #f3f4f6;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}

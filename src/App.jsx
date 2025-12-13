@@ -17,8 +17,9 @@ import QuestionBankRoutes from './Routes/QuestionBankRoutes.jsx';
 import SubscriptionRoutes from './Routes/SubscriptionRoutes.jsx';
 
 import TeachersModuleRoutes from './Routes/TeachersModuleRoutes.jsx';
+import ManageInstituteWebsiteRoute from './Routes/ManageInstituteWebsiteRoute.jsx';
 
-function App() {
+function App() {  
   return (
     <Router basename="/lms-nov26/">
       <Routes>
@@ -39,6 +40,11 @@ function App() {
         {/* student */}
         <Route path="/student/*" element={<StudentRoutes />} />
         <Route path="*" element={<PathLostPage />} />
+
+        {/* Manage institute Website Routes */}
+       <Route path="/home/*" element={<ManageInstituteWebsiteRoute />} />
+
+
 
       </Routes>
       <ToastContainer
