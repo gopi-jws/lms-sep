@@ -128,7 +128,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
 
               <li>
                 <Link
-                  to="/Teachers"
+                  to="/teachers"
                   className={`sidebar-contents ${currentPath.includes("/Teachers") ? "active" : ""}`}
                   aria-label="Teachers"
                   onClick={handleCloseMobile}
