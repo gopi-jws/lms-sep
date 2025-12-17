@@ -186,7 +186,8 @@
     flex-direction: column;
   }
 
-  .test-actions {
+  .test-actions,
+  .timer {
     margin-top: 16px;
   }
 
@@ -274,6 +275,7 @@
 }
 
 .upcomming-Countdown {
+
   display: flex;
   justify-content: flex-end;
 }

@@ -186,10 +186,10 @@ color: var(--timer-color);
     flex-direction: column;
   }
 
-  /* .timer {
+  .timer {
     text-align: left;
     margin-top: 16px;
-  } */
+  }
 
   .info-group {
     flex-direction: column;
@@ -212,4 +212,12 @@ color: var(--timer-color);
 .timer{
   display: flex;
   justify-content: flex-end;
+}
+@media (max-width: 768px){
+  
+.current-running-test{
+  max-width: 500px;
+  margin: auto;
+
+}
 }

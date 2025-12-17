@@ -128,7 +128,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
 
               <li>
                 <Link
-                  to="/teachers"
+                  to="/Teachers"
                   className={`sidebar-contents ${currentPath.includes("/Teachers") ? "active" : ""}`}
                   aria-label="Teachers"
                   onClick={handleCloseMobile}
@@ -153,7 +153,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
               <hr />
 
               <li className="sidebar-section-title" onClick={toggleManageHomeVisibility}>
-                Manage Home Website
+                Manage Website <span className="tag-dropdown-toggle ms-auto"></span>
               </li>
 
               {isManageHomeVisible && (
@@ -185,44 +185,20 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                   )}
 
                   {/* ABOUT */}
-                  <li>
-                    <div
-                      className="sidebar-contents"
-                      onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Info className="icon" size={20} />
+                       <li>
+                    <Link to="/home/about" className="sidebar-contents">
+                      <FileText className="icon" size={20} />
                       <span className="sidebar-letters">About</span>
-                      <span className="tag-dropdown-toggle ms-auto"></span>
-                    </div>
+                    </Link>
                   </li>
-                  {isAboutDropdownOpen && (
-                    <ul className="test-sidebar-submenu nested">
-                      <li><Link to="/about/company" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
-                      <li><Link to="/about/team" className="sidebar-contents"><span className="sidebar-letters">Professionalism</span></Link></li>
-                      <li><Link to="/about/vision" className="sidebar-contents"><span className="sidebar-letters">Work With Us</span></Link></li>
-                    </ul>
-                  )}
 
                   {/* COURSES */}
-                  <li>
-                    <div
-                      className="sidebar-contents"
-                      onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <BookOpen className="icon" size={20} />
+                 <li>
+                    <Link to="/home/course" className="sidebar-contents">
+                      <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Courses</span>
-                      <span className="tag-dropdown-toggle ms-auto"></span>
-                    </div>
+                    </Link>
                   </li>
-                  {isCoursesDropdownOpen && (
-                    <ul className="test-sidebar-submenu nested">
-                      <li><Link to="/courses/frontend" className="sidebar-contents"><span className="sidebar-letters">Hero Section</span></Link></li>
-                      <li><Link to="/courses/backend" className="sidebar-contents"><span className="sidebar-letters">Manage Cards</span></Link></li>
-
-                    </ul>
-                  )}
 
                   {/* BLOG */}
                   <li>

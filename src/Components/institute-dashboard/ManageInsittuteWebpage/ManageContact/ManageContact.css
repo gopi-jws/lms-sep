@@ -292,3 +292,59 @@
         font-size: var(--font-size-small);
     }
 }
+/* CTA SECTION CARD */
+.institute-home__card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+/* File input spacing */
+.institute-home__card input[type="file"] {
+  margin-bottom: 16px;
+}
+
+/* Inputs inside CTA card */
+.institute-home__card input[type="text"],
+.institute-home__card textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+/* Focus effect */
+.institute-home__card input:focus,
+.institute-home__card textarea:focus {
+  border-color: #f97316; /* orange theme */
+}
+
+/* Textarea resize control */
+.institute-home__card textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* CTA card spacing */
+.institute-home__card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+/* CTA title */
+.institute-home__card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #111827;
+}

@@ -1,35 +1,73 @@
-.manage-slider {
-  padding: 20px;
-  background: #f7f9fc;
+/* =====================================
+   BASE: SLIDER MANAGER
+===================================== */
+.slider-manager {
+  padding: 30px;
   min-height: 100vh;
   font-family: "Segoe UI", sans-serif;
 }
 
-.header {
+/* Header */
+.slider-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  padding: 12px 16px;
 }
 
-.add-btn {
+.slider-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Left: title + arrow (optional) */
+.slider-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Arrow / mobile toggle */
+.TriagbleDown {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Add button */
+.slider-add-btn {
   background: #2563eb;
   color: white;
   border: none;
   padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
+  overflow: visible;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.add-btn:hover {
+.slider-add-btn:hover {
   background: #1d4ed8;
 }
 
-/* TABLE */
-.table-box {
+/* =====================================
+   TABLE – DESKTOP / DEFAULT
+===================================== */
+.slider-table-box {
   background: white;
   margin-top: 20px;
   border-radius: 10px;
   overflow: hidden;
+  width: 100%;
 }
 
 table {
@@ -37,143 +75,35 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   padding: 12px;
-  border-bottom: 1px solid #eee;
+  
   text-align: left;
+  font-size: 14px;
 }
 
-.thumb {
+.slider-thumb,
+.slider-table-image {
   width: 80px;
   height: 45px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-.actions button {
-  margin-right: 6px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-}
-
-/* STATUS */
-.status {
-  padding: 4px 10px;
-  border-radius: 20px;
+.no-image {
   font-size: 12px;
+  color: #999;
 }
 
-.status.active {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.status.inactive {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* MODAL */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal-card {
-  background: white;
-  width: 500px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.modal-header,
-.modal-footer {
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-footer {
-  border-top: 1px solid #eee;
-  border-bottom: none;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.modal-body label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.modal-body input,
-.modal-body select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.close-btn {
-  font-size: 22px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.cancel {
-  background: #f3f4f6;
-  padding: 10px 16px;
-  border-radius: 6px;
-  border: none;
-}
-
-.save {
-  background: #2563eb;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  border: none;
-}
-.status-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status-btn.active {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.status-btn.inactive {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-
-.order-col {
+/* Order column */
+.slider-order-col {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.order-col button {
+.slider-order-col button {
   background: #f3f4f6;
   border: none;
   padding: 4px 6px;
@@ -181,16 +111,591 @@ th, td {
   cursor: pointer;
 }
 
-.icon-actions {
-  display: flex;
-  gap: 8px;
+/* Status badge */
+.slider-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
 }
 
-.icon-actions button {
-  background: #f3f4f6;
+.slider-status.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.slider-status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Action buttons */
+.slider-icon-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.slider-icon-actions button {
+  background: #f9fafb;
   border: none;
-  padding: 6px 8px;
+  padding: 8px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 16px;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.slider-icon-actions button:hover {
+  background: #e0e7ff;
+  transform: scale(1.1);
+}
+
+.slider-icon-actions .delete:hover {
+  background: #fee2e2;
+}
+
+/* =====================================
+   MODAL – SHARED SLIDER / BLOG
+===================================== */
+.slider-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.slider-modal-card {
+  background: white;
+  width: 500px;
+  max-width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.slider-modal-header,
+.slider-modal-footer {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.slider-modal-footer {
+  border-top: 1px solid #eee;
+  border-bottom: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.slider-modal-body {
+  padding: 0 20px 20px;
+  height: auto;
+  max-height: 70vh;
+  overflow-y: auto;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+}
+
+.slider-modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-modal-body label {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.slider-modal-body input,
+.slider-modal-body select,
+.slider-modal-body textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   font-size: 14px;
+  font-family: inherit;
+}
+
+.slider-modal-header {
+  position: relative;
+}
+
+.slider-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.slider-cancel-btn {
+  background: #f3f4f6;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+.slider-save-btn {
+  background: #2563eb;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+}
+
+/* =====================================
+   COURSE MANAGER (REUSES MANY STYLES)
+===================================== */
+.course-manager {
+  padding: 24px;
+  background: #f7f9fc;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-add-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.course-add-btn:hover {
+  background: #1d4ed8;
+}
+
+.course-table-box {
+  background: #fff;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.course-order-col {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.course-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.course-status.active {
+  background: #dff5ea;
+  color: #0a7a4b;
+}
+
+.course-status.inactive {
+  color: red;
+  font-weight: bold;
+}
+
+/* Course modal */
+.course-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.course-modal-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+  width: 100%;
+}
+
+.course-modal-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+
+.course-modal-body {
+  padding: 16px;
+}
+
+.course-modal-body label {
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 6px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.course-modal-body input,
+.course-modal-body select,
+.course-modal-body textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5f5;
+  font-size: 14px;
+  transition: border 0.2s ease;
+  margin-bottom: 14px;
+}
+
+.course-modal-body input:focus,
+.course-modal-body textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.course-modal-body textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.course-close-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.course-modal-footer {
+  margin-top: 30px;
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.course-cancel-btn {
+  background: #f1f1f1;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+}
+
+.course-save-btn {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.course-save-btn:hover {
+  background: #1e40af;
+}
+
+/* =====================================
+   HAPPY STUDENTS PREVIEW (IF USED)
+===================================== */
+.happy-students-preview {
+  margin-top: 30px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.happy-students-preview h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.happy-students-preview p {
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+/* Add-blogs button alignment */
+#add-blogs {
+  margin-left: auto;
+  display: block;
+}
+
+/* =====================================
+   GLOBAL SAFETY (NO HORIZONTAL SCROLL)
+===================================== */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Sidebar scroll helpers */
+@media (max-width: 767px) {
+  .sidebar,
+  .sidebar-menu,
+  .sidebar-container {
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.sidebar-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Desktop header tweak */
+@media (min-width: 768px) {
+  .TriagbleDown {
+    display: none;
+  }
+
+  .breadcrumb {
+    font-size: 20px;
+  }
+
+  .slider-header {
+    padding: 16px 20px;
+  }
+}
+
+/* =====================================
+   RESPONSIVE – TABLE / LAYOUT
+===================================== */
+
+/* 1250px → 1000px: shrink table, no scroll */
+@media (max-width: 1250px) {
+  .slider-table-box {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+
+  .slider-table-box img {
+    width: 60px !important;
+    height: 40px !important;
+  }
+
+  td:nth-child(3) {
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  td:nth-child(4) p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    font-size: 12px;
+  }
+
+  td:nth-child(5) {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .slider-status {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .slider-icon-actions button {
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
+/* 1030px → 901px: compact layout, no horizontal scroll */
+@media (max-width: 1030px) and (min-width: 901px) {
+  .slider-table-box table {
+    font-size: 12.5px;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .slider-order-col {
+    min-width: 60px;
+  }
+
+  .slider-icon-actions {
+    gap: 5px;
+    justify-content: flex-end;
+  }
+
+  .slider-icon-actions button {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    padding: 0;
+  }
+}
+
+/* 1024px → 721px: tablet tweak */
+@media (max-width: 1024px) and (min-width: 721px) {
+  th,
+  td {
+    font-size: 13px;
+    padding: 6px 4px;
+  }
+
+  .slider-thumb,
+  .slider-table-image {
+    width: 40px;
+    height: 28px;
+  }
+
+  .slider-icon-actions button {
+    padding: 4px;
+    font-size: 12px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  td.slider-icon-actions {
+    overflow: visible !important;
+  }
+}
+
+/* ≤1100px: page padding tweak */
+@media (max-width: 1100px) {
+  .course-modal-card {
+    padding: 25px;
+  }
+
+  .layout-content {
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .slider-manager {
+    padding: 0;
+    max-width: 750px;
+    width: 100%;
+  }
+}
+
+/* ≤900px: switch to card layout (no horizontal scroll) */
+@media (max-width: 900px) {
+  .slider-manager {
+    padding: 20px;
+  }
+
+  .slider-header h2 {
+    font-size: 20px;
+  }
+
+  .course-modal-card {
+    padding: 22px;
+  }
+
+  .slider-manager table,
+  .slider-manager thead,
+  .slider-manager tbody,
+  .slider-manager th,
+  .slider-manager tr {
+    display: block;
+    width: 100%;
+  }
+
+  .slider-manager thead {
+    display: none;
+  }
+
+  .slider-manager tbody tr {
+    background: #ffffff;
+    margin-bottom: 14px;
+    padding: 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .slider-manager .slider-order-col {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .slider-manager td.slider-icon-actions {
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e5e7eb;
+    white-space: nowrap;
+  }
+
+  .slider-manager .slider-thumb,
+  .slider-manager td img {
+    width: 45px;
+    height: 30px;
+  }
+}
+
+/* ≤480px: extra small tweaks */
+@media (max-width: 480px) {
+  .slider-manager {
+    padding: 15px;
+  }
+
+  .course-modal-card {
+    padding: 18px;
+  }
+
+  .course-modal-body label {
+    font-size: 13px;
+  }
+
+  .course-modal-body input,
+  .course-modal-body textarea {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .course-save-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .course-modal-footer {
+    justify-content: center;
+  }
 }

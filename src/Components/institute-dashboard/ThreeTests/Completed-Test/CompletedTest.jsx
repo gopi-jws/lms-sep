@@ -142,7 +142,7 @@ const CompletedTest = ({ onViewDetails }) => {
             name: "Test Name",
             selector: "name",
             sortable: true,
-            width: "50px",
+            width: "250px",
         },
         {
             name: "Date",
@@ -155,7 +155,7 @@ const CompletedTest = ({ onViewDetails }) => {
                 return `${day}-${month}-${year}`; // format: DD-MM-YYYY
             },
             sortable: true,
-            width: "50px",
+            width: "120px",
         },
           
         {
@@ -163,7 +163,7 @@ const CompletedTest = ({ onViewDetails }) => {
             selector: "duration",
             cell: (row) => `${row.duration} minutes`,
             sortable: true,
-            width: "50px",
+            width: "120px",
         },
         {
             name: "Participation",
@@ -173,7 +173,7 @@ const CompletedTest = ({ onViewDetails }) => {
                 return `${row.attendedStudents}/${row.enrolledStudents} (${percentage}%)`;
             },
             sortable: true,
-            width: "50px",
+            width: "200px",
         },
         {
             name: "Hours Used",
@@ -184,7 +184,7 @@ const CompletedTest = ({ onViewDetails }) => {
                 </span>
             ) ,
             sortable: true,
-            width: "35px",
+            width: "120px",
         },
     ];
 

@@ -42,7 +42,8 @@
     flex: 1 1 auto;
     padding: 24px;
     margin-left: 240px;
-    background-color: #f4f5f6;
+        background-color: #f4f5f6;
+  
     height: calc(100vh - 60px); /* Full viewport height minus header */
     overflow-y: auto; /* Enable vertical scroll */
     overflow-x: hidden;
