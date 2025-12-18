@@ -126,7 +126,7 @@ const UpcomingTest = ({ onViewDetails }) => {
       name: "Test Name",
       selector: "name",
       sortable: true,
-      width: "250px",
+      width: "50px",
     },
     {
       name: "Test Date",
@@ -139,7 +139,7 @@ const UpcomingTest = ({ onViewDetails }) => {
         return `${day}-${month}-${year}`;
       },
       sortable: true,
-      width: "120px",
+      width: "50px",
     },
     
     {
@@ -147,17 +147,17 @@ const UpcomingTest = ({ onViewDetails }) => {
       selector: "hoursAllotted",
       cell: (row) => `${row.hoursAllotted} Minutes`,
       sortable: true,
-      width: "120px",
+      width: "50px",
     },
     {
       name: "Attend/Enrolled",
       selector: "candidates",
       cell: (row) => `${row.candidates} `,
       sortable: true,
-      width: "200px",
+      width: "50px",
     },
     {
-      name: "	Countdown",
+      name: "Countdown",
       selector: "timer",
       cell: (row) =>(
         <span className="upcomming-Countdown">
@@ -165,7 +165,7 @@ const UpcomingTest = ({ onViewDetails }) => {
         </span>
       ),
       sortable: false,
-      width: "120px",
+      width: "35px",
     },
    
   ];
@@ -181,7 +181,8 @@ const UpcomingTest = ({ onViewDetails }) => {
             <h3>Upcoming Tests</h3>
           </div>
         </div>
-      <DataTable
+        <div className="my-data-table">
+<DataTable
         columns={columns}
         data={upcomingTests}
         onRowClicked={handleRowClick}
@@ -190,6 +191,8 @@ const UpcomingTest = ({ onViewDetails }) => {
         showColumnVisibility={false}
         fullViewMode={false}
       />
+        </div>
+      
 
       {/* Modify Popup */}
       {showModifyPopup && (

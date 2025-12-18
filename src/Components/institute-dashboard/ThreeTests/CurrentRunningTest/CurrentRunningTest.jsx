@@ -101,7 +101,7 @@ const CurrentRunningTest = ({ onViewDetails }) => {
       name: "Test Name",
       selector: "name",
       sortable: true,
-      width: "250px",
+      width: "50px",
     },
     {
       name: "Test Date",
@@ -114,21 +114,21 @@ const CurrentRunningTest = ({ onViewDetails }) => {
         return `${day}-${month}-${year}`; // formatted as DD-MM-YYYY
       },
       sortable: true,
-      width: "120px",
+      width: "50px",
     },
     {
       name: "Duration",
       selector: "minutesAllotted",
       cell: (row) => `${row.minutesAllotted} minutes`, // Updated to show minutes
       sortable: true,
-      width: "120px",
+      width: "50px",
     },
     {
       name: "Attend/Enrolled",
       selector: "attendingStudents",
       cell: (row) => `${row.attend} `,
       sortable: true,
-      width: "200px",
+      width: "50px",
     },
     {
       name: "Timer (Counter)",
@@ -142,7 +142,7 @@ const CurrentRunningTest = ({ onViewDetails }) => {
         </span>
       ),
       sortable: false,
-      width: "120px",
+      width: "35px",
     },
   ];
 

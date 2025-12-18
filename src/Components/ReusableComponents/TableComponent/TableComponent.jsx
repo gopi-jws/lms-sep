@@ -555,7 +555,13 @@ const DataTable = ({
                                     <th
                                         key={colIndex}
                                         className={`col-${typeof col.name === "string" ? col.name.toLowerCase().replace(/\s+/g, "-") : "default-column"}
-      ${col.name === "Actions" ? "" : "no-flex-end"}`}
+     ${col.name === "Actions" ||
+                                                col.name === "Timer (Counter)" ||
+                                                col.name === "Countdown" ||
+                                                col.name === "Hours Used"
+                                                ? ""
+                                                : "no-flex-end"}
+`}
                                         style={{ width: col.width || "", minWidth: col.width || "" }}
                                     >
                                         <div className="table-header-content" style={{ display: "flex", alignItems: "center" }}>
