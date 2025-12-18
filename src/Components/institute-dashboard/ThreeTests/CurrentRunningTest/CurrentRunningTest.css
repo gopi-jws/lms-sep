@@ -91,10 +91,6 @@ overflow-x: auto;
   color: var(--secondary-color);
 }
 
-.status-writing {
-  /* color: var(--accent-color); */
-  /* font-weight: bold; */
-}
 
 .timer {
   text-align: right;

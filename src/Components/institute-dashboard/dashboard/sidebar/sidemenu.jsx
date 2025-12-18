@@ -24,7 +24,6 @@ import {
 import "./sidemenu.css"
 
 const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
-
   console.log(isMobileOpen);
 
   const location = useLocation()
@@ -69,11 +68,15 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
   }
 
   const toggleMobileSidebar = () => {
-    setIsMobileOpen(!isMobileOpen)
+    if (typeof isMobileOpen === 'function') {
+      isMobileOpen((prev) => !prev);
+    }
   }
 
   const handleCloseMobile = () => {
-    setIsMobileOpen(false)
+    if (typeof isMobileOpen === 'function') {
+      isMobileOpen(false);
+    }
   }
 
   return (
@@ -85,6 +88,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
           <span className="sidebar-letters">LMS Institute</span>
         </div>
 
+        {/* FIXED SCROLL CONTAINER */}
         <div className="test-sidebar-scroll">
           <div className="test-sidebar-section">
             <ul className="test-sidebar-menu">
@@ -158,7 +162,6 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
 
               {isManageHomeVisible && (
                 <ul className="test-sidebar-submenu">
-
                   {/* HOME */}
                   <li>
                     <div
@@ -181,11 +184,10 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                       <li><Link to="/home/hear-from-students" className="sidebar-contents"><span className="sidebar-letters">Hear From Students</span></Link></li>
                       <li><Link to="/home/happy-students" className="sidebar-contents"><span className="sidebar-letters">Happy Students</span></Link></li>
                     </ul>
-
                   )}
 
                   {/* ABOUT */}
-                       <li>
+                  <li>
                     <Link to="/home/about" className="sidebar-contents">
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">About</span>
@@ -193,7 +195,7 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                   </li>
 
                   {/* COURSES */}
-                 <li>
+                  <li>
                     <Link to="/home/course" className="sidebar-contents">
                       <FileText className="icon" size={20} />
                       <span className="sidebar-letters">Courses</span>
@@ -207,7 +209,6 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                       <span className="sidebar-letters">Blog</span>
                     </Link>
                   </li>
-
 
                   {/* CONTACT */}
                   <li>
@@ -245,11 +246,9 @@ const SidebarMenu = ({ isMobileOpen, sideBarTop }) => {
                   <span className="sidebar-letters">Logout</span>
                 </Link>
               </li>
-
             </ul>
           </div>
         </div>
-
       </nav>
     </div>
   )

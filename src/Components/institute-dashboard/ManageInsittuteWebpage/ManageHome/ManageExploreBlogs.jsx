@@ -163,7 +163,7 @@ const ManageExploreBlog = () => {
 
       {/* ===== DESKTOP HEADER ===== */}
       <div className="slider-header desktop-only">
-        <h2>Manage Blogs     <VscTriangleDown
+        <h2>Manage Blogs  <VscTriangleDown
           ref={toggleRef}
           onClick={toggleMobileSidebar}
           className="TriagbleDown"

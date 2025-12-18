@@ -456,9 +456,8 @@ td {
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden;
+ 
 }
-
 /* Sidebar scroll helpers */
 @media (max-width: 767px) {
   .sidebar,
@@ -698,4 +697,30 @@ body {
   .course-modal-footer {
     justify-content: center;
   }
+}
+@media (max-width: 767px) {
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+    z-index: 3000;
+  }
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: #ffffff;
+  z-index: 9999;
 }

@@ -13,23 +13,24 @@ const ManageWhyChoose = () => {
     setIsMobileOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!isMobileOpen) return;
+ useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (!isMobileOpen) return;
 
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(e.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(e.target)
-      ) {
-        setIsMobileOpen(false);
-      }
-    };
+    if (
+      sidebarRef.current?.contains(e.target) ||
+      toggleRef.current?.contains(e.target)
+    ) {
+      return; // allow interaction + scroll
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMobileOpen]);
+    setIsMobileOpen(false);
+  };
+
+  document.addEventListener("click", handleClickOutside);
+  return () => document.removeEventListener("click", handleClickOutside);
+}, [isMobileOpen]);
+
 
   const [data, setData] = useState({
     title: "Why Choose LMSS SaaS Online Platform For Your Institute?",
@@ -86,13 +87,14 @@ const ManageWhyChoose = () => {
           className="TriagbleDown"
         /></h2>
      
+      </div>
+      
         <div ref={sidebarRef}>
           <SidebarMenu
             isMobileOpen={isMobileOpen}
             setIsMobileOpen={setIsMobileOpen}
           />
         </div>
-      </div>
 
       {/* ===== FORM (consistent styling) ===== */}
       <div className="slider-modal">
