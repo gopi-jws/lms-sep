@@ -80,7 +80,7 @@ const ManageWhyChoose = () => {
 
       {/* ===== DESKTOP HEADER ===== */}
       <div className="slider-header desktop-only">
-        <h2>Edit Why Choose Section   <VscTriangleDown
+        <h2>Manage Why Choose Section   <VscTriangleDown
           ref={toggleRef}
           onClick={toggleMobileSidebar}
           className="TriagbleDown"

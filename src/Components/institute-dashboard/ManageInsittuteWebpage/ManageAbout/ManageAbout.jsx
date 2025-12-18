@@ -116,7 +116,7 @@ const ManageAbout = () => {
    
 
       {/* ===== DESKTOP HEADER ===== */}
-      <div className="institute-home__header desktop-only">
+      <div className="slider-header desktop-only">
         <h2 className="institute-home__title">Manage About Page <VscTriangleDown
           ref={toggleRef}
           onClick={toggleMobileSidebar}
