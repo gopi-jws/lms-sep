@@ -1,7 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ManageContact.css";
+import { VscTriangleDown } from "react-icons/vsc";
+import SidebarMenu from "../../dashboard/sidebar/sidemenu";
 
 const ManageContact = () => {
+  /* ============ SIDEBAR (same pattern as all others) ============ */
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const sidebarRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!isMobileOpen) return;
+
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(e.target) &&
+        toggleRef.current &&
+        !toggleRef.current.contains(e.target)
+      ) {
+        setIsMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
+
   const [data, setData] = useState({
     // Hero Section
     heroTitle: "Get In Touch",
@@ -62,14 +91,33 @@ const ManageContact = () => {
 
   return (
     <div className="institute-home">
-      <h2 className="institute-home__title">Manage Contact Page</h2>
+      {/* ===== MOBILE HEADER ===== */}
+     
 
+      {/* ===== DESKTOP HEADER ===== */}
+      <div className="slider-header desktop-only">
+        <h2 className="institute-home__title">Manage Contact Page<VscTriangleDown
+          ref={toggleRef}
+          onClick={toggleMobileSidebar}
+          className="TriagbleDown"
+        /></h2>
+        
+        <div ref={sidebarRef}>
+          <SidebarMenu
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+        </div>
+      </div>
+
+      {/* ALERT */}
       {message && (
         <div className={`institute-home__alert ${messageType === "error" ? "error" : "success"}`}>
           {message}
         </div>
       )}
 
+      {/* FORM */}
       <form onSubmit={handleSubmit} className="institute-home__form">
         {/* Hero Section */}
         <div className="institute-home__card">
@@ -126,6 +174,17 @@ const ManageContact = () => {
               onChange={handleChange}
               placeholder="Enter hero description"
               rows="3"
+            />
+          </div>
+
+          <div className="institute-home__field">
+            <label>Form Title</label>
+            <input
+              type="text"
+              name="formTitle"
+              value={data.formTitle}
+              onChange={handleChange}
+              placeholder="Enter form title"
             />
           </div>
         </div>

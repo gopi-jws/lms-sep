@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ManageHome.css";
+import "../ManageHome/ManageHome.css";
 import { FaEdit, FaTrash, FaEye, FaEyeSlash } from "react-icons/fa";
 import { VscTriangleDown } from "react-icons/vsc";
 import SidebarMenu from "../../dashboard/sidebar/sidemenu";
 
-const ManageExploreCourses = () => {
-  /* ============ SIDEBAR (same as blogs) ============ */
+const ManageCourses = () => {
+  /* ============ SIDEBAR (same pattern as all others) ============ */
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const sidebarRef = useRef(null);
   const toggleRef = useRef(null);
@@ -32,11 +32,11 @@ const ManageExploreCourses = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobileOpen]);
 
-  /* ================= SECTION CONTENT (NEW) ================= */
+  /* ================= SECTION CONTENT ================= */
   const [section, setSection] = useState({
     title: "Explore Our Courses",
     description:
-      "Choose from industry-ready courses designed to help students build real-world skills.",
+      "Learn with clean, simple and modern curriculum — designed to make you industry-ready..",
   });
 
   const [editSection, setEditSection] = useState(false);
@@ -45,24 +45,90 @@ const ManageExploreCourses = () => {
   const [courses, setCourses] = useState([
     {
       id: 1,
-      title: "Backend Development",
-      description: "Build scalable backend apps with Node.js",
-      icon: "🚀",
+      title: "Full Stack Web Development",
+      description: "Become a professional full-stack developer with hands-on projects.",
+      duration: "6 Months",
+      startDate: "5th Dec 2025",
+      time: "Mon–Fri • 7 PM – 9 PM",
       status: "Active",
     },
     {
       id: 2,
-      title: "React Mastery",
-      description: "Modern UI with React & Hooks",
-      icon: "⚛️",
+      title: "Advanced Data Structures & Algorithms",
+      description: "Master DSA through structured problem-solving and mock interviews.",
+      duration: "3 Months",
+      startDate: "12th Dec 2025",
+      time: "Sat–Sun • 10 AM – 1 PM",
       status: "Active",
     },
     {
       id: 3,
-      title: "UI/UX Design",
-      description: "Design beautiful interfaces",
-      icon: "🎨",
+      title: "Digital Marketing Mastery",
+      description: "Learn SEO, SEM, Google Ads, analytics, and automation tools.",
+      duration: "2 Months",
+      startDate: "20th Dec 2025",
+      time: "Mon–Fri • 6 PM – 8 PM",
       status: "Inactive",
+    },
+    {
+      id: 4,
+      title: "Artificial Intelligence Fundamentals",
+      description:
+        "Learn AI concepts, neural networks, automation systems, and intelligent agents with hands-on mini-projects.",
+      duration: "3 Months",
+      startDate: "25th Jan 2026",
+      time: "Sat–Sun • 2 PM – 5 PM",
+      status: "Active",
+    },
+    {
+      id: 5,
+      title: "DevOps & Deployment Engineering",
+      description:
+        "Master CI/CD pipelines, Docker, Kubernetes, GitHub Actions, and cloud deployment workflows.",
+      duration: "4 Months",
+      startDate: "10th Jan 2026",
+      time: "Mon–Fri • 8 PM – 10 PM",
+      status: "Active",
+    },
+    {
+      id: 6,
+      title: "Java Backend Engineering",
+      description:
+        "Learn Java, Spring Boot, microservices, REST APIs, and backend architecture used by enterprises.",
+      duration: "5 Months",
+      startDate: "28th Dec 2025",
+      time: "Mon–Fri • 7 PM – 9 PM",
+      status: "Active",
+    },
+    {
+      id: 7,
+      title: "Graphic Design & Branding",
+      description:
+        "Learn professional design fundamentals, Adobe tools, typography, brand identity systems, and creativity.",
+      duration: "2 Months",
+      startDate: "18th Jan 2026",
+      time: "Sat–Sun • 11 AM – 2 PM",
+      status: "Active",
+    },
+    {
+      id: 8,
+      title: "Big Data Engineering with Hadoop & Spark",
+      description:
+        "Work with distributed systems, data pipelines, large-scale data processing, and big data tools.",
+      duration: "4 Months",
+      startDate: "12th Jan 2026",
+      time: "Sat–Sun • 9 AM – 1 PM",
+      status: "Active",
+    },
+    {
+      id: 9,
+      title: "Artificial Intelligence in Education (Ed-Tech AI)",
+      description:
+        "Learn how AI transforms education: adaptive learning, student analytics, content generation, and AI tutors.",
+      duration: "1.5 Months",
+      startDate: "25th Jan 2026",
+      time: "Mon–Fri • 6 PM – 8 PM",
+      status: "Active",
     },
   ]);
 
@@ -73,7 +139,9 @@ const ManageExploreCourses = () => {
   const [formCourse, setFormCourse] = useState({
     title: "",
     description: "",
-    icon: "",
+    duration: "",
+    startDate: "",
+    time: "",
     status: "Active",
   });
 
@@ -150,7 +218,9 @@ const ManageExploreCourses = () => {
     setFormCourse({
       title: "",
       description: "",
-      icon: "",
+      duration: "",
+      startDate: "",
+      time: "",
       status: "Active",
     });
   };
@@ -158,28 +228,25 @@ const ManageExploreCourses = () => {
   /* ================= UI ================= */
   return (
     <div className="slider-manager">
-      {/* ===== MOBILE HEADER (same pattern as blogs) ===== */}
-  
+      {/* ===== MOBILE HEADER ===== */}
+     
 
-      {/* ===== DESKTOP HEADER (with sidebar toggle) ===== */}
+      {/* ===== DESKTOP HEADER ===== */}
       <div className="slider-header desktop-only" style={{ alignItems: "flex-start" }}>
-        <h2>Manage Explore Courses <VscTriangleDown
+        <h2>Manage Courses   <VscTriangleDown
           ref={toggleRef}
           onClick={toggleMobileSidebar}
           className="TriagbleDown"
         /></h2>
-
-
-        
-
+    
+     
         <div ref={sidebarRef}>
           <SidebarMenu
             isMobileOpen={isMobileOpen}
             setIsMobileOpen={setIsMobileOpen}
           />
         </div>
-        
-        <button
+            <button
           className="slider-add-btn"
           onClick={() => setEditSection(true)}
         >
@@ -193,14 +260,8 @@ const ManageExploreCourses = () => {
         <p>{section.description}</p>
       </div>
 
-      {/* ===== ADD COURSE BUTTON (RIGHT ALIGNED) ===== */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "15px",
-        }}
-      >
+      {/* ===== ADD COURSE BUTTON ===== */}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 15 }}>
         <button className="slider-add-btn" onClick={() => setShowForm(true)}>
           + Add New Course
         </button>
@@ -239,6 +300,9 @@ const ManageExploreCourses = () => {
             </div>
 
             <div className="slider-modal-footer">
+              <button className="slider-cancel-btn" onClick={() => setEditSection(false)}>
+                Cancel
+              </button>
               <button
                 className="slider-save-btn"
                 onClick={() => setEditSection(false)}
@@ -263,11 +327,7 @@ const ManageExploreCourses = () => {
 
             <div className="slider-modal-body">
               <label>Title</label>
-              <input
-                name="title"
-                value={formCourse.title}
-                onChange={handleChange}
-              />
+              <input name="title" value={formCourse.title} onChange={handleChange} />
 
               <label>Description</label>
               <textarea
@@ -276,19 +336,17 @@ const ManageExploreCourses = () => {
                 onChange={handleChange}
               />
 
-              <label>Icon</label>
-              <input
-                name="icon"
-                value={formCourse.icon}
-                onChange={handleChange}
-              />
+              <label>Duration</label>
+              <input name="duration" value={formCourse.duration} onChange={handleChange} />
+
+              <label>Start Date</label>
+              <input name="startDate" value={formCourse.startDate} onChange={handleChange} />
+
+              <label>Time</label>
+              <input name="time" value={formCourse.time} onChange={handleChange} />
 
               <label>Status</label>
-              <select
-                name="status"
-                value={formCourse.status}
-                onChange={handleChange}
-              >
+              <select name="status" value={formCourse.status} onChange={handleChange}>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </select>
@@ -316,8 +374,9 @@ const ManageExploreCourses = () => {
             <tr>
               <th>Order</th>
               <th>Title</th>
-              <th>Description</th>
-              <th>Icon</th>
+              <th>Duration</th>
+              <th>Start Date</th>
+              <th>Time</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -333,8 +392,9 @@ const ManageExploreCourses = () => {
                 </td>
 
                 <td>{course.title}</td>
-                <td>{course.description}</td>
-                <td>{course.icon}</td>
+                <td>{course.duration}</td>
+                <td>{course.startDate}</td>
+                <td>{course.time}</td>
 
                 <td>
                   <span
@@ -356,10 +416,7 @@ const ManageExploreCourses = () => {
                   >
                     {course.status === "Active" ? <FaEye /> : <FaEyeSlash />}
                   </button>
-                  <button
-                    className="delete"
-                    onClick={() => handleDelete(course.id)}
-                  >
+                  <button className="delete" onClick={() => handleDelete(course.id)}>
                     <FaTrash />
                   </button>
                 </td>
@@ -372,4 +429,4 @@ const ManageExploreCourses = () => {
   );
 };
 
-export default ManageExploreCourses;
+export default ManageCourses;
